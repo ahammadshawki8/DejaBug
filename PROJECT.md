@@ -9,7 +9,7 @@
 | Field | Value |
 |---|---|
 | Current tier | T0 Setup |
-| Next action | Install Go, scaffold the monorepo (T0 checklist) |
+| Next action | T0: scaffold the monorepo, .env.example, CI |
 | Last updated | 2026-09-25 23:00 BST |
 | Bobcoins used | 0 / 40 |
 | Blockers | Waiting for the hackathon Bob invite email (arrives after the 9:00 PM kick-off) |
@@ -417,8 +417,8 @@ Every screen is composed from these. No page-specific one-off styling.
 Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review (Section 9.3).
 
 ### T0 Setup (1 h), target Fri 11:59 PM
-- [ ] Install Go (`winget install GoLang.Go`) and verify `go version`.
-- [ ] Clone IBM/sarama into `workspace/sarama` (gitignored). Confirm `go test -run TestAsyncProducer -count=1 .` runs.
+- [x] Install Go (`winget install GoLang.Go`) and verify `go version`. Installed go1.27.0.
+- [x] Clone IBM/sarama into `workspace/sarama` (gitignored). Confirm `go test -run TestAsyncProducer -count=1 .` runs. Passes: about 30 s the first time (module download), about 1 s after.
 - [ ] Scaffold npm workspaces: `packages/engine`, `apps/web`. Add shared tsconfig, eslint, prettier, and the vitest setup.
 - [ ] Add `.env.example` (`GITHUB_TOKEN`, `DEJABUG_REPO_DIR`, `BOB_MAX_COST`).
 - [ ] Add a GitHub Actions CI: lint, typecheck, unit tests, `check-style.mjs`.
