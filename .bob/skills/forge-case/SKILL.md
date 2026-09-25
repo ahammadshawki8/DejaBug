@@ -35,7 +35,7 @@ Field rules:
 
 | Field | Rule |
 |---|---|
-| `codename` | 2-4 words, title-case. Must not contain any identifier introduced by the fix. |
+| `codename` | An evocative two-to-four-word detective title (title-case). Must not describe the fix or name any identifier introduced by the fix. Good: "The Phantom Slice", "Silent Threshold". Bad: "32-bit Overflow Guard", "Missing-API-Key". |
 | `symptoms` | 1-3 sentences written as a user report. Must not name the fix. See Section 3. |
 | `evidence` | 1-3 lines copied or paraphrased from the test failure output. No fix identifiers. |
 | `hints[0]` | Nudge - behavioral observation only, no code area or identifier named. |
@@ -45,6 +45,8 @@ Field rules:
 | `precinct` | Package or subsystem name, not a file path. See Section 6. |
 | `lesson` | The fix explained plainly. May name fix identifiers. Shown only after the player solves. |
 | `tags` | 2-5 strings, all lowercase, hyphen-separated if multi-word. |
+
+Every hint must reference the code area, test, or evidence of THIS case. Never reuse wording from this skill.
 
 ## 3. Spoiler rules
 
@@ -71,21 +73,18 @@ Write exactly three hints, in this order:
 
 **hints[0] - Nudge**
 One sentence. Describe the incorrect behavior the user observes without naming any code area,
-package, function, or identifier. Example: "The connection appears to drop silently under high
-message rates even when the broker is healthy."
+package, function, or identifier. Template: "<observable symptom> when <condition>."
 
 **hints[1] - Direction**
 One or two sentences. Point to the specific package or function where the problem lives, but
 introduce no new identifiers beyond what is already in the commit subject or PR title.
-Example: "Look at how the consumer group rebalances - the rebalance loop has an early-exit path
-that does not clean up state."
+Template: "Look at <subsystem from THIS case> - <early-exit or lifecycle path observed in the diff>."
 
 **hints[2] - Near-answer**
 Two or three sentences. Describe the mechanism of the bug clearly enough that a developer who
 knows the codebase could find it, without writing any code or naming any identifier introduced
-by the fix. Example: "When a rebalance error occurs, the handler returns before signaling the
-wait-group. The goroutine that joins the session never unblocks, causing the consumer to hang
-until the context deadline."
+by the fix. Template: "When <error condition from THIS case> occurs, <resource or state> is not
+cleaned up. <Downstream consequence observed in the test output>."
 
 ## 5. Difficulty rubric
 

@@ -10,7 +10,43 @@ import type { Brief, Candidate, Certification } from "./types.js";
 
 // briefer.ts - generates a spoiler-free Brief for a certified case (PROJECT.md T3.3).
 // Supports two LLM providers: watsonx (batch) and bob (bob run headless).
-// Validates output with Zod and retries once if the spoiler guard fires.
+// Validates output with Zod and retries once on invalid JSON or if the spoiler guard fires.
+
+// Module-level WatsonxClient cache keyed by "<apiKey>|<projectId>|<url>".
+// Avoids repeated IAM token exchanges within a single process run.
+const _wxClientCache = new Map<string, WatsonxClient>();
+
+function getOrCreateWatsonxClient(config: Config): WatsonxClient {
+  const { apiKey = "", projectId = "", url } = config.watsonx;
+  const key = `${apiKey}|${projectId}|${url}`;
+  let client = _wxClientCache.get(key);
+  if (!client) {
+    client = WatsonxClient.fromConfig(config);
+    _wxClientCache.set(key, client);
+  }
+  return client;
+}
+
+// bob run --format json envelope shape (from bob source):
+//   { type: "result", status: "success", last_message: "<assistant text>" }
+// Error events are also emitted as JSON lines but the final result is the last line.
+function parseBobOutput(stdout: string): string {
+  // The JSON renderer writes one object per line; the result envelope is the last non-empty line.
+  const lines = stdout.split("\n").filter((l) => l.trim().length > 0);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    let obj: unknown;
+    try {
+      obj = JSON.parse(lines[i] as string);
+    } catch {
+      continue;
+    }
+    if (obj !== null && typeof obj === "object" && (obj as Record<string, unknown>)["type"] === "result") {
+      const msg = (obj as Record<string, unknown>)["last_message"];
+      if (typeof msg === "string") return msg;
+    }
+  }
+  throw new Error("bob run output did not contain a result envelope");
+}
 
 export interface BriefInput {
   candidate: Candidate;
@@ -84,10 +120,14 @@ function buildPrompt(
 // Provider calls
 // ---------------------------------------------------------------------------
 
-async function callWatsonx(system: string, user: string, config: Config): Promise<string> {
+async function callWatsonx(
+  system: string,
+  user: string,
+  config: Config,
+  client: WatsonxClient,
+): Promise<string> {
   const modelId = config.watsonx.modelId;
   if (!modelId) throw new Error("WATSONX_MODEL_ID is not set");
-  const client = WatsonxClient.fromConfig(config);
   return client.chat(
     modelId,
     [
@@ -99,8 +139,10 @@ async function callWatsonx(system: string, user: string, config: Config): Promis
 }
 
 function callBob(user: string, config: Config): Promise<string> {
+  // On Windows, "bob" resolves as a .cmd shim which execFile cannot find without shell:true.
+  // Deliver the prompt via stdin to avoid cmd.exe quoting of a potentially large string.
   return new Promise((resolve, reject) => {
-    execFile(
+    const child = execFile(
       "bob",
       [
         "run",
@@ -113,18 +155,26 @@ function callBob(user: string, config: Config): Promise<string> {
         "--max-turns",
         "6",
         "--disable-mcp",
-        "-p",
-        user,
       ],
-      { cwd: config.repoRoot, maxBuffer: 4 * 1024 * 1024 },
+      { cwd: config.repoRoot, maxBuffer: 4 * 1024 * 1024, shell: true },
       (err, stdout, stderr) => {
         if (err) {
           reject(new Error(`bob run failed: ${err.message}\n${stderr.slice(0, 500)}`));
           return;
         }
-        resolve(stdout);
+        try {
+          resolve(parseBobOutput(stdout));
+        } catch (parseErr) {
+          reject(
+            new Error(
+              `bob run output parse failed: ${String(parseErr)}\nraw stdout (first 500): ${stdout.slice(0, 500)}`,
+            ),
+          );
+        }
       },
     );
+    // Write prompt to stdin so cmd.exe quoting does not corrupt the content.
+    child.stdin?.end(user, "utf8");
   });
 }
 
@@ -162,9 +212,24 @@ export async function brief(input: BriefInput, config: Config): Promise<Brief | 
     return null;
   }
 
+  // Create one WatsonxClient per brief() call so the IAM token is reused across retries.
+  const wxClient =
+    config.llmProvider === "watsonx"
+      ? (() => {
+          try {
+            return getOrCreateWatsonxClient(config);
+          } catch {
+            return null;
+          }
+        })()
+      : null;
+
   async function callProvider(system: string, user: string): Promise<string | null> {
     try {
-      if (config.llmProvider === "watsonx") return await callWatsonx(system, user, config);
+      if (config.llmProvider === "watsonx") {
+        if (!wxClient) throw new Error("WatsonxClient could not be created");
+        return await callWatsonx(system, user, config, wxClient);
+      }
       return await callBob(user, config);
     } catch (e) {
       process.stderr.write(`briefer: LLM call failed: ${String(e)}\n`);
@@ -179,8 +244,38 @@ export async function brief(input: BriefInput, config: Config): Promise<Brief | 
 
   const validated1 = parseAndValidate(raw1);
   if (validated1 === null) {
-    process.stderr.write(`briefer: invalid JSON from LLM for ${input.candidate.fixSha} (attempt 1)\n`);
-    return null;
+    // Invalid JSON on attempt 1 - retry once with the same prompt before giving up.
+    process.stderr.write(
+      `briefer: invalid JSON from LLM for ${input.candidate.fixSha} (attempt 1), retrying\n`,
+    );
+    const raw1b = await callProvider(system, user);
+    if (raw1b === null) return null;
+    const validated1b = parseAndValidate(raw1b);
+    if (validated1b === null) {
+      process.stderr.write(`briefer: invalid JSON from LLM for ${input.candidate.fixSha} (attempt 1b)\n`);
+      return null;
+    }
+    const spoilers1b = checkSpoilers(validated1b, input.fixDiff);
+    if (spoilers1b.length === 0) return validated1b;
+    process.stderr.write(
+      `briefer: spoilers found for ${input.candidate.fixSha} (attempt 1b), retrying: ${spoilers1b.join(", ")}\n`,
+    );
+    const { system: sys2b, user: user2b } = buildPrompt(input, skillText, spoilers1b);
+    const raw2b = await callProvider(sys2b, user2b);
+    if (raw2b === null) return null;
+    const validated2b = parseAndValidate(raw2b);
+    if (validated2b === null) {
+      process.stderr.write(`briefer: invalid JSON from LLM for ${input.candidate.fixSha} (attempt 2b)\n`);
+      return null;
+    }
+    const spoilers2b = checkSpoilers(validated2b, input.fixDiff);
+    if (spoilers2b.length > 0) {
+      process.stderr.write(
+        `briefer: spoilers remain after retry for ${input.candidate.fixSha}: ${spoilers2b.join(", ")}\n`,
+      );
+      return null;
+    }
+    return validated2b;
   }
 
   const spoilers1 = checkSpoilers(validated1, input.fixDiff);

@@ -9,11 +9,11 @@
 | Field | Value |
 |---|---|
 | Current tier | T3 Briefs |
-| Next item | T3.3b |
-| Next owner | BOB |
-| Last updated | 2026-09-26 05:40 BST |
-| Bobcoins used | 14.625 / 40 |
-| Blockers | none. watsonx is live (ibm/granite-4-h-small, verified). |
+| Next item | T3.6 |
+| Next owner | HUMAN |
+| Last updated | 2026-09-26 06:30 BST |
+| Bobcoins used | 29.445 / 40 (10.555 left, see 9.2 re-plan) |
+| Blockers | none. The live `--provider bob` check happens in T3.6 (stdin prompt delivery is unverified). |
 
 ---
 
@@ -472,7 +472,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T3.4 [BOB] **Subagent task:** "Use explore subagents in parallel to inspect the certified cases and rank them by teaching value and difficulty; write `cases/sarama/ranking.json`." This is our "subagents" evidence.
 - [x] T3.5 [CLAUDE] (done early so that Bob's briefer can call it) `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
 - [x] T3.4b [CLAUDE] `dejabug brief` CLI: for each certified case, fetch GitHub context and original effort, build the source-only fix diff, call Bob's `brief()`, then assemble and write the Case JSON (id, language, parSeconds, bugAgeDays, certification, redacted outputs).
-- [ ] T3.3b [BOB] Apply docs/reviews/REVIEW-T3.3.md (skill examples copied into briefs, codename rules, JSON retry, client reuse, bob provider on Windows).
+- [x] T3.3b [BOB] Apply docs/reviews/REVIEW-T3.3.md (skill examples copied into briefs, codename rules, JSON retry, client reuse, bob provider on Windows).
 - [ ] T3.6 [HUMAN] Generate briefs: Granite for all certified cases, plus `LLM_PROVIDER=bob` for 2 or 3 showcase cases. Commit the case JSON.
 - [ ] **Done when:** 12 or more cases have valid, spoiler-free briefs in `cases/sarama/`.
 
@@ -486,14 +486,14 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 
 ### T5 Web core (6 h), target Sat 6:00 PM, **M2**
 - [ ] T5.1 [CLAUDE] Web app scaffold: Vite + React + Tailwind + Framer Motion + Zustand, routing, the typed API client, and the game state store.
-- [ ] T5.2 [BOB] **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
+- [ ] T5.2 [CLAUDE] (re-tagged: coins) **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
 - [ ] T5.3 [CLAUDE] Game shell (6A.6) built from the Bob components.
 - [ ] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
 - [ ] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
-- [ ] T5.6 [BOB] **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
+- [ ] T5.6 [CLAUDE] (re-tagged: coins) **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
 - [ ] T5.7 [CLAUDE] Themed loading, empty, and error states, keyboard shortcuts, and reduced motion (6A.7, 6A.8, 6A.11).
 - [ ] T5.8 [CLAUDE] **Review #2:** write `docs/reviews/REVIEW-02.md` with tagged items.
-- [ ] T5.9 [BOB] Apply the [BOB] items of REVIEW-02.
+- [ ] T5.9 [BOB] Apply the [BOB] items of REVIEW-02 (only items in Bob-owned files; cap 1 coin).
 - [ ] T5.10 [CLAUDE] Apply the [CLAUDE] items of REVIEW-02.
 - [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test.
 
@@ -505,7 +505,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 
 ### T7 Forge Console (3 h), target Sun 1:00 AM
 - [ ] T7.0 [CLAUDE] "Open a new precinct": server endpoint `POST /api/repos` (init + mine) and a repo picker in the Forge Console header, so any GitHub repository can be forged from the UI.
-- [ ] T7.1 [BOB] **Forge Console** as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons. This is the key demo moment.
+- [ ] T7.1 [CLAUDE] (re-tagged: coins) **Forge Console** as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons. This is the key demo moment.
 - [ ] **Done when:** clicking "Forge 8 cases" shows the lanes moving in real time against sarama.
 
 ### T8 Mentor (2 h), target Sun 3:00 AM
@@ -517,7 +517,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 ### T9 Hardening + showcase deploy (4 h), target Sun 7:00 AM, **M3**
 - [ ] T9.1 [BOB] **Bob Review workflow** over the whole repo (the built-in code review feature). Save its findings to `docs/reviews/BOB-REVIEW.md`.
 - [ ] T9.2 [CLAUDE] **Review #3:** merge the Bob review findings with Claude's own into `docs/reviews/REVIEW-03.md` with tagged items.
-- [ ] T9.3 [BOB] Apply the [BOB] items of REVIEW-03.
+- [ ] T9.3 [CLAUDE] (re-tagged: coins) Apply the review items of REVIEW-03.
 - [ ] T9.4 [CLAUDE] Apply the [CLAUDE] items. Get engine and web tests green, fix Windows paths, add timeouts and worktree cleanup.
 - [ ] T9.5 [CLAUDE] Showcase build (static, bundled cases, labeled replayed verification, no watsonx calls at run time) deployed to Vercel. README with a GIF, architecture, and quickstart.
 - [ ] **Done when:** a fresh clone plus quickstart works, and the public URL loads.
@@ -563,26 +563,28 @@ The rules require Bob IDE to be a **core component** and the repo to contain Bob
 
 ### 9.2 Budget: 40 Bobcoins (one registered hackathon account, no top-ups)
 
-| Bob item | Coins (estimate) |
-|---|---|
-| T1.1 engine plan (Plan mode) | 1.5 |
-| T2.1 certifier core | 5 |
-| T2.2 parallel pool | 2 |
-| T2.6 REVIEW-01 Bob items | 1.5 |
-| T3.3 forger mode + skill + briefer | 3 |
-| T3.4 subagent ranking | 1.5 |
-| T3.6 `bob run` for 2-3 showcase briefs (runtime) | 1.5 |
-| T5.2 design system | 5 |
-| T5.4 Case Board | 3.5 |
-| T5.6 Investigation + Debrief | 4.5 |
-| T5.9 REVIEW-02 Bob items | 1.5 |
-| T7.1 Forge Console | 4 |
-| T8.1 mentor mode + skill | 1 |
-| T9.1 Bob code review | 1.5 |
-| T9.3 REVIEW-03 Bob items | 1 |
-| Reserve | 1.5 |
+**Actuals so far (29.445):** T1.1 0.555, T2.1 3.33, T2.2 2.34, T2.6 3.21, T3.3 4.00, T3.4 1.19, T3.3b **14.82** (context grew to 142k tokens while Bob read the bundled `bob.js` source to reverse-engineer an output format).
 
-If Bob runs out of coins, the remaining [BOB] items are re-tagged [CLAUDE] in this file, with a note in the usage log. After every Bob task, check the balance (Bob IDE Settings, General, or https://bob.ibm.com/admin/subscription) and update Section 0.
+**Re-plan for the remaining 10.555 coins** (2026-09-26). Keep Bob on the smallest, most judge-visible items. Re-tag the large UI items to Claude:
+
+| Remaining Bob item | Cap |
+|---|---|
+| T3.6 one live `--provider bob` showcase brief (runtime Bob Shell) | 1.0 |
+| T5.4 Case Board (hero screen) | 3.0 |
+| T5.9 REVIEW-02 items in Bob-owned files | 1.0 |
+| T8.1 `deja-mentor` mode + mentor skill | 1.0 |
+| T8.3 live mentor conversation for the video | 1.0 |
+| T9.1 Bob code review over the repo | 1.5 |
+| Reserve | 2.0 |
+
+Re-tagged to Claude: T5.2 design system, T5.6 Investigation + Debrief, T7.1 Forge Console, T9.3 REVIEW-03 fixes. Record this honestly in the Bob Usage statement.
+
+**Cost guards (mandatory from now on):**
+- Bob never reads `node_modules/`, bundled or minified files, or tool sources to discover behavior. If a fact is missing, Bob stops and asks the human (Claude looks it up for free).
+- If a Bob task's context passes about 60k tokens or its cost passes its cap, Bob stops, summarizes, and hands off.
+- The human puts every known fact (API shapes, file paths, commands) into the prompt, so Bob does not explore.
+
+If Bob runs out anyway, the remaining [BOB] items are re-tagged [CLAUDE] with a note in the usage log.
 
 ### 9.3 Handoff protocol (Bob and Claude follow this exactly)
 **On start, every agent:**
@@ -685,3 +687,4 @@ Human, do this:
 - **2026-09-26 04:55:** T3.3 done by Bob (4.00 coins): the deja-forger mode, the forge-case skill, and briefer.ts (watsonx and bob providers, zod, spoiler retry) with tests. Claude hygiene fix to Bob's test (vitest 5 generics, type-import lint, prettier) to keep CI green without spending coins. The Claude spoiler guard was refined: comments and plain English words are no longer spoilers, only code-shaped identifiers and literals. First real Granite brief for fc42022 succeeded in 3.9 s (PR #3579, 1.7 days open, 3 review rounds). Review notes are queued in docs/reviews/REVIEW-02-queue.md.
 - **2026-09-26 05:10:** T3.4 done by Bob (1.19 coins): 4 explore subagents in parallel ranked all 27 certified cases into cases/sarama/ranking.json (teaching value, difficulty, precinct from a fixed list, reason). Screenshots of the parallel subagents are saved. Reasons are internal only, because some hint at the fix.
 - **2026-09-26 05:40:** T3.4b done (Claude): assemble.ts (bugAgeDays via git blame of the lines the fix touched, par time 10/20/30 min, ranking overrides for precinct/difficulty, sanitized outputs) and `dejabug brief` (parallel, --only/--limit/--redo/--provider). A real run on 3 cases with Granite: 2 good, 1 with hints copied from the SKILL.md examples (file deleted). Wrote REVIEW-T3.3 and added T3.3b [BOB] before T3.6. 66 tests.
+- **2026-09-26 06:30:** T3.3b done by Bob (14.82 coins, far over budget: 142k context from reading the bob.js bundle). Result is good: skill examples removed, codename rules added, JSON retry, client reuse, the bob provider parses the `last_message` envelope, and it uses shell on Windows with the prompt on stdin (unverified until T3.6). Coin re-plan: T5.2, T5.6, T7.1, and T9.3 re-tagged to Claude, and cost guards added (Section 9.2 and .bob/rules).

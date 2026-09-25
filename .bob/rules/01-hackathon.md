@@ -11,3 +11,4 @@
 9. Record notable design decisions as one line in `docs/DECISIONS.md`.
 10. Never hardcode credentials. Use environment variables documented in `.env.example`.
 11. You are Bob. Only do checklist items tagged [BOB] in `PROJECT.md` Section 7, one per task. Never do [CLAUDE] or [HUMAN] items, even small ones. When your item is done, or when the next item is not yours, tick your item, update Section 0, print the handoff block from Section 9.3, and stop.
+12. Cost guard: never read `node_modules/`, bundled or minified files, or tool source code to discover behavior. If a needed fact is missing, stop and ask the human. If the task context passes about 60k tokens, stop, summarize progress, and print the handoff block. Respect the per-item coin cap in `PROJECT.md` Section 9.2.

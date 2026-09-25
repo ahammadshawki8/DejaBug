@@ -10,6 +10,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 4 | ahammadshawki8 | T2.6 REVIEW-01 [BOB] items 0-5,10 (adapter migration, hang handling, sanitizing, true slots) | Plan, Agent | Plan mode, Agent mode, review-driven refactor, terminal execution (lint/test/certify rerun) | 3.21 | dejabug_task04_review01_adapter_summary.png |
 | 5 | ahammadshawki8 | T3.3 forger (deja-forger mode, forge-case skill, briefer.ts) | Plan, Agent | Custom mode, Skill, document understanding (PR/issue threads), Bob Shell headless provider, zod validation | 4.00 | dejabug_task05_forger_summary.png, dejabug_task05_forger_prompt.png |
 | 6 | ahammadshawki8 | T3.4 case ranking | Agent | 4 explore subagents in parallel, todo list, document understanding of review packs | 1.19 | dejabug_task06_ranking_*.png (todo, subagents running, subagents done, summary, prompt) |
+| 7 | ahammadshawki8 | T3.3b forger fixes (REVIEW-T3.3) | Plan, Agent | Plan mode, Agent mode, todo list, skill rewrite, Bob Shell output-format analysis | 14.82 | dejabug_task07_forger_fixes_summary.png |
 
 ## Claude Code / Codex work
 
