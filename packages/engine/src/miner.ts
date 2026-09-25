@@ -1,4 +1,5 @@
-import path from "node:path";
+import { detectAdapter } from "./adapters/index.js";
+import type { LanguageAdapter } from "./adapters/types.js";
 import { git } from "./git.js";
 import type { Candidate } from "./types.js";
 
@@ -8,11 +9,14 @@ export const FIX_PATTERN = /\b(fix(e[sd])?|bug|panic|race|deadlock|leak|crash|re
 export const MAX_SOURCE_FILES = 3;
 
 export interface MineOptions {
+  /** Language adapter to use. Detected from the repository when omitted. */
+  adapter?: LanguageAdapter;
   /** Only consider the most recent N commits (useful for tests and quick runs). */
   maxCommits?: number;
 }
 
 export interface MineResult {
+  language: string;
   scannedCommits: number;
   fixLikeCommits: number;
   candidates: Candidate[];
@@ -43,66 +47,10 @@ export function isFixLike(subject: string, body = ""): boolean {
   return FIX_PATTERN.test(body) && !NON_FIX_TYPE.test(subject);
 }
 
-export function isTestFile(file: string): boolean {
-  return file.endsWith("_test.go");
-}
-
-export function isSourceFile(file: string): boolean {
-  return file.endsWith(".go") && !isTestFile(file) && !file.startsWith("vendor/");
-}
-
 export function extractPrNumber(subject: string): number | undefined {
   const matches = [...subject.matchAll(/\(#(\d+)\)/g)];
   const last = matches.at(-1);
   return last ? Number(last[1]) : undefined;
-}
-
-/** Go package argument for a file: "." for the repo root, "./dir" otherwise. */
-export function packageOf(file: string): string {
-  const dir = path.posix.dirname(file);
-  return dir === "." ? "." : `./${dir}`;
-}
-
-/**
- * Test function names touched by a unified diff (-U0) of test files: functions whose
- * `func TestX(` line is added, plus the enclosing function named in a hunk header when
- * the hunk edits inside an existing test. A hunk that adds its own test declaration is
- * an append, so its header (which names the previous function) is ignored.
- */
-export function testsTouched(diff: string): string[] {
-  const names = new Set<string>();
-  let headerTest: string | undefined;
-  let hunkAddsTest = false;
-
-  const closeHunk = () => {
-    if (headerTest && !hunkAddsTest) names.add(headerTest);
-    headerTest = undefined;
-    hunkAddsTest = false;
-  };
-
-  for (const line of diff.split("\n")) {
-    if (line.startsWith("@@")) {
-      closeHunk();
-      headerTest = /^@@ [^@]* @@ func (Test\w+)\s*\(/.exec(line)?.[1];
-      continue;
-    }
-    if (line.startsWith("diff --git")) {
-      closeHunk();
-      continue;
-    }
-    const added = /^\+func (Test\w+)\s*\(/.exec(line);
-    if (added?.[1]) {
-      names.add(added[1]);
-      hunkAddsTest = true;
-    }
-  }
-  closeHunk();
-  return [...names].sort();
-}
-
-/** True when a Go file needs build tags to compile (for example sarama's functional tests). */
-export function hasBuildConstraint(content: string): boolean {
-  return /^\/\/go:build\s/m.test(content) || /^\/\/ \+build\s/m.test(content);
 }
 
 export function parseLog(raw: string): LogEntry[] {
@@ -129,6 +77,9 @@ export function parseLog(raw: string): LogEntry[] {
 
 /** Mines fix-like commits that change tests plus 1-3 source files (PROJECT.md 4.1 F1). */
 export async function mine(repoDir: string, options: MineOptions = {}): Promise<MineResult> {
+  const adapter = options.adapter ?? detectAdapter(repoDir);
+  if (!adapter) throw new Error(`no supported language detected in ${repoDir}`);
+
   const format = `--format=${RECORD}%H${FIELD}%P${FIELD}%cI${FIELD}%s${FIELD}%b${END_META}`;
   const args = ["log", "--no-merges", "--name-only", format];
   if (options.maxCommits) args.push(`-n${options.maxCommits}`);
@@ -138,19 +89,19 @@ export async function mine(repoDir: string, options: MineOptions = {}): Promise<
   const candidates: Candidate[] = [];
 
   for (const e of fixLike) {
-    const sourceFiles = e.files.filter(isSourceFile);
-    const allTestFiles = e.files.filter(isTestFile);
+    const sourceFiles = e.files.filter((f) => adapter.isSourceFile(f));
+    const allTestFiles = e.files.filter((f) => adapter.isTestFile(f));
     if (sourceFiles.length < 1 || sourceFiles.length > MAX_SOURCE_FILES || allTestFiles.length < 1) continue;
 
     const testFiles: string[] = [];
     for (const file of allTestFiles) {
       const content = await git(repoDir, ["show", `${e.sha}:${file}`]).catch(() => "");
-      if (content && !hasBuildConstraint(content)) testFiles.push(file);
+      if (content && adapter.isRunnableTestFile(content)) testFiles.push(file);
     }
     if (testFiles.length === 0) continue;
 
     const diff = await git(repoDir, ["show", "--format=", "-U0", e.sha, "--", ...testFiles]);
-    const tests = testsTouched(diff);
+    const tests = adapter.testsTouched(diff);
     if (tests.length === 0) continue;
 
     candidates.push({
@@ -159,12 +110,13 @@ export async function mine(repoDir: string, options: MineOptions = {}): Promise<
       subject: e.subject,
       date: e.date,
       prNumber: extractPrNumber(e.subject),
+      language: adapter.id,
       sourceFiles,
       testFiles,
-      packages: [...new Set(testFiles.map(packageOf))].sort(),
+      packages: adapter.testTargets(testFiles),
       tests,
     });
   }
 
-  return { scannedCommits: entries.length, fixLikeCommits: fixLike.length, candidates };
+  return { language: adapter.id, scannedCommits: entries.length, fixLikeCommits: fixLike.length, candidates };
 }

@@ -1,6 +1,7 @@
 {
   "repo": "IBM/sarama",
-  "generatedAt": "2026-09-25T18:07:05.230Z",
+  "generatedAt": "2026-09-25T19:05:40.880Z",
+  "language": "go",
   "scannedCommits": 2889,
   "fixLikeCommits": 703,
   "candidates": [
@@ -10,6 +11,7 @@
       "subject": "fix(protocol): return ErrUnsupportedVersion for absent broker API keys (#3741)",
       "date": "2026-09-22T01:14:48+01:00",
       "prNumber": 3741,
+      "language": "go",
       "sourceFiles": [
         "api_versions.go",
         "broker.go"
@@ -33,6 +35,7 @@
       "parentSha": "4e16ab645075e9e8d3f8e103456d18c0ed9527ac",
       "subject": "fix: guard against 32-bit integer overflow in flexible decoder and record header allocation",
       "date": "2026-05-26T12:45:15+01:00",
+      "language": "go",
       "sourceFiles": [
         "broker.go",
         "real_decoder.go",
@@ -55,6 +58,7 @@
       "subject": "fix(client): scope metadata refresh errors to requested topics (#3532)",
       "date": "2026-05-13T09:22:51+01:00",
       "prNumber": 3532,
+      "language": "go",
       "sourceFiles": [
         "client.go",
         "metadata.go"
@@ -75,6 +79,7 @@
       "subject": "fix(decoder): handle null arrays correctly (#3144)",
       "date": "2025-08-06T13:13:43+01:00",
       "prNumber": 3144,
+      "language": "go",
       "sourceFiles": [
         "real_decoder.go"
       ],
@@ -94,6 +99,7 @@
       "subject": "fix(consumer): maintain ordering of offset commit requests (#2947)",
       "date": "2024-08-07T11:17:22+01:00",
       "prNumber": 2947,
+      "language": "go",
       "sourceFiles": [
         "offset_manager.go"
       ],
@@ -114,6 +120,7 @@
       "subject": "fix(config): relax ClientID validation after 1.0.0 (#2706)",
       "date": "2023-11-07T11:20:52Z",
       "prNumber": 2706,
+      "language": "go",
       "sourceFiles": [
         "config.go"
       ],
@@ -139,6 +146,7 @@
       "parentSha": "2e077cf8d86cc06bffc2614b80a699caa868ad2b",
       "subject": "fix(txmgr): ErrOffsetsLoadInProgress is retriable",
       "date": "2023-11-02T17:47:50Z",
+      "language": "go",
       "sourceFiles": [
         "errors.go",
         "mockresponses.go",
@@ -160,6 +168,7 @@
       "subject": "Fix default retention time value in offset commit (#2700)",
       "date": "2023-11-02T15:55:24Z",
       "prNumber": 2700,
+      "language": "go",
       "sourceFiles": [
         "offset_manager.go"
       ],
@@ -179,6 +188,7 @@
       "subject": "fix(client): ignore empty Metadata responses when refreshing (#2672)",
       "date": "2023-10-13T21:54:35+01:00",
       "prNumber": 2672,
+      "language": "go",
       "sourceFiles": [
         "client.go"
       ],
@@ -213,6 +223,7 @@
       "parentSha": "4b55bb3e68a75de12a68b62d2a04490c112c5f2d",
       "subject": "fix: use least loaded broker to refresh metadata",
       "date": "2023-09-12T09:18:34+01:00",
+      "language": "go",
       "sourceFiles": [
         "client.go",
         "mockbroker.go"
@@ -257,6 +268,7 @@
       "parentSha": "0b17025c0445bcc75cb709249c25fcaba8b77aab",
       "subject": "fix(consumer): don't retry session if ctx canceled",
       "date": "2023-09-06T11:18:30+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer_group.go"
       ],
@@ -275,6 +287,7 @@
       "parentSha": "f3c419405d597f94ea995e229ebd58bd1fab61e1",
       "subject": "fix(consumer): guard against nil client",
       "date": "2023-08-31T16:30:31+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer_group.go"
       ],
@@ -293,6 +306,7 @@
       "parentSha": "96c37d1b6359913c1c2a46252dd63ac5be78a5e8",
       "subject": "fix(proto): handle V3 member metadata and empty owned partitions",
       "date": "2023-08-21T22:48:31+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer_group_members.go"
       ],
@@ -311,6 +325,7 @@
       "parentSha": "f35d212197859d2b3170a28ffef405ffdebe6ed1",
       "subject": "bug: implement unsigned modulus for partitioning with crc32 hashing",
       "date": "2023-08-07T10:32:06+01:00",
+      "language": "go",
       "sourceFiles": [
         "partitioner.go"
       ],
@@ -330,6 +345,7 @@
       "parentSha": "8c40629324ad438d3dfed8b4504b6d4886cbfb47",
       "subject": "fix(proto): use full range of MetadataRequest",
       "date": "2023-08-04T10:31:07+01:00",
+      "language": "go",
       "sourceFiles": [
         "metadata_request.go",
         "metadata_response.go"
@@ -370,6 +386,7 @@
       "parentSha": "5530d61b4d94a159c420b29c84ef86829946c81c",
       "subject": "fix(consumer): use full range of FetchRequest vers",
       "date": "2023-08-03T21:38:43+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go",
         "fetch_request.go",
@@ -396,6 +413,7 @@
       "subject": "fix(proto): ensure req+resp requiredVersion match (#2548)",
       "date": "2023-08-03T14:42:50+01:00",
       "prNumber": 2548,
+      "language": "go",
       "sourceFiles": [
         "describe_configs_request.go",
         "describe_configs_response.go"
@@ -415,6 +433,7 @@
       "parentSha": "08ff0ff4023bf1afcba58576d7f3d35e50c9e7c1",
       "subject": "fix: admin retry logic",
       "date": "2023-07-23T13:40:46+01:00",
+      "language": "go",
       "sourceFiles": [
         "admin.go"
       ],
@@ -433,6 +452,7 @@
       "parentSha": "6ecdb50a30c3f2897be5e863aa7c854781e389be",
       "subject": "fix: admin retry logic",
       "date": "2023-07-23T11:46:48+01:00",
+      "language": "go",
       "sourceFiles": [
         "admin.go"
       ],
@@ -451,6 +471,7 @@
       "parentSha": "c2cab9d229a22140f8660eaa82e5d3b4a3221383",
       "subject": "fix: restore (*OffsetCommitRequest) AddBlock func",
       "date": "2023-07-17T13:09:30+01:00",
+      "language": "go",
       "sourceFiles": [
         "offset_commit_request.go",
         "offset_manager.go"
@@ -473,6 +494,7 @@
       "subject": "fix(mock consumer): HighWaterMarkOffset (#2447)",
       "date": "2023-03-23T22:40:58Z",
       "prNumber": 2447,
+      "language": "go",
       "sourceFiles": [
         "mocks/consumer.go"
       ],
@@ -493,6 +515,7 @@
       "subject": "fix(consumer): don't retry FindCoordinator forever (#2427)",
       "date": "2023-01-25T22:07:22Z",
       "prNumber": 2427,
+      "language": "go",
       "sourceFiles": [
         "consumer_group.go"
       ],
@@ -512,6 +535,7 @@
       "subject": "fix(metrics): fix race when accessing metric registry (#2409)",
       "date": "2023-01-10T09:57:07Z",
       "prNumber": 2409,
+      "language": "go",
       "sourceFiles": [
         "broker.go"
       ],
@@ -533,6 +557,7 @@
       "subject": "fix(producer): return errors for every message in retryBatch to avoid producer hang forever (#2378)",
       "date": "2022-12-22T11:31:54Z",
       "prNumber": 2378,
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -551,6 +576,7 @@
       "parentSha": "8a001b4551d610183bcf06c538e3e2cdc02fda17",
       "subject": "fix: include assignment-less members in SyncGroup",
       "date": "2022-07-22T16:41:55+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer_group.go",
         "sync_group_request.go",
@@ -572,6 +598,7 @@
       "parentSha": "6228349b4f9206c2b9b84d7b79be03beefcb06d5",
       "subject": "fix(balance): sort and de-deplicate memberIDs",
       "date": "2022-07-20T15:22:44+01:00",
+      "language": "go",
       "sourceFiles": [
         "balance_strategy.go"
       ],
@@ -590,6 +617,7 @@
       "parentSha": "23c42869222b1467841a9b6318a7ceb159c6a6fd",
       "subject": "fix: fix metadata retry backoff invalid when get metadata failed",
       "date": "2022-06-19T19:50:15+08:00",
+      "language": "go",
       "sourceFiles": [
         "client.go"
       ],
@@ -608,6 +636,7 @@
       "parentSha": "9bf344fc6f900fc6d3bc2b0746d63e4f21017771",
       "subject": "fix(protocol): tidyup DescribeGroupsResponse",
       "date": "2022-06-07T13:50:29+01:00",
+      "language": "go",
       "sourceFiles": [
         "describe_groups_response.go"
       ],
@@ -626,6 +655,7 @@
       "parentSha": "0c4ba61b272cf7bb88872e5698aab5053637b8e5",
       "subject": "Fix: fix describe group failed",
       "date": "2022-06-07T16:46:43+08:00",
+      "language": "go",
       "sourceFiles": [
         "describe_groups_response.go"
       ],
@@ -644,6 +674,7 @@
       "parentSha": "0c4ba61b272cf7bb88872e5698aab5053637b8e5",
       "subject": "fix: range balance strategy not like reference",
       "date": "2022-06-06T16:54:33-05:00",
+      "language": "go",
       "sourceFiles": [
         "balance_strategy.go"
       ],
@@ -663,6 +694,7 @@
       "subject": "fix: use receiver goroutine to process all sasl v1 responses (#2234)",
       "date": "2022-05-30T12:49:30+01:00",
       "prNumber": 2234,
+      "language": "go",
       "sourceFiles": [
         "broker.go",
         "response_header.go"
@@ -686,6 +718,7 @@
       "parentSha": "0fe5d534ef6247cf4492a6f2233ef248891a2204",
       "subject": "fix(admin): make DeleteRecords err consistent",
       "date": "2022-05-11T18:22:23+01:00",
+      "language": "go",
       "sourceFiles": [
         "admin.go"
       ],
@@ -705,6 +738,7 @@
       "parentSha": "30855f030980209083bef1a360452980e794eb3e",
       "subject": "fix: cope with OffsetsLoadInProgress on Join+Sync",
       "date": "2022-04-14T01:37:42+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer_group.go"
       ],
@@ -723,6 +757,7 @@
       "parentSha": "43bd56231eda7d971c8cc0ee562bbc69c25f5788",
       "subject": "fix(test): mockbroker offsetResponse vers behavior",
       "date": "2022-04-14T01:30:54+01:00",
+      "language": "go",
       "sourceFiles": [
         "mockresponses.go"
       ],
@@ -752,6 +787,7 @@
       "parentSha": "8f8d8daa0703daa7420dbb6490e8304244094beb",
       "subject": "fix: prevent idempotent producer epoch exhaustion",
       "date": "2022-04-13T22:59:33+01:00",
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -770,6 +806,7 @@
       "parentSha": "3144ec856137b7f67c72a11bd945b8bc501534e1",
       "subject": "fix: prevent RefreshBrokers leaking old brokers",
       "date": "2022-04-13T22:18:05+01:00",
+      "language": "go",
       "sourceFiles": [
         "client.go"
       ],
@@ -789,6 +826,7 @@
       "subject": "producer: ensure that the management message (fin) is never \"leaked\" (#2182)",
       "date": "2022-03-30T18:32:27+01:00",
       "prNumber": 2182,
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -807,6 +845,7 @@
       "parentSha": "f07b7b87556741de750337199ccd02aa2a996fe2",
       "subject": "Remediate a number go-routine leaks.",
       "date": "2022-03-30T18:03:18+01:00",
+      "language": "go",
       "sourceFiles": [
         "admin.go"
       ],
@@ -837,6 +876,7 @@
       "parentSha": "f1fd15e9c6faea6744c92773d9c7dc1794b94765",
       "subject": "fix: reduce verbosity and whitespace of multierror",
       "date": "2022-02-27T13:32:55Z",
+      "language": "go",
       "sourceFiles": [
         "errors.go"
       ],
@@ -856,6 +896,7 @@
       "parentSha": "8f626c8aa121d23f03b180e84761fb15b3844b26",
       "subject": "fix: make ErrOutOfBrokers wrap underlying net err",
       "date": "2022-02-24T17:51:07Z",
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "client.go",
@@ -884,6 +925,7 @@
       "subject": "Fix deadlock when closing Broker in brokerProducer (#2133)",
       "date": "2022-02-13T14:28:21Z",
       "prNumber": 2133,
+      "language": "go",
       "sourceFiles": [
         "async_producer.go",
         "broker.go"
@@ -904,6 +946,7 @@
       "parentSha": "0fcf75bf394f4bd6af6e3dd5984b3dd79f281361",
       "subject": "fix: correct bugs in DescribeGroupsResponse",
       "date": "2022-01-13T13:53:23Z",
+      "language": "go",
       "sourceFiles": [
         "consumer_group_members.go",
         "describe_groups_response.go"
@@ -925,6 +968,7 @@
       "parentSha": "6a2f0c282c2cc45b51d2b22995cd857993166011",
       "subject": "Fix wrong offsets in mock Consumer",
       "date": "2021-12-17T18:25:07+01:00",
+      "language": "go",
       "sourceFiles": [
         "mocks/consumer.go"
       ],
@@ -944,6 +988,7 @@
       "parentSha": "31a5d23e7e5b8b9a0f25ddc30209b1ba46cd7e53",
       "subject": "fix: stuck on the batch with zero records length",
       "date": "2021-11-02T16:01:02+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go",
         "fetch_response.go",
@@ -969,6 +1014,7 @@
       "parentSha": "01c7c43010fd8dc00778f2741a328fd63c659a9d",
       "subject": "fix(test): use copy in mockbroker SetHandlersByMap",
       "date": "2021-09-22T14:46:16+01:00",
+      "language": "go",
       "sourceFiles": [
         "mockbroker.go"
       ],
@@ -987,6 +1033,7 @@
       "parentSha": "1cdea0aa2e8fe50e4702dac828c7c1da72c19773",
       "subject": "fix: prevent data race on conf.Version",
       "date": "2021-09-22T13:31:47+01:00",
+      "language": "go",
       "sourceFiles": [
         "broker.go"
       ],
@@ -1005,6 +1052,7 @@
       "parentSha": "aa15a3e29920bd1f9fa65ee07886f2c501c068d9",
       "subject": "Fix format",
       "date": "2021-09-08T14:12:13+02:00",
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "mockresponses.go"
@@ -1025,6 +1073,7 @@
       "parentSha": "0676fc297fca0c5dfba927c0c4f6925ce2ae1e77",
       "subject": "Fixed WithCustomFallbackPartitioner implementation. Fixes #1913",
       "date": "2021-07-16T13:03:03-07:00",
+      "language": "go",
       "sourceFiles": [
         "partitioner.go"
       ],
@@ -1043,6 +1092,7 @@
       "parentSha": "784e2498f13f984efe762b62a877a1bca425311b",
       "subject": "feat(lint): enable and fix more linting rules",
       "date": "2021-04-30T12:45:10+01:00",
+      "language": "go",
       "sourceFiles": [
         "broker.go",
         "tools/tls/config.go"
@@ -1067,6 +1117,7 @@
       "subject": "fix: tidyup code quality warnings (#1887)",
       "date": "2021-03-15T11:58:40Z",
       "prNumber": 1887,
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "client.go",
@@ -1096,6 +1147,7 @@
       "parentSha": "7df2cf0db526b2b47cb71f8ec023d7bf941b3145",
       "subject": "fix and replace original implementation",
       "date": "2020-12-24T15:14:15+08:00",
+      "language": "go",
       "sourceFiles": [
         "balance_strategy.go"
       ],
@@ -1115,6 +1167,7 @@
       "parentSha": "4bc9b8f84adfed7a16fa21798ab07118381e0a84",
       "subject": "fix: mock sync producer does not handle the offset while sending messages",
       "date": "2020-07-16T11:01:12+08:00",
+      "language": "go",
       "sourceFiles": [
         "mocks/sync_producer.go"
       ],
@@ -1133,6 +1186,7 @@
       "parentSha": "8b91b872756c4220f47cc69f2e115a4641908446",
       "subject": "Set server name only for the current broker",
       "date": "2020-05-12T15:22:50-07:00",
+      "language": "go",
       "sourceFiles": [
         "broker.go"
       ],
@@ -1152,6 +1206,7 @@
       "subject": "fix: Allow TLS to work over socks proxy. (#1666)",
       "date": "2020-05-05T14:21:22+01:00",
       "prNumber": 1666,
+      "language": "go",
       "sourceFiles": [
         "broker.go",
         "config.go"
@@ -1178,6 +1233,7 @@
       "parentSha": "6159078aacb29adb9ecbd2a83ab9c2732c80add2",
       "subject": "Fix \"broker received out of order sequence\" when brokers die",
       "date": "2020-04-14T16:05:05+10:00",
+      "language": "go",
       "sourceFiles": [
         "async_producer.go",
         "produce_set.go"
@@ -1197,6 +1253,7 @@
       "parentSha": "9501120220783df659f2e405635a20cacc3655e0",
       "subject": "Fix brokers continually allocating new Session IDs",
       "date": "2020-04-09T09:06:14+10:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go"
       ],
@@ -1216,6 +1273,7 @@
       "parentSha": "30e70940f141017978d859145f48ab6b87d9997e",
       "subject": "fix: retry topic request on ControllerNotAvailable",
       "date": "2020-01-24T13:40:02Z",
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "client.go",
@@ -1236,6 +1294,7 @@
       "parentSha": "7a7d874396a0431b0a20de48593b7dad1f4c3419",
       "subject": "fix: fill in the Fetch{Request,Response} protocol",
       "date": "2020-01-17T14:14:12Z",
+      "language": "go",
       "sourceFiles": [
         "fetch_request.go",
         "fetch_response.go",
@@ -1256,6 +1315,7 @@
       "parentSha": "94fa8ffe4e11b7b57d2b2fb14f5a10fbddd8d6c2",
       "subject": "fix: set DescribeConfigRequest Version field",
       "date": "2020-01-16T09:41:14Z",
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "mockresponses.go"
@@ -1275,6 +1335,7 @@
       "parentSha": "a20d26723487482b4f1af8b8537657a5ba72ae37",
       "subject": "fix: use the broker for any admin on BrokerConfig",
       "date": "2020-01-15T14:07:24Z",
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "config_resource_type.go",
@@ -1297,6 +1358,7 @@
       "subject": "Allow the Consumer to disable auto-commit offsets (#1164)",
       "date": "2019-11-21T18:50:03-06:00",
       "prNumber": 1164,
+      "language": "go",
       "sourceFiles": [
         "config.go",
         "offset_manager.go"
@@ -1317,6 +1379,7 @@
       "parentSha": "96122a6f6bbfd131ccb4b225127f46a74018e917",
       "subject": "fix: ensure consistent use of read/write deadlines",
       "date": "2019-10-30T22:26:59Z",
+      "language": "go",
       "sourceFiles": [
         "broker.go"
       ],
@@ -1336,6 +1399,7 @@
       "subject": "fix brokerProducer goroutine leak (#1442)",
       "date": "2019-08-07T19:32:11-05:00",
       "prNumber": 1442,
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -1357,6 +1421,7 @@
       "subject": "fix bug deleteRecord (#1425)",
       "date": "2019-07-20T13:57:00-05:00",
       "prNumber": 1425,
+      "language": "go",
       "sourceFiles": [
         "admin.go",
         "errors.go"
@@ -1378,6 +1443,7 @@
       "parentSha": "41f00bce7fd3fb0f5c556458480aa59ed9fe079c",
       "subject": "bug: handle and log throttled FetchResponses",
       "date": "2019-05-29T12:56:29+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go"
       ],
@@ -1396,6 +1462,7 @@
       "parentSha": "2b824357033b9904e3a32bf7fae2efe76f1591fd",
       "subject": "bug: V5 MetadataRequest nullable topics array",
       "date": "2019-04-10T22:57:28+01:00",
+      "language": "go",
       "sourceFiles": [
         "metadata_request.go"
       ],
@@ -1418,6 +1485,7 @@
       "parentSha": "6b86562f5c88b1d9dbaf802ec84f213a2e101500",
       "subject": "PR fixes: - clean up config test - clarify comment on batch - rm none - rm naked error - clarify producerList logic",
       "date": "2019-03-30T16:41:15+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go",
         "control_record.go",
@@ -1439,6 +1507,7 @@
       "parentSha": "f3f4f5f1acf1a26acb582cfb158c2433f37288b4",
       "subject": "Revert to individual msg retries for non-idempotent",
       "date": "2018-10-30T17:45:39Z",
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -1459,6 +1528,7 @@
       "parentSha": "9f69c419039f6c4d60ba5bb74a394131ad2a933c",
       "subject": "simplified code for abandoned connection check, attempt to fix racy sync producer test",
       "date": "2018-10-08T16:40:36-07:00",
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -1479,6 +1549,7 @@
       "parentSha": "ed280996b51ddb92b2cf90947a4ba12d695a1f36",
       "subject": "Handle overflow-only batch",
       "date": "2018-08-16T17:18:11+01:00",
+      "language": "go",
       "sourceFiles": [
         "fetch_response.go",
         "message_set.go",
@@ -1499,6 +1570,7 @@
       "parentSha": "e7238b119b7daab993720f0153eafb88e2b0ac1f",
       "subject": "Fix partial messages handling",
       "date": "2018-08-10T17:21:03+01:00",
+      "language": "go",
       "sourceFiles": [
         "length_field.go"
       ],
@@ -1517,6 +1589,7 @@
       "parentSha": "f7df95cff1bc4d14a4194a5be4c88a86253afb98",
       "subject": "Simpler offset management, fixed minor race",
       "date": "2018-07-10T10:25:28+01:00",
+      "language": "go",
       "sourceFiles": [
         "offset_manager.go"
       ],
@@ -1536,6 +1609,7 @@
       "parentSha": "f7466ea37d994396e26da2a8b7ca33e6691abafd",
       "subject": "Proper mock expectations in SyncProducer.SendMessages",
       "date": "2018-02-06T13:01:10+01:00",
+      "language": "go",
       "sourceFiles": [
         "mocks/sync_producer.go"
       ],
@@ -1555,6 +1629,7 @@
       "parentSha": "1fcddd9b8ef8dce0ac165ea3da25556d0fe42f22",
       "subject": "advance partition consumer offset after compacted messages",
       "date": "2017-12-23T16:44:58+01:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go",
         "errors.go",
@@ -1576,6 +1651,7 @@
       "parentSha": "6a8d89d71d22bbdc14b6cb52778889a710be19a7",
       "subject": "Fix header references during record build.",
       "date": "2017-12-04T14:10:07Z",
+      "language": "go",
       "sourceFiles": [
         "produce_set.go"
       ],
@@ -1594,6 +1670,7 @@
       "parentSha": "55b3f6a77f08038b1e82c3db3c1ce619e46de9b6",
       "subject": "make decoding unknown message versions error",
       "date": "2017-08-25T16:02:25+01:00",
+      "language": "go",
       "sourceFiles": [
         "message.go"
       ],
@@ -1613,6 +1690,7 @@
       "parentSha": "2fd980e23bdcbb8edeb78fc704de0c39a6567ffc",
       "subject": "FIX: It shouldn't sort the replicas and isr while the order is meaningful to Kafka(preferred leader)",
       "date": "2017-08-12T12:13:20+08:00",
+      "language": "go",
       "sourceFiles": [
         "client.go",
         "utils.go"
@@ -1632,6 +1710,7 @@
       "parentSha": "088e47274c3c2dbb8851067a2212f8c89a094fe5",
       "subject": "Fix concurrency issue in hashedPartitioner",
       "date": "2017-03-02T15:40:55+01:00",
+      "language": "go",
       "sourceFiles": [
         "partitioner.go"
       ],
@@ -1652,6 +1731,7 @@
       "subject": "Fix compression timestamps (#759)",
       "date": "2016-10-06T11:29:08-04:00",
       "prNumber": 759,
+      "language": "go",
       "sourceFiles": [
         "produce_set.go"
       ],
@@ -1670,6 +1750,7 @@
       "parentSha": "fde67d333550a7e2b9046140befe6d93756a6669",
       "subject": "OffsetManager: match upstream mark/next behaviour",
       "date": "2016-07-26T13:17:33-04:00",
+      "language": "go",
       "sourceFiles": [
         "offset_manager.go"
       ],
@@ -1692,6 +1773,7 @@
       "parentSha": "7fbb591e578ef78a88ed72f3ea7156a086a680be",
       "subject": "Fix HashPartitioner's negative result by applying modulo before checking negative",
       "date": "2016-07-18T20:19:19+07:00",
+      "language": "go",
       "sourceFiles": [
         "partitioner.go"
       ],
@@ -1710,6 +1792,7 @@
       "parentSha": "f9642ad29d5d0e6273e5b84cf56c89eb9f8c4707",
       "subject": "Fix race condition with graceful shutdown of MockBroker",
       "date": "2016-07-13T11:16:49-07:00",
+      "language": "go",
       "sourceFiles": [
         "mockbroker.go"
       ],
@@ -1728,6 +1811,7 @@
       "parentSha": "f26080eb84027ccbd6aca4565b540be1baafbc05",
       "subject": "Validate client ID",
       "date": "2016-03-17T17:04:27-04:00",
+      "language": "go",
       "sourceFiles": [
         "config.go"
       ],
@@ -1746,6 +1830,7 @@
       "parentSha": "ffff88f338c62e1d901f6ee8d76eb825a68affaf",
       "subject": "Makes newMockMetadataResponse exported (fixes #609)",
       "date": "2016-02-19T14:09:11-08:00",
+      "language": "go",
       "sourceFiles": [
         "mockresponses.go"
       ],
@@ -1777,6 +1862,7 @@
       "parentSha": "87ec8d76e89cc002ff5673ee7598ae1db2f32424",
       "subject": "Fix offset_manager for Kafka 0.9.0.0",
       "date": "2015-12-13T10:19:03-08:00",
+      "language": "go",
       "sourceFiles": [
         "offset_manager.go"
       ],
@@ -1795,6 +1881,7 @@
       "parentSha": "f0e1e8afb3b67d285dc988fc9c71ed26436827ac",
       "subject": "Refactor the producer, part 2",
       "date": "2015-10-14T17:34:41-04:00",
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -1813,6 +1900,7 @@
       "parentSha": "0fc41057b8778e403af500c680970a992be9bdbb",
       "subject": "client: stop the background thread before closing",
       "date": "2015-04-15T19:11:27Z",
+      "language": "go",
       "sourceFiles": [
         "client.go"
       ],
@@ -1831,6 +1919,7 @@
       "parentSha": "264b5e585624de58b4185f7c2cedde83c92ee486",
       "subject": "Fix OffsetCommitRequest",
       "date": "2015-03-24T13:31:25Z",
+      "language": "go",
       "sourceFiles": [
         "offset_commit_request.go"
       ],
@@ -1849,6 +1938,7 @@
       "parentSha": "4f41ea618633c54155adb3a4dcf43651fdc2ac9d",
       "subject": "producer: bugfix for broker flushers getting stuck",
       "date": "2015-03-18T22:21:28Z",
+      "language": "go",
       "sourceFiles": [
         "async_producer.go"
       ],
@@ -1867,6 +1957,7 @@
       "parentSha": "33c59fc879acc3a69310bec6bda47c26e97c9c4e",
       "subject": "Don't pre-emptively test the leader connectedness",
       "date": "2015-02-23T16:00:24Z",
+      "language": "go",
       "sourceFiles": [
         "producer.go"
       ],
@@ -1885,6 +1976,7 @@
       "parentSha": "1b465e78c274a76c0a522272cac25e39ddaa0d07",
       "subject": "Implement Client.WritablePartitions",
       "date": "2014-11-28T15:04:26-05:00",
+      "language": "go",
       "sourceFiles": [
         "client.go",
         "metadata_response.go"
@@ -1917,6 +2009,7 @@
       "parentSha": "1618fc4ef2ceb7ff2f1fea846dde4469e22d01a2",
       "subject": "Fix bug #179",
       "date": "2014-11-19T09:37:52-05:00",
+      "language": "go",
       "sourceFiles": [
         "producer.go"
       ],
@@ -1935,6 +2028,7 @@
       "parentSha": "0b9addd1e08548b523db2d936949016305dd5f60",
       "subject": "Fix test raciness",
       "date": "2014-11-16T09:14:12-05:00",
+      "language": "go",
       "sourceFiles": [
         "mockbroker.go"
       ],
@@ -1953,6 +2047,7 @@
       "parentSha": "bedb1a471f81878f1783591d968c0b7f757306d2",
       "subject": "Add some tests",
       "date": "2014-11-11T11:53:14-05:00",
+      "language": "go",
       "sourceFiles": [
         "producer.go"
       ],
@@ -1974,6 +2069,7 @@
       "parentSha": "6c7468fa03fc6508b9b35776eccf47670111c8c3",
       "subject": "consumer: add unit test",
       "date": "2014-11-03T11:34:42-05:00",
+      "language": "go",
       "sourceFiles": [
         "consumer.go",
         "fetch_response.go"
@@ -1994,6 +2090,7 @@
       "parentSha": "03fbf23be5bcba2b8380425cc6c3c6d1f5f38c9a",
       "subject": "fix compression",
       "date": "2013-11-14T15:55:23-05:00",
+      "language": "go",
       "sourceFiles": [
         "produce_message.go",
         "producer.go"
@@ -2013,6 +2110,7 @@
       "parentSha": "ae8685c89014546904dcfb00e7cf9dab3f4689f1",
       "subject": "Allow configuration of per-broker concurrency.",
       "date": "2013-10-01T21:33:47-05:00",
+      "language": "go",
       "sourceFiles": [
         "broker.go",
         "client.go"
@@ -2032,6 +2130,7 @@
       "parentSha": "907691e531e50898fed450cac1d1a5c014ea0909",
       "subject": "Fix HashPartitioner returning negative partitions.",
       "date": "2013-08-26T10:25:46-04:00",
+      "language": "go",
       "sourceFiles": [
         "partitioner.go",
         "producer.go"
@@ -2052,6 +2151,7 @@
       "parentSha": "98ac318f22209c6b6585c57f001f8f3ac8a379f5",
       "subject": "Fix message compression flag.",
       "date": "2013-08-22T09:42:49-04:00",
+      "language": "go",
       "sourceFiles": [
         "message.go"
       ],
@@ -2071,6 +2171,7 @@
       "parentSha": "dae9785f7e142d43da2ffbd1de966b20f2d5d044",
       "subject": "Permit creating client with multiple broker addresses",
       "date": "2013-08-15T09:51:35-04:00",
+      "language": "go",
       "sourceFiles": [
         "client.go"
       ],
@@ -2096,6 +2197,7 @@
       "parentSha": "163e743eb7660749bccd4b58269425efd1f29d56",
       "subject": "Add a test, fix a bug.",
       "date": "2013-07-29T09:50:39-04:00",
+      "language": "go",
       "sourceFiles": [
         "kafka/client.go"
       ],

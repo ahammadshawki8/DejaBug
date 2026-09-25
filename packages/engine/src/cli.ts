@@ -1,11 +1,13 @@
 #!/usr/bin/env node
+import { execFileSync } from "node:child_process";
 import { EventEmitter } from "node:events";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { Command } from "commander";
+import { ADAPTERS, detectAdapter } from "./adapters/index.js";
 import { certify } from "./certifier.js";
-import { loadConfig } from "./config.js";
+import { findRepoRoot, loadConfig, normalizeSlug, type Config } from "./config.js";
 import { runDoctor } from "./doctor.js";
 import { mine } from "./miner.js";
 import {
@@ -26,41 +28,96 @@ const program = new Command();
 
 program
   .name("dejabug")
-  .description("Mine, certify, and brief real bug fixes into training cases.")
-  .version("0.1.0");
+  .description("Turn any repository's real bug fixes into certified training cases.")
+  .version("0.1.0")
+  .option(
+    "-t, --target <repo>",
+    "target repository as owner/name or GitHub URL (default: DEJABUG_REPO_SLUG)",
+  );
+
+function config(): Config {
+  const target = program.opts<{ target?: string }>().target;
+  return loadConfig(process.env, findRepoRoot(), { target });
+}
+
+/** The target repo's language adapter, with its toolchain verified. Throws with a fix-it message otherwise. */
+function requireAdapter(cfg: Config) {
+  if (!existsSync(path.join(cfg.repoDir, ".git"))) {
+    throw new Error(`${cfg.repoSlug} is not cloned yet. Run: dejabug init ${cfg.repoSlug}`);
+  }
+  const adapter = detectAdapter(cfg.repoDir);
+  if (!adapter) {
+    throw new Error(
+      `no supported language in ${cfg.repoSlug} (adapters: ${ADAPTERS.map((a) => a.name).join(", ")})`,
+    );
+  }
+  const tool = adapter.toolCheck();
+  if (!tool.ok) {
+    throw new Error(
+      `${adapter.name} toolchain unavailable in this terminal (${tool.detail}). Every run would be misread, ` +
+        "so nothing was started. Open a new terminal after installing it and run `dejabug doctor`.",
+    );
+  }
+  return adapter;
+}
 
 program
   .command("doctor")
-  .description("check git, go, the target repo, Bob Shell, and watsonx configuration")
+  .description("check git, the target repo, its language toolchain, Bob Shell, and watsonx configuration")
   .action(() => {
-    const checks = runDoctor(loadConfig());
-    for (const c of checks) console.log(`${c.ok ? "OK  " : "MISS"}  ${c.name.padEnd(12)} ${c.detail}`);
+    for (const c of runDoctor(config()))
+      console.log(`${c.ok ? "OK  " : "MISS"}  ${c.name.padEnd(12)} ${c.detail}`);
+  });
+
+program
+  .command("init")
+  .description("clone a GitHub repository into workspace/ and detect its language")
+  .argument("<repo>", "owner/name or GitHub URL")
+  .action((repo: string) => {
+    const slug = normalizeSlug(repo);
+    const cfg = loadConfig(process.env, findRepoRoot(), { target: slug });
+    if (existsSync(path.join(cfg.repoDir, ".git"))) {
+      console.log(`${slug} already cloned at ${cfg.repoDir}`);
+    } else {
+      console.log(`cloning https://github.com/${slug}.git ...`);
+      mkdirSync(path.dirname(cfg.repoDir), { recursive: true });
+      execFileSync("git", ["clone", "--quiet", `https://github.com/${slug}.git`, cfg.repoDir], {
+        stdio: "inherit",
+      });
+    }
+    const adapter = detectAdapter(cfg.repoDir);
+    if (!adapter) {
+      console.log(`no supported language detected (adapters: ${ADAPTERS.map((a) => a.name).join(", ")})`);
+      process.exitCode = 1;
+      return;
+    }
+    const tool = adapter.toolCheck();
+    console.log(
+      `language: ${adapter.name}   toolchain: ${tool.ok ? tool.detail : `MISSING (${tool.detail})`}`,
+    );
+    console.log(`next: dejabug --target ${slug} mine`);
   });
 
 program
   .command("mine")
   .description("find fix-like commits that change tests plus 1-3 source files")
-  .option("--repo <dir>", "target repository (default: DEJABUG_REPO_DIR)")
+  .option("--repo <dir>", "repository directory (default: the --target clone)")
   .option("--out <file>", "output JSON (default: <casesDir>/candidates.json)")
   .option("--max-commits <n>", "only scan the most recent N commits", (v) => Number(v))
   .action(async (opts: { repo?: string; out?: string; maxCommits?: number }) => {
-    const config = loadConfig();
-    const repoDir = opts.repo ? fromInvocationDir(opts.repo) : config.repoDir;
-    const out = opts.out ? fromInvocationDir(opts.out) : path.join(config.casesDir, "candidates.json");
+    const cfg = config();
+    const repoDir = opts.repo ? fromInvocationDir(opts.repo) : cfg.repoDir;
+    const out = opts.out ? fromInvocationDir(opts.out) : path.join(cfg.casesDir, "candidates.json");
 
     const started = Date.now();
     const result = await mine(repoDir, { maxCommits: opts.maxCommits });
-    const file: CandidatesFile = {
-      repo: config.repoSlug,
-      generatedAt: new Date().toISOString(),
-      ...result,
-    };
+    const file: CandidatesFile = { repo: cfg.repoSlug, generatedAt: new Date().toISOString(), ...result };
     mkdirSync(path.dirname(out), { recursive: true });
     writeFileSync(out, JSON.stringify(file, null, 2) + "\n");
 
     const secs = ((Date.now() - started) / 1000).toFixed(1);
     console.log(
-      `scanned ${result.scannedCommits} commits, ${result.fixLikeCommits} fix-like, ` +
+      `[${result.language}] scanned ${result.scannedCommits} commits, ${result.fixLikeCommits} fix-like, ` +
         `${result.candidates.length} candidates in ${secs}s -> ${path.relative(process.cwd(), out)}`,
     );
   });
@@ -73,18 +130,12 @@ program
   .option("--only <shas>", "comma-separated fix shas (prefixes allowed) to certify")
   .option("--redo", "re-certify candidates that already have a result")
   .action(async (opts: { limit?: number; concurrency: number; only?: string; redo?: boolean }) => {
-    const config = loadConfig();
-    const file = readCandidates(config.casesDir);
-    if (!file) throw new Error(`no candidates.json in ${config.casesDir}; run "dejabug mine" first`);
-    const go = runDoctor(config).find((c) => c.name === "go");
-    if (!go?.ok) {
-      throw new Error(
-        "go is not on PATH in this terminal, so every candidate would be misread as a build failure. " +
-          "Open a new terminal (or restart the IDE) after installing Go, then run `dejabug doctor`.",
-      );
-    }
+    const cfg = config();
+    const file = readCandidates(cfg.casesDir);
+    if (!file) throw new Error(`no candidates.json in ${cfg.casesDir}; run "dejabug mine" first`);
+    const adapter = requireAdapter(cfg);
 
-    const done = new Set((readCertifications(config.casesDir)?.results ?? []).map((r) => r.fixSha));
+    const done = new Set((readCertifications(cfg.casesDir)?.results ?? []).map((r) => r.fixSha));
     const only = opts.only?.split(",").map((s) => s.trim().toLowerCase());
     let queue = file.candidates.filter((c) =>
       only ? only.some((p) => c.fixSha.startsWith(p)) : opts.redo || !done.has(c.fixSha),
@@ -95,17 +146,17 @@ program
       return;
     }
 
-    console.log(`certifying ${queue.length} candidates with ${opts.concurrency} workers...`);
+    console.log(`[${adapter.id}] certifying ${queue.length} candidates with ${opts.concurrency} workers...`);
     const emitter = new EventEmitter();
     emitter.on("forge", (e: ForgeEvent) => {
       if (e.type === "result") console.log(`  [w${e.worker}] ${e.fixSha.slice(0, 7)}  ${e.status}`);
     });
 
     const started = Date.now();
-    const results = await certify(queue, config.repoDir, emitter, opts.concurrency);
-    const merged = mergeCertifications(config.casesDir, file.repo, results);
+    const results = await certify(queue, cfg.repoDir, emitter, opts.concurrency);
+    const merged = mergeCertifications(cfg.casesDir, file.repo, results);
     const funnel = computeFunnel(file, merged.results);
-    writeFunnel(config.casesDir, funnel);
+    writeFunnel(cfg.casesDir, funnel);
 
     const secs = ((Date.now() - started) / 1000).toFixed(0);
     console.log(
@@ -125,18 +176,16 @@ program
   .command("serve")
   .description("start the local engine server (full API arrives in T4.3)")
   .action(() => {
-    const config = loadConfig();
+    const cfg = config();
     const server = createServer((req, res) => {
       if (req.url === "/api/health") {
         res.writeHead(200, { "content-type": "application/json" });
-        res.end(JSON.stringify({ ok: true, repo: config.repoSlug }));
+        res.end(JSON.stringify({ ok: true, repo: cfg.repoSlug }));
         return;
       }
       res.writeHead(404).end();
     });
-    server.listen(config.port, () =>
-      console.log(`dejabug engine listening on http://localhost:${config.port}`),
-    );
+    server.listen(cfg.port, () => console.log(`dejabug engine listening on http://localhost:${cfg.port}`));
   });
 
 program.parseAsync(process.argv).catch((err: unknown) => {

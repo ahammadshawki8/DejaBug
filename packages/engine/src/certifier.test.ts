@@ -29,6 +29,7 @@ describe.skipIf(!hasGo())("certify (Go fixture repository)", () => {
       parentSha: repo.git("rev-parse", `${fixSha}^`).trim(),
       subject: name,
       date: new Date().toISOString(),
+      language: "go",
       sourceFiles,
       testFiles: ["calc_test.go"],
       packages: ["."],

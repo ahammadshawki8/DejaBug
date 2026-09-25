@@ -11,7 +11,7 @@
 | Current tier | T2 Certifier |
 | Next item | T2.6 |
 | Next owner | BOB |
-| Last updated | 2026-09-26 01:50 BST |
+| Last updated | 2026-09-26 02:45 BST |
 | Bobcoins used | 6.225 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
@@ -47,6 +47,7 @@
 7. **Secrets** (GitHub token, API keys) live only in `.env`, never in git. `.env.example` documents them.
 8. **Working software over breadth.** A tier is done only when its "Done when" line is demonstrably true. Never start the next tier with the current one broken.
 9. **The frontend must feel like a game**, not an admin panel (see Section 6).
+10. **Repository-agnostic.** DejaBug must work on any well-maintained repository with a test suite, not only sarama. No language- or repo-specific literals (`go test`, `_test.go`, `IBM/sarama`) outside `packages/engine/src/adapters/` and config defaults. sarama is only the demo target.
 
 ---
 
@@ -66,7 +67,9 @@
 
 Bob turns each fix's PR and issue thread into a spoiler-free case file. The new hire then debugs the real bug in Bob IDE, coached by a **read-only Bob Mentor mode that physically cannot write the fix**. They earn XP, ranks, and badges. At the end they get a debrief comparing their fix and time with the original team's.
 
-**Demo repository:** [IBM/sarama](https://github.com/IBM/sarama), a Go client for Apache Kafka (12.5k stars, MIT license).
+**Works on any repository with tests.** A language adapter layer (Go first, then Python) detects the repo's language, finds its tests, runs them, and classifies the results. `dejabug init <owner/repo>` onboards a new repository in one command. Each repository gets its own `cases/<name>/`.
+
+**Primary demo repository:** [IBM/sarama](https://github.com/IBM/sarama), a Go client for Apache Kafka (12.5k stars, MIT license).
 - Measured by `dejabug mine` on 2026-09-26: 2,889 commits, 703 fix-like, and **101 runnable candidates** that change tests plus 1-3 source files. Commits whose only test changes are in sarama's `functional` tests are excluded, because those need a live Kafka broker.
 - Go modules make historical snapshots build reliably.
 
@@ -80,7 +83,8 @@ Bob turns each fix's PR and issue thread into a spoiler-free case file. The new 
 ## 4. Features
 
 ### 4.1 Engine (CLI + local server)
-- **F1 Mine.** Scan `git log` for fix-like commits. Keep those that change `_test.go` files plus 1 to 3 source files. Record the PR number from the commit message. Output a candidate list with metadata.
+- **F0 Onboard.** `dejabug init <owner/repo | url>` clones into `workspace/<name>` and detects the language adapter (`go.mod` means Go, `pyproject.toml`/`setup.py`/`pytest.ini` means Python). The toolchain is checked by `dejabug doctor`. Every command takes `--target <owner/name>`.
+- **F1 Mine.** Scan `git log` for fix-like commits. Keep those that change the adapter's test files plus 1 to 3 source files. (For Go these are `_test.go` files.) Record the PR number from the commit message. Output a candidate list with metadata.
 - **F2 Certify.** For each candidate, in parallel isolated worktrees:
   1. Check out the parent commit.
   2. Overlay the fix commit's test files.
@@ -146,6 +150,15 @@ flowchart LR
   API <--> W[apps/web React game UI]
   PG --> IDE[Bob IDE + deja-mentor mode]
 ```
+
+**Language adapters** (`packages/engine/src/adapters/`). One interface, `LanguageAdapter`:
+- `detect(repoDir)`
+- `isTestFile` / `isSourceFile` / `isRunnableTestFile` (for example, excluding Go build-tagged files)
+- `testsTouched(diff)` and `testTargets(testFiles)`
+- `runTests(dir, targets, tests)`, which returns `pass | fail | hang | build | notest` plus the failing test names; it throws `ToolMissingError` or `TimeoutError`
+- `toolCheck()`
+
+The miner, certifier, and verifier call only this interface.
 
 **Stack**
 - Engine: Node 24, TypeScript, `tsx`, `commander`, `execa`, `fastify`, `zod`, `p-limit`, `vitest`.
@@ -444,7 +457,8 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T2.3 [CLAUDE] `funnel.json` writer, the `dejabug certify --limit N` CLI command, and certifier unit tests.
 - [x] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
 - [x] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
-- [ ] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task.
+- [x] T2.5a [CLAUDE] **Repository-agnostic engine:** `adapters/` (interface, errors, registry, Go adapter with the REVIEW-01 item 1 and 4 output classification), the miner refactored onto the adapter, `Candidate.language`, `dejabug init <owner/repo>`, and a global `--target` option. Update the engine tests.
+- [ ] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task, and make `certifier.ts` call `adapter.runTests()` (no Go literals left in the certifier).
 - [ ] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
 - [x] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output. **Result: 23 certified of 44 attempted.**
 
@@ -463,6 +477,8 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 ### T4 Game server + play/verify (3 h), target Sat 12:00 PM
 - [ ] T4.1 [CLAUDE] `play.ts`: `git archive` export, test overlay, fresh `git init`, the playground `AGENTS.md` template, and a copy of the `deja-mentor` mode.
 - [ ] T4.2 [CLAUDE] `verify.ts`: run the case's tests in the playground and parse the results.
+- [ ] T4.4 [CLAUDE] **Python adapter** (pytest): test files `test_*.py`/`*_test.py`, test names from `def test_*` diffs, targets `file::name`, output classification, and the `.venv` toolchain check. Tests on a Python fixture repo.
+- [ ] T4.5 [HUMAN] Prove the product is generic: `dejabug init` + `mine` + `certify` on a second, Python IBM repository. Record the funnel for the video and README.
 - [ ] T4.3 [CLAUDE] `server.ts`: all REST endpoints plus SSE forge events (Section 5). Reveal stays locked until a pass or a give-up.
 - [ ] **Done when:** an end-to-end run through curl works: start, apply the real fix by hand, verify passes, reveal works.
 
@@ -486,6 +502,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [ ] **Done when:** solving a case visibly awards XP and badges, and a rank-up can be triggered.
 
 ### T7 Forge Console (3 h), target Sun 1:00 AM
+- [ ] T7.0 [CLAUDE] "Open a new precinct": server endpoint `POST /api/repos` (init + mine) and a repo picker in the Forge Console header, so any GitHub repository can be forged from the UI.
 - [ ] T7.1 [BOB] **Forge Console** as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons. This is the key demo moment.
 - [ ] **Done when:** clicking "Forge 8 cases" shows the lanes moving in real time against sarama.
 
@@ -658,3 +675,5 @@ Human, do this:
 - **2026-09-26 00:45:** T2.1 done by Bob (3.33 coins, Plan then Agent). Claude review (docs/reviews/REVIEW-T2.1.md) found 3 correctness defects, all verified with go test: build failures read as test failures, unanchored -run, and no-tests-to-run read as a pass. It also found robustness issues and lint errors. They are bundled into Bob's T2.2 task. T2.1 is committed locally and not pushed until lint passes.
 - **2026-09-26 01:20:** T2.2 done by Bob (2.34 coins): p-limit pool plus all 7 REVIEW-T2.1 fixes. T2.3 done by Claude: store.ts (atomic JSON, merge, funnel), `dejabug certify` (--limit/--concurrency/--only/--redo), and certifier tests on a real Go fixture covering all statuses (21 tests). Go added to CI. Smoke run on sarama: 2 of 4 certified in 25 s with 4 workers. Notes for REVIEW-01: (a) worker slot is i % concurrency, not a true slot, (b) fail output contains the local temp path, which includes the Windows username, (c) rejected:build stores no output.
 - **2026-09-26 01:50:** T2.4 batch: the first run was invalid (no Go on PATH in that terminal, so 40 were misread as build failures). The CLI now has a Go preflight. The rerun gives **23 certified of 44 attempted** (9 build, 5 no-fail, 2 no-pass, 5 timeout; the timeouts are hang bugs). Temp paths were scrubbed from the data. T2.5 REVIEW-01 is written (5 [BOB] items, 4 [CLAUDE] items). Next: T2.6 [BOB].
+- **2026-09-26 02:00:** Product decision (user): DejaBug must work on any well-maintained repository, not just sarama. Added Rule 10, F0 Onboard, the language adapter architecture, and new items T2.5a (adapter refactor, Claude, before Bob's T2.6), T4.4 (Python adapter), T4.5 (second-repo proof), and T7.0 (repo picker). REVIEW-01 items 1 and 4 move into the Go adapter.
+- **2026-09-26 02:45:** T2.5a done (Claude). The engine is repository-agnostic: `adapters/` (the LanguageAdapter interface, errors, registry, and a Go adapter with anchored -run, hang/notest/build classification, ToolMissingError, and multi-module routing by nearest go.mod). The miner runs on the adapter. `Candidate.language`, `dejabug init <owner/repo>`, a global `--target`, and an adapter-driven doctor and preflight were added. 35 tests. Second repo proven at the mining level: IBM/fp-go gives 137 candidates. Its recent fix: commits are mostly API additions (genuine build rejections). REVIEW-01 item 10 added (the pass phase restores the full fix tree). Next: T2.6 [BOB].

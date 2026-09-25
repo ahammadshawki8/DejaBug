@@ -9,15 +9,17 @@ export interface Candidate {
   subject: string;
   date: string; // ISO 8601
   prNumber?: number;
+  language: string; // language adapter id, e.g. "go"
   sourceFiles: string[];
   testFiles: string[];
-  packages: string[]; // go test package args: "." for the repo root, "./sub/dir" otherwise
+  packages: string[]; // test runner targets from the adapter (Go: "." or "./dir")
   tests: string[]; // test function names added or changed by the fix
 }
 
 /** Output of `dejabug mine` (cases/<repo>/candidates.json), input of `dejabug certify`. */
 export interface CandidatesFile {
   repo: string;
+  language: string;
   generatedAt: string;
   scannedCommits: number;
   fixLikeCommits: number;
@@ -65,6 +67,7 @@ export interface OriginalEffort {
 export interface Case {
   id: string; // short sha of the fix commit
   repo: string; // e.g. "IBM/sarama"
+  language: string; // language adapter id
   fixSha: string;
   parentSha: string;
   prNumber?: number;

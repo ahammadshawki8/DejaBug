@@ -1,0 +1,3805 @@
+{
+  "repo": "IBM/fp-go",
+  "generatedAt": "2026-09-25T19:06:18.860Z",
+  "language": "go",
+  "scannedCommits": 748,
+  "fixLikeCommits": 624,
+  "candidates": [
+    {
+      "fixSha": "56f41092e4468211c1398ed03268018806bcf1fe",
+      "parentSha": "111cac145fb620f3137c227314af6421659e6dd0",
+      "subject": "fix: overhaul skills",
+      "date": "2026-09-19T12:10:51+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/data/gen_skills.go",
+        "v2/array/find.go"
+      ],
+      "testFiles": [
+        "gen/v2/mcp/server_test.go",
+        "v2/array/example_pattern_matching_test.go",
+        "v2/array/pattern_matching_test.go"
+      ],
+      "packages": [
+        "./gen/v2/mcp",
+        "./v2/array"
+      ],
+      "tests": [
+        "TestHandleUseSkill",
+        "TestPatternMatching_AllFormulationsAgree",
+        "TestPatternMatching_AltAllArrayIsEagerButScanStopsEarly",
+        "TestPatternMatching_AltAllArrayStartWith",
+        "TestPatternMatching_AltChainIsLazy",
+        "TestPatternMatching_DefaultMakesMatchTotal",
+        "TestPatternMatching_EmptyMatcherIsNone",
+        "TestPatternMatching_FindFirstMapIsLazy",
+        "TestPatternMatching_FoldAltMonoidIsLazy",
+        "TestPatternMatching_FromValidationCases",
+        "TestPatternMatching_OrderDefinesPriority",
+        "TestPatternMatching_PrismCases",
+        "TestPatternMatching_ReaderOptionAltIsLazy",
+        "TestPatternMatching_ReaderResultAltKeepsLastError",
+        "TestPatternMatching_ReaderResultFoldIsLazyAndKeepsLastError",
+        "TestPatternMatching_SliceMatching",
+        "TestPatternMatching_SumTypeCases"
+      ]
+    },
+    {
+      "fixSha": "a56def572a8e8ea292d8dd639f083698b002b885",
+      "parentSha": "3a5834353df05a218b034e55b1adbe513186ab4c",
+      "subject": "fix: better bracket implementation and better docks",
+      "date": "2026-09-11T12:01:34+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readerreaderioeither/bracket.go"
+      ],
+      "testFiles": [
+        "v2/readerreaderioeither/bracket_test.go",
+        "v2/readerreaderioeither/examples_bracket_test.go"
+      ],
+      "packages": [
+        "./v2/readerreaderioeither"
+      ],
+      "tests": [
+        "TestBracketAcquireFailure",
+        "TestBracketEnvironments",
+        "TestBracketIsLazy",
+        "TestBracketMultipleResources",
+        "TestBracketNested",
+        "TestBracketNestedInnerAcquireFailure",
+        "TestBracketOutcomes",
+        "TestBracketReleaseErrorDoesNotAffectResult",
+        "TestBracketReleaseReceivesOutcome",
+        "TestBracketReleaseReceivesResult",
+        "TestBracketReleaseRunsBeforeResultPropagates",
+        "TestBracketResourceIdentity",
+        "TestBracketSuccessPath",
+        "TestBracketUseFailure",
+        "TestBracketWithContextAccess",
+        "TestMonadChainReaderReaderIO"
+      ]
+    },
+    {
+      "fixSha": "3a5834353df05a218b034e55b1adbe513186ab4c",
+      "parentSha": "88ca19cc9c42dd80e47e64507fe7313f78554bd3",
+      "subject": "fix: better tests",
+      "date": "2026-09-11T11:36:19+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go",
+        "v2/readerreaderioeither/reader.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_contract_test.go",
+        "v2/effect/effect_test.go",
+        "v2/readerreaderioeither/reader_test.go",
+        "v2/readerreaderioeither/readio_test.go"
+      ],
+      "packages": [
+        "./v2/effect",
+        "./v2/readerreaderioeither"
+      ],
+      "tests": [
+        "TestChainFirstLeftThunkK_Failure",
+        "TestChainFirstLeft_Contract",
+        "TestDefer_EdgeCases",
+        "TestDefer_Failure",
+        "TestDefer_Integration",
+        "TestDefer_Success",
+        "TestPaired",
+        "TestReadIO",
+        "TestReadIOEitherLeftComputation",
+        "TestReadIOEitherLeftEnvironment",
+        "TestReadIOEitherRight",
+        "TestReadIOEither_EdgeCases",
+        "TestReadIOEither_Failure",
+        "TestReadIOEither_Integration",
+        "TestReadIOEither_Success",
+        "TestReadIOLeftComputation",
+        "TestReadIO_EdgeCases",
+        "TestReadIO_Failure",
+        "TestReadIO_Integration",
+        "TestReadIO_Success"
+      ]
+    },
+    {
+      "fixSha": "6bd8a51303244cb0aa8c7fab1b8d36a977009cae",
+      "parentSha": "033a1e7a7b96cefa9bef260f813a747dc089caf5",
+      "subject": "fix: add AtKey codec",
+      "date": "2026-09-07T17:31:43+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/decode/from.go",
+        "v2/optics/codec/decode/types.go",
+        "v2/optics/codec/record.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/decode/from_test.go",
+        "v2/optics/codec/record_example_test.go",
+        "v2/optics/codec/record_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec",
+        "./v2/optics/codec/decode"
+      ],
+      "tests": [
+        "TestAtKey_Decode_Failure",
+        "TestAtKey_Decode_Success",
+        "TestAtKey_Encode",
+        "TestAtKey_ErrorMessage",
+        "TestAtKey_Integration",
+        "TestAtKey_Name",
+        "TestAtKey_RoundTrip",
+        "TestAtKey_TypeCheck",
+        "TestAtKey_Validate",
+        "TestFromOption"
+      ]
+    },
+    {
+      "fixSha": "b0220181def957e5808d40931c34a905603831eb",
+      "parentSha": "ab0362450695e4a62f5a09d5f990ce1a610ddb1e",
+      "subject": "fix: more useful ISOs",
+      "date": "2026-09-06T11:29:39+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/http/client/client.go",
+        "v2/http/client/types.go",
+        "v2/optics/iso/isos.go"
+      ],
+      "testFiles": [
+        "v2/http/client/client_test.go",
+        "v2/http/client/example_test.go",
+        "v2/optics/iso/isos_example_test.go",
+        "v2/optics/iso/isos_test.go"
+      ],
+      "packages": [
+        "./v2/http/client",
+        "./v2/optics/iso"
+      ],
+      "tests": [
+        "TestComposedLenses",
+        "TestNanoDuration",
+        "TestNanoDurationRoundTripLaws",
+        "TestSecondsDuration",
+        "TestSecondsDurationRoundTripLaws",
+        "TestTimeoutLens_Get",
+        "TestTimeoutLens_Laws",
+        "TestTimeoutLens_Set",
+        "TestTransportLens_Get",
+        "TestTransportLens_Laws",
+        "TestTransportLens_Set"
+      ]
+    },
+    {
+      "fixSha": "ff0479548475e739945152ac5934923140d5a117",
+      "parentSha": "ced6b5af38894e4a223a2b53b2bd7c1568678238",
+      "subject": "fix: refactor options",
+      "date": "2026-09-01T18:44:46+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/internal/common/option_core.go",
+        "v2/internal/common/option_format.go",
+        "v2/option/bind.go"
+      ],
+      "testFiles": [
+        "v2/internal/common/option_format_test.go",
+        "v2/option/bind_test.go",
+        "v2/option/examples_bind_lens_test.go",
+        "v2/samples/mostly-adequate/chapter12_traversing_test.go",
+        "v2/samples/traversable/compose_test.go"
+      ],
+      "packages": [
+        "./v2/internal/common",
+        "./v2/option",
+        "./v2/samples/mostly-adequate",
+        "./v2/samples/traversable"
+      ],
+      "tests": [
+        "TestApSL",
+        "TestBindL",
+        "TestFormatComprehensive",
+        "TestFormatInterface",
+        "TestLetL",
+        "TestLetToL"
+      ]
+    },
+    {
+      "fixSha": "d6255756f65790844591953b24ffbcf2dbc3919e",
+      "parentSha": "01c3adafaf48956f61df1a08a211f41f303e3b11",
+      "subject": "fix: add more tests",
+      "date": "2026-08-30T12:42:56+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/codec.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/type_methods_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestType_AsDecode",
+        "TestType_AsEncode",
+        "TestType_AsValidate"
+      ]
+    },
+    {
+      "fixSha": "b3fc8dabf8cb4d7f46d8062e291fbd733b2f0515",
+      "parentSha": "349948f6c7804ee928fe41d6272ef6da0740e5b5",
+      "subject": "fix: lens",
+      "date": "2026-08-27T14:12:31+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lenses/ast.go",
+        "gen/v2/cli/lenses/generate.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_test.go",
+        "gen/v2/cli/lenses/ast_test.go",
+        "gen/v2/cli/lenses/parse_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli",
+        "./gen/v2/cli/lenses"
+      ],
+      "tests": [
+        "TestIsComparableType",
+        "TestIsComparableTypeWithLocalTypes",
+        "TestParseFileExternalImportOptionTypeAlias",
+        "TestParseFileExternalImportUsesFullPathAlias",
+        "TestParseFileWithNamedNonComparableTypes"
+      ]
+    },
+    {
+      "fixSha": "349948f6c7804ee928fe41d6272ef6da0740e5b5",
+      "parentSha": "c52889eced6b1d5dc6b4378d5bbdd3e78be8c205",
+      "subject": "fix: support v1.27",
+      "date": "2026-08-27T13:09:39+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/internal/array/array.go",
+        "v2/record/generic/record.go",
+        "v2/record/record.go"
+      ],
+      "testFiles": [
+        "v2/array/array_nil_test.go",
+        "v2/array/bind_extended_test.go",
+        "v2/optics/codec/codec_test.go",
+        "v2/optics/codec/validation/validation_test.go",
+        "v2/record/record_nil_test.go"
+      ],
+      "packages": [
+        "./v2/array",
+        "./v2/optics/codec",
+        "./v2/optics/codec/validation",
+        "./v2/record"
+      ],
+      "tests": [
+        "TestArrayEncoding",
+        "TestBindTo",
+        "TestLet",
+        "TestNilMap_Collect",
+        "TestNilMap_FromEntries",
+        "TestNilMap_ToArray",
+        "TestNilMap_ToEntries",
+        "TestNilSlice_Flap",
+        "TestNilSlice_Map",
+        "TestNilSlice_MapWithIndex",
+        "TestNilSlice_MonadFlap",
+        "TestNilSlice_MonadMap",
+        "TestTranscodeArray",
+        "TestValidationErrors_Errors"
+      ]
+    },
+    {
+      "fixSha": "7ca1a18dc8e5d056453955b5286ef5bac62af9ba",
+      "parentSha": "d7ccfa0f1d333b8006c646703fd5fdf36d2e3d87",
+      "subject": "fix: support unexported types",
+      "date": "2026-08-06T12:18:54+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens_types.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_types_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli"
+      ],
+      "tests": [
+        "TestGenerateLensHelpersByTypeSkipsUnexportedNamedType",
+        "TestParsePackageByTypeNamesSkipsUnexportedNamedType"
+      ]
+    },
+    {
+      "fixSha": "c47b564269326056d8ad5470973769e1e511a44b",
+      "parentSha": "1bbe0fb253f93b802393114c15ddd0fc8f095f44",
+      "subject": "fix: import disambiguation",
+      "date": "2026-07-31T15:48:57+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens_types.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_test.go",
+        "gen/v2/cli/lens_types_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli"
+      ],
+      "tests": [
+        "TestGenerateLensHelpersByTypeSourcePkgAlias",
+        "TestLensCommandHttpServer",
+        "TestParsePackageByTypeNamesAlwaysFullPath",
+        "TestParsePackageByTypeNamesDisambiguationIsDeterministic",
+        "TestParsePackageByTypeNamesFullPathAlias",
+        "TestParsePackageByTypeNamesNoConflict",
+        "TestParsePackageByTypeNamesSourcePkgConflictDetection"
+      ]
+    },
+    {
+      "fixSha": "1bbe0fb253f93b802393114c15ddd0fc8f095f44",
+      "parentSha": "30d29c908793d56f2d02b7355c269a8be6a517ac",
+      "subject": "fix: add more tests",
+      "date": "2026-07-31T15:22:23+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens_types.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_test.go",
+        "gen/v2/cli/lens_types_test.go",
+        "gen/v2/cli/lenses/imports_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli",
+        "./gen/v2/cli/lenses"
+      ],
+      "tests": [
+        "TestGenerateLensHelpersByTypeSourcePkgAlias",
+        "TestHasOmitEmptyStringTag",
+        "TestLensCommandSourcePackageSameNameAsFieldTypePackage",
+        "TestParsePackageByTypeNamesDisambiguationIsDeterministic",
+        "TestParsePackageByTypeNamesNoConflict",
+        "TestParsePackageByTypeNamesSourcePkgConflictDetection",
+        "TestResolveImportAliasesConflict",
+        "TestResolveImportAliasesConflictCrossStruct",
+        "TestResolveImportAliasesConflictPointerAndSliceTypes",
+        "TestResolveImportAliasesConflictSingleStruct"
+      ]
+    },
+    {
+      "fixSha": "9c4a6f85b1988bde8e7f99478b23105021fef25f",
+      "parentSha": "bf23c419b8b68f1de83c30630dfdaaefa57e28f4",
+      "subject": "fix: import paths",
+      "date": "2026-07-31T09:58:50+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens_types.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli"
+      ],
+      "tests": [
+        "TestLensCommandHttpServer"
+      ]
+    },
+    {
+      "fixSha": "62833ddf6bde86bb3da5fff5ab6500bf8dc9bfcd",
+      "parentSha": "8d88086b7087901e1a51543a7a40b4e7cc7ae3dc",
+      "subject": "fix: handling of import paths in lenses",
+      "date": "2026-07-31T09:37:01+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli"
+      ],
+      "tests": [
+        "TestAliasFromPath",
+        "TestGenerateLensFileImportDisambiguation",
+        "TestResolveImportAliasesConflict",
+        "TestResolveImportAliasesNoConflict"
+      ]
+    },
+    {
+      "fixSha": "8d88086b7087901e1a51543a7a40b4e7cc7ae3dc",
+      "parentSha": "0fb05c49525e0b026855e015bed27d38d232add7",
+      "subject": "fix: better lens generation",
+      "date": "2026-07-25T20:11:49+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli"
+      ],
+      "tests": [
+        "TestLensRefTemplatesWithComparable",
+        "TestLensTemplates",
+        "TestLensTemplatesWithOmitEmpty"
+      ]
+    },
+    {
+      "fixSha": "0fb05c49525e0b026855e015bed27d38d232add7",
+      "parentSha": "0e18376796ee0ac4237d3c349609f2c97eea0d95",
+      "subject": "fix: comparable in lenses",
+      "date": "2026-07-25T19:52:21+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "gen/v2/cli/lens.go",
+        "gen/v2/cli/lens_types.go"
+      ],
+      "testFiles": [
+        "gen/v2/cli/_check_comparable_test.go",
+        "gen/v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./gen/v2/cli"
+      ],
+      "tests": [
+        "TestCheckComparableDebug",
+        "TestGenerateLensHelpersOptionFieldNoLensO",
+        "TestGenerateLensHelpersWithQualifiedField",
+        "TestIsComparableType",
+        "TestIsOptionType",
+        "TestParseFileWithOptionField"
+      ]
+    },
+    {
+      "fixSha": "f2094ab56e7c17a789ec3156e513fa14382be87c",
+      "parentSha": "b0ea285a2cdbe387e8400095a560ff7d08d1db76",
+      "subject": "fix: try to fix lens generator",
+      "date": "2026-07-24T16:49:35+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/lens.go"
+      ],
+      "testFiles": [
+        "v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./v2/cli"
+      ],
+      "tests": [
+        "TestParseFile_CrossFileStructWithSliceIsNotComparable"
+      ]
+    },
+    {
+      "fixSha": "b0ea285a2cdbe387e8400095a560ff7d08d1db76",
+      "parentSha": "f97d85796eed230d138da252f414d93833d8c3cb",
+      "subject": "fix: mark ternary as deprecated",
+      "date": "2026-07-24T15:56:57+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/di/erasure/injector.go",
+        "v2/effect/effect.go",
+        "v2/function/ternary.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_additional_test.go",
+        "v2/function/function_test.go",
+        "v2/function/ternary_test.go"
+      ],
+      "packages": [
+        "./v2/effect",
+        "./v2/function"
+      ],
+      "tests": [
+        "TestSecond",
+        "TestTernary",
+        "TestTernary_Success"
+      ]
+    },
+    {
+      "fixSha": "f97d85796eed230d138da252f414d93833d8c3cb",
+      "parentSha": "e7b2906b302209e2b09404cd39d8f7fe88b66426",
+      "subject": "fix: lens generator",
+      "date": "2026-07-24T15:32:46+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/lens.go"
+      ],
+      "testFiles": [
+        "v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./v2/cli"
+      ],
+      "tests": [
+        "TestIsComparableType",
+        "TestIsComparableType_CrossPackage",
+        "TestIsComparableType_NamedStructs",
+        "TestParseFile_CrossPackageStructFieldIsNotComparable",
+        "TestParseFile_StructWithSliceFieldIsNotComparable"
+      ]
+    },
+    {
+      "fixSha": "e7b2906b302209e2b09404cd39d8f7fe88b66426",
+      "parentSha": "0c79602e3887ea77951f54fc6c817cce6c510cff",
+      "subject": "fix: update DB abd examples",
+      "date": "2026-07-24T12:55:25+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/assert/traverse.go",
+        "v2/assert/types.go"
+      ],
+      "testFiles": [
+        "v2/context/readerreaderioresult/reader_test.go",
+        "v2/optics/prism/prisms_test.go",
+        "v2/option/examples_extract_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerreaderioresult",
+        "./v2/optics/prism",
+        "./v2/option"
+      ],
+      "tests": [
+        "TestFromPredicate",
+        "TestFromResultComposition"
+      ]
+    },
+    {
+      "fixSha": "53a7873a3b1d6e0211745e56154c122cab55e2db",
+      "parentSha": "6712e300c829ff9b4e665c465c9d774f204c1234",
+      "subject": "fix: add Fold to Predicate",
+      "date": "2026-07-24T12:42:22+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/option/option.go",
+        "v2/predicate/fold.go"
+      ],
+      "testFiles": [
+        "v2/option/examples_extract_test.go",
+        "v2/predicate/examples_test.go",
+        "v2/predicate/fold_test.go"
+      ],
+      "packages": [
+        "./v2/option",
+        "./v2/predicate"
+      ],
+      "tests": [
+        "TestFold_EdgeCases",
+        "TestFold_FalseBranch",
+        "TestFold_Integration",
+        "TestFold_TrueBranch",
+        "TestFold_TypeVariety"
+      ]
+    },
+    {
+      "fixSha": "824e14ccbc87d1385584084bde268002ad681162",
+      "parentSha": "82fc72f6b8ca0f50dba07050aa3660ad26becf25",
+      "subject": "fix: refactor and add EitherOf codec",
+      "date": "2026-07-23T15:28:28+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/codecs.go",
+        "v2/optics/codec/either.go",
+        "v2/optics/codec/matchers.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/codecs_test.go",
+        "v2/optics/codec/either_test.go",
+        "v2/optics/codec/matchers_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestAltW_Decode",
+        "TestAltW_Decode_BothFail",
+        "TestAltW_Decode_CustomCodecs",
+        "TestAltW_Decode_Prioritization",
+        "TestAltW_Encode",
+        "TestAltW_Naming",
+        "TestAltW_RoundTrip",
+        "TestAltW_TypeChecking",
+        "TestBoolFromString_TypeChecking",
+        "TestDate_TypeChecking",
+        "TestEitherDecode",
+        "TestEitherEncode",
+        "TestEitherErrorAccumulation",
+        "TestEitherOf_Decoding_Left",
+        "TestEitherOf_Decoding_Right",
+        "TestEitherOf_Decoding_ValidationFailure",
+        "TestEitherOf_Encoding_Left",
+        "TestEitherOf_Encoding_Right",
+        "TestEitherOf_Naming",
+        "TestEitherOf_RoundTrip",
+        "TestEitherOf_TypeChecking",
+        "TestEitherPrioritization",
+        "TestEitherRoundTrip",
+        "TestEitherValidation",
+        "TestFromNonZero_TypeChecking",
+        "TestInt64FromString_TypeChecking",
+        "TestIntFromString_TypeChecking",
+        "TestMarshalJSON_TypeChecking",
+        "TestMarshalText_Decode_Failure",
+        "TestMarshalText_Decode_Success",
+        "TestMarshalText_Encode",
+        "TestMarshalText_Name",
+        "TestMarshalText_RoundTrip",
+        "TestMarshalText_TypeChecking",
+        "TestNonEmptyString_TypeChecking",
+        "TestOptional_Decoding_PresentFalse",
+        "TestOptional_Decoding_PresentTrue",
+        "TestOptional_Decoding_ValidationFailure",
+        "TestOptional_Encoding_None",
+        "TestOptional_Encoding_Some",
+        "TestOptional_Naming",
+        "TestOptional_RoundTrip",
+        "TestOptional_TypeChecking",
+        "TestRegexNamed_TypeChecking",
+        "TestRegex_TypeChecking",
+        "TestURL_TypeChecking"
+      ]
+    },
+    {
+      "fixSha": "5c1f7bc6931162ee94f1db60bb35397c238783f1",
+      "parentSha": "f6233f149eccb1264c69fd037d5f02e1cff69e96",
+      "subject": "fix: lens generation",
+      "date": "2026-07-22T21:21:11+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/lens.go"
+      ],
+      "testFiles": [
+        "v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./v2/cli"
+      ],
+      "tests": [
+        "TestIsComparableType_GenericBuiltins"
+      ]
+    },
+    {
+      "fixSha": "f6233f149eccb1264c69fd037d5f02e1cff69e96",
+      "parentSha": "083a496b0ccbf7d07d9e3068bf8393b25cdb6f59",
+      "subject": "fix: add PartitionMapWithIndex",
+      "date": "2026-07-22T17:48:47+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/record/generic/partition.go",
+        "v2/record/partition.go"
+      ],
+      "testFiles": [
+        "v2/record/partition_test.go"
+      ],
+      "packages": [
+        "./v2/record"
+      ],
+      "tests": [
+        "TestMonadPartitionMapWithIndex_AllLeft",
+        "TestMonadPartitionMapWithIndex_AllRight",
+        "TestMonadPartitionMapWithIndex_EmptyRecord",
+        "TestMonadPartitionMapWithIndex_KeyUsedInClassification",
+        "TestMonadPartitionMapWithIndex_NilRecord",
+        "TestMonadPartitionMapWithIndex_SplitsOnKeyAndValue",
+        "TestPartitionMapWithIndex_CurriedReturnsFunction",
+        "TestPartitionMapWithIndex_NilRecord"
+      ]
+    },
+    {
+      "fixSha": "977915c6fdd7c4698000f36d553ddbc17300072c",
+      "parentSha": "5ba7f4e31168a3eab124f96c98c9a243414d8f95",
+      "subject": "fix: implement partitionMap for record",
+      "date": "2026-07-22T15:48:13+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/record/generic/partition.go",
+        "v2/record/partition.go"
+      ],
+      "testFiles": [
+        "v2/record/partition_test.go"
+      ],
+      "packages": [
+        "./v2/record"
+      ],
+      "tests": [
+        "TestMonadPartitionMap_AllLeft",
+        "TestMonadPartitionMap_AllRight",
+        "TestMonadPartitionMap_EmptyRecord",
+        "TestMonadPartitionMap_NilRecord",
+        "TestMonadPartitionMap_SplitsOnEither",
+        "TestMonadPartitionMap_TypeTransformation",
+        "TestPartitionMap_CurriedReturnsFunction",
+        "TestPartitionMap_NilRecord"
+      ]
+    },
+    {
+      "fixSha": "66df4eb550c8630c11b886493bb3552232725b6c",
+      "parentSha": "e2325073a7245fa36ec77f188745968f171c1997",
+      "subject": "fix: add AtContext",
+      "date": "2026-07-17T11:43:51+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/lenses/context.go",
+        "v2/optics/lenses/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/lenses/context_test.go",
+        "v2/optics/lenses/examples_context_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lenses"
+      ],
+      "tests": [
+        "TestAtContext_GetSet_LensLaw",
+        "TestAtContext_Get_NoneOnTypeMismatch",
+        "TestAtContext_Get_NoneWhenAbsent",
+        "TestAtContext_Get_SomeWhenPresent",
+        "TestAtContext_IntValue",
+        "TestAtContext_MultipleKeys",
+        "TestAtContext_Name",
+        "TestAtContext_SetGet_LensLaw",
+        "TestAtContext_SetSet_LensLaw",
+        "TestAtContext_Set_NonePreservesContext",
+        "TestAtContext_Set_SomeAddsValue",
+        "TestAtContext_StringKey",
+        "TestAtContext_StructValue"
+      ]
+    },
+    {
+      "fixSha": "70938cac7b211df7e315aea54783d2fba4ccd59a",
+      "parentSha": "23324cacfda8f81320b356c49642b21ad3e86300",
+      "subject": "fix: OfLazy to ReaderIO",
+      "date": "2026-07-16T08:18:10+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readerio/reader.go",
+        "v2/readerio/types.go"
+      ],
+      "testFiles": [
+        "v2/readerio/reader_test.go"
+      ],
+      "packages": [
+        "./v2/readerio"
+      ],
+      "tests": [
+        "TestAfter",
+        "TestDelay",
+        "TestOfLazy"
+      ]
+    },
+    {
+      "fixSha": "5c18fafb009aae1c8c687bfd94b6c87815ee018c",
+      "parentSha": "5ee659e0fa4fef7b0f603d13c372549b16a860e6",
+      "subject": "fix: improve codec.Pipe",
+      "date": "2026-07-14T17:43:58+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/codec.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/codec_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestEmpty_Integration",
+        "TestFromRefinement",
+        "TestFromRefinementComposition",
+        "TestFromRefinementValidationContext",
+        "TestFromRefinementWithRange"
+      ]
+    },
+    {
+      "fixSha": "5e00a6010e81e80115fc950a99243e050b2cd43f",
+      "parentSha": "66486c5962b8d0302ae236362d2135544f3f8161",
+      "subject": "fix: support the Optional matcher for codecs",
+      "date": "2026-06-30T12:08:37+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/bind.go",
+        "v2/optics/codec/matchers.go",
+        "v2/optics/codec/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/matchers_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestOptional_Decoding_PresentFalse",
+        "TestOptional_Decoding_PresentTrue",
+        "TestOptional_Decoding_ValidationFailure",
+        "TestOptional_Encoding_None",
+        "TestOptional_Encoding_Some",
+        "TestOptional_Naming",
+        "TestOptional_RoundTrip",
+        "TestOptional_TypeChecking"
+      ]
+    },
+    {
+      "fixSha": "66486c5962b8d0302ae236362d2135544f3f8161",
+      "parentSha": "5be9fb54025363b9b8f6c6a88691f75eabf0f3af",
+      "subject": "fix: implement ChainFirstResult for ReaderResult",
+      "date": "2026-06-30T09:09:00+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readereither/reader.go",
+        "v2/readerresult/reader.go"
+      ],
+      "testFiles": [
+        "v2/readerresult/reader_test.go"
+      ],
+      "packages": [
+        "./v2/readerresult"
+      ],
+      "tests": [
+        "TestAlt",
+        "TestApReader",
+        "TestChainFirstI",
+        "TestChainFirstResultIK",
+        "TestChainFirstResultK",
+        "TestChainReaderK",
+        "TestChainResultK",
+        "TestMonadAlt",
+        "TestMonadApReader",
+        "TestMonadChainFirstI",
+        "TestMonadChainFirstResultIK",
+        "TestMonadChainFirstResultK",
+        "TestMonadChainReaderK",
+        "TestMonadChainResultK"
+      ]
+    },
+    {
+      "fixSha": "5be9fb54025363b9b8f6c6a88691f75eabf0f3af",
+      "parentSha": "d1a0d95f2ce9f90f02662cf32d97996cf074ff43",
+      "subject": "fix: implement ChainFirst for ReaderResult",
+      "date": "2026-06-30T08:43:27+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readereither/reader.go",
+        "v2/readerresult/reader.go"
+      ],
+      "testFiles": [
+        "v2/readerresult/reader_test.go"
+      ],
+      "packages": [
+        "./v2/readerresult"
+      ],
+      "tests": [
+        "TestChainFirst",
+        "TestMonadChainFirst"
+      ]
+    },
+    {
+      "fixSha": "32eada9fa6515a7730743992bb2879e02d704d04",
+      "parentSha": "e127f2ff880fe647b1e1c6a93598186b714e8a25",
+      "subject": "fix: expose FromReader in Effect",
+      "date": "2026-06-26T17:05:46+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_missing_test.go",
+        "v2/effect/effect_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestFromReader_EdgeCases",
+        "TestFromReader_Integration",
+        "TestFromReader_Success"
+      ]
+    },
+    {
+      "fixSha": "bc2868e66e1ecf818cabcc535d32b7d9427f47f8",
+      "parentSha": "7b26d4234e9ebfcbff0f568ee0587ff85b72f469",
+      "subject": "fix: render markdown in plain text output",
+      "date": "2026-06-24T11:09:59+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/gen/mcp/server.go"
+      ],
+      "testFiles": [
+        "v2/gen/mcp/server_test.go"
+      ],
+      "packages": [
+        "./v2/gen/mcp"
+      ],
+      "tests": [
+        "TestHandleUseSkill",
+        "TestParseFrontmatter"
+      ]
+    },
+    {
+      "fixSha": "7b26d4234e9ebfcbff0f568ee0587ff85b72f469",
+      "parentSha": "b14304fbac979c0fc8959454769439f0b8429aba",
+      "subject": "fix: make AltAllArray short circuit and implement it for Result and Either",
+      "date": "2026-06-23T23:35:39+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/either/alt.go",
+        "v2/option/alt.go",
+        "v2/result/alt.go"
+      ],
+      "testFiles": [
+        "v2/either/alt_test.go",
+        "v2/option/alt_test.go"
+      ],
+      "packages": [
+        "./v2/either",
+        "./v2/option"
+      ],
+      "tests": [
+        "TestAltAllArray_EdgeCases",
+        "TestAltAllArray_Integration",
+        "TestAltAllArray_ShortCircuit",
+        "TestAltAllArray_Success",
+        "TestAltAllSeq_EdgeCases",
+        "TestAltAllSeq_Integration",
+        "TestAltAllSeq_ShortCircuit",
+        "TestAltAllSeq_Success"
+      ]
+    },
+    {
+      "fixSha": "7d5abed3384f40ce9312ad8fd19c2ef857d00325",
+      "parentSha": "aca8075cac7984cceb87bd9f809bd76b375e79d1",
+      "subject": "fix: document FromArrayMap",
+      "date": "2026-06-23T17:26:51+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/record/generic/record.go",
+        "v2/record/record.go"
+      ],
+      "testFiles": [
+        "v2/record/record_nil_test.go",
+        "v2/record/record_test.go"
+      ],
+      "packages": [
+        "./v2/record"
+      ],
+      "tests": [
+        "TestFromArrayMap_NilInput",
+        "TestFromArray_NilInput",
+        "TestFromFoldableMap_EdgeCases",
+        "TestFromFoldableMap_Integration",
+        "TestFromFoldableMap_NilInput",
+        "TestFromFoldableMap_Success",
+        "TestFromFoldable_NilInput",
+        "TestNilMap_FromArray"
+      ]
+    },
+    {
+      "fixSha": "619118b7c18b371f7be6ec54a48b328dcdfe7f02",
+      "parentSha": "13cdbb7ea5cb1bd2e574d2bf70bc7dbdf6a571ee",
+      "subject": "fix: add http examples",
+      "date": "2026-06-19T18:00:04+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/http/utils.go"
+      ],
+      "testFiles": [
+        "v2/context/readerioresult/http/examples_test.go",
+        "v2/context/readerioresult/http/request_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerioresult/http"
+      ],
+      "tests": [
+        "TestReadFullResponse_Integration"
+      ]
+    },
+    {
+      "fixSha": "5fe192833c460447615a7314ac3a54daf9e507be",
+      "parentSha": "d63f9980c05acc593a431bcfba68c6375a01ce36",
+      "subject": "fix: add withHeaders",
+      "date": "2026-06-19T15:49:25+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/http/types.go",
+        "v2/http/utils.go"
+      ],
+      "testFiles": [
+        "v2/http/utils_test.go"
+      ],
+      "packages": [
+        "./v2/http"
+      ],
+      "tests": [
+        "TestWithHeader_DataLastPattern",
+        "TestWithHeader_EdgeCases",
+        "TestWithHeader_Mutation",
+        "TestWithHeader_StandardHeaders"
+      ]
+    },
+    {
+      "fixSha": "d63f9980c05acc593a431bcfba68c6375a01ce36",
+      "parentSha": "b14915169315aa6b7cfac05addc1b034955a7f02",
+      "subject": "fix: add Always and Never",
+      "date": "2026-06-19T14:42:48+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/predicate/monoid.go",
+        "v2/predicate/predicates.go",
+        "v2/predicate/types.go"
+      ],
+      "testFiles": [
+        "v2/predicate/examples_test.go",
+        "v2/predicate/predicate_test.go"
+      ],
+      "packages": [
+        "./v2/predicate"
+      ],
+      "tests": [
+        "TestAlways",
+        "TestAlwaysNeverIntegration",
+        "TestNever"
+      ]
+    },
+    {
+      "fixSha": "4c470babdcf244040d3de1fc65ecc15b41349c44",
+      "parentSha": "ba01002c2a796285f0028f335162267b836a0289",
+      "subject": "fix: finish Effect DI example and implement Fixpoint method",
+      "date": "2026-06-19T10:40:48+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go",
+        "v2/lazy/fixpoint.go",
+        "v2/readerreaderioeither/reader.go"
+      ],
+      "testFiles": [
+        "v2/effect/di_test.go",
+        "v2/effect/effect_additional_test.go",
+        "v2/effect/effect_test.go",
+        "v2/lazy/fixpoint_test.go"
+      ],
+      "packages": [
+        "./v2/effect",
+        "./v2/lazy"
+      ],
+      "tests": [
+        "TestFixpoint_ComplexTypes",
+        "TestFixpoint_ConstantValue",
+        "TestFixpoint_EdgeCases",
+        "TestFixpoint_Factorial",
+        "TestFixpoint_Fibonacci",
+        "TestFixpoint_MultipleParameters",
+        "TestFixpoint_RecursiveDepth",
+        "TestFixpoint_SelfReferential",
+        "TestReadIO_EdgeCases",
+        "TestReadIO_Failure",
+        "TestReadIO_Integration",
+        "TestReadIO_Success"
+      ]
+    },
+    {
+      "fixSha": "ba01002c2a796285f0028f335162267b836a0289",
+      "parentSha": "b7f6c32a1e5bf491b1f3d6ff8b4da010f37a482f",
+      "subject": "fix: re-introduce the Y-combinator",
+      "date": "2026-06-18T16:16:11+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/lambda/y.go"
+      ],
+      "testFiles": [
+        "v2/lambda/y_test.go"
+      ],
+      "packages": [
+        "./v2/lambda"
+      ],
+      "tests": [
+        "TestFactorial"
+      ]
+    },
+    {
+      "fixSha": "337e423af1b4c596a5dfd3fd7131d928ea7b7294",
+      "parentSha": "9e39409a422db6902970a96e2f68553c60406f22",
+      "subject": "fix: better example for Effect",
+      "date": "2026-06-16T12:18:14+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestChainFirstLeftThunkK_EdgeCases",
+        "TestChainFirstLeftThunkK_Failure",
+        "TestChainFirstLeftThunkK_Integration",
+        "TestChainFirstLeftThunkK_Success",
+        "TestTapLeftThunkK_EdgeCases",
+        "TestTapLeftThunkK_Failure",
+        "TestTapLeftThunkK_Integration",
+        "TestTapLeftThunkK_Success"
+      ]
+    },
+    {
+      "fixSha": "9e39409a422db6902970a96e2f68553c60406f22",
+      "parentSha": "ee5f58ea7c5bbc8f1a11f8991e5e6899557f6b61",
+      "subject": "fix: simplify the use of SLog",
+      "date": "2026-06-16T11:50:36+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerioresult/logging.go"
+      ],
+      "testFiles": [
+        "v2/context/readerioresult/logging_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerioresult"
+      ],
+      "tests": [
+        "TestSLogLeftDisabled",
+        "TestSLogLeftLogsError",
+        "TestSLogLeftMultipleErrors",
+        "TestSLogLeftWithContextLogger",
+        "TestSLogLeftWithOrElse",
+        "TestSLogLogsErrorValue",
+        "TestSLogLogsSuccessValue",
+        "TestSLogRightChainBehavior",
+        "TestSLogRightComparison",
+        "TestSLogRightDisabled",
+        "TestSLogRightInPipeline",
+        "TestSLogRightLogsValue",
+        "TestSLogRightMultipleValues",
+        "TestSLogRightPreservesValue",
+        "TestSLogRightWithContextLogger",
+        "TestSLogRightWithMap",
+        "TestSLogRightWithStructValue",
+        "TestSLogWithCallbackCustomLevel",
+        "TestSLogWithCallbackLogsError",
+        "TestTapSLog_PreservesErrorCause"
+      ]
+    },
+    {
+      "fixSha": "9873e302e9b8597065495a6e46ef3b2311710a16",
+      "parentSha": "58f36656104e0d4bab558a41a60e7b2e7792bc9f",
+      "subject": "fix: add Alt for Effect",
+      "date": "2026-06-15T18:29:10+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go",
+        "v2/effect/monoid.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_test.go",
+        "v2/effect/monoid_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestAltMonoid",
+        "TestAlt_EdgeCases",
+        "TestAlt_Failure",
+        "TestAlt_Integration",
+        "TestAlt_Success",
+        "TestChainLeft_EdgeCases",
+        "TestChainLeft_Failure",
+        "TestChainLeft_Integration",
+        "TestChainLeft_Success",
+        "TestMonadAlt_EdgeCases",
+        "TestMonadAlt_Failure",
+        "TestMonadAlt_Integration",
+        "TestMonadAlt_Success",
+        "TestMonadChainLeft_EdgeCases",
+        "TestMonadChainLeft_Failure",
+        "TestMonadChainLeft_Integration",
+        "TestMonadChainLeft_Success"
+      ]
+    },
+    {
+      "fixSha": "58f36656104e0d4bab558a41a60e7b2e7792bc9f",
+      "parentSha": "4fb8f04c8c40b6a1562cda46fae23f792a93e6bd",
+      "subject": "fix: ingest all examples",
+      "date": "2026-06-15T13:37:37+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/array/array.go",
+        "v2/gen/cli/examples.go"
+      ],
+      "testFiles": [
+        "v2/array/example_find_test.go",
+        "v2/gen/cli/examples_test.go"
+      ],
+      "packages": [
+        "./v2/array",
+        "./v2/gen/cli"
+      ],
+      "tests": [
+        "TestCollectExamplesUsesGoDocNaming",
+        "TestCollectExamplesUsesGoDocNamingArray"
+      ]
+    },
+    {
+      "fixSha": "6768f2de653fe33660331a4bb52130056344e405",
+      "parentSha": "4b98d31c0922664bdc3f383966d1dd06ef4c2bec",
+      "subject": "fix: update examples DB",
+      "date": "2026-06-15T12:11:54+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/gen/cli/examples.go",
+        "v2/gen/testpkg/sample.go"
+      ],
+      "testFiles": [
+        "v2/context/readerioresult/flip_example_test.go",
+        "v2/gen/cli/examples_test.go",
+        "v2/gen/testpkg/examples_test.go",
+        "v2/gen/testpkg/multiple_examples_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerioresult",
+        "./v2/gen/cli",
+        "./v2/gen/testpkg"
+      ],
+      "tests": [
+        "TestCollectExamplesUsesGoDocNaming",
+        "TestIsValidExampleName"
+      ]
+    },
+    {
+      "fixSha": "258ec22123fb645c59df635ae34d7771c6143afa",
+      "parentSha": "e128bb83d456000fc8d0a6ea8d9dc36b73e85421",
+      "subject": "fix: updated examples",
+      "date": "2026-06-14T23:51:35+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/gen/cli/examples.go"
+      ],
+      "testFiles": [
+        "v2/gen/cli/examples_test.go"
+      ],
+      "packages": [
+        "./v2/gen/cli"
+      ],
+      "tests": [
+        "TestIsValidExampleName"
+      ]
+    },
+    {
+      "fixSha": "034b7076950ef8def15ce991ebff9457067b3c91",
+      "parentSha": "f2abf065052e6c770984140c77bcc1c76edcebb1",
+      "subject": "fix: add SQL lookup to MCP DB",
+      "date": "2026-06-14T23:24:48+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/gen/cli/examples.go"
+      ],
+      "testFiles": [
+        "v2/gen/cli/lens_test.go"
+      ],
+      "packages": [
+        "./v2/gen/cli"
+      ],
+      "tests": [
+        "TestLensCommandHttpServer",
+        "TestLensRefTemplatesWithComparable",
+        "TestLensTemplates",
+        "TestLensTemplatesWithOmitEmpty"
+      ]
+    },
+    {
+      "fixSha": "62e156f8ce369c4727cd7fbf186d16cbb3cb0820",
+      "parentSha": "73b71de8fef8ed816561b600ad6c1072ff45ba79",
+      "subject": "fix: add more tests",
+      "date": "2026-06-09T11:26:09+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/optional/lens/lens.go",
+        "v2/optics/optional/prism/prism.go"
+      ],
+      "testFiles": [
+        "v2/optics/optional/prism/prism_test.go"
+      ],
+      "packages": [
+        "./v2/optics/optional/prism"
+      ],
+      "tests": [
+        "TestCompose_BasicFunctionality",
+        "TestCompose_EdgeCases",
+        "TestCompose_OptionalLaw1_GetSet",
+        "TestCompose_OptionalLaw2_SetGet",
+        "TestCompose_OptionalLaw3_SetSet",
+        "TestPrismSome_TypeVariants"
+      ]
+    },
+    {
+      "fixSha": "10a8396d795144bec08bf00e19f1a19984842539",
+      "parentSha": "c9737177add150854d2e366317b1ec8ca4a32a4c",
+      "subject": "fix: extra composition and more tests",
+      "date": "2026-06-09T10:49:16+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/optional/prism/prism.go",
+        "v2/optics/prism/lens/lens.go",
+        "v2/optics/prism/lens/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/lens/prism/compose_test.go",
+        "v2/optics/optional/prism/prism_test.go",
+        "v2/optics/prism/lens/lens_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lens/prism",
+        "./v2/optics/optional/prism",
+        "./v2/optics/prism/lens"
+      ],
+      "tests": [
+        "TestAsOptional_BasicConversion",
+        "TestAsOptional_OptionalLaw1_GetSet",
+        "TestAsOptional_OptionalLaw2_SetGet",
+        "TestAsOptional_OptionalLaw3_SetSet",
+        "TestAsOptional_Set",
+        "TestComposeOptionalLawsExtended",
+        "TestComposeRefOptionalLawsExtended",
+        "TestCompose_BasicFunctionality",
+        "TestCompose_DocumentationExample",
+        "TestCompose_EdgeCases",
+        "TestCompose_Integration",
+        "TestCompose_MultipleVariants",
+        "TestCompose_OptionalLaw1_GetSet",
+        "TestCompose_OptionalLaw2_SetGet",
+        "TestCompose_OptionalLaw3_SetSet",
+        "TestPrismSome",
+        "TestSome_BasicConversion",
+        "TestSome_EdgeCases",
+        "TestSome_Integration",
+        "TestSome_OptionalLaw1_GetSet",
+        "TestSome_OptionalLaw2_SetGet",
+        "TestSome_OptionalLaw3_SetSet",
+        "TestSome_Set"
+      ]
+    },
+    {
+      "fixSha": "a8c131577bdc8883040c792c0e83b5b726d3239c",
+      "parentSha": "84af86cfa447ac3a6eb3bf343a2d282034c6d646",
+      "subject": "fix: extends CLI to generate lenses for foreign types (#168)",
+      "date": "2026-06-06T15:44:19+02:00",
+      "prNumber": 168,
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/lens.go",
+        "v2/cli/lens_types.go"
+      ],
+      "testFiles": [
+        "v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./v2/cli"
+      ],
+      "tests": [
+        "TestLensCommandFlags",
+        "TestLensCommandHttpServer"
+      ]
+    },
+    {
+      "fixSha": "4833e6640490b5a02fc458cd6119bbed375b12af",
+      "parentSha": "f4389366286e72aefc340808876ba02035cfd5c9",
+      "subject": "fix: optimize concatAll",
+      "date": "2026-06-03T16:36:29+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/iterator/iter/concatall.go",
+        "v2/iterator/iter/iter.go",
+        "v2/iterator/iter/monoid.go"
+      ],
+      "testFiles": [
+        "v2/iterator/iter/concatall_test.go",
+        "v2/iterator/iter/iter_test.go",
+        "v2/iterator/iter/main_test.go",
+        "v2/iterator/iter/monoid_test.go",
+        "v2/iterator/itereither/ioeither_test.go",
+        "v2/iterator/iterresult/ioeither_test.go"
+      ],
+      "packages": [
+        "./v2/iterator/iter",
+        "./v2/iterator/itereither",
+        "./v2/iterator/iterresult"
+      ],
+      "tests": [
+        "TestChainFirstIOK",
+        "TestConcatAll",
+        "TestConcatAll_BufferSizes",
+        "TestConcatAll_Concurrency",
+        "TestConcatAll_EarlyTermination",
+        "TestConcatAll_EdgeCases",
+        "TestConcatAll_Empty",
+        "TestConcatAll_OrderPreservation",
+        "TestConcatAll_Success",
+        "TestConcatAll_WithChainedOperations",
+        "TestConcatAll_WithComplexTypes",
+        "TestConcatAll_WithDynamicGeneration",
+        "TestConcatAll_vs_MergeAll",
+        "TestConcatBuf_EarlyTermination",
+        "TestConcatBuf_Empty",
+        "TestConcatBuf_OrderPreservation",
+        "TestConcatBuf_Success",
+        "TestConcatBuf_WithChainedOperations",
+        "TestConcatBuf_WithComplexTypes",
+        "TestConcatBuf_WithConcatMonoid",
+        "TestConcatMapBuf_EarlyTermination",
+        "TestConcatMapBuf_Success",
+        "TestConcatMapBuf_vs_Chain",
+        "TestConcatMonoid_Associativity",
+        "TestConcatMonoid_ComparisonWithMergeMonoid",
+        "TestConcatMonoid_DeterministicOrder",
+        "TestConcatMonoid_EmptySequences",
+        "TestConcatMonoid_Identity",
+        "TestConcatMonoid_WithComplexTypes",
+        "TestConcatMonoid_WithFoldMap",
+        "TestConcatMonoid_WithReduce",
+        "TestConcat_Alias",
+        "TestMain",
+        "TestMonadChainFirstIOK",
+        "TestMonadConcatMap_Success",
+        "TestMonadConcatMap_vs_MonadChain"
+      ]
+    },
+    {
+      "fixSha": "c7fb372be6d5ccee4a1b100677bf8ed5f3c3259c",
+      "parentSha": "41d3d768f7853588c95079290eb805e3fa8f051b",
+      "subject": "fix: unfold for IO",
+      "date": "2026-05-31T18:11:12+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/io/types.go",
+        "v2/io/unfold.go"
+      ],
+      "testFiles": [
+        "v2/io/unfold_test.go"
+      ],
+      "packages": [
+        "./v2/io"
+      ],
+      "tests": [
+        "TestUnfold_EarlyTerminationByConsumer",
+        "TestUnfold_EmitsExpectedValues",
+        "TestUnfold_EmptySequenceWhenSeedTerminatesImmediately",
+        "TestUnfold_LargeSequence",
+        "TestUnfold_SingleElement",
+        "TestUnfold_StringSeed"
+      ]
+    },
+    {
+      "fixSha": "41d3d768f7853588c95079290eb805e3fa8f051b",
+      "parentSha": "86bf17c2ab59cf2ed0245c3b0d4df61a6cacf0ad",
+      "subject": "fix: implement Unfold for Thunk",
+      "date": "2026-05-30T15:34:08+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerioresult/type.go",
+        "v2/context/readerioresult/unfold.go"
+      ],
+      "testFiles": [
+        "v2/context/readerioresult/unfold_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerioresult"
+      ],
+      "tests": [
+        "TestUnfold_CancelledContextBeforeStart",
+        "TestUnfold_CancelledContextMidSequence",
+        "TestUnfold_ContextValueVisible",
+        "TestUnfold_EarlyTerminationByConsumer",
+        "TestUnfold_EmitsExpectedValues",
+        "TestUnfold_EmptySequenceWhenSeedTerminatesImmediately",
+        "TestUnfold_ErrorOnFirstStep",
+        "TestUnfold_PropagatesStepError",
+        "TestUnfold_SingleElement",
+        "TestUnfold_StringSeed"
+      ]
+    },
+    {
+      "fixSha": "86bf17c2ab59cf2ed0245c3b0d4df61a6cacf0ad",
+      "parentSha": "5d4c7e60f2dde04ffce06f30fd99969550106323",
+      "subject": "fix: implement traversable composition",
+      "date": "2026-05-30T10:46:43+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/internal/traversable/compose.go",
+        "v2/number/utils.go"
+      ],
+      "testFiles": [
+        "v2/number/number_test.go",
+        "v2/samples/gala/blog_test.go",
+        "v2/samples/traversable/compose_test.go"
+      ],
+      "packages": [
+        "./v2/number",
+        "./v2/samples/gala",
+        "./v2/samples/traversable"
+      ],
+      "tests": [
+        "TestMod",
+        "TestMod_Int8",
+        "TestMod_LargeDivisor",
+        "TestMod_Parity"
+      ]
+    },
+    {
+      "fixSha": "22c9f2d9227667522ae6f6ad4571a8c0acfff0dc",
+      "parentSha": "48ab83cd46957ad082e6ad3570ce905e0d595ce6",
+      "subject": "fix: monoid tests and doc",
+      "date": "2026-05-20T20:05:33+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/monoid/function.go",
+        "v2/monoid/monoid.go",
+        "v2/monoid/void.go"
+      ],
+      "testFiles": [
+        "v2/monoid/monoid_test.go"
+      ],
+      "packages": [
+        "./v2/monoid"
+      ],
+      "tests": [
+        "TestAltMonoid_IdentityLaws",
+        "TestAltMonoid_MultipleOperations",
+        "TestAlternativeMonoid_MultipleNone",
+        "TestApplicativeMonoid_WithNone",
+        "TestFunctionMonoid_Associativity",
+        "TestFunctionMonoid_IdentityLaws",
+        "TestFunctionMonoid_Multiplication"
+      ]
+    },
+    {
+      "fixSha": "46ea7d6ca436e97da14cd00b906f99a9b91c9d1c",
+      "parentSha": "83a18e5db20fb233a63d53386990bbef5f9a7e79",
+      "subject": "fix: add Lens.Modify helper",
+      "date": "2026-05-09T17:07:56+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/lens/lens.go"
+      ],
+      "testFiles": [
+        "v2/optics/lens/lens_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lens"
+      ],
+      "tests": [
+        "TestModify_EdgeCases",
+        "TestModify_Integration",
+        "TestModify_Success"
+      ]
+    },
+    {
+      "fixSha": "6ccd66601b6cdc5dbbcb3909db77e7982334e836",
+      "parentSha": "124520665db810d8ea8d33d19d362597b52d1bd6",
+      "subject": "fix: implement Modify and Set for Lens and LensO",
+      "date": "2026-05-08T13:50:49+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/lens/lens.go",
+        "v2/optics/lens/option/lens.go"
+      ],
+      "testFiles": [
+        "v2/optics/lens/lens_test.go",
+        "v2/optics/lens/option/lens_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lens",
+        "./v2/optics/lens/option"
+      ],
+      "tests": [
+        "TestModify",
+        "TestSet"
+      ]
+    },
+    {
+      "fixSha": "124520665db810d8ea8d33d19d362597b52d1bd6",
+      "parentSha": "a214fe54981c10b988fe73a06cbd401e01c27e5e",
+      "subject": "fix: add missing ChainReaderK to ReaderOption",
+      "date": "2026-05-08T12:51:37+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readeroption/reader.go"
+      ],
+      "testFiles": [
+        "v2/readeroption/reader_test.go"
+      ],
+      "packages": [
+        "./v2/readeroption"
+      ],
+      "tests": [
+        "TestChainReaderK",
+        "TestMonadChainReaderK"
+      ]
+    },
+    {
+      "fixSha": "dabba59e8cf33f0d70699a37ad25146409f55fae",
+      "parentSha": "796e668ed9cf03fc13b795d444faf1a0dfff6955",
+      "subject": "fix: refactor file handling a bit",
+      "date": "2026-05-05T13:13:57+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerioresult/file/file.go",
+        "v2/file/utils.go"
+      ],
+      "testFiles": [
+        "v2/file/utils_test.go",
+        "v2/iterator/iter/mergeall_test.go"
+      ],
+      "packages": [
+        "./v2/file",
+        "./v2/iterator/iter"
+      ],
+      "tests": [
+        "TestNopReadCloser_Close",
+        "TestNopReadCloser_Integration",
+        "TestNopReadCloser_NopWriteCloser_Together",
+        "TestNopReadCloser_Success",
+        "TestNopWriteCloser_Close",
+        "TestNopWriteCloser_EdgeCases",
+        "TestNopWriteCloser_Integration",
+        "TestNopWriteCloser_Success"
+      ]
+    },
+    {
+      "fixSha": "593153b188a88fb69bff7724ad4dd6223c26de14",
+      "parentSha": "1264793e4219d8d5ec5184f0a177afc38131357b",
+      "subject": "fix: consider '-' as identifiers for stdin/stdout",
+      "date": "2026-05-04T16:20:29+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerioresult/file/file.go",
+        "v2/file/getters.go"
+      ],
+      "testFiles": [
+        "v2/context/readerioresult/file/file_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerioresult/file"
+      ],
+      "tests": [
+        "TestCreateOrStdOut",
+        "TestOpenOrStdIn",
+        "TestReadFile",
+        "TestWriteFile_StdoutBehavior"
+      ]
+    },
+    {
+      "fixSha": "f70cc67f6f102605da426551246db9b86bbc1d82",
+      "parentSha": "a0256c4afb0cf80dc9a6841411654c99ed45bd46",
+      "subject": "fix: AltMonoid",
+      "date": "2026-04-23T18:03:23+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readeriooption/monoid.go",
+        "v2/readeroption/monoid.go"
+      ],
+      "testFiles": [
+        "v2/readeriooption/monoid_test.go",
+        "v2/readeroption/monoid_test.go"
+      ],
+      "packages": [
+        "./v2/readeriooption",
+        "./v2/readeroption"
+      ],
+      "tests": [
+        "TestAltMonoid",
+        "TestAltMonoidLaws",
+        "TestAltMonoidRealWorldScenarios",
+        "TestAltMonoidWithEnvironment",
+        "TestAltVsAlternativeMonoid"
+      ]
+    },
+    {
+      "fixSha": "21b517d388010c8a51a3b9feb87271d740bc1eb9",
+      "parentSha": "0df62c0031cde832b0a10d9bd64f67965607120a",
+      "subject": "fix: better doc and NonEmptyString",
+      "date": "2026-04-09T14:51:39+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/constraints/constraints.go",
+        "v2/optics/codec/codecs.go",
+        "v2/record/generic/record.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/codecs_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestFromNonZero_Decode_Failure",
+        "TestFromNonZero_Decode_Success",
+        "TestFromNonZero_Encode",
+        "TestFromNonZero_Integration",
+        "TestFromNonZero_Name",
+        "TestIntFromString_PipeComposition",
+        "TestNonEmptyString_Decode_Failure",
+        "TestNonEmptyString_Decode_Success",
+        "TestNonEmptyString_Encode",
+        "TestNonEmptyString_Integration",
+        "TestNonEmptyString_Name",
+        "TestWithName_AsDecoderEncoder",
+        "TestWithName_BasicFunctionality",
+        "TestWithName_ErrorMessages",
+        "TestWithName_Integration",
+        "TestWithName_MultipleRenames",
+        "TestWithName_PreservesTypeChecking",
+        "TestWithName_RoundTrip",
+        "TestWithName_WithComposedCodecs",
+        "TestWithName_WithDifferentTypes"
+      ]
+    },
+    {
+      "fixSha": "0df62c0031cde832b0a10d9bd64f67965607120a",
+      "parentSha": "57318e2d1dc2722b36824a412f60cee94302e387",
+      "subject": "fix: unroll array Fold and FoldMap",
+      "date": "2026-04-09T11:11:00+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/array/array.go",
+        "v2/array/generic/array.go",
+        "v2/effect/effect.go"
+      ],
+      "testFiles": [
+        "v2/array/array_test.go"
+      ],
+      "packages": [
+        "./v2/array"
+      ],
+      "tests": [
+        "TestFold",
+        "TestFoldMap",
+        "TestFoldMapWithIndex"
+      ]
+    },
+    {
+      "fixSha": "747a1794e5492d075ed92bbb683c495e8a01a426",
+      "parentSha": "c754cacf1f4ff4b880bedb1fa30b52c3ca2b2c7e",
+      "subject": "fix: add more iter operators",
+      "date": "2026-03-30T10:04:20+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/iterator/iter/iter.go",
+        "v2/iterator/iter/take.go"
+      ],
+      "testFiles": [
+        "v2/iterator/iter/iter_test.go",
+        "v2/iterator/iter/take_test.go"
+      ],
+      "packages": [
+        "./v2/iterator/iter"
+      ],
+      "tests": [
+        "TestSkip",
+        "TestSkipDoesNotConsumeSkippedElements",
+        "TestSkipEdgeCases",
+        "TestSkipEmpty",
+        "TestSkipWhile",
+        "TestSkipWhileDoesNotConsumeEntireSequence",
+        "TestSkipWhileEdgeCases",
+        "TestSkipWhileEmpty",
+        "TestSkipWhileWithChainedOperations",
+        "TestSkipWhileWithComplexTypes",
+        "TestSkipWhileWithFlatten",
+        "TestSkipWhileWithMakeBy",
+        "TestSkipWhileWithPrependAppend",
+        "TestSkipWhileWithReplicate",
+        "TestSkipWithChainedOperations",
+        "TestSkipWithComplexTypes",
+        "TestSkipWithFlatten",
+        "TestSkipWithMakeBy",
+        "TestSkipWithPrependAppend",
+        "TestSkipWithReplicate",
+        "TestSkipZeroOrNegative",
+        "TestTakeWhile",
+        "TestTakeWhileDoesNotConsumeEntireSequence",
+        "TestTakeWhileEdgeCases",
+        "TestTakeWhileEmpty",
+        "TestTakeWhileWithChainedOperations",
+        "TestTakeWhileWithComplexTypes",
+        "TestTakeWhileWithFlatten",
+        "TestTakeWhileWithMakeBy",
+        "TestTakeWhileWithPrependAppend",
+        "TestTakeWhileWithReplicate"
+      ]
+    },
+    {
+      "fixSha": "d357b32847c77535d5f559dbad46f5b6fc62fc2f",
+      "parentSha": "a3af003e7480f8d190959f93873a99157bcba5f6",
+      "subject": "fix: add TapThunkK",
+      "date": "2026-03-23T18:43:49+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestAsks_Comparison",
+        "TestAsks_EdgeCases",
+        "TestAsks_Integration",
+        "TestAsks_RealWorldScenarios",
+        "TestAsks_Success",
+        "TestChainFirstThunkK_EdgeCases",
+        "TestChainFirstThunkK_Failure",
+        "TestChainFirstThunkK_Integration",
+        "TestChainFirstThunkK_Success",
+        "TestTapThunkK_EdgeCases",
+        "TestTapThunkK_Failure",
+        "TestTapThunkK_Integration",
+        "TestTapThunkK_Success"
+      ]
+    },
+    {
+      "fixSha": "f35430cf18e5af995a79ab6fed78d62b630f4b48",
+      "parentSha": "d3ffc7180857233428450da3f819f5e9b27f4b04",
+      "subject": "fix: introduce async iterators",
+      "date": "2026-03-18T10:19:03+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/iterator/iter/async.go",
+        "v2/iterator/iter/iter.go",
+        "v2/number/utils.go"
+      ],
+      "testFiles": [
+        "v2/effect/filter_test.go",
+        "v2/iterator/iter/async_test.go"
+      ],
+      "packages": [
+        "./v2/effect",
+        "./v2/iterator/iter"
+      ],
+      "tests": [
+        "TestAsync2_BufferSizes",
+        "TestAsync2_EarlyTermination",
+        "TestAsync2_Empty",
+        "TestAsync2_Success",
+        "TestAsync2_WithChainedOperations",
+        "TestAsync_BufferSizes",
+        "TestAsync_Concurrency",
+        "TestAsync_EarlyTermination",
+        "TestAsync_EdgeCases",
+        "TestAsync_Empty",
+        "TestAsync_Success",
+        "TestAsync_WithChainedOperations",
+        "TestAsync_WithComplexTypes",
+        "TestFilter_Integration",
+        "TestFromSeqPair_Empty",
+        "TestFromSeqPair_Success",
+        "TestFromSeqPair_WithComplexTypes",
+        "TestRoundTrip",
+        "TestToSeqPair_Empty",
+        "TestToSeqPair_Success",
+        "TestToSeqPair_WithComplexTypes"
+      ]
+    },
+    {
+      "fixSha": "02acbae8f660ab3195dcff17155cb5a3a1bd2281",
+      "parentSha": "eb27ecdc016fb1f8ed7985a723e82875957c4a9c",
+      "subject": "fix: add lenses for Hostname and Port",
+      "date": "2026-03-15T22:49:11+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/lenses/url.go"
+      ],
+      "testFiles": [
+        "v2/optics/lenses/url_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lenses"
+      ],
+      "tests": [
+        "TestErrorLenses",
+        "TestErrorRefLenses",
+        "TestHostnameO_ReferenceBased",
+        "TestHostnameO_ValueBased",
+        "TestHostnamePort_EdgeCases",
+        "TestHostnamePort_Integration",
+        "TestHostname_ReferenceBased",
+        "TestHostname_ValueBased",
+        "TestPortO_ReferenceBased",
+        "TestPortO_ValueBased",
+        "TestPort_ReferenceBased",
+        "TestPort_ValueBased",
+        "TestURLLenses",
+        "TestURLLenses_ComplexScenarios",
+        "TestURLRefLenses",
+        "TestUserinfoRefLenses_Composition",
+        "TestUserinfoRefLenses_EdgeCases",
+        "TestUserinfoRefLenses_Immutability",
+        "TestUserinfoRefLenses_Password",
+        "TestUserinfoRefLenses_PasswordO",
+        "TestUserinfoRefLenses_PasswordPresence",
+        "TestUserinfoRefLenses_Username",
+        "TestUserinfoRefLenses_UsernameO"
+      ]
+    },
+    {
+      "fixSha": "eb27ecdc016fb1f8ed7985a723e82875957c4a9c",
+      "parentSha": "e5eb7d343cb0e4ffd631a269636edcb3d4dde743",
+      "subject": "fix: clarify behaviour of array.Concat",
+      "date": "2026-03-13T18:39:55+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/array/array.go"
+      ],
+      "testFiles": [
+        "v2/array/array_test.go"
+      ],
+      "packages": [
+        "./v2/array"
+      ],
+      "tests": [
+        "TestConcat"
+      ]
+    },
+    {
+      "fixSha": "c5cbdaad6886de11ad968fb78ffcada36a23d861",
+      "parentSha": "5d0f27ad103d1e8b7792ccc7eac38941b467ccf9",
+      "subject": "fix: add FromIso",
+      "date": "2026-03-12T22:38:01+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/iso.go",
+        "v2/optics/codec/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/iso_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestFromIso_AsDecoder",
+        "TestFromIso_AsEncoder",
+        "TestFromIso_ComplexTypes",
+        "TestFromIso_Composition",
+        "TestFromIso_EdgeCases",
+        "TestFromIso_Integration",
+        "TestFromIso_Name",
+        "TestFromIso_NumericConversions",
+        "TestFromIso_StringTypes",
+        "TestFromIso_Success",
+        "TestFromIso_TypeChecking",
+        "TestFromIso_Validate"
+      ]
+    },
+    {
+      "fixSha": "5d0f27ad103d1e8b7792ccc7eac38941b467ccf9",
+      "parentSha": "3a954e0d1fd7297c2a50213f78b6b8c85fbe7362",
+      "subject": "fix: add SequenceSeq and TraverseSeq",
+      "date": "2026-03-12T20:38:52+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/either/array.go",
+        "v2/result/array.go"
+      ],
+      "testFiles": [
+        "v2/either/array_test.go",
+        "v2/result/array_test.go"
+      ],
+      "packages": [
+        "./v2/either",
+        "./v2/result"
+      ],
+      "tests": [
+        "TestCompactArray",
+        "TestSequenceArray",
+        "TestSequenceArrayError",
+        "TestSequenceSeq_Failure",
+        "TestSequenceSeq_Integration",
+        "TestSequenceSeq_Success",
+        "TestTraverseSeq_EdgeCases",
+        "TestTraverseSeq_Failure",
+        "TestTraverseSeq_Success"
+      ]
+    },
+    {
+      "fixSha": "3a954e0d1fd7297c2a50213f78b6b8c85fbe7362",
+      "parentSha": "cb2e0b23e81f4486f544a9a19d931524d3551d9f",
+      "subject": "fix: introduce Promap for Effect",
+      "date": "2026-03-10T16:10:12+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/dependencies.go",
+        "v2/effect/effect.go",
+        "v2/effect/profunctor.go"
+      ],
+      "testFiles": [
+        "v2/effect/dependencies_test.go",
+        "v2/effect/effect_test.go",
+        "v2/effect/profunctor_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestAsk",
+        "TestAsks_Comparison",
+        "TestAsks_EdgeCases",
+        "TestAsks_Integration",
+        "TestAsks_RealWorldScenarios",
+        "TestAsks_Success",
+        "TestLocalReaderK",
+        "TestPromapBasic",
+        "TestPromapChaining",
+        "TestPromapComposition",
+        "TestPromapEdgeCases",
+        "TestPromapIntegration",
+        "TestPromapWithComplexTypes",
+        "TestPromapWithErrors"
+      ]
+    },
+    {
+      "fixSha": "f0ec0b25417d58e67d17780d8d5244e4b8537895",
+      "parentSha": "ce3c7d9359d227accd55625c2a4e63a6d47a3d7a",
+      "subject": "fix: optimize record performance",
+      "date": "2026-03-08T22:20:19+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/record/generic/record.go",
+        "v2/record/record.go"
+      ],
+      "testFiles": [
+        "v2/record/record_nil_test.go"
+      ],
+      "packages": [
+        "./v2/record"
+      ],
+      "tests": [
+        "TestNilMap_DeleteAt",
+        "TestNilMap_Keys",
+        "TestNilMap_Values"
+      ]
+    },
+    {
+      "fixSha": "3ed354cc8c313de0be7a3f600d706a35c23d294b",
+      "parentSha": "0932c8c464249e6b42a925163d97a172ebdd3053",
+      "subject": "fix: implement endomorphism.Read",
+      "date": "2026-03-08T19:01:22+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/endomorphism/endo.go"
+      ],
+      "testFiles": [
+        "v2/endomorphism/endomorphism_test.go"
+      ],
+      "packages": [
+        "./v2/endomorphism"
+      ],
+      "tests": [
+        "TestRead",
+        "TestReadWithBuild"
+      ]
+    },
+    {
+      "fixSha": "8cfb7ef6592106ae8bb7f4d019e3a0de2793a0f2",
+      "parentSha": "622c87d734560bd140bfc9bdc629709594c67c43",
+      "subject": "fix: logging implementation for context sensitive operations",
+      "date": "2026-03-06T23:54:42+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerio/bracket.go"
+      ],
+      "testFiles": [
+        "v2/context/readerio/bracket_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerio"
+      ],
+      "tests": [
+        "TestBracket_MultipleResources",
+        "TestBracket_Success",
+        "TestWithResource_ContextPropagation",
+        "TestWithResource_DifferentResultTypes",
+        "TestWithResource_ErrorInRelease",
+        "TestWithResource_Reusability",
+        "TestWithResource_Success"
+      ]
+    },
+    {
+      "fixSha": "e4dd1169c4fb87c3ca1e08752f1add0ee08c80a9",
+      "parentSha": "1657569f1da9aeb03f0d35a184639c5fbd21a83c",
+      "subject": "fix: recursion in Errors()",
+      "date": "2026-03-04T11:12:22+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/validation/validation.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/validation/validation_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec/validation"
+      ],
+      "tests": [
+        "TestValidationErrors_Errors"
+      ]
+    },
+    {
+      "fixSha": "a77d61f6327b86d26405856b17bca5ff7c9e6882",
+      "parentSha": "66b2f57d73c7d2e0649c108e993113d86fe5043f",
+      "subject": "fix: add Bind for Codec",
+      "date": "2026-03-02T13:01:21+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/bind.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/bind_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestBind_DependentFieldCodec",
+        "TestBind_EncodingCombination",
+        "TestBind_KleisliArrowReceivesCurrentValue",
+        "TestBind_Naming",
+        "TestBind_TypeCheckingPreserved",
+        "TestBind_ValidationFailsOnBaseFailure",
+        "TestBind_ValidationFailsOnFieldFailure",
+        "TestBind_ValidationSuccess"
+      ]
+    },
+    {
+      "fixSha": "92eb2a50a27870fbb4d4015dec672200ae96c386",
+      "parentSha": "3df1dca14683943ef95eb32025fe0a02e445290b",
+      "subject": "fix: support MarshalJSON and MarshalText types",
+      "date": "2026-03-01T22:38:20+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/codecs.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/codecs_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestDate",
+        "TestDate_Decode_Failure",
+        "TestDate_Decode_Success",
+        "TestDate_Encode",
+        "TestDate_Integration",
+        "TestDate_Name",
+        "TestInt64FromString",
+        "TestInt64FromString_Decode_Failure",
+        "TestInt64FromString_Decode_Success",
+        "TestInt64FromString_Encode",
+        "TestInt64FromString_Name",
+        "TestIntFromString",
+        "TestIntFromString_Decode_Failure",
+        "TestIntFromString_Decode_Success",
+        "TestIntFromString_Encode",
+        "TestIntFromString_Integration",
+        "TestIntFromString_Name",
+        "TestIntFromString_PipeComposition",
+        "TestMarshalJSON_Decode_Failure",
+        "TestMarshalJSON_Decode_Success",
+        "TestMarshalJSON_Encode",
+        "TestMarshalJSON_Name",
+        "TestRegex",
+        "TestRegexNamed",
+        "TestRegexNamed_Decode_Failure",
+        "TestRegexNamed_Decode_Success",
+        "TestRegexNamed_Encode",
+        "TestRegex_Decode_Failure",
+        "TestRegex_Decode_Success",
+        "TestRegex_Encode",
+        "TestURL",
+        "TestURL_Decode_Failure",
+        "TestURL_Decode_Success",
+        "TestURL_Encode",
+        "TestURL_Integration",
+        "TestURL_Name",
+        "TestValidateFromParser"
+      ]
+    },
+    {
+      "fixSha": "a0132e2e9263ea35444efacb72a49219bf22c841",
+      "parentSha": "c6b342908dde51f419083cfae4bb9a899178186f",
+      "subject": "fix: parameter order",
+      "date": "2026-02-27T15:08:11+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/codec.go"
+      ],
+      "testFiles": [
+        "v2/context/readerreaderioresult/eitherize_test.go",
+        "v2/optics/codec/codec_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerreaderioresult",
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestEitherize1_Integration",
+        "TestEmpty_DifferentInputOutput",
+        "TestEmpty_EdgeCases",
+        "TestEmpty_Encoding",
+        "TestEmpty_Integration",
+        "TestEmpty_LazyEvaluation",
+        "TestEmpty_Name",
+        "TestEmpty_RoundTrip",
+        "TestEmpty_Success",
+        "TestEmpty_TypeChecking",
+        "TestEmpty_WithPointers",
+        "TestEmpty_WithSlices",
+        "TestEmpty_WithStructs"
+      ]
+    },
+    {
+      "fixSha": "168a6e107263ca88d63fb8775b100fc716a49978",
+      "parentSha": "4d67b1d254f41f39adeece0bfca8e1c0d2c1bb68",
+      "subject": "fix: add Eitherize to Effect",
+      "date": "2026-02-27T12:55:03+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerreaderioresult/eitherize.go",
+        "v2/effect/eitherize.go"
+      ],
+      "testFiles": [
+        "v2/context/readerreaderioresult/eitherize_test.go",
+        "v2/effect/eitherize_test.go",
+        "v2/monoid/void_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerreaderioresult",
+        "./v2/effect",
+        "./v2/monoid"
+      ],
+      "tests": [
+        "TestEitherize1_EdgeCases",
+        "TestEitherize1_Failure",
+        "TestEitherize1_Integration",
+        "TestEitherize1_Success",
+        "TestEitherize_EdgeCases",
+        "TestEitherize_Failure",
+        "TestEitherize_Integration",
+        "TestEitherize_Success",
+        "TestEitherize_TypeSafety"
+      ]
+    },
+    {
+      "fixSha": "77a8cc6b0966439311186133fff5d765bee44357",
+      "parentSha": "bc8743fdfc75e50bad64a94b52ad10597f221ce8",
+      "subject": "fix: implement ApSO",
+      "date": "2026-02-26T18:44:27+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/bind.go",
+        "v2/optics/codec/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/bind_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestApSO_EncodingWithAbsentField",
+        "TestApSO_EncodingWithPresentField",
+        "TestApSO_ErrorAccumulation",
+        "TestApSO_Naming",
+        "TestApSO_TypeChecking"
+      ]
+    },
+    {
+      "fixSha": "1837d3f86dd8fd6b4738626a78d55c38c69af19b",
+      "parentSha": "b2d111e8ec7e0adb143d29bd96823a0e5813bfd3",
+      "subject": "fix: add semigroup helpers",
+      "date": "2026-02-26T16:39:05+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/bind.go",
+        "v2/optics/codec/types.go",
+        "v2/semigroup/semigroup.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/bind_test.go",
+        "v2/semigroup/semigroup_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec",
+        "./v2/semigroup"
+      ],
+      "tests": [
+        "TestApSL_EncodingCombination",
+        "TestApSL_ErrorAccumulation",
+        "TestApSL_Naming",
+        "TestApSL_TypeChecking",
+        "TestApSL_ValidationCombination",
+        "TestAppendTo",
+        "TestConcatWith",
+        "TestConcatWithAppendToComposition",
+        "TestConcatWithVsAppendTo"
+      ]
+    },
+    {
+      "fixSha": "b2d111e8ec7e0adb143d29bd96823a0e5813bfd3",
+      "parentSha": "ae141c85c64b9ae3991a67eb70b20c79eb6b005d",
+      "subject": "fix: more doc and tests",
+      "date": "2026-02-26T14:04:44+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/constant/monoid.go"
+      ],
+      "testFiles": [
+        "v2/constant/const_test.go"
+      ],
+      "packages": [
+        "./v2/constant"
+      ],
+      "tests": [
+        "TestConstApplicativeLaws",
+        "TestConstEdgeCases",
+        "TestConstFunctorLaws",
+        "TestMake",
+        "TestMap",
+        "TestMonadAp",
+        "TestMonadMap",
+        "TestMonoid",
+        "TestOf",
+        "TestUnwrap"
+      ]
+    },
+    {
+      "fixSha": "b9c8fb4ff1d2c11e09a22ded56e7f69f60ba5a42",
+      "parentSha": "4529e720bccebf66200938a1aec7cb54d6a5cd83",
+      "subject": "fix: parameter order for Local and TapIOK",
+      "date": "2026-02-24T17:55:32+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/dependencies.go",
+        "v2/effect/effect.go",
+        "v2/effect/run.go"
+      ],
+      "testFiles": [
+        "v2/effect/common_test.go",
+        "v2/effect/dependencies_test.go",
+        "v2/effect/effect_additional_test.go",
+        "v2/effect/run_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestAp_Failure",
+        "TestAp_Success",
+        "TestChainFirstIOK_Failure",
+        "TestChainFirstIOK_Success",
+        "TestChainIOK_Failure",
+        "TestChainIOK_Success",
+        "TestChainResultK_Failure",
+        "TestChainResultK_Success",
+        "TestChain_Failure",
+        "TestChain_Success",
+        "TestContramap",
+        "TestFail_Failure",
+        "TestLocal",
+        "TestLocalAndContramapInteroperability",
+        "TestLocalEffectK",
+        "TestMap_Failure",
+        "TestMap_Success",
+        "TestOf_Success",
+        "TestProvide",
+        "TestProvideAndRunSyncIntegration",
+        "TestRead_Failure",
+        "TestRead_Success",
+        "TestRunSync",
+        "TestSucceed_Success",
+        "TestSuspend_Success",
+        "TestTapIOK_Failure",
+        "TestTapIOK_Success",
+        "TestTap_Failure",
+        "TestTap_Success",
+        "TestTernary_Success"
+      ]
+    },
+    {
+      "fixSha": "4529e720bccebf66200938a1aec7cb54d6a5cd83",
+      "parentSha": "ef8b2ea65dc5ec92dea26c1c21859e788d3c2bf3",
+      "subject": "fix: add ChainThunkK",
+      "date": "2026-02-24T15:59:51+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go"
+      ],
+      "testFiles": [
+        "v2/effect/effect_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestChainThunkK_EdgeCases",
+        "TestChainThunkK_Failure",
+        "TestChainThunkK_Integration",
+        "TestChainThunkK_Success",
+        "TestFromThunk_Failure",
+        "TestFromThunk_Integration",
+        "TestFromThunk_Success"
+      ]
+    },
+    {
+      "fixSha": "ef8b2ea65dc5ec92dea26c1c21859e788d3c2bf3",
+      "parentSha": "5bd7caafddcceca0189b4237d1f3bebfc8c9f586",
+      "subject": "fix: add ChainReaderK",
+      "date": "2026-02-24T15:31:51+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/effect/effect.go"
+      ],
+      "testFiles": [
+        "v2/effect/common_test.go",
+        "v2/effect/effect_missing_test.go",
+        "v2/effect/effect_test.go"
+      ],
+      "packages": [
+        "./v2/effect"
+      ],
+      "tests": [
+        "TestChainReaderIOK_EdgeCases",
+        "TestChainReaderIOK_Failure",
+        "TestChainReaderIOK_Integration",
+        "TestChainReaderIOK_Success",
+        "TestChainReaderK_EdgeCases",
+        "TestChainReaderK_Failure",
+        "TestChainReaderK_Integration",
+        "TestChainReaderK_Success",
+        "TestChainResultK",
+        "TestSuspend",
+        "TestTernary"
+      ]
+    },
+    {
+      "fixSha": "47ebcd79b12793405b0683dcd8527cb35a0a6f7c",
+      "parentSha": "dbad94806eb764d6327714f7552ae46183c6054b",
+      "subject": "fix: add LocalIOResultK",
+      "date": "2026-02-23T14:15:00+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/effect.go",
+        "v2/cli/flags.go"
+      ],
+      "testFiles": [
+        "v2/cli/effect_test.go",
+        "v2/cli/flags_test.go",
+        "v2/optics/codec/validate/from_test.go"
+      ],
+      "packages": [
+        "./v2/cli",
+        "./v2/optics/codec/validate"
+      ],
+      "tests": [
+        "TestPrisms_EdgeCases",
+        "TestToAction_Integration"
+      ]
+    },
+    {
+      "fixSha": "c4cac1cb3ead986594ed390f3cd9e3fd84f8a2cf",
+      "parentSha": "a3fdb03df4b168d33e3d00548b5dd742060dbe88",
+      "subject": "fix: add FromReaderResult",
+      "date": "2026-02-21T16:44:51+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/validate/from.go",
+        "v2/optics/codec/validate/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/validate/from_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec/validate"
+      ],
+      "tests": [
+        "TestFromReaderResult_EdgeCases",
+        "TestFromReaderResult_Failure",
+        "TestFromReaderResult_Integration",
+        "TestFromReaderResult_Success",
+        "TestFromReaderResult_TypeSafety"
+      ]
+    },
+    {
+      "fixSha": "8c656a4297d84ea47c81256f8e767521e68a3dd9",
+      "parentSha": "bd9a642e939477859b6ddf9c1d7b664b8dad6723",
+      "subject": "fix: more Alt tests",
+      "date": "2026-02-10T08:52:39+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/codec/alt.go",
+        "v2/optics/codec/types.go"
+      ],
+      "testFiles": [
+        "v2/optics/codec/alt_test.go"
+      ],
+      "packages": [
+        "./v2/optics/codec"
+      ],
+      "tests": [
+        "TestAltMonoid"
+      ]
+    },
+    {
+      "fixSha": "ff2a4299b2d32dcaaaff7a2d473f65c0c73136eb",
+      "parentSha": "edd66d63e6822720f596edacf963e781d914e2cd",
+      "subject": "fix: add some useful lenses",
+      "date": "2026-01-27T17:39:34+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/lenses/doc.go",
+        "v2/optics/lenses/url.go"
+      ],
+      "testFiles": [
+        "v2/optics/lenses/matcher_test.go",
+        "v2/optics/lenses/url_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lenses"
+      ],
+      "tests": [
+        "TestErrorLenses",
+        "TestErrorPrisms",
+        "TestErrorRefLenses",
+        "TestMatchLenses_After",
+        "TestMatchLenses_AfterO",
+        "TestMatchLenses_Before",
+        "TestMatchLenses_BeforeO",
+        "TestMatchLenses_Groups",
+        "TestMatchLenses_Immutability",
+        "TestMatchPrisms_After",
+        "TestMatchPrisms_Before",
+        "TestMatchPrisms_Groups",
+        "TestMatchRefLenses_After",
+        "TestMatchRefLenses_Before",
+        "TestMatchRefLenses_Groups",
+        "TestNamedMatchLenses_After",
+        "TestNamedMatchLenses_Before",
+        "TestNamedMatchLenses_Full",
+        "TestNamedMatchLenses_Groups",
+        "TestNamedMatchLenses_Immutability",
+        "TestNamedMatchLenses_Optional",
+        "TestNamedMatchPrisms",
+        "TestNamedMatchRefLenses_Immutability",
+        "TestURLLenses",
+        "TestURLLenses_ComplexScenarios",
+        "TestURLPrisms",
+        "TestURLRefLenses",
+        "TestUserinfoRefLenses_Composition",
+        "TestUserinfoRefLenses_EdgeCases",
+        "TestUserinfoRefLenses_Immutability",
+        "TestUserinfoRefLenses_Password",
+        "TestUserinfoRefLenses_PasswordO",
+        "TestUserinfoRefLenses_PasswordPresence",
+        "TestUserinfoRefLenses_Username",
+        "TestUserinfoRefLenses_UsernameO"
+      ]
+    },
+    {
+      "fixSha": "b87c20d139517ccb40e2c997ef5013fbe46c948e",
+      "parentSha": "9fd5b901389b7800af37145ece6fe5f8f4149801",
+      "subject": "fix: better reader abstraction",
+      "date": "2026-01-17T22:36:26+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/idiomatic/readerioresult/reader.go",
+        "v2/optics/codec/codec.go"
+      ],
+      "testFiles": [
+        "v2/idiomatic/readerioresult/reader_bench_test.go",
+        "v2/idiomatic/readerioresult/reader_test.go"
+      ],
+      "packages": [
+        "./v2/idiomatic/readerioresult"
+      ],
+      "tests": [
+        "TestReadIO",
+        "TestReadIOResult"
+      ]
+    },
+    {
+      "fixSha": "777fff9a5a610ca5b5300751c03caaea9b073095",
+      "parentSha": "8acea9043f5727b0eb97a8cc18cfdfe9b70be82e",
+      "subject": "fix: implement ReadIO",
+      "date": "2026-01-15T12:24:46+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/context/readerio/reader.go",
+        "v2/readerioeither/reader.go"
+      ],
+      "testFiles": [
+        "v2/context/readerio/reader_test.go",
+        "v2/readerioeither/reader_test.go"
+      ],
+      "packages": [
+        "./v2/context/readerio",
+        "./v2/readerioeither"
+      ],
+      "tests": [
+        "TestReadIO",
+        "TestReadIOComparisonWithRead",
+        "TestReadIOEither",
+        "TestReadIOMultipleExecutions",
+        "TestReadIOWithAsk",
+        "TestReadIOWithBackground",
+        "TestReadIOWithChain",
+        "TestReadIOWithComplexContext",
+        "TestReadIOWithMap",
+        "TestReadIOWithSideEffects"
+      ]
+    },
+    {
+      "fixSha": "89766bdb263a36179c3debd9142c58880b2f15b0",
+      "parentSha": "21d116d3252cca462ef87faf44010abef8f7bdea",
+      "subject": "fix: add monoid to state",
+      "date": "2026-01-12T23:03:37+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/state/monoid.go"
+      ],
+      "testFiles": [
+        "v2/state/monoid_test.go"
+      ],
+      "packages": [
+        "./v2/state"
+      ],
+      "tests": [
+        "TestApplicativeMonoidBasic",
+        "TestApplicativeMonoidCommutativity",
+        "TestApplicativeMonoidEdgeCases",
+        "TestApplicativeMonoidEmpty",
+        "TestApplicativeMonoidLaws",
+        "TestApplicativeMonoidMultipleConcatenations",
+        "TestApplicativeMonoidWithDifferentTypes",
+        "TestApplicativeMonoidWithGets",
+        "TestApplicativeMonoidWithStateModification"
+      ]
+    },
+    {
+      "fixSha": "21d116d3252cca462ef87faf44010abef8f7bdea",
+      "parentSha": "7f2e76dd94d49e7766df28460029478d78606f1a",
+      "subject": "fix: implement monoid for Pair",
+      "date": "2026-01-12T22:53:19+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/pair/monoid.go"
+      ],
+      "testFiles": [
+        "v2/pair/monoid_test.go"
+      ],
+      "packages": [
+        "./v2/pair"
+      ],
+      "tests": [
+        "TestMonoidComparison",
+        "TestMonoidHaskellComparison",
+        "TestMonoidOrderingDocumentation",
+        "TestSimpleMonoid"
+      ]
+    },
+    {
+      "fixSha": "77965a12ff1391044429ece4f024c9b661852614",
+      "parentSha": "ed77bd79718c8c9d54a5e091949c33d5fe1bd822",
+      "subject": "fix: implement monoid for Pair",
+      "date": "2026-01-12T22:32:04+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/pair/monoid.go",
+        "v2/result/monoid.go"
+      ],
+      "testFiles": [
+        "v2/pair/monoid_test.go",
+        "v2/result/monoid_test.go"
+      ],
+      "packages": [
+        "./v2/pair",
+        "./v2/result"
+      ],
+      "tests": [
+        "TestAltMonoid",
+        "TestApplicativeMonoid",
+        "TestApplicativeMonoidHead",
+        "TestApplicativeMonoidTail",
+        "TestFirstMonoid",
+        "TestFirstMonoidVsAltMonoid",
+        "TestFirstMonoidVsLastMonoid",
+        "TestLastMonoid",
+        "TestMonoidCommutativity",
+        "TestMonoidEdgeCases",
+        "TestMonoidHeadVsTail",
+        "TestMonoidLaws",
+        "TestMonoidWithDifferentTypes"
+      ]
+    },
+    {
+      "fixSha": "ed77bd79718c8c9d54a5e091949c33d5fe1bd822",
+      "parentSha": "f154790d8896d6aa557404503942814c81c54c8e",
+      "subject": "fix: implement get last and get first monoids",
+      "date": "2026-01-12T20:44:04+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/either/monoid.go",
+        "v2/option/monoid.go"
+      ],
+      "testFiles": [
+        "v2/either/monoid_test.go",
+        "v2/option/monoid_test.go",
+        "v2/reflect/reflect_test.go",
+        "v2/state/bind_test.go",
+        "v2/state/state_test.go"
+      ],
+      "packages": [
+        "./v2/either",
+        "./v2/option",
+        "./v2/reflect",
+        "./v2/state"
+      ],
+      "tests": [
+        "TestAltMonoidIdentityLaws",
+        "TestAlternativeMonoidIdentityLaws",
+        "TestEvaluateWithChain",
+        "TestFirstMonoid",
+        "TestFirstMonoidVsAltMonoid",
+        "TestFirstMonoidVsLastMonoid",
+        "TestIntegration_ReduceWithIndexToMap",
+        "TestLastMonoid",
+        "TestMixedBindAndLet",
+        "TestMonoidComparison",
+        "TestMonoidEdgeCases",
+        "TestMonoidIdentityLaws",
+        "TestMonoidLaws",
+        "TestSemigroupAssociativity",
+        "TestSemigroupWithNone"
+      ]
+    },
+    {
+      "fixSha": "86a260a204c83ec89ab811fe3b4426f988e9270e",
+      "parentSha": "6a6b982779314477399bb5bd30eb4aca1daaeb93",
+      "subject": "Introduce IORef (#150)",
+      "date": "2026-01-04T16:45:40+01:00",
+      "prNumber": 150,
+      "language": "go",
+      "sourceFiles": [
+        "v2/ioref/doc.go",
+        "v2/ioref/ioref.go",
+        "v2/ioref/types.go"
+      ],
+      "testFiles": [
+        "v2/ioref/ioref_test.go",
+        "v2/reader/rec_test.go",
+        "v2/readerio/retry_test.go"
+      ],
+      "packages": [
+        "./v2/ioref",
+        "./v2/reader",
+        "./v2/readerio"
+      ],
+      "tests": [
+        "TestComplexTypes",
+        "TestConcurrency",
+        "TestEdgeCases",
+        "TestMakeIORef",
+        "TestModify",
+        "TestModifyWithResult",
+        "TestRead",
+        "TestRetrying_StackSafety",
+        "TestTailRec_ComplexState",
+        "TestWrite"
+      ]
+    },
+    {
+      "fixSha": "ffdfd218f84afbcb9ed46251a6dc965800f655d6",
+      "parentSha": "34826d8c52cf5091230d3dba68283be9386754ce",
+      "subject": "fix: implement Flip for Reader",
+      "date": "2025-12-05T11:04:49+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/reader/flip.go",
+        "v2/reader/reader.go"
+      ],
+      "testFiles": [
+        "v2/reader/flip_test.go"
+      ],
+      "packages": [
+        "./v2/reader"
+      ],
+      "tests": [
+        "TestFlip",
+        "TestFlipEdgeCases",
+        "TestFlipWithChain"
+      ]
+    },
+    {
+      "fixSha": "f652a94c3a7cf9885ef15d2a398adf9ace81abbd",
+      "parentSha": "774db88ca5cf6081ce2166383d64701f73e25d31",
+      "subject": "fix: add template based logger",
+      "date": "2025-11-28T10:11:08+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/io/logging.go"
+      ],
+      "testFiles": [
+        "v2/io/logging_test.go"
+      ],
+      "packages": [
+        "./v2/io"
+      ],
+      "tests": [
+        "TestLogGo",
+        "TestLogGoInPipeline",
+        "TestLogGoReturnsOriginalValue",
+        "TestLogGoWithComplexTemplate",
+        "TestLogGoWithInvalidTemplate",
+        "TestLogf",
+        "TestLogfReturnsOriginalValue",
+        "TestLogger",
+        "TestLoggerReturnsOriginalValue",
+        "TestLoggerWithCustomLogger",
+        "TestPrintGo",
+        "TestPrintGoInPipeline",
+        "TestPrintGoReturnsOriginalValue",
+        "TestPrintGoWithInvalidTemplate",
+        "TestPrintfLogger",
+        "TestPrintfLoggerReturnsOriginalValue"
+      ]
+    },
+    {
+      "fixSha": "62a3365b20dc4f0617751752dfcc896620a9486b",
+      "parentSha": "d9a16a6771a6cd460b985b9eba026df43354c7d7",
+      "subject": "fix: add conversion prisms for numbers",
+      "date": "2025-11-27T13:12:18+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/optics/prism/prisms.go"
+      ],
+      "testFiles": [
+        "v2/optics/prism/prisms_test.go"
+      ],
+      "packages": [
+        "./v2/optics/prism"
+      ],
+      "tests": [
+        "TestFromNonZero",
+        "TestFromNonZeroWithSet",
+        "TestParseBool",
+        "TestParseBoolWithSet",
+        "TestParseFloat32",
+        "TestParseFloat64",
+        "TestParseInt",
+        "TestParseInt64",
+        "TestParseIntWithSet"
+      ]
+    },
+    {
+      "fixSha": "d9a16a6771a6cd460b985b9eba026df43354c7d7",
+      "parentSha": "8949cc7dcad12227e4010cf0ad08f868d82dc01c",
+      "subject": "fix: add reduce operations to readerioresult",
+      "date": "2025-11-26T17:00:10+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readerioeither/array.go",
+        "v2/readerioresult/array.go"
+      ],
+      "testFiles": [
+        "v2/readerioresult/array_test.go"
+      ],
+      "packages": [
+        "./v2/readerioresult"
+      ],
+      "tests": [
+        "TestMonadReduceArray",
+        "TestMonadReduceArrayM",
+        "TestMonadReduceArrayMWithError",
+        "TestMonadReduceArrayWithError",
+        "TestMonadTraverseReduceArray",
+        "TestMonadTraverseReduceArrayM",
+        "TestMonadTraverseReduceArrayMWithError",
+        "TestMonadTraverseReduceArrayWithError",
+        "TestReduceArray",
+        "TestReduceArrayEmptyArray",
+        "TestReduceArrayM",
+        "TestReduceArrayMWithError",
+        "TestReduceArrayWithError",
+        "TestTraverseReduceArray",
+        "TestTraverseReduceArrayEmptyArray",
+        "TestTraverseReduceArrayM",
+        "TestTraverseReduceArrayMWithError",
+        "TestTraverseReduceArrayWithError"
+      ]
+    },
+    {
+      "fixSha": "fa6b6caf2226bc90e13c96daa1640f9eb43b582f",
+      "parentSha": "a1e8d397c36c4d6f0ada583efe3ff9353dbc1d41",
+      "subject": "fix: generic order for reader.Flap",
+      "date": "2025-11-26T12:53:13+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/reader/reader.go"
+      ],
+      "testFiles": [
+        "v2/reader/reader_test.go"
+      ],
+      "packages": [
+        "./v2/reader"
+      ],
+      "tests": [
+        "TestFlap"
+      ]
+    },
+    {
+      "fixSha": "51cf241a267b2e085d4043b52d143c4c86f488b8",
+      "parentSha": "9004c9397609d67d53d3759ce5737354e20805e9",
+      "subject": "fix: add ReaderK",
+      "date": "2025-11-24T12:29:55+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/readereither/reader.go",
+        "v2/readerresult/reader.go"
+      ],
+      "testFiles": [
+        "v2/readerresult/idiomatic_test.go"
+      ],
+      "packages": [
+        "./v2/readerresult"
+      ],
+      "tests": [
+        "TestApResult",
+        "TestApResultI",
+        "TestMonadApResult"
+      ]
+    },
+    {
+      "fixSha": "d8ab6b0ce5c7420e89d9b081d33f0572fa3eceee",
+      "parentSha": "4e9998b645641441c00f9290bb54ca7542ee1d92",
+      "subject": "fix: ChainReaderK",
+      "date": "2025-11-22T10:39:56+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/idiomatic/readerresult/reader.go"
+      ],
+      "testFiles": [
+        "v2/idiomatic/readerresult/reader_test.go"
+      ],
+      "packages": [
+        "./v2/idiomatic/readerresult"
+      ],
+      "tests": [
+        "TestChainEitherK",
+        "TestChainReaderK"
+      ]
+    },
+    {
+      "fixSha": "5aa0e1ea2ec21c0bcfe397100a3d2e49d2fded9e",
+      "parentSha": "d586428cb0a318041c2c04637721a0884c86556c",
+      "subject": "fix: handle non comparable types",
+      "date": "2025-11-13T09:35:56+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/lens.go",
+        "v2/samples/lens/example.go",
+        "v2/samples/lens/gen_lens.go"
+      ],
+      "testFiles": [
+        "v2/cli/lens_test.go"
+      ],
+      "packages": [
+        "./v2/cli"
+      ],
+      "tests": [
+        "TestGenerateLensHelpersWithComparableTypeParam",
+        "TestGenerateLensHelpersWithEmbeddedStruct",
+        "TestGenerateLensHelpersWithGenericStruct",
+        "TestIsComparableType",
+        "TestParseFileWithEmbeddedStruct",
+        "TestParseFileWithGenericStruct",
+        "TestParseFileWithMultipleTypeParams",
+        "TestParseFileWithPointerEmbeddedStruct"
+      ]
+    },
+    {
+      "fixSha": "6f7ec0768d5cbefb5ac3788003d69395d8bb9ed1",
+      "parentSha": "ca813b673c32d438b7c96c504510140f63d32f82",
+      "subject": "fix: improve lens generation",
+      "date": "2025-11-12T17:28:20+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/cli/lens.go",
+        "v2/samples/lens/example.go",
+        "v2/samples/lens/gen_lens.go"
+      ],
+      "testFiles": [
+        "v2/cli/lens_test.go",
+        "v2/samples/lens/example_test.go"
+      ],
+      "packages": [
+        "./v2/cli",
+        "./v2/samples/lens"
+      ],
+      "tests": [
+        "TestGenerateLensHelpersWithComparable",
+        "TestIsComparableType",
+        "TestLensRefTemplatesWithComparable",
+        "TestParseFileWithComparableTypes",
+        "TestPersonRefLensesIdempotent"
+      ]
+    },
+    {
+      "fixSha": "567315a31c8f406a8c664d0ed1fca9282d080663",
+      "parentSha": "311ed55f063c783b399c464a7a1787738022331a",
+      "subject": "fix: make a distinction between Chain and Compose for endomorphism",
+      "date": "2025-11-12T13:51:00+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/endomorphism/doc.go",
+        "v2/endomorphism/endo.go",
+        "v2/endomorphism/monoid.go"
+      ],
+      "testFiles": [
+        "v2/endomorphism/endomorphism_test.go"
+      ],
+      "packages": [
+        "./v2/endomorphism"
+      ],
+      "tests": [
+        "TestChain",
+        "TestComplexCompositions",
+        "TestCompose",
+        "TestComposeVsChain",
+        "TestEndomorphismWithDifferentTypes",
+        "TestIdentity",
+        "TestMonadChain",
+        "TestMonadCompose",
+        "TestMonadComposeVsCompose",
+        "TestMonoid",
+        "TestSemigroup"
+      ]
+    },
+    {
+      "fixSha": "0c742b81e62f2ed08a5e2cf2e2abb0558eac8f4d",
+      "parentSha": "a1d6c94b15c2cec762123efe2ff382dabcfed278",
+      "subject": "fix: better performance for either",
+      "date": "2025-11-08T10:01:14+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "v2/either/core.go",
+        "v2/either/core_any.go",
+        "v2/optics/lens/lens.go"
+      ],
+      "testFiles": [
+        "v2/optics/lens/lens_test.go"
+      ],
+      "packages": [
+        "./v2/optics/lens"
+      ],
+      "tests": [
+        "TestMakeLensStrict",
+        "TestMakeLensStrict_BoolField",
+        "TestMakeLensStrict_ComposedLens",
+        "TestMakeLensStrict_IntField",
+        "TestMakeLensStrict_MultipleUpdates",
+        "TestMakeLensStrict_PointerField",
+        "TestMakeLensWithEq",
+        "TestMakeLensWithEq_ComposedLens",
+        "TestMakeLensWithEq_CustomEq",
+        "TestMakeLensWithEq_IntField",
+        "TestMakeLensWithEq_MultipleUpdates"
+      ]
+    },
+    {
+      "fixSha": "3b3b80aed00025035ed9dc387f0020467acd3b75",
+      "parentSha": "fdff4e4735e087aa5c75967f4f77032b0dbe792c",
+      "subject": "fix: some more tests",
+      "date": "2024-05-27T11:54:04+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "record/eq.go",
+        "record/generic/eq.go"
+      ],
+      "testFiles": [
+        "record/eq_test.go",
+        "record/monoid_test.go",
+        "record/record_test.go"
+      ],
+      "packages": [
+        "./record"
+      ],
+      "tests": [
+        "TestEmpty",
+        "TestFromStrictEquals",
+        "TestHas",
+        "TestUnionFirstMonoid",
+        "TestUnionLastMonoid"
+      ]
+    },
+    {
+      "fixSha": "fdff4e4735e087aa5c75967f4f77032b0dbe792c",
+      "parentSha": "391754e5a6a78df4351ecb5588a6b398e14c3920",
+      "subject": "fix: more tests",
+      "date": "2024-05-26T16:23:40+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "internal/testing/sequence.go"
+      ],
+      "testFiles": [
+        "option/record_test.go"
+      ],
+      "packages": [
+        "./option"
+      ],
+      "tests": [
+        "TestSequenceRecord"
+      ]
+    },
+    {
+      "fixSha": "6ab6ff094bfd34dcc56c835aa1d93f574ab633bc",
+      "parentSha": "e6e35d643c3c8ca85a77dfec29217b347331aa73",
+      "subject": "fix: correct sequence order of TraverseArraySeq for IO",
+      "date": "2024-02-16T15:46:12+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "io/generic/ap.go",
+        "io/generic/traverse.go",
+        "io/traverse.go"
+      ],
+      "testFiles": [
+        "io/sequence_test.go",
+        "ioeither/sequence_test.go"
+      ],
+      "packages": [
+        "./io",
+        "./ioeither"
+      ],
+      "tests": [
+        "TestMapSeq"
+      ]
+    },
+    {
+      "fixSha": "6f91e91eb9206e54d38217eead0af8f4917f067f",
+      "parentSha": "9f6b6d496858c4b3dc084c0896dd23eb92fbe47e",
+      "subject": "fix: add hash to http builder",
+      "date": "2024-02-08T09:42:29+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "bytes/bytes.go",
+        "http/builder/builder.go"
+      ],
+      "testFiles": [
+        "context/readerioeither/http/builder/builder_test.go",
+        "http/builder/builder_test.go"
+      ],
+      "packages": [
+        "./context/readerioeither/http/builder",
+        "./http/builder"
+      ],
+      "tests": [
+        "TestBuilderWithQuery",
+        "TestHash"
+      ]
+    },
+    {
+      "fixSha": "a774d63e66ba6bba833a69700d236056f54da3a0",
+      "parentSha": "d86cf55a3de4de45e8c55e0fdfbfa6211c7bdeec",
+      "subject": "fix: try a more efficient implementation of standard interfaces",
+      "date": "2024-02-07T13:26:17+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "either/core.go",
+        "option/core.go"
+      ],
+      "testFiles": [
+        "either/either_test.go"
+      ],
+      "packages": [
+        "./either"
+      ],
+      "tests": [
+        "TestStringer"
+      ]
+    },
+    {
+      "fixSha": "8150ae2a68360ace3bb631dc630e42053eea46cd",
+      "parentSha": "7daf65effc533a9d8b81283d357025709dd71571",
+      "subject": "fix: refactor either type (#102)",
+      "date": "2024-02-07T11:03:20+01:00",
+      "prNumber": 102,
+      "language": "go",
+      "sourceFiles": [
+        "context/readerioeither/generic/reader.go",
+        "either/core.go",
+        "io/generic/io.go"
+      ],
+      "testFiles": [
+        "context/readerioeither/file/file_test.go",
+        "either/either_test.go",
+        "either/examples_create_test.go",
+        "either/examples_extract_test.go",
+        "io/logging_test.go",
+        "ioeither/examples_create_test.go",
+        "ioeither/examples_do_test.go",
+        "ioeither/examples_extract_test.go",
+        "samples/mostly-adequate/chapter08_tupperware_test.go",
+        "samples/mostly-adequate/chapter09_monadiconions_test.go",
+        "samples/mostly-adequate/chapter10_applicativefunctor_test.go",
+        "samples/mostly-adequate/chapter11_transformagain_test.go",
+        "samples/mostly-adequate/chapter12_traversing_test.go",
+        "samples/presentation/examples/example_either_test.go",
+        "samples/presentation/examples/example_sideeffect_test.go"
+      ],
+      "packages": [
+        "./context/readerioeither/file",
+        "./either",
+        "./io",
+        "./ioeither",
+        "./samples/mostly-adequate",
+        "./samples/presentation/examples"
+      ],
+      "tests": [
+        "TestLogf",
+        "TestLogger"
+      ]
+    },
+    {
+      "fixSha": "358573cc20a5a22608dfa58b281c6b400106e293",
+      "parentSha": "e166806d1b088f2057a1ba67b6e110c6311ea9a1",
+      "subject": "fix: optimize strings package",
+      "date": "2024-02-06T14:43:23+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "string/string.go"
+      ],
+      "testFiles": [
+        "string/string_test.go"
+      ],
+      "packages": [
+        "./string"
+      ],
+      "tests": [
+        "TestEquals",
+        "TestIncludes"
+      ]
+    },
+    {
+      "fixSha": "3e09a19d68baec2f1906076a54d42009aed7b357",
+      "parentSha": "839ef47054ec15b632fa4ab9c99af318ff26239a",
+      "subject": "fix: Writer monad",
+      "date": "2024-02-01T22:11:29+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "writer/generic/writer.go",
+        "writer/writer.go"
+      ],
+      "testFiles": [
+        "writer/bind_test.go"
+      ],
+      "packages": [
+        "./writer"
+      ],
+      "tests": [
+        "TestApS",
+        "TestBind"
+      ]
+    },
+    {
+      "fixSha": "89c34254a9f05e4f6f5a3103f17569db641ffdcc",
+      "parentSha": "a14feff1d6833e5a398b2f94d54e695e7a737892",
+      "subject": "fix: add Join",
+      "date": "2024-01-17T11:57:26+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "string/string.go"
+      ],
+      "testFiles": [
+        "string/string_test.go"
+      ],
+      "packages": [
+        "./string"
+      ],
+      "tests": [
+        "TestJoin"
+      ]
+    },
+    {
+      "fixSha": "1e1411c003236c01f810937e5e95773ed3279bb2",
+      "parentSha": "9ed9f8a1719fdd8ba41e2129e2d4165c50536d15",
+      "subject": "fix: add LogJson",
+      "date": "2024-01-15T10:46:50+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "array/monoid.go",
+        "ioeither/generic/logging.go",
+        "ioeither/logging.go"
+      ],
+      "testFiles": [
+        "ioeither/logging_test.go"
+      ],
+      "packages": [
+        "./ioeither"
+      ],
+      "tests": [
+        "TestLogging"
+      ]
+    },
+    {
+      "fixSha": "9ed9f8a1719fdd8ba41e2129e2d4165c50536d15",
+      "parentSha": "e7428549e40903f36baf0e489ca7d85d784e3324",
+      "subject": "fix: implement foldMap for records",
+      "date": "2024-01-12T17:19:38+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "record/generic/record.go",
+        "record/record.go"
+      ],
+      "testFiles": [
+        "record/record_test.go"
+      ],
+      "packages": [
+        "./record"
+      ],
+      "tests": [
+        "TestFromArrayMap"
+      ]
+    },
+    {
+      "fixSha": "709d74b135901470705f2e322f99e129b24c331b",
+      "parentSha": "38c6541254710847d92f562471437d6d357e5d79",
+      "subject": "fix: refactor builder",
+      "date": "2024-01-11T14:12:53+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "context/readerioeither/http/builder/builder.go",
+        "http/builder/builder.go",
+        "ioeither/http/builder/builder.go"
+      ],
+      "testFiles": [
+        "context/readerioeither/http/builder/builder_test.go",
+        "http/builder/builder_test.go",
+        "ioeither/http/builder/builder_test.go"
+      ],
+      "packages": [
+        "./context/readerioeither/http/builder",
+        "./http/builder",
+        "./ioeither/http/builder"
+      ],
+      "tests": [
+        "TestBuilder",
+        "TestBuilderWithQuery",
+        "TestWithFormData"
+      ]
+    },
+    {
+      "fixSha": "813b83b42375a739e0f2ac4e21d0b1dd161f9152",
+      "parentSha": "9139dedbbebbbf3b356ea711558dc914044e9248",
+      "subject": "fix: add WithQueryArg to request builder",
+      "date": "2024-01-08T21:35:39+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "http/form/form.go",
+        "http/headers/headers.go",
+        "ioeither/http/builder/builder.go"
+      ],
+      "testFiles": [
+        "http/headers/headers_test.go",
+        "ioeither/http/builder/builder_test.go"
+      ],
+      "packages": [
+        "./http/headers",
+        "./ioeither/http/builder"
+      ],
+      "tests": [
+        "TestBuilder",
+        "TestBuilderWithQuery",
+        "TestLaws"
+      ]
+    },
+    {
+      "fixSha": "9139dedbbebbbf3b356ea711558dc914044e9248",
+      "parentSha": "5e15119653d2614b45c5bbb098fa7b119dbe58dd",
+      "subject": "fix: add lazy support for iterators",
+      "date": "2024-01-08T14:22:08+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "iterator/stateless/generic/io.go",
+        "iterator/stateless/io.go"
+      ],
+      "testFiles": [
+        "iterator/stateless/io_test.go"
+      ],
+      "packages": [
+        "./iterator/stateless"
+      ],
+      "tests": [
+        "TestIteratorFromLazy"
+      ]
+    },
+    {
+      "fixSha": "12ef79184ba9f1cc2e8fb3b8beea39d3e3a0ec40",
+      "parentSha": "5ac47440a17dbe3ab5ec5518054146cdf71b608c",
+      "subject": "fix: typing for Y combinator",
+      "date": "2023-12-21T16:25:35+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "ioeither/http/builder/builder.go",
+        "lambda/y.go"
+      ],
+      "testFiles": [
+        "lambda/y_test.go"
+      ],
+      "packages": [
+        "./lambda"
+      ],
+      "tests": [
+        "TestFactorial"
+      ]
+    },
+    {
+      "fixSha": "5ac47440a17dbe3ab5ec5518054146cdf71b608c",
+      "parentSha": "3aa55c74d43a61fde86ce58d0f7a4a43db611715",
+      "subject": "fix: add a single element cache",
+      "date": "2023-12-21T14:10:46+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "function/cache.go",
+        "function/generic/cache.go"
+      ],
+      "testFiles": [
+        "function/cache_test.go"
+      ],
+      "packages": [
+        "./function"
+      ],
+      "tests": [
+        "TestSingleElementCache"
+      ]
+    },
+    {
+      "fixSha": "5caabf478c39f0052df22093fef83970f85bb225",
+      "parentSha": "b7ec18c83eb44ee1065f743ddeb79e0be113885a",
+      "subject": "fix: add Lens for FormData",
+      "date": "2023-12-16T23:38:03+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "http/form/form.go",
+        "optics/lens/array/generic/head.go",
+        "optics/lens/array/head.go"
+      ],
+      "testFiles": [
+        "http/form/form_test.go",
+        "optics/lens/array/head_test.go"
+      ],
+      "packages": [
+        "./http/form",
+        "./optics/lens/array"
+      ],
+      "tests": [
+        "TestFormField",
+        "TestLaws"
+      ]
+    },
+    {
+      "fixSha": "1f675e08fa54ef6f8bc9bc2d27ebd8db0d7005d0",
+      "parentSha": "4d2f410c980a070207008788b55de772026e5715",
+      "subject": "fix: add support for request builder",
+      "date": "2023-12-16T16:49:57+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "ioeither/http/builder/builder.go"
+      ],
+      "testFiles": [
+        "ioeither/http/builder/builder_test.go"
+      ],
+      "packages": [
+        "./ioeither/http/builder"
+      ],
+      "tests": [
+        "TestBuiler"
+      ]
+    },
+    {
+      "fixSha": "8bb006c74158743239552608150a6caaa5ff00dc",
+      "parentSha": "b6efa35b03639989586fcd7a0c1a765fb402562f",
+      "subject": "fix: add a uniq method to arrays (#88)",
+      "date": "2023-11-30T09:03:16+01:00",
+      "prNumber": 88,
+      "language": "go",
+      "sourceFiles": [
+        "array/generic/uniq.go",
+        "array/uniq.go",
+        "iterator/stateless/uniq.go"
+      ],
+      "testFiles": [
+        "array/uniq_test.go"
+      ],
+      "packages": [
+        "./array"
+      ],
+      "tests": [
+        "TestUniq"
+      ]
+    },
+    {
+      "fixSha": "b6efa35b03639989586fcd7a0c1a765fb402562f",
+      "parentSha": "35848900c019ec67694d4514ece396d2a6bd4a9c",
+      "subject": "fix: bug in compact array (#87)",
+      "date": "2023-11-29T22:13:46+01:00",
+      "prNumber": 87,
+      "language": "go",
+      "sourceFiles": [
+        "either/array.go",
+        "option/array.go"
+      ],
+      "testFiles": [
+        "either/array_test.go",
+        "option/array_test.go"
+      ],
+      "packages": [
+        "./either",
+        "./option"
+      ],
+      "tests": [
+        "TestCompactArray"
+      ]
+    },
+    {
+      "fixSha": "b4bf511f035db2931388e2d6550a4317108549ca",
+      "parentSha": "211340952be9235ae632777ce9d5e59e0b4f062a",
+      "subject": "fix: http interface of IOEither (#82)",
+      "date": "2023-11-27T12:12:44+01:00",
+      "prNumber": 82,
+      "language": "go",
+      "sourceFiles": [
+        "ioeither/generic/ioeither.go",
+        "ioeither/http/request.go",
+        "ioeither/ioeither.go"
+      ],
+      "testFiles": [
+        "ioeither/http/retry_test.go"
+      ],
+      "packages": [
+        "./ioeither/http"
+      ],
+      "tests": [
+        "TestRetryHttp"
+      ]
+    },
+    {
+      "fixSha": "56860425c4ce381aa9d0f4474af6383317d9a69f",
+      "parentSha": "c0b16c675b4246cc1cc1b9fbe96f3efa5cfe5cc2",
+      "subject": "fix: add Flip function (#80)",
+      "date": "2023-11-12T13:34:27+01:00",
+      "prNumber": 80,
+      "language": "go",
+      "sourceFiles": [
+        "function/flip.go"
+      ],
+      "testFiles": [
+        "function/flip_test.go"
+      ],
+      "packages": [
+        "./function"
+      ],
+      "tests": [
+        "TestFlip"
+      ]
+    },
+    {
+      "fixSha": "7ef6eb524b8aa36f5f598668f5a4adae3e3064df",
+      "parentSha": "7b82e87bf31e1cc415b623941d7be1043e7469aa",
+      "subject": "fix: add match example",
+      "date": "2023-09-24T22:15:01+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "either/either.go",
+        "http/utils.go",
+        "internal/fromeither/either.go"
+      ],
+      "testFiles": [
+        "either/either_test.go",
+        "samples/match/examples_match_test.go"
+      ],
+      "packages": [
+        "./either",
+        "./samples/match"
+      ],
+      "tests": [
+        "TestFromOption"
+      ]
+    },
+    {
+      "fixSha": "7c12b72db15c68ea8298cf5861e9ed7b718b0bde",
+      "parentSha": "dc894ad6435eaaa34c55caeef689051e24fe79f5",
+      "subject": "fix: add missing IOO.FromIOEither",
+      "date": "2023-09-19T12:24:05+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "ioeither/ioeither.go",
+        "iooption/generic/iooption.go",
+        "iooption/iooption.go"
+      ],
+      "testFiles": [
+        "samples/tuples/option_test.go",
+        "samples/tuples/tuple_test.go"
+      ],
+      "packages": [
+        "./samples/tuples"
+      ],
+      "tests": [
+        "TestIOEitherToOption1",
+        "TestIOEitherToOption2",
+        "TestSampleConvertDocx1",
+        "TestSampleConvertDocx2",
+        "TestSampleConvertDocx3",
+        "TestSampleConvertDocx4"
+      ]
+    },
+    {
+      "fixSha": "c902058320bb5c5eea5fd4d98f9750a6095950a5",
+      "parentSha": "bf33f4fb66870feac6e19b14b2044084039e277e",
+      "subject": "fix: add some benchmarks",
+      "date": "2023-09-19T10:21:16+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "iterator/stateless/generic/iterator.go"
+      ],
+      "testFiles": [
+        "iterator/stateless/benchmark_test.go",
+        "samples/http/http_test.go"
+      ],
+      "packages": [
+        "./iterator/stateless",
+        "./samples/http"
+      ],
+      "tests": [
+        "TestHeterogeneousHttpRequests",
+        "TestMultipleHttpRequests"
+      ]
+    },
+    {
+      "fixSha": "a83c2aec499973d9bad84c0a21787d7cf60bc0d3",
+      "parentSha": "03debd37c80bfae0c57fccb70584eb0a42f077cc",
+      "subject": "fix: change Cache to Memoize and fix order of parameters to ToType",
+      "date": "2023-09-10T21:29:01+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "either/either.go",
+        "function/cache.go",
+        "function/generic/cache.go"
+      ],
+      "testFiles": [
+        "function/cache_test.go"
+      ],
+      "packages": [
+        "./function"
+      ],
+      "tests": [
+        "TestCache"
+      ]
+    },
+    {
+      "fixSha": "3e0eb99b8861dc93f06e155a7b32b2a6deb67784",
+      "parentSha": "cb15a3d9fcceed755cdfdc1cf07c9b071c082b46",
+      "subject": "fix: order of generic parameters",
+      "date": "2023-09-08T18:16:06+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "either/either.go",
+        "readereither/reader.go",
+        "readerioeither/reader.go"
+      ],
+      "testFiles": [
+        "either/either_test.go",
+        "readereither/reader_test.go",
+        "readerioeither/reader_test.go"
+      ],
+      "packages": [
+        "./either",
+        "./readereither",
+        "./readerioeither"
+      ],
+      "tests": [
+        "TestAp",
+        "TestChainOptionK",
+        "TestChainReaderK",
+        "TestOrLeft"
+      ]
+    },
+    {
+      "fixSha": "4ed0046971e9c3c2397ff46cb193996116f248f1",
+      "parentSha": "e4fd34a6b5a855ffbaaff89d8191a98db7a71170",
+      "subject": "fix: add uniq",
+      "date": "2023-08-03T14:32:46+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "iterator/stateless/generic/uniq.go",
+        "iterator/stateless/uniq.go"
+      ],
+      "testFiles": [
+        "iterator/stateless/uniq_test.go"
+      ],
+      "packages": [
+        "./iterator/stateless"
+      ],
+      "tests": [
+        "TestUniq"
+      ]
+    },
+    {
+      "fixSha": "d2346b016e742b8932d485f5b8cd6ebed5ab4ac4",
+      "parentSha": "41b792b23a105e5607ec68c99a2cb16dde9ba3fe",
+      "subject": "fix: add Ap for iterators",
+      "date": "2023-07-25T17:34:32+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "iterator/stateless/generic/iterator.go",
+        "iterator/stateless/iterator.go"
+      ],
+      "testFiles": [
+        "iterator/stateless/iterator_test.go"
+      ],
+      "packages": [
+        "./iterator/stateless"
+      ],
+      "tests": [
+        "TestChain",
+        "TestFilterMap"
+      ]
+    },
+    {
+      "fixSha": "691ceb067590005ebeb482557601753e24270dfe",
+      "parentSha": "c169cb42bbe17633fc57a2490d31be4027fddb89",
+      "subject": "fix: add json serialization support for option",
+      "date": "2023-07-09T10:21:56+02:00",
+      "language": "go",
+      "sourceFiles": [
+        "either/core.go",
+        "option/core.go"
+      ],
+      "testFiles": [
+        "either/either_test.go",
+        "option/option_test.go"
+      ],
+      "packages": [
+        "./either",
+        "./option"
+      ],
+      "tests": [
+        "TestDefault",
+        "TestJson"
+      ]
+    }
+  ]
+}
