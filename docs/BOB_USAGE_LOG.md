@@ -11,6 +11,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 5 | ahammadshawki8 | T3.3 forger (deja-forger mode, forge-case skill, briefer.ts) | Plan, Agent | Custom mode, Skill, document understanding (PR/issue threads), Bob Shell headless provider, zod validation | 4.00 | dejabug_task05_forger_summary.png, dejabug_task05_forger_prompt.png |
 | 6 | ahammadshawki8 | T3.4 case ranking | Agent | 4 explore subagents in parallel, todo list, document understanding of review packs | 1.19 | dejabug_task06_ranking_*.png (todo, subagents running, subagents done, summary, prompt) |
 | 7 | ahammadshawki8 | T3.3b forger fixes (REVIEW-T3.3) | Plan, Agent | Plan mode, Agent mode, todo list, skill rewrite, Bob Shell output-format analysis | 14.82 | dejabug_task07_forger_fixes_summary.png |
+| 9 | ahammadshawki8 | T5.4 Case Board | Plan, Agent | Plan mode, Agent mode, frontend composition from the design system | 4.43 | dejabug_task09_case_board_summary.png, dejabug_task09_case_board_prompt.png |
 | 8 | ahammadshawki8 | T3.6 live Bob Shell headless brief (fc42022) | bob run --mode deja-forger | Bob Shell headless inside the product pipeline, custom mode, skill | (see Bob usage dashboard) | terminal output in PROJECT.md progress log |
 
 ## Claude Code / Codex work
@@ -33,3 +34,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T4.1-T4.3 | Claude Code | packages/engine/src/play.ts, verify.ts, forge.ts, server.ts, cli.ts (refactor), types.ts, server.test.ts, cases (testFiles backfill) | Playground, verify, game server |
 | 2026-09-26 | T4.4, T4.5 | Claude Code | packages/engine/src/adapters/python.ts (+ tests), adapters/tool.ts, forge.ts (activateToolchain), store.ts (sanitizer), scripts/check-cases.mjs, cases/python-sdk-core/* | Python adapter and second-repo proof |
 | 2026-09-26 | T5.1-T5.3 | Claude Code | apps/web/* (scaffold, api client, stores, design system, shell, styleguide, placeholders) | Web foundation and design system |
+| 2026-09-26 | T5.4 fixes + T5.5 | Claude Code | apps/web/src/pages/CaseBoardPage.tsx (data-driven precinct tabs, stray footer), CaseFilePage.tsx, components/game/Terminal.tsx (wrap) | Case Board review fixes and Case File |

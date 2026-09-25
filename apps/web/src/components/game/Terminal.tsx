@@ -18,12 +18,15 @@ export function Terminal({
   title = "terminal",
   maxHeight = 320,
   shake = false,
+  wrap = false,
 }: {
   lines: string[];
   tone?: TerminalTone;
   title?: string;
   maxHeight?: number;
   shake?: boolean;
+  /** Wrap long lines instead of scrolling sideways (evidence, prose-like logs). */
+  wrap?: boolean;
 }) {
   const reduced = useReducedMotion();
   const border = { idle: "border-line", running: "border-amber", fail: "border-stamp", pass: "border-pass" }[
@@ -42,7 +45,7 @@ export function Terminal({
         <span className="ml-2 font-mono text-xs text-muted">{title}</span>
       </div>
       <pre
-        className="overflow-auto px-4 py-3 font-mono text-[13px] leading-relaxed"
+        className={`overflow-auto px-4 py-3 font-mono text-[13px] leading-relaxed ${wrap ? "whitespace-pre-wrap break-words" : ""}`}
         style={{ maxHeight }}
         aria-live="polite"
       >

@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T5 Web core |
-| Next item | T5.4 |
-| Next owner | BOB |
-| Last updated | 2026-09-26 03:35 BST |
-| Bobcoins used | 29.445 / 40 (10.555 left, see 9.2 re-plan) |
+| Next item | T5.6 |
+| Next owner | CLAUDE |
+| Last updated | 2026-09-26 04:10 BST |
+| Bobcoins used | 35.5 / 40 (4.5 left: only T8.1, T8.3, T9.1) |
 | Blockers | none |
 
 ---
@@ -488,12 +488,12 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T5.1 [CLAUDE] Web app scaffold: Vite + React + Tailwind + Framer Motion + Zustand, routing, the typed API client, and the game state store.
 - [x] T5.2 [CLAUDE] (re-tagged: coins) **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
 - [x] T5.3 [CLAUDE] Game shell (6A.6) built from the Bob components.
-- [ ] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
-- [ ] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
+- [x] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
+- [x] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
 - [ ] T5.6 [CLAUDE] (re-tagged: coins) **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
 - [ ] T5.7 [CLAUDE] Themed loading, empty, and error states, keyboard shortcuts, and reduced motion (6A.7, 6A.8, 6A.11).
 - [ ] T5.8 [CLAUDE] **Review #2:** write `docs/reviews/REVIEW-02.md` with tagged items.
-- [ ] T5.9 [BOB] Apply the [BOB] items of REVIEW-02 (only items in Bob-owned files; cap 1 coin).
+- [ ] T5.9 [CLAUDE] (re-tagged: coins) Apply the REVIEW-02 items.
 - [ ] T5.10 [CLAUDE] Apply the [CLAUDE] items of REVIEW-02.
 - [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test.
 
@@ -570,8 +570,8 @@ The rules require Bob IDE to be a **core component** and the repo to contain Bob
 | Remaining Bob item | Cap |
 |---|---|
 | T3.6 one live `--provider bob` showcase brief (runtime Bob Shell) | 1.0 |
-| T5.4 Case Board (hero screen) | 3.0 |
-| T5.9 REVIEW-02 items in Bob-owned files | 1.0 |
+| T5.4 Case Board (hero screen) | 3.0 (actual 4.43) |
+| T5.9 (re-tagged to Claude) | 0 |
 | T8.1 `deja-mentor` mode + mentor skill | 1.0 |
 | T8.3 live mentor conversation for the video | 1.0 |
 | T9.1 Bob code review over the repo | 1.5 |
@@ -693,3 +693,4 @@ Human, do this:
 - **2026-09-26 08:30:** T4.1-T4.3 done (Claude). play.ts exports the parent commit via a worktree with autocrlf off, overlays the fix tests, and makes a fresh single-commit repo with AGENTS.md and the deja-mentor mode. verify.ts runs the adapter with a 20 s per-test timeout. forge.ts holds the pipeline shared by the CLI and the server. server.ts (Fastify) serves health, repos, cases (public view hides fixDiff, lesson, and hints), session, start, ordered hints, verify, giveup, reveal (403 until solved or given up), funnel, profile, and forge plus SSE events (one run at a time). Sessions persist in .dejabug/state.json. Case.testFiles was added and backfilled.
 - **2026-09-26 03:40 (real clock):** Note: progress-log times after 02:45 were estimates that ran ahead of the real clock; the real time is now Sat 03:40. T4.4 done: Python adapter (pytest: test file and name detection incl. classes, exit-code classification, hang = killed at timeout, the checked-out code comes first on PYTHONPATH, per-repo virtualenv at workspace/.venvs/<repo> activated automatically). T4.5 proven on **IBM/python-sdk-core**: 489 commits, 98 fix-like, 45 candidates in 3.2 s, **31 certified in 44 s**, and 28 briefed with Granite. Total: **55 cases across 2 languages and 2 IBM repos**. The privacy sanitizer now redacts home directories in any separator form plus truncated worktree names. check-cases scans every JSON file for local paths, and prose only for emails and @mentions (Python decorators in diffs are fine). 87 tests. Follow-up idea: `dejabug init` could create the Python virtualenv automatically.
 - **2026-09-26 03:35:** T5.1-T5.3 done (Claude). Web: Vite 8 + React 18 + Tailwind 4 (@theme tokens from 6A.3) + Framer Motion + Zustand + React Router 7, self-hosted fonts, pixelarticons. Typed API client (types shared from the engine via the @engine alias), game, profile, and settings stores. Design system: pixel art from character grids (5 rank insignias, 7 badges, pin, clip, magnifier pips), and the full 6A.10 component inventory (ArcadeButton, Panels, StatTile, RibbonTitle, Stamp, TypewriterText, Terminal, XpBar, CountUp, MasteryRing, BadgeCard, StreakCalendar, CaseFolder with 4 states, HintLadder, Timer, VersusPanel, Modal, Toast, Tooltip, DossierTabs, FunnelCounter, WorkerLane), shown at /styleguide. The game shell has the rail, a top bar with rank/XP/streak/mute/engine light, and a dispatch ticker. XP rules are in lib/rules.ts with tests. Visual review via Playwright screenshots, with 5 fixes applied. Engine dev script switched to node --watch (tsx watch hung under concurrently on Windows).
+- **2026-09-26 04:10:** T5.4 done by Bob (4.43 coins): Case Board with stat tiles, precinct tabs, cork grid, the four folder states, red string on hover, and loading/error/empty states. Claude fixes: precinct tabs are derived from the data instead of hardcoded sarama areas (Rule 10; consumer-group had no tab), and a stray footer was removed. T5.5 done (Claude): Case File dossier (two pages sliding in, typewriter symptoms, wrapped evidence terminal, mission parameters incl. "Briefed by IBM Bob/Granite", Take the case, playground path with copy, Bob IDE + Deja Mentor steps). **Only 4.5 Bobcoins left** (35.5 used, per the user): Bob does only T8.1 mentor mode, T8.3 live mentor demo, and T9.1 code review. T5.9 is re-tagged to Claude. Note: dev servers were stopped by Claude Code for low system memory; visual checks resume when they are restarted.
