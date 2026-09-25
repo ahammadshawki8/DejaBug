@@ -119,9 +119,14 @@ export async function runCertify(
   const done = new Set((readCertifications(cfg.casesDir)?.results ?? []).map((r) => r.fixSha));
   const queue = selectShas(file.candidates, done, opts);
 
-  const results = queue.length
-    ? await certify(queue, cfg.repoDir, emitter ?? new EventEmitter(), opts.concurrency ?? 4)
-    : [];
+  // Relay the certifier's events, adding each commit's subject to stage events so the Forge Console
+  // lanes can show what is being certified (the certifier itself only knows shas).
+  const subjects = new Map(queue.map((c) => [c.fixSha, c.subject]));
+  const relay = new EventEmitter();
+  relay.on("forge", (e: ForgeEvent) =>
+    emitForge(emitter, e.type === "stage" ? { ...e, detail: e.detail ?? subjects.get(e.fixSha) } : e),
+  );
+  const results = queue.length ? await certify(queue, cfg.repoDir, relay, opts.concurrency ?? 4) : [];
   const merged = mergeCertifications(cfg.casesDir, file.repo, results);
   const funnel = computeFunnel(file, merged.results);
   writeFunnel(cfg.casesDir, funnel);
@@ -156,7 +161,13 @@ export async function runBrief(cfg: Config, opts: QueueOptions, emitter?: EventE
       const cert = queue[next++]!;
       const candidate = candidates.candidates.find((c) => c.fixSha === cert.fixSha);
       if (!candidate) continue;
-      emitForge(emitter, { type: "stage", worker: slot, fixSha: cert.fixSha, stage: "brief" });
+      emitForge(emitter, {
+        type: "stage",
+        worker: slot,
+        fixSha: cert.fixSha,
+        stage: "brief",
+        detail: candidate.subject,
+      });
       try {
         const [context, original] = await Promise.all([
           fetchContext(gh, candidate),

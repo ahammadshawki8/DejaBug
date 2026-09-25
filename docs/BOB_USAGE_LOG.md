@@ -39,3 +39,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T5.7 | Claude Code | apps/web/src/pages/SettingsPage.tsx (repo switcher, sound, motion, reset), router.tsx (lazy routes) | States, settings, code splitting |
 | 2026-09-26 | T5.8-T5.10 | Claude Code | docs/reviews/REVIEW-02.md; certifier.ts (hang head), briefer.ts (exec), CaseBoardPage, InvestigationPage, DebriefPage | Review and fixes (re-tagged from Bob for coins) |
 | 2026-09-26 | T6.1-T6.3 | Claude Code | apps/web/src/lib/badges.ts (+ tests), sound.ts, shareCard.ts, pages/ProgressPage.tsx, DebriefPage.tsx, InvestigationPage.tsx, ArcadeButton.tsx | Gamification |
+| 2026-09-26 | T7.0, T7.1 | Claude Code | apps/web/src/pages/ForgePage.tsx, lib/forgeView.ts (+ tests), packages/engine/src/forge.ts (subject relay) | Forge Console and repo picker |
