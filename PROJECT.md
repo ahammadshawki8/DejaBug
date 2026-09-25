@@ -11,8 +11,7 @@
 | Current tier | T0 Setup |
 | Next action | Install Go, scaffold the monorepo (T0 checklist) |
 | Last updated | 2026-09-25 23:00 BST |
-| Bobcoins used (ahammadshawki8) | 0 / 40 |
-| Bobcoins used (ashfaqstu) | 0 / 40 |
+| Bobcoins used | 0 / 40 |
 | Blockers | Waiting for the hackathon Bob invite email (arrives after the 9:00 PM kick-off) |
 
 ---
@@ -38,7 +37,7 @@
 
 ## 2. Rules (must be followed for the whole project)
 
-1. **Commit identity.** Every commit is authored and committed by `ahammadshawki8` or `ashfaqstu`, and nobody else. Never add `Co-Authored-By` trailers, and never list Claude, Bob, srotdev, or any bot as author, committer, collaborator, or contributor. Bob's generated commit messages must be checked for trailers before committing. Before every push, run `git log --format='%an <%ae> | %cn <%ce>%n%b' origin/main..HEAD` and confirm.
+1. **Commit identity.** Every commit is authored and committed by `ahammadshawki8`, and nobody else. Never add `Co-Authored-By` trailers, and never list Claude, Bob, srotdev, or any bot as author, committer, collaborator, or contributor. Bob's generated commit messages must be checked for trailers before committing. Before every push, run `git log --format='%an <%ae> | %cn <%ce>%n%b' origin/main..HEAD` and confirm.
 2. **No emojis and no em dashes (U+2014)** anywhere in the project: code, comments, docs, UI text, commit messages, slides. Use a plain hyphen or a colon instead. `scripts/check-style.mjs` enforces this.
 3. **No personal information in case data.** GitHub usernames, emails, and avatars from issues and PRs are never stored or shown. Store only counts, durations, and redacted text.
 4. **Bob builds the product.** Product code is written through Bob tasks (see Section 9). Claude Code reviews and writes review files. It changes product code only under the conditions in Section 9.4.
@@ -322,17 +321,21 @@ No. The rules say Bob IDE must be a **core component** and the repo must contain
 
 This keeps the Bob Usage statement truthful and strong.
 
-### 9.2 Budget: 80 Bobcoins total (40 per member, no top-ups)
+### 9.2 Budget: 40 Bobcoins total (the one registered hackathon account, no top-ups)
 
-| Tier | Owner | Coins (estimate) |
-|---|---|---|
-| T0-T2 engine | ahammadshawki8 | 14 |
-| T3 briefs (includes runtime `bob run` for about 15 cases) | ahammadshawki8 | 10 |
-| T4 server | ahammadshawki8 | 6 |
-| T5-T7 web | ashfaqstu | 24 |
-| T8 mentor | ashfaqstu | 3 |
-| Review fix-ups (3 rounds) | split | 13 |
-| Reserve | split | 10 |
+| Tier | Coins (estimate) |
+|---|---|
+| T0-T2 engine | 7 |
+| T3 briefs (includes runtime `bob run` for about 12 cases) | 6 |
+| T4 server | 3 |
+| T5-T7 web | 11 |
+| T8 mentor | 2 |
+| Review fix-ups (3 rounds) | 7 |
+| Reserve | 4 |
+
+This budget is tight. To stretch it:
+- Bob does the core logic of each tier. Repetitive scaffolding (config files, boilerplate components) is batched into a few large tasks.
+- If coins run out, Section 9.4 applies and the change is logged.
 
 Check the balance after every task (Bob IDE Settings, General, or https://bob.ibm.com/admin/subscription). Log each task in `docs/BOB_USAGE_LOG.md`.
 
