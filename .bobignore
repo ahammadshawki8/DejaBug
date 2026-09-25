@@ -1,0 +1,23 @@
+# Keep Bob's context (and Bobcoins) focused on source code
+.env
+.env.*
+!.env.example
+node_modules/
+.venv/
+venv/
+__pycache__/
+dist/
+build/
+.next/
+coverage/
+*.log
+*.lock
+package-lock.json
+pnpm-lock.yaml
+bob_sessions/
+media/
+*.mp4
+*.png
+*.jpg
+workspace/
+playgrounds/
