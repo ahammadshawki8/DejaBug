@@ -1,21 +1,17 @@
-// T2.1: certifier core -- worktree lifecycle, test overlay, go test runner,
+// T2.1: certifier core -- worktree lifecycle, test overlay, adapter-based test runner,
 // output parsing, 3-run fail rule, 1-run pass rule, all rejection statuses.
-// T2.2: parallel pool (p-limit, default concurrency 4); each worker slot
-// carries its index in every ForgeEvent.
+// T2.2: parallel pool (default concurrency 4); each worker slot carries its index.
+// T2.6: uses adapter.runTests() (REVIEW-01 items 0-5, 10); no Go literals.
 
-import { execFile } from "node:child_process";
 import type { EventEmitter } from "node:events";
 import { rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
-import pLimit from "p-limit";
+import { getAdapter, TimeoutError, ToolMissingError } from "./adapters/index.js";
+import type { RunOutcome } from "./adapters/index.js";
 import { git } from "./git.js";
 import type { Candidate, Certification, CertificationStatus, ForgeEvent } from "./types.js";
 
-const execFileAsync = promisify(execFile);
-
-const PHASE_TIMEOUT_MS = 120_000;
 const FAIL_RUNS = 3;
 
 // ---------------------------------------------------------------------------
@@ -25,6 +21,18 @@ const FAIL_RUNS = 3;
 /** Keep only the last `n` characters of a string (tail is where failures live). */
 function tail(s: string, n = 4000): string {
   return s.length <= n ? s : s.slice(-n);
+}
+
+/**
+ * Strip the worktree path from recorded output so no local temp dir or username
+ * leaks into stored data (REVIEW-01 item 2).
+ * Handles both backslash (Windows native) and forward-slash (go output on Windows).
+ */
+function sanitize(output: string, wtDir: string): string {
+  const fwd = wtDir.replace(/\\/g, "/");
+  // Escape both forms for use in a regex, then strip them globally.
+  const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return output.replace(new RegExp(escape(wtDir), "g"), "").replace(new RegExp(escape(fwd), "g"), "");
 }
 
 // ---------------------------------------------------------------------------
@@ -46,88 +54,12 @@ async function removeWorktree(repoDir: string, wtDir: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// File overlay
+// File overlay (fail phase only)
 // ---------------------------------------------------------------------------
 
 async function overlayFiles(wtDir: string, fixSha: string, files: string[]): Promise<void> {
   if (files.length === 0) return;
   await git(wtDir, ["checkout", fixSha, "--", ...files]);
-}
-
-// ---------------------------------------------------------------------------
-// go test runner
-// ---------------------------------------------------------------------------
-
-class TimeoutError extends Error {
-  constructor() {
-    super("go test timed out");
-    this.name = "TimeoutError";
-  }
-}
-
-// "notest" = go exited 0 but no tests matched the -run filter (REVIEW-T2.1 item 3).
-type GoOutcome = "build" | "fail" | "notest" | "pass";
-
-interface GoResult {
-  outcome: GoOutcome;
-  output: string;
-}
-
-async function runGoTest(wtDir: string, packages: string[], tests: string[]): Promise<GoResult> {
-  // Anchor the pattern so "TestNew" does not also run "TestNewer" (item 2).
-  const runArg = `^(${tests.join("|")})$`;
-  const args = ["test", "-run", runArg, "-count=1", "-timeout", "120s", ...packages];
-
-  let stdout: string;
-  let stderr: string;
-
-  try {
-    const result = await execFileAsync("go", args, {
-      cwd: wtDir,
-      timeout: PHASE_TIMEOUT_MS,
-      encoding: "utf8",
-      maxBuffer: 16 * 1024 * 1024,
-      windowsHide: true,
-    });
-    stdout = result.stdout;
-    stderr = result.stderr;
-  } catch (err: unknown) {
-    const e = err as NodeJS.ErrnoException & {
-      stdout?: string;
-      stderr?: string;
-      killed?: boolean;
-      signal?: string;
-    };
-    stdout = e.stdout ?? "";
-    stderr = e.stderr ?? "";
-
-    if (e.killed === true || e.code === "ETIMEDOUT" || e.signal === "SIGTERM") {
-      throw new TimeoutError();
-    }
-
-    const combined = stdout + stderr;
-
-    // Build failures: compile error header, or [build failed] / [setup failed],
-    // or no "--- FAIL: TestX" line at all (item 1).
-    if (
-      /\[build failed\]|\[setup failed\]/.test(combined) ||
-      /^# /m.test(combined) ||
-      !/^--- FAIL:/m.test(combined)
-    ) {
-      return { outcome: "build", output: combined };
-    }
-
-    return { outcome: "fail", output: combined };
-  }
-
-  const combined = stdout + stderr;
-
-  // No tests matched the -run filter (item 3).
-  if (combined.includes("[no tests to run]") || combined.includes("testing: warning: no tests to run")) {
-    return { outcome: "notest", output: combined };
-  }
-
-  return { outcome: "pass", output: combined };
 }
 
 // ---------------------------------------------------------------------------
@@ -144,9 +76,12 @@ async function certifyOne(
   emitter: EventEmitter,
   workerIndex: number,
 ): Promise<Certification> {
-  const { fixSha, parentSha, testFiles, sourceFiles, packages, tests } = candidate;
+  const { fixSha, parentSha, testFiles, packages, tests } = candidate;
   const wtDir = path.join(os.tmpdir(), `dejabug-wt-${fixSha}`);
   const start = Date.now();
+
+  // Resolve the language adapter for this candidate (REVIEW-01 item 0).
+  const adapter = getAdapter(candidate.language);
 
   emit(emitter, { type: "stage", worker: workerIndex, fixSha, stage: "certify" });
 
@@ -161,11 +96,11 @@ async function certifyOne(
     await overlayFiles(wtDir, fixSha, testFiles);
 
     // --- fail phase: must fail all FAIL_RUNS times ---
-    const failOutcomes: GoOutcome[] = [];
+    const failOutcomes: RunOutcome[] = [];
     for (let attempt = 1; attempt <= FAIL_RUNS; attempt++) {
-      let result: GoResult;
+      let result: Awaited<ReturnType<typeof adapter.runTests>>;
       try {
-        result = await runGoTest(wtDir, packages, tests);
+        result = await adapter.runTests(wtDir, packages, tests);
       } catch (err) {
         if (err instanceof TimeoutError) {
           status = "rejected:timeout";
@@ -191,18 +126,18 @@ async function certifyOne(
         throw err;
       }
 
-      const ok = result.outcome === "fail";
-      emit(emitter, {
-        type: "run",
-        worker: workerIndex,
-        fixSha,
-        phase: "fail",
-        attempt,
-        ok,
-      });
-
+      // build failure in the fail phase (REVIEW-01 item 3: record output).
       if (result.outcome === "build") {
+        failOutput = tail(sanitize(result.output, wtDir));
         status = "rejected:build";
+        emit(emitter, {
+          type: "run",
+          worker: workerIndex,
+          fixSha,
+          phase: "fail",
+          attempt,
+          ok: false,
+        });
         emit(emitter, { type: "result", worker: workerIndex, fixSha, status });
         return {
           fixSha,
@@ -215,9 +150,18 @@ async function certifyOne(
         };
       }
 
-      // "notest" in the fail phase: the test names do not exist (item 3).
+      // "notest" in the fail phase: the test names do not exist (REVIEW-01 item 3: record output).
       if (result.outcome === "notest") {
+        passOutput = tail(sanitize(result.output, wtDir));
         status = "rejected:no-fail";
+        emit(emitter, {
+          type: "run",
+          worker: workerIndex,
+          fixSha,
+          phase: "fail",
+          attempt,
+          ok: false,
+        });
         emit(emitter, { type: "result", worker: workerIndex, fixSha, status });
         return {
           fixSha,
@@ -229,11 +173,25 @@ async function certifyOne(
           durationMs: Date.now() - start,
         };
       }
+
+      // "hang" in the fail phase = the bug reproduced as a deadlock (REVIEW-01 item 4).
+      // Count it as a "fail" for the 3-run rule.
+      if (result.outcome === "hang") {
+        const ok = true;
+        emit(emitter, { type: "run", worker: workerIndex, fixSha, phase: "fail", attempt, ok });
+        failOutcomes.push("fail");
+        failRuns++;
+        if (failOutput === "") failOutput = tail(sanitize(result.output, wtDir));
+        continue;
+      }
+
+      const ok = result.outcome === "fail";
+      emit(emitter, { type: "run", worker: workerIndex, fixSha, phase: "fail", attempt, ok });
 
       failOutcomes.push(result.outcome);
       if (result.outcome === "fail") {
         failRuns++;
-        if (failOutput === "") failOutput = tail(result.output);
+        if (failOutput === "") failOutput = tail(sanitize(result.output, wtDir));
       } else {
         passRuns++;
       }
@@ -263,12 +221,14 @@ async function certifyOne(
       };
     }
 
-    // --- pass phase: overlay source files, must pass once ---
-    await overlayFiles(wtDir, fixSha, sourceFiles);
+    // --- pass phase: restore the full fix-commit tree (REVIEW-01 item 10) ---
+    // Using `git checkout <fixSha> -- .` ensures generated files, go.mod, go.sum,
+    // and any other non-source non-test files changed by the fix are also present.
+    await git(wtDir, ["checkout", fixSha, "--", "."]);
 
-    let passResult: GoResult;
+    let passResult: Awaited<ReturnType<typeof adapter.runTests>>;
     try {
-      passResult = await runGoTest(wtDir, packages, tests);
+      passResult = await adapter.runTests(wtDir, packages, tests);
     } catch (err) {
       if (err instanceof TimeoutError) {
         status = "rejected:timeout";
@@ -294,8 +254,33 @@ async function certifyOne(
       throw err;
     }
 
-    // "notest" in the pass phase: test names do not exist (item 3).
+    // "hang" in pass phase = test blocks after the fix; the fix did not resolve it (item 4).
+    if (passResult.outcome === "hang") {
+      passOutput = tail(sanitize(passResult.output, wtDir));
+      status = "rejected:no-pass";
+      emit(emitter, {
+        type: "run",
+        worker: workerIndex,
+        fixSha,
+        phase: "pass",
+        attempt: 1,
+        ok: false,
+      });
+      emit(emitter, { type: "result", worker: workerIndex, fixSha, status });
+      return {
+        fixSha,
+        status,
+        failRuns,
+        passRuns,
+        failOutput,
+        passOutput,
+        durationMs: Date.now() - start,
+      };
+    }
+
+    // "notest" in the pass phase: test names do not exist after the fix (REVIEW-01 item 3).
     if (passResult.outcome === "notest") {
+      passOutput = tail(sanitize(passResult.output, wtDir));
       status = "rejected:no-pass";
       emit(emitter, {
         type: "run",
@@ -329,9 +314,11 @@ async function certifyOne(
 
     if (passOk) {
       passRuns++;
-      passOutput = tail(passResult.output);
+      passOutput = tail(sanitize(passResult.output, wtDir));
       status = "certified";
     } else {
+      // "fail" in pass phase: the fix did not make the test pass (REVIEW-01 item 3).
+      passOutput = tail(sanitize(passResult.output, wtDir));
       status = "rejected:no-pass";
     }
 
@@ -358,8 +345,10 @@ async function certifyOne(
  * Certify a list of candidates in parallel.
  * Emits ForgeEvents on `emitter` (event name "forge") as work proceeds.
  * Each of the `concurrency` worker slots carries its 0-based index in every event.
- * An unexpected per-candidate error is caught and returned as rejected:build
+ * `ToolMissingError` is rethrown to abort the whole run (REVIEW-01 item 1).
+ * Any other unexpected per-candidate error is caught and returned as rejected:build
  * so one bad candidate never aborts the rest (REVIEW-T2.1 item 4).
+ * True worker slots: at most one candidate in flight per slot at any moment (REVIEW-01 item 5).
  */
 export async function certify(
   candidates: Candidate[],
@@ -367,16 +356,20 @@ export async function certify(
   emitter: EventEmitter,
   concurrency = 4,
 ): Promise<Certification[]> {
-  const limit = pLimit(concurrency);
+  const results: Certification[] = new Array(candidates.length);
+  let next = 0;
 
-  const tasks = candidates.map((candidate, i) => {
-    const workerIndex = i % concurrency;
-    return limit(async () => {
+  const worker = async (slot: number): Promise<void> => {
+    while (next < candidates.length) {
+      const idx = next++;
+      const candidate = candidates[idx]!;
       try {
-        return await certifyOne(candidate, repoDir, emitter, workerIndex);
+        results[idx] = await certifyOne(candidate, repoDir, emitter, slot);
       } catch (err: unknown) {
+        // ToolMissingError is a fatal infrastructure failure -- abort the whole run.
+        if (err instanceof ToolMissingError) throw err;
         const msg = err instanceof Error ? err.message : String(err);
-        const result: Certification = {
+        results[idx] = {
           fixSha: candidate.fixSha,
           status: "rejected:build",
           failRuns: 0,
@@ -387,14 +380,14 @@ export async function certify(
         };
         emit(emitter, {
           type: "result",
-          worker: workerIndex,
+          worker: slot,
           fixSha: candidate.fixSha,
           status: "rejected:build",
         });
-        return result;
       }
-    });
-  });
+    }
+  };
 
-  return Promise.all(tasks);
+  await Promise.all(Array.from({ length: concurrency }, (_, i) => worker(i)));
+  return results;
 }

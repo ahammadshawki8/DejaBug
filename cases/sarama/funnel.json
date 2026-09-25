@@ -4,12 +4,12 @@
   "candidates": 101,
   "attempted": 44,
   "byStatus": {
-    "certified": 23,
+    "certified": 27,
     "rejected:build": 9,
     "rejected:no-fail": 5,
     "rejected:flaky": 0,
-    "rejected:no-pass": 2,
-    "rejected:timeout": 5
+    "rejected:no-pass": 3,
+    "rejected:timeout": 0
   },
-  "generatedAt": "2026-09-25T18:58:51.477Z"
+  "generatedAt": "2026-09-25T19:28:30.016Z"
 }

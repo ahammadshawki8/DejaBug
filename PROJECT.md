@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T2 Certifier |
-| Next item | T2.6 |
-| Next owner | BOB |
-| Last updated | 2026-09-26 02:45 BST |
-| Bobcoins used | 6.225 / 40 |
+| Next item | T2.7 |
+| Next owner | CLAUDE |
+| Last updated | 2026-09-26 03:20 BST |
+| Bobcoins used | 9.435 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
 ---
@@ -458,7 +458,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
 - [x] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
 - [x] T2.5a [CLAUDE] **Repository-agnostic engine:** `adapters/` (interface, errors, registry, Go adapter with the REVIEW-01 item 1 and 4 output classification), the miner refactored onto the adapter, `Candidate.language`, `dejabug init <owner/repo>`, and a global `--target` option. Update the engine tests.
-- [ ] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task, and make `certifier.ts` call `adapter.runTests()` (no Go literals left in the certifier).
+- [x] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task, and make `certifier.ts` call `adapter.runTests()` (no Go literals left in the certifier).
 - [ ] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
 - [x] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output. **Result: 23 certified of 44 attempted.**
 

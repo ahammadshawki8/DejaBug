@@ -16,8 +16,7 @@
     "dejabug": "tsx src/cli.ts"
   },
   "dependencies": {
-    "commander": "^15.0.0",
-    "p-limit": "^6.2.0"
+    "commander": "^15.0.0"
   },
   "devDependencies": {
     "tsx": "^4.23.15"
