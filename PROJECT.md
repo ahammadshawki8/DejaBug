@@ -9,7 +9,7 @@
 | Field | Value |
 |---|---|
 | Current tier | T5 Web core |
-| Next item | T5.7 |
+| Next item | T5.8 |
 | Next owner | CLAUDE |
 | Last updated | 2026-09-26 04:10 BST |
 | Bobcoins used | 35.5 / 40 (4.5 left: only T8.1, T8.3, T9.1) |
@@ -491,7 +491,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
 - [x] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
 - [x] T5.6 [CLAUDE] (re-tagged: coins) **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
-- [ ] T5.7 [CLAUDE] Themed loading, empty, and error states, keyboard shortcuts, and reduced motion (6A.7, 6A.8, 6A.11).
+- [x] T5.7 [CLAUDE] Themed loading, empty, and error states, keyboard shortcuts, and reduced motion (6A.7, 6A.8, 6A.11).
 - [ ] T5.8 [CLAUDE] **Review #2:** write `docs/reviews/REVIEW-02.md` with tagged items.
 - [ ] T5.9 [CLAUDE] (re-tagged: coins) Apply the REVIEW-02 items.
 - [ ] T5.10 [CLAUDE] Apply the [CLAUDE] items of REVIEW-02.
