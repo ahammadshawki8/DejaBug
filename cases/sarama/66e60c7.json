@@ -1,0 +1,49 @@
+{
+  "id": "66e60c7",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "66e60c7ec6012a1943bd2853fd20051edf4310ee",
+  "parentSha": "6acb2767144a840d9cc423f2917617e3372da7be",
+  "prNumber": 2427,
+  "status": "certified",
+  "tests": [
+    "TestConsumerGroupSessionDoesNotRetryForever"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).retryNewSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1, 0x1)\n\t/consumer_group.go:255 +0x19c\ngithub.com/Shopify/sarama.(*consumerGroup).newSession(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090}, 0x1)\n\t/consumer_group.go:269 +0x1dc\ngithub.com/Shopify/sarama.(*consumerGroup).Consume(0x31d8afac4000, {0x7ff72a0e7198, 0x31d8afaa4140}, {0x31d8afb1a1c0, 0x1, 0x1}, {0x7ff72a0e6840, 0x31d8afaa0090})\n\t/consumer_group.go:206 +0x1eb\ngithub.com/Shopify/sarama.TestConsumerGroupSessionDoesNotRetryForever.func2()\n\t/consumer_group_test.go:241 +0xaa\ncreated by github.com/Shopify/sarama.TestConsumerGroupSessionDoesNotRetryForever in goroutine 7\n\t/consumer_group_test.go:239 +0x6ad\nFAIL\tgithub.com/Shopify/sarama\t45.100s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t2.357s\n",
+    "durationMs": 148150
+  },
+  "brief": {
+    "codename": "Infinite Coordinator Loop",
+    "symptoms": "The consumer group repeatedly fails to find its coordinator and logs an authorization error, causing the Consume() method to hang indefinitely.",
+    "evidence": "[Sarama] 2023/01/25 15:27:40 client/coordinator retrying after 250ms... (3 attempts remaining)\n[Sarama] 2023/01/25 15:27:40 client was not authorized to access group kafka-demo while attempting to find coordinator\n... (loop continues)",
+    "hints": [
+      "The consumer keeps trying to locate its coordinator even after receiving an authorization error.",
+      "Check the logic that handles coordinator lookup failures in the consumer group.",
+      "The fix involves decrementing the retry counter and returning early when retries are exhausted."
+    ],
+    "difficulty": 2,
+    "precinct": "consumer-group",
+    "lesson": "When a consumer group cannot access its coordinator, the retry logic must stop after a finite number of attempts to avoid an infinite loop.",
+    "tags": [
+      "consumer-group",
+      "retry",
+      "authorization"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.4,
+    "comments": 2,
+    "reviewRounds": 0,
+    "mergedAt": "2023-01-25T22:07:22Z"
+  },
+  "bugAgeDays": 1513,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/consumer_group.go b/consumer_group.go\nindex ecdbcfa6..140d9f7e 100644\n--- a/consumer_group.go\n+++ b/consumer_group.go\n@@ -252,7 +252,10 @@ func (c *consumerGroup) retryNewSession(ctx context.Context, topics []string, ha\n \tif refreshCoordinator {\n \t\terr := c.client.RefreshCoordinator(c.groupID)\n \t\tif err != nil {\n-\t\t\treturn c.retryNewSession(ctx, topics, handler, retries, true)\n+\t\t\tif retries <= 0 {\n+\t\t\t\treturn nil, err\n+\t\t\t}\n+\t\t\treturn c.retryNewSession(ctx, topics, handler, retries-1, true)\n \t\t}\n \t}\n \n"
+}

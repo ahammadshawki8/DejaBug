@@ -1,0 +1,49 @@
+{
+  "id": "3ba807b",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "3ba807b5fb307fb30f7d7f8bab1850ecbb6157d1",
+  "parentSha": "08ff0ff4023bf1afcba58576d7f3d35e50c9e7c1",
+  "prNumber": 2519,
+  "status": "certified",
+  "tests": [
+    "Test_retryOnError"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: Test_retryOnError (0.20s)\n    --- FAIL: Test_retryOnError/failing_all_attempts (0.20s)\n        admin_test.go:1856: expected 4 attempts to have been made but was 3\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.282s\nFAIL\ngo: downloading golang.org/x/net v0.12.0\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.380s\n",
+    "durationMs": 12122
+  },
+  "brief": {
+    "codename": "Retry Count Conundrum",
+    "symptoms": "The admin client fails to retry a failing operation the expected number of times, causing the test to report an incorrect attempt count.",
+    "evidence": "expected 4 attempts to have been made but was 3",
+    "hints": [
+      "The client reports an error after reconnecting.",
+      "Look at the retry logic in the admin package.",
+      "When the error condition occurs, the remaining attempts are decremented before the check."
+    ],
+    "difficulty": 1,
+    "precinct": "admin",
+    "lesson": "The retry loop must include the first attempt in the count, so initialize attemptsRemaining with Max + 1.",
+    "tags": [
+      "retry-logic",
+      "admin-client",
+      "test-fix"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.2,
+    "comments": 0,
+    "reviewRounds": 1,
+    "mergedAt": "2023-07-23T16:28:59Z"
+  },
+  "bugAgeDays": 0,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/admin.go b/admin.go\nindex b04102e2..d64652c2 100644\n--- a/admin.go\n+++ b/admin.go\n@@ -207,7 +207,7 @@ func isErrNoController(err error) bool {\n // provided retryable func) up to the maximum number of tries permitted by\n // the admin client configuration\n func (ca *clusterAdmin) retryOnError(retryable func(error) bool, fn func() error) error {\n-\tfor attemptsRemaining := ca.conf.Admin.Retry.Max; ; {\n+\tfor attemptsRemaining := ca.conf.Admin.Retry.Max + 1; ; {\n \t\terr := fn()\n \t\tattemptsRemaining--\n \t\tif err == nil || attemptsRemaining == 0 || !retryable(err) {\n"
+}

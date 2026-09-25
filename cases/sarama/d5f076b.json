@@ -1,0 +1,49 @@
+{
+  "id": "d5f076b",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "d5f076b9e2010975bdaa3891427fda0becd95cae",
+  "parentSha": "f07b7b87556741de750337199ccd02aa2a996fe2",
+  "prNumber": 2182,
+  "status": "certified",
+  "tests": [
+    "TestAsyncProducerBrokerRestart"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestAsyncProducerBrokerRestart (15.81s)\n    async_producer_test.go:72: Unexpected successes 35 or errors 0\n    async_producer_test.go:26: timeout\n    async_producer_test.go:835: 1 empty values\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t16.277s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t1.525s\n",
+    "durationMs": 57239
+  },
+  "brief": {
+    "codename": "Lost Message Paradox",
+    "symptoms": "The async producer reports an unexpected success after the broker is restarted, causing messages to be lost and the shutdown to hang.",
+    "evidence": "unexpected successes 35 or errors 0\ntimeout\n1 empty values",
+    "hints": [
+      "The producer is still reporting successes even though the broker has been restarted.",
+      "Look at the broker restart handling logic in the async producer.",
+      "The fix adds a special case for a management message that signals shutdown."
+    ],
+    "difficulty": 2,
+    "precinct": "producer",
+    "lesson": "When a broker restarts while messages are in flight, the async producer must detect the shutdown signal and not treat the in-flight management message as a successful delivery.",
+    "tags": [
+      "async-producer",
+      "broker-restart",
+      "management-message"
+    ]
+  },
+  "original": {
+    "daysOpen": 14.3,
+    "comments": 29,
+    "reviewRounds": 14,
+    "mergedAt": "2022-03-30T17:32:27Z"
+  },
+  "bugAgeDays": 715,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/async_producer.go b/async_producer.go\nindex 27398bcd..343d3de9 100644\n--- a/async_producer.go\n+++ b/async_producer.go\n@@ -840,6 +840,14 @@ func (bp *brokerProducer) run() {\n \t\t\t\tcontinue\n \t\t\t}\n \n+\t\t\tif msg.flags&fin == fin {\n+\t\t\t\t// New broker producer that was caught up by the retry loop\n+\t\t\t\tbp.parent.retryMessage(msg, ErrShuttingDown)\n+\t\t\t\tDebugLogger.Printf(\"producer/broker/%d state change to [dying-%d] on %s/%d\\n\",\n+\t\t\t\t\tbp.broker.ID(), msg.retries, msg.Topic, msg.Partition)\n+\t\t\t\tcontinue\n+\t\t\t}\n+\n \t\t\tif bp.buffer.wouldOverflow(msg) {\n \t\t\t\tLogger.Printf(\"producer/broker/%d maximum request accumulated, waiting for space\\n\", bp.broker.ID())\n \t\t\t\tif err := bp.waitForSpace(msg, false); err != nil {\n"
+}

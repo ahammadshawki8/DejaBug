@@ -1,0 +1,49 @@
+{
+  "id": "2e077cf",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "2e077cf8d86cc06bffc2614b80a699caa868ad2b",
+  "parentSha": "f97ced28dc79cdd25985ef4e95bfd538c63bbffe",
+  "prNumber": 2700,
+  "status": "certified",
+  "tests": [
+    "TestConstructRequestRetentionTime"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConstructRequestRetentionTime (0.00s)\n    --- FAIL: TestConstructRequestRetentionTime/version_0.9.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.9.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.1.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.1.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.2.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.2.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.2.2_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.11.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.11.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.11.0.2_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.0.2_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.1.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.1.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_2.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_2.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.086s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.094s\n",
+    "durationMs": 9737
+  },
+  "brief": {
+    "codename": "Azure Offsets Ghost",
+    "symptoms": "Offsets are reset on Azure EventHubs when a consumer starts, causing the consumer to reprocess all messages from the beginning each time it joins the group.",
+    "evidence": "Message received: key=, value={...}, partition=0, offset=0\nMessage received: key=, value={...}, partition=0, offset=1\n... (repeated for every offset from the start of the topic)\nrestarting the consumer or adding a new one it will consume everything again",
+    "hints": [
+      "The consumer reports that it has processed messages from offset 0 each time it starts.",
+      "Look at the offset commit request handling in the offset manager.",
+      "When the retention time is set to 0, the broker treats it as a special value."
+    ],
+    "difficulty": 1,
+    "precinct": "consumer",
+    "lesson": "The fix maps Sarama's default retention value (0) to Kafka's default (-1) for offset commit requests, preventing the broker from resetting offsets on consumer group joins.",
+    "tags": [
+      "offset-commit",
+      "azure-eventhubs",
+      "consumer-group"
+    ]
+  },
+  "original": {
+    "daysOpen": 15.2,
+    "comments": 8,
+    "reviewRounds": 1,
+    "mergedAt": "2023-11-02T15:55:25Z"
+  },
+  "bugAgeDays": 91,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/offset_manager.go b/offset_manager.go\nindex 332679fd..bc5beaf5 100644\n--- a/offset_manager.go\n+++ b/offset_manager.go\n@@ -318,9 +318,13 @@ func (om *offsetManager) constructRequest() *OffsetCommitRequest {\n \n \t// request controlled retention was only supported from V2-V4 (it became\n \t// broker-only after that) so if the user has set the config options then\n-\t// flow those through as retention time on the commit request\n-\tif r.Version >= 2 && r.Version < 5 && om.conf.Consumer.Offsets.Retention > 0 {\n-\t\tr.RetentionTime = int64(om.conf.Consumer.Offsets.Retention / time.Millisecond)\n+\t// flow those through as retention time on the commit request.\n+\tif r.Version >= 2 && r.Version < 5 {\n+\t\t// Map Sarama's default of 0 to Kafka's default of -1\n+\t\tr.RetentionTime = -1\n+\t\tif om.conf.Consumer.Offsets.Retention > 0 {\n+\t\t\tr.RetentionTime = int64(om.conf.Consumer.Offsets.Retention / time.Millisecond)\n+\t\t}\n \t}\n \n \tom.pomsLock.RLock()\n"
+}

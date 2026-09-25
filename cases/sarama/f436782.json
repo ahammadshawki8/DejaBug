@@ -1,0 +1,50 @@
+{
+  "id": "f436782",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "f43678235d7245fec7473f4ace652a5e849c2884",
+  "parentSha": "f1fd15e9c6faea6744c92773d9c7dc1794b94765",
+  "prNumber": 2164,
+  "status": "certified",
+  "tests": [
+    "TestSentinelWithSingleWrappedError",
+    "TestSentinelWithWrappedError"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestSentinelWithSingleWrappedError (0.00s)\n    errors_test.go:18: unexpected value 'kafka: client has run out of available brokers to talk to: mock: op error' vs 'kafka: client has run out of available brokers to talk to: 1 error occurred:\n        \t* mock: op error\n        \n        '\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.460s\nFAIL\ngo: downloading github.com/klauspost/compress v1.14.4\ngo: downloading golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.478s\n",
+    "durationMs": 17343
+  },
+  "brief": {
+    "codename": "Verbose Sentinel",
+    "symptoms": "The test fails because the error message does not match the expected sentinel value.",
+    "evidence": "unexpected value 'kafka: client has run out of available brokers to talk to: mock: op error' vs 'kafka: client has run out of available brokers to talk to: 1 error occurred:\n\t* mock: op error\n'",
+    "hints": [
+      "The client reports a connection problem when trying to reach the broker.",
+      "Look at the `errors` package - the multierror formatting path is exercised.",
+      "When multiple wrapped errors are present, the default formatter adds a bullet list; the test expects a single‑line concatenation."
+    ],
+    "difficulty": 1,
+    "precinct": "client",
+    "lesson": "Condensing multi‑error output can improve readability, but the sentinel test must be updated to match the new format.",
+    "tags": [
+      "error-handling",
+      "multierror",
+      "formatting"
+    ]
+  },
+  "original": {
+    "daysOpen": 1.9,
+    "comments": 2,
+    "reviewRounds": 0,
+    "mergedAt": "2022-02-27T14:06:53Z"
+  },
+  "bugAgeDays": 3,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/errors.go b/errors.go\nindex ba27d38b..507002bf 100644\n--- a/errors.go\n+++ b/errors.go\n@@ -3,6 +3,7 @@ package sarama\n import (\n \t\"errors\"\n \t\"fmt\"\n+\t\"strings\"\n \n \t\"github.com/hashicorp/go-multierror\"\n )\n@@ -63,8 +64,23 @@ var ErrReassignPartitions = errors.New(\"failed to reassign partitions for topic\"\n // ErrDeleteRecords is the type of error returned when fail to delete the required records\n var ErrDeleteRecords = errors.New(\"kafka server: failed to delete records\")\n \n-// The formatter used to format multierrors\n-var MultiErrorFormat multierror.ErrorFormatFunc\n+// MultiErrorFormat specifies the formatter applied to format multierrors. The\n+// default implementation is a consensed version of the hashicorp/go-multierror\n+// default one\n+var MultiErrorFormat multierror.ErrorFormatFunc = func(es []error) string {\n+\tif len(es) == 1 {\n+\t\treturn es[0].Error()\n+\t}\n+\n+\tpoints := make([]string, len(es))\n+\tfor i, err := range es {\n+\t\tpoints[i] = fmt.Sprintf(\"* %s\", err)\n+\t}\n+\n+\treturn fmt.Sprintf(\n+\t\t\"%d errors occurred:\\n\\t%s\\n\",\n+\t\tlen(es), strings.Join(points, \"\\n\\t\"))\n+}\n \n type sentinelError struct {\n \tsentinel error\n"
+}

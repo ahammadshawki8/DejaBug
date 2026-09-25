@@ -28,3 +28,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T3.1, T3.2, T3.5 | Claude Code | packages/engine/src/github.ts, llm/watsonx.ts, spoiler.ts (+ tests), cli.ts (models) | GitHub context, watsonx client, spoiler guard |
 | 2026-09-26 | T3.3 hygiene + spoiler refinement | Claude Code | packages/engine/src/briefer.test.ts (typing/lint only), spoiler.ts, spoiler.test.ts | Keep CI green; fix false positives found by the first real brief |
 | 2026-09-26 | T3.4b | Claude Code | packages/engine/src/assemble.ts (+ tests), cli.ts (brief), store.ts (readRanking), test/fixture-repo.ts, docs/reviews/REVIEW-T3.3.md | Case assembly + brief CLI + review |
+| 2026-09-26 | T3.6 (Granite part) | Claude Code | packages/engine/src/codenames.ts (+ tests), cli.ts (codenames), scripts/check-cases.mjs, ci.yml, cases/sarama/*.json | 27 case files, unique codenames, data checks |

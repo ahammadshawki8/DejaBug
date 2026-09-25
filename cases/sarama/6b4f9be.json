@@ -21,21 +21,21 @@
     "durationMs": 56742
   },
   "brief": {
-    "codename": "Offset Commit Ordering",
-    "symptoms": "When committing offsets under high load, the consumer reports that offsets are committed out of order, causing downstream processing to see gaps or duplicates.",
+    "codename": "Offset Outlier Puzzle",
+    "symptoms": "The offset manager commits offsets out of order, causing the committed offset to be higher than the offset included in the request.",
     "evidence": "out of order commit to partition 0, current committed offset: 7, offset in request: 1",
     "hints": [
-      "The consumer group rebalancing loop may be exiting early under certain conditions.",
-      "Look at the broker interaction when flushing offset commits.",
-      "The lock protecting the commit request is held only while sending, not while waiting for the response."
+      "The offset commit request is being processed while other requests are queued.",
+      "Look at the offset manager's coordination with the broker.",
+      "When multiple commit requests arrive simultaneously, the broker may handle them in a different order than they were queued."
     ],
     "difficulty": 3,
     "precinct": "consumer-group",
-    "lesson": "Holding a lock only around the send of an offset commit request, rather than the entire wait for the broker response, can allow concurrent commits to be reordered. The fix adds a lock around the whole commit flow, preserving order while still allowing the broker to be used concurrently for other operations.",
+    "lesson": "The fix adds a lock around the offset commit request to ensure that the broker processes each request in the order it was received, preventing out-of-order commits.",
     "tags": [
       "offset-commit",
-      "consumer-group",
-      "locking"
+      "broker-coordination",
+      "concurrency"
     ]
   },
   "original": {

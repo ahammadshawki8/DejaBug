@@ -1,0 +1,49 @@
+{
+  "id": "3c1940a",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "3c1940a12474b3506ee23e239a6924e74c2cb926",
+  "parentSha": "30855f030980209083bef1a360452980e794eb3e",
+  "prNumber": 2214,
+  "status": "certified",
+  "tests": [
+    "TestConsumerGroupNewSessionDuringOffsetLoad"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConsumerGroupNewSessionDuringOffsetLoad (0.01s)\n    consumer_group_test.go:90: kafka server: The broker is still loading offsets after a leader change for that offset's topic partition\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.485s\nFAIL\ngo: downloading github.com/pierrec/lz4 v2.6.1+incompatible\ngo: downloading golang.org/x/net v0.0.0-20220225172249-27dd8689420f\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t4.691s\n",
+    "durationMs": 33333
+  },
+  "brief": {
+    "codename": "Phantom Offset Load",
+    "symptoms": "The consumer group test fails with a kafka server error indicating the broker is still loading offsets after a leader change.",
+    "evidence": "kafka server: The broker is still loading offsets after a leader change for that offset's topic partition",
+    "hints": [
+      "The test fails when the broker is in the middle of loading offsets.",
+      "Check the code path that handles JoinGroup and SyncGroup responses.",
+      "The fix adds a retry for specific error codes."
+    ],
+    "difficulty": 2,
+    "precinct": "consumer-group",
+    "lesson": "When the broker is still loading offsets after a leader change, the consumer group must retry JoinGroup and SyncGroup requests instead of failing immediately. The fix adds ErrOffsetsLoadInProgress to the list of errors that trigger a retry.",
+    "tags": [
+      "consumer-group",
+      "offset-management",
+      "retry"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 0,
+    "reviewRounds": 0,
+    "mergedAt": "2022-04-14T00:57:48Z"
+  },
+  "bugAgeDays": 91,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/consumer_group.go b/consumer_group.go\nindex 18f58788..845fb857 100644\n--- a/consumer_group.go\n+++ b/consumer_group.go\n@@ -290,21 +290,16 @@ func (c *consumerGroup) newSession(ctx context.Context, topics []string, handler\n \tswitch join.Err {\n \tcase ErrNoError:\n \t\tc.memberID = join.MemberId\n-\tcase ErrUnknownMemberId, ErrIllegalGeneration: // reset member ID and retry immediately\n+\tcase ErrUnknownMemberId, ErrIllegalGeneration:\n+\t\t// reset member ID and retry immediately\n \t\tc.memberID = \"\"\n \t\treturn c.newSession(ctx, topics, handler, retries)\n-\tcase ErrNotCoordinatorForConsumer: // retry after backoff with coordinator refresh\n+\tcase ErrNotCoordinatorForConsumer, ErrRebalanceInProgress, ErrOffsetsLoadInProgress:\n+\t\t// retry after backoff\n \t\tif retries <= 0 {\n \t\t\treturn nil, join.Err\n \t\t}\n-\n \t\treturn c.retryNewSession(ctx, topics, handler, retries, true)\n-\tcase ErrRebalanceInProgress: // retry after backoff\n-\t\tif retries <= 0 {\n-\t\t\treturn nil, join.Err\n-\t\t}\n-\n-\t\treturn c.retryNewSession(ctx, topics, handler, retries, false)\n \tdefault:\n \t\treturn nil, join.Err\n \t}\n@@ -343,21 +338,16 @@ func (c *consumerGroup) newSession(ctx context.Context, topics []string, handler\n \n \tswitch groupRequest.Err {\n \tcase ErrNoError:\n-\tcase ErrUnknownMemberId, ErrIllegalGeneration: // reset member ID and retry immediately\n+\tcase ErrUnknownMemberId, ErrIllegalGeneration:\n+\t\t// reset member ID and retry immediately\n \t\tc.memberID = \"\"\n \t\treturn c.newSession(ctx, topics, handler, retries)\n-\tcase ErrNotCoordinatorForConsumer: // retry after backoff with coordinator refresh\n+\tcase ErrNotCoordinatorForConsumer, ErrRebalanceInProgress, ErrOffsetsLoadInProgress:\n+\t\t// retry after backoff\n \t\tif retries <= 0 {\n \t\t\treturn nil, groupRequest.Err\n \t\t}\n-\n \t\treturn c.retryNewSession(ctx, topics, handler, retries, true)\n-\tcase ErrRebalanceInProgress: // retry after backoff\n-\t\tif retries <= 0 {\n-\t\t\treturn nil, groupRequest.Err\n-\t\t}\n-\n-\t\treturn c.retryNewSession(ctx, topics, handler, retries, false)\n \tdefault:\n \t\treturn nil, groupRequest.Err\n \t}\n@@ -564,8 +554,8 @@ func (c *consumerGroup) topicToPartitionNumbers(topics []string) (map[string]int\n \tfor _, topic := range topics {\n \t\tif partitionNum, err := c.client.Partitions(topic); err != nil {\n \t\t\tLogger.Printf(\n-\t\t\t\t\"consumergroup/%s topic %s get partition number failed %v\\n\",\n-\t\t\t\tc.groupID, err)\n+\t\t\t\t\"consumergroup/%s topic %s get partition number failed due to '%v'\\n\",\n+\t\t\t\tc.groupID, topic, err)\n \t\t\treturn nil, err\n \t\t} else {\n \t\t\ttopicToPartitionNum[topic] = len(partitionNum)\n"
+}

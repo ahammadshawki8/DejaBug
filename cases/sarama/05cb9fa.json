@@ -1,0 +1,49 @@
+{
+  "id": "05cb9fa",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "05cb9fa28349a2092fb03a0f781455c9a383c9e3",
+  "parentSha": "0b17025c0445bcc75cb709249c25fcaba8b77aab",
+  "prNumber": 2642,
+  "status": "certified",
+  "tests": [
+    "TestConsumerShouldNotRetrySessionIfContextCancelled"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConsumerShouldNotRetrySessionIfContextCancelled (0.00s)\npanic: runtime error: invalid memory address or nil pointer dereference [recovered, repanicked]\n[signal 0xc0000005 code=0x0 addr=0x48 pc=0x7ff78cc6540c]\n\ngoroutine 20 [running]:\ntesting.tRunner.func1.2({0x7ff78d28ad20, 0x7ff78d348d60})\n\tC:/Program Files/Go/src/testing/testing.go:2123 +0x239\ntesting.tRunner.func1()\n\tC:/Program Files/Go/src/testing/testing.go:2126 +0x329\npanic({0x7ff78d28ad20?, 0x7ff78d348d60?})\n\tC:/Program Files/Go/src/runtime/panic.go:859 +0x125\ngithub.com/IBM/sarama.(*consumerGroup).newSession(0x3df32fa383c0, {0x7ff78d2f1e90, 0x3df32fa78640}, {0x0, 0x0, 0x0}, {0x0, 0x0}, 0x400)\n\tconsumer_group.go:264 +0x6c\ngithub.com/IBM/sarama.TestConsumerShouldNotRetrySessionIfContextCancelled(0x3df32fa98400)\n\tconsumer_group_test.go:242 +0xa9\ntesting.tRunner(0x3df32fa98400, 0x7ff78d2f6af0)\n\tC:/Program Files/Go/src/testing/testing.go:2193 +0xc3\ncreated by testing.(*T).Run in goroutine 1\n\tC:/Program Files/Go/src/testing/testing.go:2258 +0x4b4\nFAIL\tgithub.com/IBM/sarama\t0.093s\nFAIL\ngo: downloading golang.org/x/net v0.15.0\ngo: downloading golang.org/x/crypto v0.13.0\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.117s\n",
+    "durationMs": 11690
+  },
+  "brief": {
+    "codename": "Phantom Session Retry",
+    "symptoms": "The consumer group test panics with a nil pointer dereference when the context is canceled before the session can be created.",
+    "evidence": "panic: runtime error: invalid memory address or nil pointer dereference\nFAIL\tgithub.com/IBM/sarama\t0.093s",
+    "hints": [
+      "The consumer group attempts to start a new session even after the caller has canceled the operation.",
+      "Look at the consumer-group package - the retry loop does not check the context early enough.",
+      "When the context is canceled, the retry path should abort immediately and return the canceled error."
+    ],
+    "difficulty": 2,
+    "precinct": "consumer-group",
+    "lesson": "A consumer group must abort its session creation as soon as the supplied context signals Done, otherwise downstream code dereferences a nil coordinator and panics.",
+    "tags": [
+      "context",
+      "consumer-group",
+      "retry"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 0,
+    "reviewRounds": 1,
+    "mergedAt": "2023-09-06T10:31:45Z"
+  },
+  "bugAgeDays": 592,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/consumer_group.go b/consumer_group.go\nindex 01cdb669..91b6e584 100644\n--- a/consumer_group.go\n+++ b/consumer_group.go\n@@ -242,6 +242,8 @@ func (c *consumerGroup) ResumeAll() {\n \n func (c *consumerGroup) retryNewSession(ctx context.Context, topics []string, handler ConsumerGroupHandler, retries int, refreshCoordinator bool) (*consumerGroupSession, error) {\n \tselect {\n+\tcase <-ctx.Done():\n+\t\treturn nil, ctx.Err()\n \tcase <-c.closed:\n \t\treturn nil, ErrClosedConsumerGroup\n \tcase <-time.After(c.config.Consumer.Group.Rebalance.Retry.Backoff):\n@@ -261,6 +263,9 @@ func (c *consumerGroup) retryNewSession(ctx context.Context, topics []string, ha\n }\n \n func (c *consumerGroup) newSession(ctx context.Context, topics []string, handler ConsumerGroupHandler, retries int) (*consumerGroupSession, error) {\n+\tif ctx.Err() != nil {\n+\t\treturn nil, ctx.Err()\n+\t}\n \tcoordinator, err := c.client.Coordinator(c.groupID)\n \tif err != nil {\n \t\tif retries <= 0 {\n"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ebc05cc",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "ebc05cc93ab4483e294affa4c37359dd375f4493",
+  "parentSha": "0fe5d534ef6247cf4492a6f2233ef248891a2204",
+  "prNumber": 2226,
+  "status": "certified",
+  "tests": [
+    "TestClusterAdminDeleteRecordsWithLeaderNotAvailable",
+    "TestClusterAdminDeleteRecordsWithUnsupportedVersion"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestClusterAdminDeleteRecordsWithLeaderNotAvailable (0.00s)\n    admin_test.go:674: kafka server: In the middle of a leadership election, there is currently no leader for this partition and hence it is unavailable for writes\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.481s\nFAIL\ngo: downloading github.com/pierrec/lz4 v2.6.1+incompatible\ngo: downloading golang.org/x/net v0.0.0-20220225172249-27dd8689420f\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.587s\n",
+    "durationMs": 29547
+  },
+  "brief": {
+    "codename": "Inconsistent Delete",
+    "symptoms": "The DeleteRecords admin call sometimes returns a single KError when a partition leader is missing, but other times it returns ErrDeleteRecords with wrapped per-partition errors. The error type is unpredictable.",
+    "evidence": "kafka server: In the middle of a leadership election, there is currently no leader for this partition and hence it is unavailable for writes\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.481s",
+    "hints": [
+      "The client reports an error after reconnecting to a broker that is still electing a leader.",
+      "Look at the admin package - the DeleteRecords request handling path.",
+      "When a broker has no leader, the response should be wrapped consistently so that errors.Is checks work."
+    ],
+    "difficulty": 2,
+    "precinct": "admin",
+    "lesson": "Wrap the KError returned by DeleteRecords when a partition lacks a leader, preserving the original error type so that errors.Is checks succeed.",
+    "tags": [
+      "admin-api",
+      "error-handling",
+      "partition-leader"
+    ]
+  },
+  "original": {
+    "daysOpen": 4.9,
+    "comments": 0,
+    "reviewRounds": 0,
+    "mergedAt": "2022-05-11T19:54:23Z"
+  },
+  "bugAgeDays": 76,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/admin.go b/admin.go\nindex 3fa7258b..7683b44f 100644\n--- a/admin.go\n+++ b/admin.go\n@@ -525,14 +525,13 @@ func (ca *clusterAdmin) AlterPartitionReassignments(topic string, assignment [][\n \t\t\terrs = append(errs, err)\n \t\t} else {\n \t\t\tif rsp.ErrorCode > 0 {\n-\t\t\t\terrs = append(errs, errors.New(rsp.ErrorCode.Error()))\n+\t\t\t\terrs = append(errs, rsp.ErrorCode)\n \t\t\t}\n \n \t\t\tfor topic, topicErrors := range rsp.Errors {\n \t\t\t\tfor partition, partitionError := range topicErrors {\n \t\t\t\t\tif !errors.Is(partitionError.errorCode, ErrNoError) {\n-\t\t\t\t\t\terrStr := fmt.Sprintf(\"[%s-%d]: %s\", topic, partition, partitionError.errorCode.Error())\n-\t\t\t\t\t\terrs = append(errs, errors.New(errStr))\n+\t\t\t\t\t\terrs = append(errs, fmt.Errorf(\"[%s-%d]: %w\", topic, partition, partitionError.errorCode))\n \t\t\t\t\t}\n \t\t\t\t}\n \t\t\t}\n@@ -577,40 +576,45 @@ func (ca *clusterAdmin) DeleteRecords(topic string, partitionOffsets map[int32]i\n \tif topic == \"\" {\n \t\treturn ErrInvalidTopic\n \t}\n+\terrs := make([]error, 0)\n \tpartitionPerBroker := make(map[*Broker][]int32)\n \tfor partition := range partitionOffsets {\n \t\tbroker, err := ca.client.Leader(topic, partition)\n \t\tif err != nil {\n-\t\t\treturn err\n+\t\t\terrs = append(errs, err)\n+\t\t\tcontinue\n \t\t}\n \t\tpartitionPerBroker[broker] = append(partitionPerBroker[broker], partition)\n \t}\n-\terrs := make([]error, 0)\n \tfor broker, partitions := range partitionPerBroker {\n \t\ttopics := make(map[string]*DeleteRecordsRequestTopic)\n \t\trecordsToDelete := make(map[int32]int64)\n \t\tfor _, p := range partitions {\n \t\t\trecordsToDelete[p] = partitionOffsets[p]\n \t\t}\n-\t\ttopics[topic] = &DeleteRecordsRequestTopic{PartitionOffsets: recordsToDelete}\n+\t\ttopics[topic] = &DeleteRecordsRequestTopic{\n+\t\t\tPartitionOffsets: recordsToDelete,\n+\t\t}\n \t\trequest := &DeleteRecordsRequest{\n \t\t\tTopics:  topics,\n \t\t\tTimeout: ca.conf.Admin.Timeout,\n \t\t}\n-\n \t\trsp, err := broker.DeleteRecords(request)\n \t\tif err != nil {\n \t\t\terrs = append(errs, err)\n-\t\t} else {\n-\t\t\tdeleteRecordsResponseTopic, ok := rsp.Topics[topic]\n-\t\t\tif !ok {\n-\t\t\t\terrs = append(errs, ErrIncompleteResponse)\n-\t\t\t} else {\n-\t\t\t\tfor _, deleteRecordsResponsePartition := range deleteRecordsResponseTopic.Partitions {\n-\t\t\t\t\tif !errors.Is(deleteRecordsResponsePartition.Err, ErrNoError) {\n-\t\t\t\t\t\terrs = append(errs, errors.New(deleteRecordsResponsePartition.Err.Error()))\n-\t\t\t\t\t}\n-\t\t\t\t}\n+\t\t\tcontinue\n+\t\t}\n+\n+\t\tdeleteRecordsResponseTopic, ok := rsp.Topics[topic]\n+\t\tif !ok {\n+\t\t\terrs = append(errs, ErrIncompleteResponse)\n+\t\t\tcontinue\n+\t\t}\n+\n+\t\tfor _, deleteRecordsResponsePartition := range deleteRecordsResponseTopic.Partitions {\n+\t\t\tif !errors.Is(deleteRecordsResponsePartition.Err, ErrNoError) {\n+\t\t\t\terrs = append(errs, deleteRecordsResponsePartition.Err)\n+\t\t\t\tcontinue\n \t\t\t}\n \t\t}\n \t}\n"
+}

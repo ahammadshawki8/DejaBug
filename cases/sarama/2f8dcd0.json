@@ -1,0 +1,50 @@
+{
+  "id": "2f8dcd0",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "2f8dcd0731e524b14f4b714902e1039982654b66",
+  "parentSha": "7dbf0b5d85538641227a30a281f1a54e18a94cb7",
+  "prNumber": 2447,
+  "status": "certified",
+  "tests": [
+    "TestConsumerHandlesExpectationsPausingResuming",
+    "TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset"
+  ],
+  "packages": [
+    "./mocks"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConsumerHandlesExpectationsPausingResuming (0.00s)\n    consumer_test.go:103: High water mark offset with value different from the expected:  1\n    consumer_test.go:116: High water mark offset with value different from the expected:  2\n    consumer_test.go:129: High water mark offset with value different from the expected:  -998\n    consumer_test.go:144: High water mark offset with value different from the expected:  3\n--- FAIL: TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset (0.00s)\n    consumer_test.go:401: Difference between highwatermarkoffset and last message offset greater than 1, got: 2\nFAIL\nFAIL\tgithub.com/Shopify/sarama/mocks\t0.312s\nFAIL\ngo: downloading github.com/klauspost/compress v1.15.14\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama/mocks\t0.308s\n",
+    "durationMs": 16229
+  },
+  "brief": {
+    "codename": "Offset Discrepancy Enigma",
+    "symptoms": "The test reports that the high water mark offset differs from the expected value.",
+    "evidence": "consumer_test.go:103: High water mark offset with value different from the expected:  1\nconsumer_test.go:116: High water mark offset with value different from the expected:  2\nconsumer_test.go:129: High water mark offset with value different from the expected:  -998\nconsumer_test.go:144: High water mark offset with value different from the expected:  3",
+    "hints": [
+      "The consumer reports an offset that is not what the test expects.",
+      "Look at the mocks package - the partition consumer's HighWaterMarkOffset method.",
+      "When the consumer is paused and resumed, the offset it returns does not match the real broker's high water mark."
+    ],
+    "difficulty": 1,
+    "precinct": "consumer",
+    "lesson": "The mock consumer previously added 1 to the stored high water mark offset, causing the test to see a shifted value. The fix removes that addition so the mock reports the exact offset stored.",
+    "tags": [
+      "mocks",
+      "offset-management",
+      "consumer-group"
+    ]
+  },
+  "original": {
+    "daysOpen": 20.5,
+    "comments": 1,
+    "reviewRounds": 1,
+    "mergedAt": "2023-03-23T22:40:58Z"
+  },
+  "bugAgeDays": 426,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/mocks/consumer.go b/mocks/consumer.go\nindex 37a07cf3..03283f8f 100644\n--- a/mocks/consumer.go\n+++ b/mocks/consumer.go\n@@ -343,7 +343,7 @@ func (pc *PartitionConsumer) Messages() <-chan *sarama.ConsumerMessage {\n }\n \n func (pc *PartitionConsumer) HighWaterMarkOffset() int64 {\n-\treturn atomic.LoadInt64(&pc.highWaterMarkOffset) + 1\n+\treturn atomic.LoadInt64(&pc.highWaterMarkOffset)\n }\n \n // Pause implements the Pause method from the sarama.PartitionConsumer interface.\n"
+}

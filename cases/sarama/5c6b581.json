@@ -1,0 +1,49 @@
+{
+  "id": "5c6b581",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "5c6b581244ef80b9cbad9852025dbd2c3d70cd60",
+  "parentSha": "8f8d8daa0703daa7420dbb6490e8304244094beb",
+  "prNumber": 2178,
+  "status": "certified",
+  "tests": [
+    "TestAsyncProducerIdempotentEpochExhaustion"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestAsyncProducerIdempotentEpochExhaustion (0.03s)\n    mockbroker.go:145: mockbroker/1: not all expectations were satisfied! Still waiting on:\n        (*sarama.InitProducerIDResponse)(0x27bd05514000)({\n         ThrottleTime: (time.Duration) 0s,\n         Err: (sarama.KError) kafka server: Not an error, why are you printing me?,\n         ProducerID: (int64) 1001,\n         ProducerEpoch: (int16) 0\n        })\n        \npanic: interface conversion: sarama.protocolBody is *sarama.InitProducerIDRequest, not *sarama.ProduceRequest [recovered, repanicked]\n\ngoroutine 7 [running]:\ntesting.tRunner.func1.2({0x7ff6297aaa60, 0x27bd056002d0})\n\tC:/Program Files/Go/src/testing/testing.go:2123 +0x239\ntesting.tRunner.func1()\n\tC:/Program Files/Go/src/testing/testing.go:2126 +0x329\npanic({0x7ff6297aaa60?, 0x27bd056002d0?})\n\tC:/Program Files/Go/src/runtime/panic.go:859 +0x125\ngithub.com/Shopify/sarama.TestAsyncProducerIdempotentEpochExhaustion(0x27bd052a0600)\n\tasync_producer_test.go:1479 +0x80f\ntesting.tRunner(0x27bd052a0600, 0x7ff62987b758)\n\tC:/Program Files/Go/src/testing/testing.go:2193 +0xc3\ncreated by testing.(*T).Run in goroutine 1\n\tC:/Program Files/Go/src/testing/testing.go:2258 +0x4b4\nFAIL\tgithub.com/Shopify/sarama\t0.782s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.504s\n",
+    "durationMs": 10061
+  },
+  "brief": {
+    "codename": "Epoch Exhaustion",
+    "symptoms": "The async producer test fails with a panic about converting an InitProducerIDResponse to a ProduceRequest after the broker returns an unexpected error code.",
+    "evidence": "panic: interface conversion: sarama.protocolBody is *sarama.InitProducerIDRequest, not *sarama.ProduceRequest",
+    "hints": [
+      "The test simulates a producer that uses idempotent delivery.",
+      "The failure occurs after the broker reports an error for the first produce request.",
+      "Inspect how the producer handles the error and what state it changes."
+    ],
+    "difficulty": 2,
+    "precinct": "producer",
+    "lesson": "When the broker returns an error for an idempotent producer, the producer must request a new producer ID (and thus a new epoch) before retrying, otherwise the internal state becomes inconsistent and panics when the broker expects a ProduceRequest.",
+    "tags": [
+      "idempotent-producer",
+      "epoch",
+      "transaction-manager"
+    ]
+  },
+  "original": {
+    "daysOpen": 30.3,
+    "comments": 4,
+    "reviewRounds": 5,
+    "mergedAt": "2022-04-13T22:26:52Z"
+  },
+  "bugAgeDays": 48,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/async_producer.go b/async_producer.go\nindex ad0c789f..4f7ece58 100644\n--- a/async_producer.go\n+++ b/async_producer.go\n@@ -4,6 +4,7 @@ import (\n \t\"encoding/binary\"\n \t\"errors\"\n \t\"fmt\"\n+\t\"math\"\n \t\"sync\"\n \t\"time\"\n \n@@ -1135,13 +1136,30 @@ func (p *asyncProducer) shutdown() {\n \tclose(p.successes)\n }\n \n+func (p *asyncProducer) bumpIdempotentProducerEpoch() {\n+\t_, epoch := p.txnmgr.getProducerID()\n+\tif epoch == math.MaxInt16 {\n+\t\tLogger.Println(\"producer/txnmanager epoch exhausted, requesting new producer ID\")\n+\t\ttxnmgr, err := newTransactionManager(p.conf, p.client)\n+\t\tif err != nil {\n+\t\t\tLogger.Println(err)\n+\t\t\treturn\n+\t\t}\n+\n+\t\tp.txnmgr = txnmgr\n+\t} else {\n+\t\tp.txnmgr.bumpEpoch()\n+\t}\n+}\n+\n func (p *asyncProducer) returnError(msg *ProducerMessage, err error) {\n \t// We need to reset the producer ID epoch if we set a sequence number on it, because the broker\n \t// will never see a message with this number, so we can never continue the sequence.\n \tif msg.hasSequence {\n \t\tLogger.Printf(\"producer/txnmanager rolling over epoch due to publish failure on %s/%d\", msg.Topic, msg.Partition)\n-\t\tp.txnmgr.bumpEpoch()\n+\t\tp.bumpIdempotentProducerEpoch()\n \t}\n+\n \tmsg.clear()\n \tpErr := &ProducerError{Msg: msg, Err: err}\n \tif p.conf.Producer.Return.Errors {\n"
+}

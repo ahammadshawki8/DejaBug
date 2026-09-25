@@ -1,0 +1,49 @@
+{
+  "id": "39cc66a",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "39cc66a4594c07b4f8eada621145fa0d092a4506",
+  "parentSha": "0c4ba61b272cf7bb88872e5698aab5053637b8e5",
+  "prNumber": 2247,
+  "status": "certified",
+  "tests": [
+    "TestDescribeGroupsResponseV1plus"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestDescribeGroupsResponseV1plus (0.00s)\n    request_test.go:33: Decoding empty version 3 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case empty decode failed, expected:&{Version:3 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:0} got &{Version:3 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:-1}\n    request_test.go:19: Encoding empty failed\n        got  [0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 0]\n    request_test.go:33: Decoding populated version 3 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case populated decode failed, expected:&{Version:3 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce5a0 0x2dcaaa0ce5f0] AuthorizedOperations:0} got &{Version:3 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce730 0x2dcaaa0ce780] AuthorizedOperations:0}\n    request_test.go:19: Encoding populated failed\n        got  [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 0 0 0 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n    request_test.go:33: Decoding empty version 4 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case empty decode failed, expected:&{Version:4 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:0} got &{Version:4 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:-1}\n    request_test.go:19: Encoding empty failed\n        got  [0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 0]\n    request_test.go:33: Decoding populated version 4 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case populated decode failed, expected:&{Version:4 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce640 0x2dcaaa0ce690] AuthorizedOperations:0} got &{Version:4 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce870 0x2dcaaa0ce8c0] AuthorizedOperations:0}\n    request_test.go:19: Encoding populated failed\n        got  [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 3 103 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 3 103 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 0 0 0 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.484s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.534s\n",
+    "durationMs": 9295
+  },
+  "brief": {
+    "codename": "Kafka Decode Dilemma",
+    "symptoms": "The test suite fails with 'kafka: insufficient data to decode packet, more bytes expected' when encoding and decoding DescribeGroupsResponseV1plus messages.",
+    "evidence": "request_test.go:33: Decoding empty version 3 failed: kafka: insufficient data to decode packet, more bytes expected\ndescribe_groups_response_test.go:270: case empty decode failed, expected:&{Version:3 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:0} got &{Version:3 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:-1}",
+    "hints": [
+      "The failure occurs when the broker sends a DescribeGroups response with no consumer groups.",
+      "Look at the `DescribeGroupsResponse` struct in the `sarama` package.",
+      "The bug is related to a field that is conditionally encoded based on the protocol version."
+    ],
+    "difficulty": 1,
+    "precinct": "protocol",
+    "lesson": "When adding optional fields to a Kafka response, ensure the field is always encoded even when its value is zero, otherwise the broker will send an incomplete packet that fails to decode.",
+    "tags": [
+      "kafka-protocol",
+      "encoding",
+      "optional-field"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.1,
+    "comments": 0,
+    "reviewRounds": 1,
+    "mergedAt": "2022-06-07T10:18:26Z"
+  },
+  "bugAgeDays": 15,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/describe_groups_response.go b/describe_groups_response.go\nindex 21c9cbc4..7e0daa11 100644\n--- a/describe_groups_response.go\n+++ b/describe_groups_response.go\n@@ -1,10 +1,9 @@\n package sarama\n \n type DescribeGroupsResponse struct {\n-\tVersion              int16\n-\tThrottleTimeMs       int32\n-\tGroups               []*GroupDescription\n-\tAuthorizedOperations int32\n+\tVersion        int16\n+\tThrottleTimeMs int32\n+\tGroups         []*GroupDescription\n }\n \n func (r *DescribeGroupsResponse) encode(pe packetEncoder) error {\n@@ -21,9 +20,6 @@ func (r *DescribeGroupsResponse) encode(pe packetEncoder) error {\n \t\t\treturn err\n \t\t}\n \t}\n-\tif r.Version >= 3 {\n-\t\tpe.putInt32(r.AuthorizedOperations)\n-\t}\n \n \treturn nil\n }\n@@ -48,11 +44,6 @@ func (r *DescribeGroupsResponse) decode(pd packetDecoder, version int16) (err er\n \t\t\treturn err\n \t\t}\n \t}\n-\tif r.Version >= 3 {\n-\t\tif r.AuthorizedOperations, err = pd.getInt32(); err != nil {\n-\t\t\treturn err\n-\t\t}\n-\t}\n \n \treturn nil\n }\n@@ -80,12 +71,13 @@ func (r *DescribeGroupsResponse) requiredVersion() KafkaVersion {\n type GroupDescription struct {\n \tVersion int16\n \n-\tErr          KError\n-\tGroupId      string\n-\tState        string\n-\tProtocolType string\n-\tProtocol     string\n-\tMembers      map[string]*GroupMemberDescription\n+\tErr                  KError\n+\tGroupId              string\n+\tState                string\n+\tProtocolType         string\n+\tProtocol             string\n+\tMembers              map[string]*GroupMemberDescription\n+\tAuthorizedOperations int32\n }\n \n func (gd *GroupDescription) encode(pe packetEncoder) error {\n@@ -119,6 +111,10 @@ func (gd *GroupDescription) encode(pe packetEncoder) error {\n \t\t}\n \t}\n \n+\tif gd.Version >= 3 {\n+\t\tpe.putInt32(gd.AuthorizedOperations)\n+\t}\n+\n \treturn nil\n }\n \n@@ -147,20 +143,25 @@ func (gd *GroupDescription) decode(pd packetDecoder) (err error) {\n \tif err != nil {\n \t\treturn err\n \t}\n-\tif n == 0 {\n-\t\treturn nil\n-\t}\n \n-\tgd.Members = make(map[string]*GroupMemberDescription)\n-\tfor i := 0; i < n; i++ {\n-\t\tmemberId, err := pd.getString()\n-\t\tif err != nil {\n-\t\t\treturn err\n+\tif n > 0 {\n+\t\tgd.Members = make(map[string]*GroupMemberDescription)\n+\t\tfor i := 0; i < n; i++ {\n+\t\t\tmemberId, err := pd.getString()\n+\t\t\tif err != nil {\n+\t\t\t\treturn err\n+\t\t\t}\n+\n+\t\t\tgd.Members[memberId] = new(GroupMemberDescription)\n+\t\t\tgd.Members[memberId].Version = gd.Version\n+\t\t\tif err := gd.Members[memberId].decode(pd); err != nil {\n+\t\t\t\treturn err\n+\t\t\t}\n \t\t}\n+\t}\n \n-\t\tgd.Members[memberId] = new(GroupMemberDescription)\n-\t\tgd.Members[memberId].Version = gd.Version\n-\t\tif err := gd.Members[memberId].decode(pd); err != nil {\n+\tif gd.Version >= 3 {\n+\t\tif gd.AuthorizedOperations, err = pd.getInt32(); err != nil {\n \t\t\treturn err\n \t\t}\n \t}\n"
+}

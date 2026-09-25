@@ -1,0 +1,51 @@
+{
+  "id": "df0fb3d",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "df0fb3d1f471b0177682afe4903e8ab5c99e1e65",
+  "parentSha": "0fcf75bf394f4bd6af6e3dd5984b3dd79f281361",
+  "prNumber": 2111,
+  "status": "certified",
+  "tests": [
+    "TestConsumerGroupMemberAssignment",
+    "TestConsumerGroupMemberMetadata",
+    "TestConsumerGroupMemberMetadataV1Decode"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConsumerGroupMemberMetadataV1Decode (0.00s)\n    consumer_group_members_test.go:73: Failed to decode V1 data kafka: error decoding packet: invalid length\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.500s\nFAIL\ngo: downloading golang.org/x/net v0.0.0-20220105145211-5b0dc2dfae98\ngo: downloading github.com/klauspost/compress v1.13.6\ngo: downloading golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.438s\n",
+    "durationMs": 21813
+  },
+  "brief": {
+    "codename": "Phantom Response",
+    "symptoms": "A consumer group test fails with 'invalid length' when decoding V1 metadata.",
+    "evidence": "consumer_group_members_test.go:73: Failed to decode V1 data kafka: error decoding packet: invalid length",
+    "hints": [
+      "The consumer group client reports an error after reconnecting.",
+      "Inspect the DescribeGroupsResponse handling for version differences.",
+      "The failure occurs when processing metadata for a specific protocol version."
+    ],
+    "difficulty": 2,
+    "precinct": "consumer-group",
+    "lesson": "When a client sends an outdated JoinGroup request but includes newer metadata fields, the broker's DescribeGroupsResponse must safely ignore missing fields to avoid decoding errors.",
+    "tags": [
+      "consumer-group",
+      "protocol-version",
+      "metadata"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 0,
+    "reviewRounds": 1,
+    "mergedAt": "2022-01-13T14:09:58Z"
+  },
+  "bugAgeDays": 258,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/consumer_group_members.go b/consumer_group_members.go\nindex 21b11e94..f4100f56 100644\n--- a/consumer_group_members.go\n+++ b/consumer_group_members.go\n@@ -1,10 +1,12 @@\n package sarama\n \n // ConsumerGroupMemberMetadata holds the metadata for consumer group\n+// https://github.com/apache/kafka/blob/trunk/clients/src/main/resources/common/message/ConsumerProtocolSubscription.json\n type ConsumerGroupMemberMetadata struct {\n-\tVersion  int16\n-\tTopics   []string\n-\tUserData []byte\n+\tVersion         int16\n+\tTopics          []string\n+\tUserData        []byte\n+\tOwnedPartitions []*OwnedPartition\n }\n \n func (m *ConsumerGroupMemberMetadata) encode(pe packetEncoder) error {\n@@ -33,11 +35,50 @@ func (m *ConsumerGroupMemberMetadata) decode(pd packetDecoder) (err error) {\n \tif m.UserData, err = pd.getBytes(); err != nil {\n \t\treturn\n \t}\n+\tif m.Version >= 1 {\n+\t\tn, err := pd.getArrayLength()\n+\t\tif err != nil {\n+\t\t\t// permit missing data here in case of misbehaving 3rd party\n+\t\t\t// clients who incorrectly marked the member metadata as V1 in\n+\t\t\t// their JoinGroup request\n+\t\t\tif err == ErrInsufficientData {\n+\t\t\t\treturn nil\n+\t\t\t}\n+\t\t\treturn err\n+\t\t}\n+\t\tif n == 0 {\n+\t\t\treturn nil\n+\t\t}\n+\t\tm.OwnedPartitions = make([]*OwnedPartition, n)\n+\t\tfor i := 0; i < n; i++ {\n+\t\t\tm.OwnedPartitions[i] = &OwnedPartition{}\n+\t\t\tif err := m.OwnedPartitions[i].decode(pd); err != nil {\n+\t\t\t\treturn err\n+\t\t\t}\n+\t\t}\n+\t}\n+\n+\treturn nil\n+}\n+\n+type OwnedPartition struct {\n+\tTopic      string\n+\tPartitions []int32\n+}\n+\n+func (m *OwnedPartition) decode(pd packetDecoder) (err error) {\n+\tif m.Topic, err = pd.getString(); err != nil {\n+\t\treturn err\n+\t}\n+\tif m.Partitions, err = pd.getInt32Array(); err != nil {\n+\t\treturn err\n+\t}\n \n \treturn nil\n }\n \n // ConsumerGroupMemberAssignment holds the member assignment for a consume group\n+// https://github.com/apache/kafka/blob/trunk/clients/src/main/resources/common/message/ConsumerProtocolAssignment.json\n type ConsumerGroupMemberAssignment struct {\n \tVersion  int16\n \tTopics   map[string][]int32\ndiff --git a/describe_groups_response.go b/describe_groups_response.go\nindex bc242e42..1027b33d 100644\n--- a/describe_groups_response.go\n+++ b/describe_groups_response.go\n@@ -179,12 +179,18 @@ func (gmd *GroupMemberDescription) decode(pd packetDecoder) (err error) {\n }\n \n func (gmd *GroupMemberDescription) GetMemberAssignment() (*ConsumerGroupMemberAssignment, error) {\n+\tif len(gmd.MemberAssignment) == 0 {\n+\t\treturn nil, nil\n+\t}\n \tassignment := new(ConsumerGroupMemberAssignment)\n \terr := decode(gmd.MemberAssignment, assignment)\n \treturn assignment, err\n }\n \n func (gmd *GroupMemberDescription) GetMemberMetadata() (*ConsumerGroupMemberMetadata, error) {\n+\tif len(gmd.MemberMetadata) == 0 {\n+\t\treturn nil, nil\n+\t}\n \tmetadata := new(ConsumerGroupMemberMetadata)\n \terr := decode(gmd.MemberMetadata, metadata)\n \treturn metadata, err\n"
+}

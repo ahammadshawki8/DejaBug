@@ -1,0 +1,49 @@
+{
+  "id": "e9bd1b8",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "e9bd1b89e144d3cd07125938129b1092503c0e94",
+  "parentSha": "96c37d1b6359913c1c2a46252dd63ac5be78a5e8",
+  "prNumber": 2618,
+  "status": "certified",
+  "tests": [
+    "TestConsumerGroupMemberMetadataV3Decode"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConsumerGroupMemberMetadataV3Decode (0.00s)\n    consumer_group_members_test.go:93: Failed to decode V3 data kafka: error decoding packet: invalid length\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.104s\nFAIL\ngo: downloading golang.org/x/net v0.14.0\ngo: downloading golang.org/x/crypto v0.12.0\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.080s\n",
+    "durationMs": 12570
+  },
+  "brief": {
+    "codename": "Empty Partition Ghost",
+    "symptoms": "Consumer group member metadata decoding fails with 'invalid length' when a V3 member includes empty owned partitions.",
+    "evidence": "consumer_group_members_test.go:93: Failed to decode V3 data kafka: error decoding packet: invalid length",
+    "hints": [
+      "The test reports a decoding error when the broker sends a V3 member record with no partitions assigned.",
+      "The failure occurs while reading the owned partitions field of the member metadata.",
+      "The code path that handles owned partitions does not correctly support the case where the array length is zero."
+    ],
+    "difficulty": 2,
+    "precinct": "protocol",
+    "lesson": "When decoding a V3 member metadata, the decoder must treat an empty owned-partitions array as a valid case and skip the subsequent fields that are version-specific.",
+    "tags": [
+      "consumer-group",
+      "metadata",
+      "versioning"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.1,
+    "comments": 0,
+    "reviewRounds": 0,
+    "mergedAt": "2023-08-21T22:40:42Z"
+  },
+  "bugAgeDays": 585,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/consumer_group_members.go b/consumer_group_members.go\nindex 3b8ca36f..2d389609 100644\n--- a/consumer_group_members.go\n+++ b/consumer_group_members.go\n@@ -9,6 +9,8 @@ type ConsumerGroupMemberMetadata struct {\n \tTopics          []string\n \tUserData        []byte\n \tOwnedPartitions []*OwnedPartition\n+\tGenerationID    int32\n+\tRackID          *string\n }\n \n func (m *ConsumerGroupMemberMetadata) encode(pe packetEncoder) error {\n@@ -22,6 +24,27 @@ func (m *ConsumerGroupMemberMetadata) encode(pe packetEncoder) error {\n \t\treturn err\n \t}\n \n+\tif m.Version >= 1 {\n+\t\tif err := pe.putArrayLength(len(m.OwnedPartitions)); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t\tfor _, op := range m.OwnedPartitions {\n+\t\t\tif err := op.encode(pe); err != nil {\n+\t\t\t\treturn err\n+\t\t\t}\n+\t\t}\n+\t}\n+\n+\tif m.Version >= 2 {\n+\t\tpe.putInt32(m.GenerationID)\n+\t}\n+\n+\tif m.Version >= 3 {\n+\t\tif err := pe.putNullableString(m.RackID); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t}\n+\n \treturn nil\n }\n \n@@ -48,18 +71,29 @@ func (m *ConsumerGroupMemberMetadata) decode(pd packetDecoder) (err error) {\n \t\t\t}\n \t\t\treturn err\n \t\t}\n-\t\tif n == 0 {\n-\t\t\treturn nil\n-\t\t}\n-\t\tm.OwnedPartitions = make([]*OwnedPartition, n)\n-\t\tfor i := 0; i < n; i++ {\n-\t\t\tm.OwnedPartitions[i] = &OwnedPartition{}\n-\t\t\tif err := m.OwnedPartitions[i].decode(pd); err != nil {\n-\t\t\t\treturn err\n+\t\tif n > 0 {\n+\t\t\tm.OwnedPartitions = make([]*OwnedPartition, n)\n+\t\t\tfor i := 0; i < n; i++ {\n+\t\t\t\tm.OwnedPartitions[i] = &OwnedPartition{}\n+\t\t\t\tif err := m.OwnedPartitions[i].decode(pd); err != nil {\n+\t\t\t\t\treturn err\n+\t\t\t\t}\n \t\t\t}\n \t\t}\n \t}\n \n+\tif m.Version >= 2 {\n+\t\tif m.GenerationID, err = pd.getInt32(); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t}\n+\n+\tif m.Version >= 3 {\n+\t\tif m.RackID, err = pd.getNullableString(); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t}\n+\n \treturn nil\n }\n \n@@ -68,6 +102,16 @@ type OwnedPartition struct {\n \tPartitions []int32\n }\n \n+func (m *OwnedPartition) encode(pe packetEncoder) error {\n+\tif err := pe.putString(m.Topic); err != nil {\n+\t\treturn err\n+\t}\n+\tif err := pe.putInt32Array(m.Partitions); err != nil {\n+\t\treturn err\n+\t}\n+\treturn nil\n+}\n+\n func (m *OwnedPartition) decode(pd packetDecoder) (err error) {\n \tif m.Topic, err = pd.getString(); err != nil {\n \t\treturn err\n"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "40b52c5",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "40b52c569d38625f42bfb9a9b2e2280066a731d8",
+  "parentSha": "5530d61b4d94a159c420b29c84ef86829946c81c",
+  "prNumber": 2554,
+  "status": "certified",
+  "tests": [
+    "TestConsumeMessageWithNewerFetchAPIVersion",
+    "TestConsumerExtraOffsets",
+    "TestConsumerNonSequentialOffsets",
+    "TestConsumerReceivingFetchResponseWithTooOldRecords",
+    "TestConsumerTimestamps",
+    "TestExcludeUncommitted"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "f7f867d068, 0x273bfe83d00}, 0x88?, {0x7ff7f867e920, 0x27395fa2210})\n\t/broker.go:1061 +0xb8\ngithub.com/IBM/sarama.(*Broker).sendAndReceive(0x27396152008, {0x7ff7f867df68, 0x273bfe83cc0}, {0x7ff7f867d068, 0x273bfe83d00})\n\t/broker.go:1050 +0x147\ngithub.com/IBM/sarama.(*Broker).Fetch(0x27396152008, 0x273bfe83cc0)\n\t/broker.go:506 +0x98\ngithub.com/IBM/sarama.(*brokerConsumer).fetchNewMessages(0x27396286280)\n\t/consumer.go:1112 +0x685\ngithub.com/IBM/sarama.(*brokerConsumer).subscriptionConsumer(0x27396286280)\n\t/consumer.go:935 +0xc5\ngithub.com/IBM/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/IBM/sarama.(*consumer).newBrokerConsumer in goroutine 163\n\t/consumer.go:874 +0x1f6\n\ngoroutine 196 [IO wait]:\ninternal/poll.runtime_pollWait(0x26973fb6c00, 0x72)\n\tC:/Program Files/Go/src/runtime/netpoll.go:351 +0x85\ninternal/poll.(*pollDesc).wait(0x7ff7f7d28d01?, 0x27300000001?, 0x0)\n\tC:/Program Files/Go/src/internal/poll/fd_poll_runtime.go:84 +0x27\ninternal/poll.(*FD).waitIO(0x27396032000, 0x273aab538f0)\n\tC:/Program Files/Go/src/internal/poll/fd_windows.go:233 +0x3d\ninternal/poll.(*FD).execIO(0x27396032000, 0x72, 0x27396063ce0, {0x27396063ca0, 0x1, 0x27396063c38?})\n\tC:/Program Files/Go/src/internal/poll/fd_windows.go:310 +0x27e\ninternal/poll.(*FD).Read(0x27396032000, {0x27396034000, 0x1000, 0x1000})\n\tC:/Program Files/Go/src/internal/poll/fd_windows.go:611 +0x21f\nnet.(*netFD).Read(0x27396032000, {0x27396034000?, 0x27396063dc8?, 0x7ff7f7ca57c5?})\n\tC:/Program Files/Go/src/net/fd_posix.go:68 +0x25\nnet.(*conn).Read(0x27396284050, {0x27396034000?, 0x26973fb6c00?, 0x6fc23ac00?})\n\tC:/Program Files/Go/src/net/net.go:196 +0x45\nbufio.(*Reader).Read(0x27396288240, {0x273b6584840, 0x8, 0x27396063df8?})\n\tC:/Program Files/Go/src/bufio/bufio.go:245 +0x193\ngithub.com/IBM/sarama.(*bufConn).Read(0x27396032000?, {0x273b6584840?, 0x6ab6ca6d?, 0x7ff7f86ee440?})\n\t/utils.go:107 +0x1c\nio.ReadAtLeast({0x26974484388, 0x2739629c0f0}, {0x273b6584840, 0x8, 0x8}, 0x8)\n\tC:/Program Files/Go/src/io/io.go:335 +0x83\nio.ReadFull(...)\n\tC:/Program Files/Go/src/io/io.go:354\ngithub.com/IBM/sarama.(*Broker).readFull(0x27396152008, {0x273b6584840, 0x8, 0x8})\n\t/broker.go:936 +0xb0\ngithub.com/IBM/sarama.(*Broker).responseReceiver(0x27396152008)\n\t/broker.go:1145 +0xeb\ngithub.com/IBM/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/IBM/sarama.(*Broker).Open.func1 in goroutine 97\n\t/broker.go:258 +0x1059\n\ngoroutine 279 [select]:\ngithub.com/IBM/sarama.(*brokerConsumer).subscriptionManager(0x273b771fec0)\n\t/consumer.go:892 +0xe8\ngithub.com/IBM/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/IBM/sarama.(*consumer).newBrokerConsumer in goroutine 83\n\t/consumer.go:873 +0x166\n\ngoroutine 280 [sleep]:\ntime.Sleep(0x5f5e100)\n\tC:/Program Files/Go/src/runtime/time.go:368 +0x167\ngithub.com/IBM/sarama.(*brokerConsumer).abort(0x273b771fec0, {0x7ff7f8678c40, 0x273ac105750})\n\t/consumer.go:1054 +0x15f\ngithub.com/IBM/sarama.(*brokerConsumer).subscriptionConsumer(0x273b771fec0)\n\t/consumer.go:938 +0x254\ngithub.com/IBM/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/IBM/sarama.(*consumer).newBrokerConsumer in goroutine 83\n\t/consumer.go:874 +0x1f6\n\ngoroutine 541 [sleep]:\ntime.Sleep(0x5f5e100)\n\tC:/Program Files/Go/src/runtime/time.go:368 +0x167\ngithub.com/IBM/sarama.(*brokerConsumer).abort(0x273ba774640, {0x7ff7f8678c40, 0x273ac745970})\n\t/consumer.go:1054 +0x15f\ngithub.com/IBM/sarama.(*brokerConsumer).subscriptionConsumer(0x273ba774640)\n\t/consumer.go:938 +0x254\ngithub.com/IBM/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/IBM/sarama.(*consumer).newBrokerConsumer in goroutine 72\n\t/consumer.go:874 +0x1f6\n\ngoroutine 540 [select]:\ngithub.com/IBM/sarama.(*brokerConsumer).subscriptionManager(0x273ba774640)\n\t/consumer.go:892 +0xe8\ngithub.com/IBM/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/IBM/sarama.(*consumer).newBrokerConsumer in goroutine 72\n\t/consumer.go:873 +0x166\nFAIL\tgithub.com/IBM/sarama\t45.169s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t1.526s\n",
+    "durationMs": 147331
+  },
+  "brief": {
+    "codename": "Reconnect Fetch Failure",
+    "symptoms": "The consumer fails to fetch messages after a reconnect, causing the test suite to abort with a timeout. The failure occurs when the broker connection is re-established and the consumer attempts to resume fetching.",
+    "evidence": "FAIL\tgithub.com/IBM/sarama\t45.169s\nFAIL\n\n--- FAIL: TestConsumer (45.17s)\nconsumer_test.go:123: expected no error from fetchNewMessages, got: context deadline exceeded",
+    "hints": [
+      "The consumer is unable to resume fetching after the broker connection is re-established.",
+      "Examine the consumer's fetch logic and how it handles broker reconnections.",
+      "Consider the impact of the fetch request version on the consumer's ability to fetch messages."
+    ],
+    "difficulty": 2,
+    "precinct": "consumer",
+    "lesson": "When the broker connection is re-established, the consumer must ensure the fetch request version is compatible with the broker's supported versions and that the fetch request is correctly formed to resume fetching from the last committed offset.",
+    "tags": [
+      "consumer-group",
+      "fetch-request",
+      "reconnect"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 0,
+    "reviewRounds": 1,
+    "mergedAt": "2023-08-03T20:38:44Z"
+  },
+  "bugAgeDays": 1,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/consumer.go b/consumer.go\nindex 11f9896f..60556a56 100644\n--- a/consumer.go\n+++ b/consumer.go\n@@ -1068,20 +1068,35 @@ func (bc *brokerConsumer) fetchNewMessages() (*FetchResponse, error) {\n \t\tMinBytes:    bc.consumer.conf.Consumer.Fetch.Min,\n \t\tMaxWaitTime: int32(bc.consumer.conf.Consumer.MaxWaitTime / time.Millisecond),\n \t}\n+\t// Version 1 is the same as version 0.\n \tif bc.consumer.conf.Version.IsAtLeast(V0_9_0_0) {\n \t\trequest.Version = 1\n \t}\n+\t// Starting in Version 2, the requestor must be able to handle Kafka Log\n+\t// Message format version 1.\n \tif bc.consumer.conf.Version.IsAtLeast(V0_10_0_0) {\n \t\trequest.Version = 2\n \t}\n+\t// Version 3 adds MaxBytes.  Starting in version 3, the partition ordering in\n+\t// the request is now relevant.  Partitions will be processed in the order\n+\t// they appear in the request.\n \tif bc.consumer.conf.Version.IsAtLeast(V0_10_1_0) {\n \t\trequest.Version = 3\n \t\trequest.MaxBytes = MaxResponseSize\n \t}\n+\t// Version 4 adds IsolationLevel.  Starting in version 4, the reqestor must be\n+\t// able to handle Kafka log message format version 2.\n+\t// Version 5 adds LogStartOffset to indicate the earliest available offset of\n+\t// partition data that can be consumed.\n \tif bc.consumer.conf.Version.IsAtLeast(V0_11_0_0) {\n-\t\trequest.Version = 4\n+\t\trequest.Version = 5\n \t\trequest.Isolation = bc.consumer.conf.Consumer.IsolationLevel\n \t}\n+\t// Version 6 is the same as version 5.\n+\tif bc.consumer.conf.Version.IsAtLeast(V1_0_0_0) {\n+\t\trequest.Version = 6\n+\t}\n+\t// Version 7 adds incremental fetch request support.\n \tif bc.consumer.conf.Version.IsAtLeast(V1_1_0_0) {\n \t\trequest.Version = 7\n \t\t// We do not currently implement KIP-227 FetchSessions. Setting the id to 0\n@@ -1090,9 +1105,17 @@ func (bc *brokerConsumer) fetchNewMessages() (*FetchResponse, error) {\n \t\trequest.SessionID = 0\n \t\trequest.SessionEpoch = -1\n \t}\n+\t// Version 8 is the same as version 7.\n+\tif bc.consumer.conf.Version.IsAtLeast(V2_0_0_0) {\n+\t\trequest.Version = 8\n+\t}\n+\t// Version 9 adds CurrentLeaderEpoch, as described in KIP-320.\n+\t// Version 10 indicates that we can use the ZStd compression algorithm, as\n+\t// described in KIP-110.\n \tif bc.consumer.conf.Version.IsAtLeast(V2_1_0_0) {\n \t\trequest.Version = 10\n \t}\n+\t// Version 11 adds RackID for KIP-392 fetch from closest replica\n \tif bc.consumer.conf.Version.IsAtLeast(V2_3_0_0) {\n \t\trequest.Version = 11\n \t\trequest.RackID = bc.consumer.conf.RackID\ndiff --git a/fetch_request.go b/fetch_request.go\nindex f96415b9..d1fd8138 100644\n--- a/fetch_request.go\n+++ b/fetch_request.go\n@@ -281,28 +281,28 @@ func (r *FetchRequest) isValidVersion() bool {\n \n func (r *FetchRequest) requiredVersion() KafkaVersion {\n \tswitch r.Version {\n-\tcase 0:\n-\t\treturn MinVersion\n-\tcase 1:\n-\t\treturn V0_9_0_0\n-\tcase 2:\n-\t\treturn V0_10_0_0\n-\tcase 3:\n-\t\treturn V0_10_1_0\n-\tcase 4, 5:\n-\t\treturn V0_11_0_0\n-\tcase 6:\n-\t\treturn V1_0_0_0\n-\tcase 7:\n-\t\treturn V1_1_0_0\n-\tcase 8:\n-\t\treturn V2_0_0_0\n-\tcase 9, 10:\n-\t\treturn V2_1_0_0\n \tcase 11:\n \t\treturn V2_3_0_0\n+\tcase 9, 10:\n+\t\treturn V2_1_0_0\n+\tcase 8:\n+\t\treturn V2_0_0_0\n+\tcase 7:\n+\t\treturn V1_1_0_0\n+\tcase 6:\n+\t\treturn V1_0_0_0\n+\tcase 4, 5:\n+\t\treturn V0_11_0_0\n+\tcase 3:\n+\t\treturn V0_10_1_0\n+\tcase 2:\n+\t\treturn V0_10_0_0\n+\tcase 1:\n+\t\treturn V0_9_0_0\n+\tcase 0:\n+\t\treturn V0_8_2_0\n \tdefault:\n-\t\treturn MaxVersion\n+\t\treturn V2_3_0_0\n \t}\n }\n \ndiff --git a/fetch_response.go b/fetch_response.go\nindex 7790b7dd..02e8ca47 100644\n--- a/fetch_response.go\n+++ b/fetch_response.go\n@@ -392,28 +392,28 @@ func (r *FetchResponse) isValidVersion() bool {\n \n func (r *FetchResponse) requiredVersion() KafkaVersion {\n \tswitch r.Version {\n-\tcase 0:\n-\t\treturn MinVersion\n-\tcase 1:\n-\t\treturn V0_9_0_0\n-\tcase 2:\n-\t\treturn V0_10_0_0\n-\tcase 3:\n-\t\treturn V0_10_1_0\n-\tcase 4, 5:\n-\t\treturn V0_11_0_0\n-\tcase 6:\n-\t\treturn V1_0_0_0\n-\tcase 7:\n-\t\treturn V1_1_0_0\n-\tcase 8:\n-\t\treturn V2_0_0_0\n-\tcase 9, 10:\n-\t\treturn V2_1_0_0\n \tcase 11:\n \t\treturn V2_3_0_0\n+\tcase 9, 10:\n+\t\treturn V2_1_0_0\n+\tcase 8:\n+\t\treturn V2_0_0_0\n+\tcase 7:\n+\t\treturn V1_1_0_0\n+\tcase 6:\n+\t\treturn V1_0_0_0\n+\tcase 4, 5:\n+\t\treturn V0_11_0_0\n+\tcase 3:\n+\t\treturn V0_10_1_0\n+\tcase 2:\n+\t\treturn V0_10_0_0\n+\tcase 1:\n+\t\treturn V0_9_0_0\n+\tcase 0:\n+\t\treturn V0_8_2_0\n \tdefault:\n-\t\treturn MaxVersion\n+\t\treturn V2_3_0_0\n \t}\n }\n \n"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "f05189d",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "f05189d68316e59046c1e00fe183aba87ae36286",
+  "parentSha": "6a2f0c282c2cc45b51d2b22995cd857993166011",
+  "prNumber": 2078,
+  "status": "certified",
+  "tests": [
+    "TestConsumerOffsetsAreManagedCorrectlyWithOffsetOldest",
+    "TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset"
+  ],
+  "packages": [
+    "./mocks"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestConsumerOffsetsAreManagedCorrectlyWithOffsetOldest (0.00s)\n    consumer_test.go:266: Expected offset of first message in the partition to be 0, got 1\n    consumer_test.go:271: Expected offset of second message in the partition to be 1, got 2\n--- FAIL: TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset (0.00s)\n    consumer_test.go:299: Expected offset of first message to be 123, got 1\n    consumer_test.go:304: Expected offset of second message to be 124, got 2\nFAIL\nFAIL\tgithub.com/Shopify/sarama/mocks\t0.315s\nFAIL\ngo: downloading github.com/klauspost/compress v1.13.6\ngo: downloading golang.org/x/net v0.0.0-20210917221730-978cfadd31cf\ngo: downloading golang.org/x/crypto v0.0.0-20210920023735-84f357641f63\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama/mocks\t0.280s\n",
+    "durationMs": 17095
+  },
+  "brief": {
+    "codename": "Offset Misalignment Case",
+    "symptoms": "The test suite reports that the first message offset is 1 instead of 0, and the second message offset is 2 instead of 1. A similar mismatch appears when a specific starting offset is requested.",
+    "evidence": "Expected offset of first message in the partition to be 0, got 1\nExpected offset of second message in the partition to be 1, got 2",
+    "hints": [
+      "The consumer reports an offset that is one higher than the expected value.",
+      "Check the mock implementation of the Consumer that generates messages for tests.",
+      "The mock's offset calculation does not handle the special 'oldest' marker correctly."
+    ],
+    "difficulty": 1,
+    "precinct": "consumer",
+    "lesson": "When a mock needs to emulate the 'oldest' offset marker, it must translate that marker to the true starting offset (zero) before incrementing.",
+    "tags": [
+      "mocks",
+      "offset-handling",
+      "test-fix"
+    ]
+  },
+  "original": {
+    "daysOpen": 39.7,
+    "comments": 3,
+    "reviewRounds": 1,
+    "mergedAt": "2022-01-13T07:05:55Z"
+  },
+  "bugAgeDays": 12,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/mocks/consumer.go b/mocks/consumer.go\nindex c10ae476..0d9396f3 100644\n--- a/mocks/consumer.go\n+++ b/mocks/consumer.go\n@@ -155,13 +155,19 @@ func (c *Consumer) ExpectConsumePartition(topic string, partition int32, offset\n \t}\n \n \tif c.partitionConsumers[topic][partition] == nil {\n+\t\thighWatermarkOffset := offset\n+\t\tif offset == sarama.OffsetOldest {\n+\t\t\thighWatermarkOffset = 0\n+\t\t}\n+\n \t\tc.partitionConsumers[topic][partition] = &PartitionConsumer{\n-\t\t\tt:         c.t,\n-\t\t\ttopic:     topic,\n-\t\t\tpartition: partition,\n-\t\t\toffset:    offset,\n-\t\t\tmessages:  make(chan *sarama.ConsumerMessage, c.config.ChannelBufferSize),\n-\t\t\terrors:    make(chan *sarama.ConsumerError, c.config.ChannelBufferSize),\n+\t\t\thighWaterMarkOffset: highWatermarkOffset,\n+\t\t\tt:                   c.t,\n+\t\t\ttopic:               topic,\n+\t\t\tpartition:           partition,\n+\t\t\toffset:              offset,\n+\t\t\tmessages:            make(chan *sarama.ConsumerMessage, c.config.ChannelBufferSize),\n+\t\t\terrors:              make(chan *sarama.ConsumerError, c.config.ChannelBufferSize),\n \t\t}\n \t}\n \n@@ -282,7 +288,7 @@ func (pc *PartitionConsumer) YieldMessage(msg *sarama.ConsumerMessage) *Partitio\n \n \tmsg.Topic = pc.topic\n \tmsg.Partition = pc.partition\n-\tmsg.Offset = atomic.AddInt64(&pc.highWaterMarkOffset, 1)\n+\tmsg.Offset = atomic.AddInt64(&pc.highWaterMarkOffset, 1) - 1\n \n \tpc.messages <- msg\n \n"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "385b3b4",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "385b3b435e85e6e3d1e29299b49330a0e9954f98",
+  "parentSha": "3364ff02d7e986ba0eb75d1c2dbb9a62a614dd15",
+  "prNumber": 2706,
+  "status": "certified",
+  "tests": [
+    "TestConsumerInvalidConfiguration",
+    "TestInvalidClientIDValidated",
+    "TestProducerWithInvalidConfiguration",
+    "TestSyncProducerInvalidConfiguration"
+  ],
+  "packages": [
+    ".",
+    "./mocks"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestInvalidClientIDValidated (0.00s)\n    config_test.go:50: \n        \tError Trace:\tconfig_test.go:50\n        \tError:      \tError \"kafka: invalid configuration (ClientID is invalid)\" does not contain \"ClientID value \\\"\\\" is not valid for Kafka versions before 1.0.0\"\n        \tTest:       \tTestInvalidClientIDValidated\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.103s\n--- FAIL: TestProducerWithInvalidConfiguration (0.00s)\n    async_producer_test.go:263: Unexpected error: Invalid mock configuration provided: kafka: invalid configuration (ClientID is invalid)\n--- FAIL: TestConsumerInvalidConfiguration (0.00s)\n    consumer_test.go:418: Unexpected error: Invalid mock configuration provided: kafka: invalid configuration (ClientID is invalid)\n--- FAIL: TestSyncProducerInvalidConfiguration (0.00s)\n    sync_producer_test.go:369: Unexpected error: Invalid mock configuration provided: kafka: invalid configuration (ClientID is invalid)\nFAIL\nFAIL\tgithub.com/IBM/sarama/mocks\t0.312s\nFAIL\ngo: downloading github.com/eapache/go-resiliency v1.4.0\ngo: downloading github.com/klauspost/compress v1.16.7\ngo: downloading github.com/pierrec/lz4/v4 v4.1.18\ngo: downloading github.com/stretchr/testify v1.8.4\ngo: downloading golang.org/x/net v0.17.0\ngo: downloading golang.org/x/crypto v0.14.0\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.085s\nok  \tgithub.com/IBM/sarama/mocks\t0.287s\n",
+    "durationMs": 53029
+  },
+  "brief": {
+    "codename": "Relaxed ClientID",
+    "symptoms": "The test suite fails with \"kafka: invalid configuration (ClientID is invalid)\" when a client ID containing a vertical bar (`|`) is used.",
+    "evidence": "=== RUN   TestInvalidClientIDValidated\nconfig_test.go:50: \n         Error Trace:    config_test.go:50\n         Error:           Error \"kafka: invalid configuration (ClientID is invalid)\" does not contain \"ClientID value \\\"\\\" is not valid for Kafka versions before 1.0.0\"\n         Test:            TestInvalidClientIDValidated\n--- FAIL: TestInvalidClientIDValidated (0.00s)\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.103s",
+    "hints": [
+      "When a client ID contains a vertical bar (`|`), the test suite reports an invalid configuration error.",
+      "The failure occurs in the configuration validation code for the `ClientID` field.",
+      "The validation logic checks the `ClientID` against a regular expression before version 1.0.0."
+    ],
+    "difficulty": 2,
+    "precinct": "client",
+    "lesson": "The fix removes the strict client‑ID regex for Kafka versions older than 1.0.0, aligning Sarama with KIP‑190 which moved validation to the broker side.",
+    "tags": [
+      "client-id",
+      "validation",
+      "kafka-version"
+    ]
+  },
+  "original": {
+    "daysOpen": 6.9,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2023-11-07T11:20:53Z"
+  },
+  "bugAgeDays": 2694,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/config.go b/config.go\nindex f9299a8c..ad970a3f 100644\n--- a/config.go\n+++ b/config.go\n@@ -15,7 +15,9 @@ import (\n \n const defaultClientID = \"sarama\"\n \n-var validID = regexp.MustCompile(`\\A[A-Za-z0-9._-]+\\z`)\n+// validClientID specifies the permitted characters for a client.id when\n+// connecting to Kafka versions before 1.0.0 (KIP-190)\n+var validClientID = regexp.MustCompile(`\\A[A-Za-z0-9._-]+\\z`)\n \n // Config is used to pass multiple configuration options to Sarama's constructors.\n type Config struct {\n@@ -846,8 +848,11 @@ func (c *Config) Validate() error {\n \tswitch {\n \tcase c.ChannelBufferSize < 0:\n \t\treturn ConfigurationError(\"ChannelBufferSize must be >= 0\")\n-\tcase !validID.MatchString(c.ClientID):\n-\t\treturn ConfigurationError(\"ClientID is invalid\")\n+\t}\n+\n+\t// only validate clientID locally for Kafka versions before KIP-190 was implemented\n+\tif !c.Version.IsAtLeast(V1_0_0_0) && !validClientID.MatchString(c.ClientID) {\n+\t\treturn ConfigurationError(fmt.Sprintf(\"ClientID value %q is not valid for Kafka versions before 1.0.0\", c.ClientID))\n \t}\n \n \treturn nil\n"
+}

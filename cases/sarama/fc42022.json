@@ -21,22 +21,22 @@
     "durationMs": 7564
   },
   "brief": {
-    "codename": "32-bit Overflow Guard",
-    "symptoms": "Running the Sarama library's metadata response tests on a 32-bit architecture causes a panic: `runtime error: makeslice: len out of range`. The failure occurs in `TestFlexibleMetadataResponseInvalidInt32ArrayLengthOverflow`.",
-    "evidence": "panic: runtime error: makeslice: len out of range\n--- FAIL: TestFlexibleMetadataResponseInvalidInt32ArrayLengthOverflow (0.00s)\nFAIL",
+    "codename": "32-bit Overflow Crash",
+    "symptoms": "Running the tests on a 32‑bit architecture causes a panic: `runtime error: makeslice: len out of range`. The failure occurs when decoding a metadata response that contains an array length that overflows a signed 32‑bit integer.",
+    "evidence": "panic: runtime error: makeslice: len out of range [recovered]\n... github.com/IBM/sarama.(*realFlexibleDecoder).getInt32Array ...",
     "hints": [
-      "The test failure mentions a panic about slice length being out of range, but does not name any specific function or identifier.",
-      "Inspect the metadata response decoding path, especially where array lengths are parsed from the binary payload.",
-      "Consider how signed vs unsigned integers behave differently on 32-bit systems when parsing lengths."
+      "The test fails when the broker sends an array length that is too large for a 32‑bit signed integer.",
+      "Look at the `realFlexibleDecoder.getInt32Array` method – it converts the length to an `int` without checking for overflow.",
+      "When the length is negative after conversion, the code attempts to allocate a slice with a negative size, causing the panic."
     ],
     "difficulty": 3,
     "precinct": "protocol",
-    "lesson": "When parsing binary lengths on 32-bit platforms, always use unsigned integer types for lengths and validate that the parsed value is non-negative before allocating slices. This prevents overflow and negative length panics.",
+    "lesson": "Use an `int64` check before allocating slices to guard against overflow on 32‑bit platforms.",
     "tags": [
+      "overflow",
       "32bit",
-      "metadata",
       "decoder",
-      "overflow"
+      "metadata-response"
     ]
   },
   "original": {

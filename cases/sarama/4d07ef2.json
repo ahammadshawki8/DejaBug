@@ -1,0 +1,53 @@
+{
+  "id": "4d07ef2",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "4d07ef2ec3f5307e12dc1ee66e6c7d0b885d0e2a",
+  "parentSha": "5dd9f4c6ef74ee3281479bc234644441b2893ac6",
+  "prNumber": 3741,
+  "status": "certified",
+  "tests": [
+    "TestRestrictApiVersion",
+    "TestRestrictApiVersionDoesNotRaiseVersionBeyondUserSetMax",
+    "TestRestrictApiVersionDoesNothingIfBrokerVersionRangeMissing",
+    "TestRestrictApiVersionLeavesVersionUnchangedWhenWithinRange",
+    "TestRestrictApiVersionLowersVersionToBrokerMax"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestRestrictApiVersion (0.00s)\n    --- FAIL: TestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised (0.00s)\n        api_versions_test.go:72: \n            \tError Trace:\tapi_versions_test.go:72\n            \tError:      \tExpected error with \"kafka server: The version of API is not supported\" in chain but got nil.\n            \tTest:       \tTestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.180s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.087s\n",
+    "durationMs": 7587
+  },
+  "brief": {
+    "codename": "Broker Compatibility Enigma",
+    "symptoms": "ClusterAdmin.DescribeCluster() returns io.EOF when the Kafka broker is older than version 2.8 after upgrading to v1.60.2.",
+    "evidence": "ERROR Closing socket for 10.12.36.50:9094-10.47.194.93:49678-7813801 because of error (kafka.network.Processor)\norg.apache.kafka.common.errors.InvalidRequestException: Unknown API key 60\nFAIL  github.com/IBM/sarama 0.180s\nFAIL",
+    "hints": [
+      "The client reports an error after reconnecting when the broker version is below 2.8.",
+      "Look at the API version negotiation logic in the client library.",
+      "When the broker advertises that an API is missing, the client should treat it as unsupported instead of sending the request."
+    ],
+    "difficulty": 2,
+    "precinct": "protocol",
+    "lesson": "A missing API key in the broker's version response must be treated as an unsupported API, not as a successful request. The client's version negotiation must short-circuit to a fallback path when the broker advertises that an API is absent.",
+    "tags": [
+      "api-version",
+      "fallback",
+      "broker-compatibility"
+    ]
+  },
+  "original": {
+    "daysOpen": 14.9,
+    "comments": 1,
+    "reviewRounds": 2,
+    "mergedAt": "2026-09-22T00:14:48Z"
+  },
+  "bugAgeDays": 117,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/api_versions.go b/api_versions.go\nindex 8de19469..c8327e6f 100644\n--- a/api_versions.go\n+++ b/api_versions.go\n@@ -25,6 +25,13 @@ func restrictApiVersion(pb protocolBody, brokerVersions apiVersionMap) error {\n \t\treturn nil\n \t}\n \n+\t// an empty map means ApiVersions was never negotiated; a populated one that\n+\t// omits this key means the broker does not have the API and would close the\n+\t// connection on the request\n+\tif len(brokerVersions) > 0 {\n+\t\treturn ErrUnsupportedVersion\n+\t}\n+\n \treturn nil // no version ranges available, no restriction\n }\n \ndiff --git a/broker.go b/broker.go\nindex 56110eae..4a5441a2 100644\n--- a/broker.go\n+++ b/broker.go\n@@ -1248,13 +1248,15 @@ func (b *Broker) sendAndReceive(req protocolBody, res protocolBody) error {\n // negotiateApiVersion clamps pb's version to the broker's advertised maximum\n // for pb's API (treating pb's current version as the client max). When the\n // broker has not advertised ApiVersions info, pb's version is left untouched\n-// (optimistic). Returns (0, false) if the resulting version is below\n-// minVersion.\n+// (optimistic). Returns (0, false) if the broker advertised ApiVersions info\n+// that omits pb's API, or if the resulting version is below minVersion.\n func (b *Broker) negotiateApiVersion(pb protocolBody, minVersion int16) (int16, bool) {\n \tb.lock.Lock()\n \tdefer b.lock.Unlock()\n \n-\t_ = restrictApiVersion(pb, b.brokerAPIVersions)\n+\tif err := restrictApiVersion(pb, b.brokerAPIVersions); err != nil {\n+\t\treturn 0, false\n+\t}\n \tif pb.version() < minVersion {\n \t\treturn 0, false\n \t}\n"
+}

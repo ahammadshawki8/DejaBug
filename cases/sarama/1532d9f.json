@@ -1,0 +1,49 @@
+{
+  "id": "1532d9f",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "1532d9f6ed61e181f7f13ce8c7f2d9ade3230f5b",
+  "parentSha": "2a5f0f6578e61e68fc9843802f384a098d32ac04",
+  "prNumber": 2548,
+  "status": "certified",
+  "tests": [
+    "TestAllocateBodyProtocolVersions"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestAllocateBodyProtocolVersions (0.00s)\n    --- FAIL: TestAllocateBodyProtocolVersions/1.1.0-DescribeConfigsRequest (0.00s)\n        request_test.go:244: \n            \tError Trace:\trequest_test.go:244\n            \tError:      \tNot equal: \n            \t            \texpected: sarama.KafkaVersion{version:[4]uint{0x1, 0x1, 0x0, 0x0}}\n            \t            \tactual  : sarama.KafkaVersion{version:[4]uint{0x1, 0x0, 0x0, 0x0}}\n            \t            \t\n            \t            \tDiff:\n            \t            \t--- Expected\n            \t            \t+++ Actual\n            \t            \t@@ -3,3 +3,3 @@\n            \t            \t   (uint) 1,\n            \t            \t-  (uint) 1,\n            \t            \t+  (uint) 0,\n            \t            \t   (uint) 0,\n            \tTest:       \tTestAllocateBodyProtocolVersions/1.1.0-DescribeConfigsRequest\n            \tMessages:   \t*sarama.DescribeConfigsRequest requiredVersion should match *sarama.DescribeConfigsResponse\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.086s\nFAIL\ngo: downloading github.com/klauspost/compress v1.16.6\ngo: downloading github.com/pierrec/lz4/v4 v4.1.17\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.085s\n",
+    "durationMs": 16111
+  },
+  "brief": {
+    "codename": "Mismatched Version Guard",
+    "symptoms": "The test suite reports that the requiredVersion of a DescribeConfigs request does not match the requiredVersion of its response.",
+    "evidence": "=== RUN   TestAllocateBodyProtocolVersions/1.1.0-DescribeConfigsRequest\nrequest_test.go:244: \n         Error Trace:    request_test.go:244\n         Error:           Not equal: \n                             expected: sarama.KafkaVersion{version:[4]uint{0x1, 0x1, 0x0, 0x0}}\n                             actual  : sarama.KafkaVersion{version:[4]uint{0x1, 0x0, 0x0, 0x0}}\n                             \n                             Diff:\n                             --- Expected\n                             +++ Actual\n                             @@ -3,3 +3,3 @@\n                             \t    (uint) 1,\n                             - (uint) 1,\n                             + (uint) 0,\n                             \t    (uint) 0,\n                             \n                             Messages:        *sarama.DescribeConfigsRequest requiredVersion should match *sarama.DescribeConfigsResponse\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.086s",
+    "hints": [
+      "The test fails when the request and response versions are different.",
+      "Check the package that handles protocol version negotiation for requests and responses.",
+      "The bug is caused by returning the wrong version constant for a specific protocol version."
+    ],
+    "difficulty": 1,
+    "precinct": "protocol",
+    "lesson": "When handling protocol versions, always return the correct requiredVersion constant for both request and response to keep them in sync.",
+    "tags": [
+      "protocol",
+      "versioning",
+      "request-response"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 0,
+    "reviewRounds": 1,
+    "mergedAt": "2023-08-03T13:42:51Z"
+  },
+  "bugAgeDays": 1,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/describe_configs_request.go b/describe_configs_request.go\nindex 2d2d906c..d0ab0d6e 100644\n--- a/describe_configs_request.go\n+++ b/describe_configs_request.go\n@@ -109,11 +109,13 @@ func (r *DescribeConfigsRequest) isValidVersion() bool {\n \n func (r *DescribeConfigsRequest) requiredVersion() KafkaVersion {\n \tswitch r.Version {\n-\tcase 1:\n-\t\treturn V1_1_0_0\n \tcase 2:\n \t\treturn V2_0_0_0\n-\tdefault:\n+\tcase 1:\n+\t\treturn V1_1_0_0\n+\tcase 0:\n \t\treturn V0_11_0_0\n+\tdefault:\n+\t\treturn V2_0_0_0\n \t}\n }\ndiff --git a/describe_configs_response.go b/describe_configs_response.go\nindex 772d06b8..8aed5de8 100644\n--- a/describe_configs_response.go\n+++ b/describe_configs_response.go\n@@ -122,12 +122,14 @@ func (r *DescribeConfigsResponse) isValidVersion() bool {\n \n func (r *DescribeConfigsResponse) requiredVersion() KafkaVersion {\n \tswitch r.Version {\n-\tcase 1:\n-\t\treturn V1_0_0_0\n \tcase 2:\n \t\treturn V2_0_0_0\n-\tdefault:\n+\tcase 1:\n+\t\treturn V1_1_0_0\n+\tcase 0:\n \t\treturn V0_11_0_0\n+\tdefault:\n+\t\treturn V2_0_0_0\n \t}\n }\n \n"
+}

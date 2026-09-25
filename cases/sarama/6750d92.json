@@ -1,0 +1,49 @@
+{
+  "id": "6750d92",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "6750d926bb1148bab75ac05865df05b41013ce20",
+  "parentSha": "6228349b4f9206c2b9b84d7b79be03beefcb06d5",
+  "prNumber": 2285,
+  "status": "certified",
+  "tests": [
+    "TestBalanceStrategyRange"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestBalanceStrategyRange (0.00s)\n    --- FAIL: TestBalanceStrategyRange/2_members,_1_topic_with_duplicate_assignments,_8_partitions_each (0.00s)\n        balance_strategy_test.go:92: Plan does not match expectation\n            expected: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1, 2, 3}}, \"M2\":map[string][]int32{\"T1\":[]int32{4, 5, 6, 7}}}\n            actual: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1, 2, 3, 4, 5, 6, 7}}}\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.075s\nFAIL\ngo: downloading github.com/jcmturner/gofork v1.0.0\ngo: downloading github.com/eapache/go-resiliency v1.2.0\ngo: downloading github.com/jcmturner/gokrb5/v8 v8.4.2\ngo: downloading golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2\ngo: downloading github.com/klauspost/compress v1.15.6\ngo: downloading github.com/pierrec/lz4/v4 v4.1.14\ngo: downloading github.com/stretchr/testify v1.7.1\ngo: downloading gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b\ngo: downloading golang.org/x/crypto v0.0.0-20220214200702-86341886e292\ngo: downloading github.com/hashicorp/go-uuid v1.0.2\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.076s\n",
+    "durationMs": 44200
+  },
+  "brief": {
+    "codename": "Balancing Act Mystery",
+    "symptoms": "The test `TestBalanceStrategyRange` fails with \"Plan does not match expectation\". The actual plan contains duplicate member assignments for topic `T1` on member `M1`.",
+    "evidence": "expected: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1, 2, 3}}, \"M2\":map[string][]int32{\"T1\":[]int32{4, 5, 6, 7}}}\nactual: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1, 2, 3, 4, 5, 6, 7}}}",
+    "hints": [
+      "The consumer group reports an unexpected number of assignments for a topic.",
+      "Examine the balance strategy that builds the plan for each topic.",
+      "The plan shows the same partition numbers assigned to multiple members."
+    ],
+    "difficulty": 1,
+    "precinct": "consumer-group",
+    "lesson": "Removing duplicate member IDs from the metadata and sorting them before building the plan restores the expected partition distribution.",
+    "tags": [
+      "balance-strategy",
+      "consumer-group",
+      "deduplication"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.3,
+    "comments": 0,
+    "reviewRounds": 0,
+    "mergedAt": "2022-07-20T21:54:25Z"
+  },
+  "bugAgeDays": 446,
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/balance_strategy.go b/balance_strategy.go\nindex 49c1a40b..716da90c 100644\n--- a/balance_strategy.go\n+++ b/balance_strategy.go\n@@ -117,18 +117,27 @@ func (s *balanceStrategy) Plan(members map[string]ConsumerGroupMemberMetadata, t\n \t\t}\n \t}\n \n-\t// Sort members for each topic\n-\tfor topic, memberIDs := range mbt {\n-\t\tsort.Sort(&balanceStrategySortable{\n-\t\t\ttopic:     topic,\n-\t\t\tmemberIDs: memberIDs,\n-\t\t})\n+\t// func to sort and de-duplicate a StringSlice\n+\tuniq := func(ss sort.StringSlice) []string {\n+\t\tif ss.Len() < 2 {\n+\t\t\treturn ss\n+\t\t}\n+\t\tsort.Sort(ss)\n+\t\tvar i, j int\n+\t\tfor i = 1; i < ss.Len(); i++ {\n+\t\t\tif ss[i] == ss[j] {\n+\t\t\t\tcontinue\n+\t\t\t}\n+\t\t\tj++\n+\t\t\tss.Swap(i, j)\n+\t\t}\n+\t\treturn ss[:j+1]\n \t}\n \n \t// Assemble plan\n \tplan := make(BalanceStrategyPlan, len(members))\n \tfor topic, memberIDs := range mbt {\n-\t\ts.coreFn(plan, memberIDs, topic, topics[topic])\n+\t\ts.coreFn(plan, uniq(memberIDs), topic, topics[topic])\n \t}\n \treturn plan, nil\n }\n@@ -138,31 +147,6 @@ func (s *balanceStrategy) AssignmentData(memberID string, topics map[string][]in\n \treturn nil, nil\n }\n \n-type balanceStrategySortable struct {\n-\ttopic     string\n-\tmemberIDs []string\n-}\n-\n-func (p balanceStrategySortable) Len() int { return len(p.memberIDs) }\n-func (p balanceStrategySortable) Swap(i, j int) {\n-\tp.memberIDs[i], p.memberIDs[j] = p.memberIDs[j], p.memberIDs[i]\n-}\n-\n-func (p balanceStrategySortable) Less(i, j int) bool {\n-\treturn balanceStrategyHashValue(p.topic, p.memberIDs[i]) < balanceStrategyHashValue(p.topic, p.memberIDs[j])\n-}\n-\n-func balanceStrategyHashValue(vv ...string) uint32 {\n-\th := uint32(2166136261)\n-\tfor _, s := range vv {\n-\t\tfor _, c := range s {\n-\t\t\th ^= uint32(c)\n-\t\t\th *= 16777619\n-\t\t}\n-\t}\n-\treturn h\n-}\n-\n type stickyBalanceStrategy struct {\n \tmovements partitionMovements\n }\n"
+}

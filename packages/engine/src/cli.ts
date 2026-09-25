@@ -9,6 +9,7 @@ import { ADAPTERS, detectAdapter } from "./adapters/index.js";
 import { certify } from "./certifier.js";
 import { assembleCase, bugAgeDays } from "./assemble.js";
 import { brief } from "./briefer.js";
+import { casesNeedingRename, ensureUniqueCodenames, watsonxNamer } from "./codenames.js";
 import { findRepoRoot, loadConfig, normalizeSlug, type Config, type LlmProvider } from "./config.js";
 import { git } from "./git.js";
 import { createGitHubClient, fetchContext, fetchOriginalEffort } from "./github.js";
@@ -30,6 +31,20 @@ import type { CandidatesFile, ForgeEvent } from "./types.js";
 /** Resolves CLI paths against the directory the user ran the command from (npm sets INIT_CWD). */
 function fromInvocationDir(p: string): string {
   return path.resolve(process.env.INIT_CWD ?? process.cwd(), p);
+}
+
+async function renameDuplicateCodenames(cfg: Config): Promise<void> {
+  const cases = readCases(cfg.casesDir);
+  if (casesNeedingRename(cases).length === 0) return;
+  if (!cfg.watsonx.apiKey || !cfg.watsonx.modelId) {
+    console.log("duplicate codenames found; set watsonx credentials and run `dejabug codenames`");
+    return;
+  }
+  const renamed = await ensureUniqueCodenames(cases, watsonxNamer(cfg));
+  for (const c of renamed) {
+    writeCase(cfg.casesDir, c);
+    console.log(`  renamed ${c.id} -> "${c.brief.codename}"`);
+  }
 }
 
 const program = new Command();
@@ -269,8 +284,16 @@ program
       console.log(
         `\n${written}/${queue.length} case files written to ${path.relative(process.cwd(), cfg.casesDir)}`,
       );
+      await renameDuplicateCodenames(cfg);
     },
   );
+
+program
+  .command("codenames")
+  .description("give every case a unique codename (renames duplicates with the watsonx model)")
+  .action(async () => {
+    await renameDuplicateCodenames(config());
+  });
 
 program
   .command("models")

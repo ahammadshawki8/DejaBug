@@ -1,0 +1,49 @@
+{
+  "id": "67d977b",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "67d977b9197bd3993b1dfc606f46b5fa097f5bba",
+  "parentSha": "e5f5d5b31329759cfd024a822c7a5a65a35fa34c",
+  "prNumber": 2378,
+  "status": "certified",
+  "tests": [
+    "TestAsyncProducerIdempotentRetryCheckBatch_2378"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "om/Shopify/sarama.newAsyncProducer in goroutine 7\n\t/async_producer.go:136 +0x325\n\ngoroutine 38 [chan receive]:\ngithub.com/Shopify/sarama.(*asyncProducer).retryHandler(0x2ecf00754000)\n\t/async_producer.go:1214 +0x168\ngithub.com/Shopify/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.newAsyncProducer in goroutine 7\n\t/async_producer.go:137 +0x3b6\n\ngoroutine 50 [chan receive]:\ngithub.com/Shopify/sarama.(*topicProducer).dispatch(0x2ecf006961c0)\n\t/async_producer.go:499 +0x4e\ngithub.com/Shopify/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.(*asyncProducer).newTopicProducer in goroutine 37\n\t/async_producer.go:494 +0x1dc\n\ngoroutine 12 [chan receive]:\ngithub.com/Shopify/sarama.(*partitionProducer).dispatch(0x2ecf00530240)\n\t/async_producer.go:644 +0x18a\ngithub.com/Shopify/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.(*asyncProducer).newPartitionProducer in goroutine 50\n\t/async_producer.go:599 +0x1cc\n\ngoroutine 43 [select]:\ngithub.com/Shopify/sarama.(*brokerProducer).run(0x2ecf0070cae0)\n\t/async_producer.go:916 +0x17b\ngithub.com/Shopify/sarama.withRecover(0x7ff7449d0013?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.(*asyncProducer).newBrokerProducer in goroutine 12\n\t/async_producer.go:790 +0x248\n\ngoroutine 52 [IO wait]:\ninternal/poll.runtime_pollWait(0x27df3f90800, 0x72)\n\tC:/Program Files/Go/src/runtime/netpoll.go:351 +0x85\ninternal/poll.(*pollDesc).wait(0x2ecf005dba01?, 0x7f0000000001?, 0x0)\n\tC:/Program Files/Go/src/internal/poll/fd_poll_runtime.go:84 +0x27\ninternal/poll.(*FD).waitIO(0x2ecf006c4000, 0x2ecf0046eb70)\n\tC:/Program Files/Go/src/internal/poll/fd_windows.go:233 +0x3d\ninternal/poll.(*FD).execIO(0x2ecf006c4000, 0x72, 0x2ecf005dbc50, {0x2ecf005dbc10, 0x1, 0x0?})\n\tC:/Program Files/Go/src/internal/poll/fd_windows.go:310 +0x27e\ninternal/poll.(*FD).Read(0x2ecf006c4000, {0x2ecf00784710, 0x4, 0x4})\n\tC:/Program Files/Go/src/internal/poll/fd_windows.go:611 +0x21f\nnet.(*netFD).Read(0x2ecf006c4000, {0x2ecf00784710?, 0x27dae9b0e50?, 0x2ecf00784710?})\n\tC:/Program Files/Go/src/net/fd_posix.go:68 +0x25\nnet.(*conn).Read(0x2ecf00682020, {0x2ecf00784710?, 0x2ecf005dbd60?, 0x7ff74408a1e9?})\n\tC:/Program Files/Go/src/net/net.go:196 +0x45\nio.ReadAtLeast({0x7ff7449cdea8, 0x2ecf00682020}, {0x2ecf00784710, 0x4, 0x4}, 0x4)\n\tC:/Program Files/Go/src/io/io.go:335 +0x83\nio.ReadFull(...)\n\tC:/Program Files/Go/src/io/io.go:354\ngithub.com/Shopify/sarama.(*MockBroker).readToBytes(0x7ff744a293e0?, {0x7ff7449cdea8, 0x2ecf00682020})\n\t/mockbroker.go:194 +0x5c\ngithub.com/Shopify/sarama.(*MockBroker).handleRequests(0x2ecf005ba000, {0x27df3f91230, 0x2ecf00682020}, 0x1, 0x0?)\n\t/mockbroker.go:244 +0x2cb\ncreated by github.com/Shopify/sarama.(*MockBroker).serverLoop in goroutine 18\n\t/mockbroker.go:177 +0xff\n\ngoroutine 66 [select]:\ngithub.com/Shopify/sarama.(*MockBroker).handleRequests.func2()\n\t/mockbroker.go:234 +0x65\ncreated by github.com/Shopify/sarama.(*MockBroker).handleRequests in goroutine 52\n\t/mockbroker.go:233 +0x288\n\ngoroutine 21 [chan receive]:\ngithub.com/Shopify/sarama.(*Broker).responseReceiver(0x2ecf00750008)\n\t/broker.go:1115 +0x6d\ngithub.com/Shopify/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.(*Broker).Open.func1 in goroutine 13\n\t/broker.go:254 +0x1059\n\ngoroutine 45 [chan receive]:\ngithub.com/Shopify/sarama.(*asyncProducer).newBrokerProducer.func2()\n\t/async_producer.go:853 +0xbc\ngithub.com/Shopify/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.(*asyncProducer).newBrokerProducer in goroutine 12\n\t/async_producer.go:849 +0x3b8\n\ngoroutine 44 [chan receive]:\ngithub.com/Shopify/sarama.(*asyncProducer).newBrokerProducer.func1()\n\t/async_producer.go:797 +0x74\ngithub.com/Shopify/sarama.withRecover(0x0?)\n\t/utils.go:43 +0x33\ncreated by github.com/Shopify/sarama.(*asyncProducer).newBrokerProducer in goroutine 12\n\t/async_producer.go:793 +0x318\nFAIL\tgithub.com/Shopify/sarama\t45.098s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.748s\n",
+    "durationMs": 146537
+  },
+  "brief": {
+    "codename": "The Phantom Batch",
+    "symptoms": "The producer hangs indefinitely after a batch of messages fails to send.",
+    "evidence": "goroutine 7 [chan receive]:\n\tgithub.com/Shopify/sarama.(*asyncProducer).retryHandler(0x2ecf00754000)\n\t/async_producer.go:1214 +0x168\nFAIL github.com/Shopify/sarama 45.098s",
+    "hints": [
+      "The producer reports an error after a batch fails to send.",
+      "Look at the asyncProducer package - the retryHandler function.",
+      "When a batch cannot be sent, the producer should report an error for each message in the batch."
+    ],
+    "difficulty": 2,
+    "precinct": "producer",
+    "lesson": "Returning an error for every message in a failed batch prevents the producer from getting stuck in an infinite retry loop.",
+    "tags": [
+      "producer",
+      "retry",
+      "error-handling"
+    ]
+  },
+  "original": {
+    "daysOpen": 46.2,
+    "comments": 6,
+    "reviewRounds": 1,
+    "mergedAt": "2022-12-22T11:31:55Z"
+  },
+  "bugAgeDays": 1543,
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/async_producer.go b/async_producer.go\nindex 61746c8f..50f226f8 100644\n--- a/async_producer.go\n+++ b/async_producer.go\n@@ -1161,7 +1161,7 @@ func (p *asyncProducer) retryBatch(topic string, partition int32, pSet *partitio\n \tproduceSet.bufferCount += len(pSet.msgs)\n \tfor _, msg := range pSet.msgs {\n \t\tif msg.retries >= p.conf.Producer.Retry.Max {\n-\t\t\tp.returnError(msg, kerr)\n+\t\t\tp.returnErrors(pSet.msgs, kerr)\n \t\t\treturn\n \t\t}\n \t\tmsg.retries++\n"
+}
