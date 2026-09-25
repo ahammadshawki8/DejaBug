@@ -12,6 +12,9 @@
   "packages": [
     "."
   ],
+  "testFiles": [
+    "describe_groups_response_test.go"
+  ],
   "certification": {
     "failRuns": 3,
     "passRuns": 1,

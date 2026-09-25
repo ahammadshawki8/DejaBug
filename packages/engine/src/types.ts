@@ -74,6 +74,7 @@ export interface Case {
   status: "certified";
   tests: string[];
   packages: string[];
+  testFiles: string[]; // overlaid onto the playground at the parent commit
   certification: Omit<Certification, "fixSha" | "status">;
   brief: Brief;
   original: OriginalEffort;
@@ -84,7 +85,44 @@ export interface Case {
 }
 
 /** Case as served before reveal: the fix diff is withheld. */
-export type PublicCase = Omit<Case, "fixDiff">;
+/**
+ * Case as served before a solve: the fix diff, the lesson and the hints are withheld
+ * (hints are unlocked one by one through the hint endpoint).
+ */
+export type PublicCase = Omit<Case, "fixDiff" | "brief"> & {
+  brief: Omit<Brief, "hints" | "lesson">;
+  hintCount: number;
+};
+
+/** Player progress on one case (persisted by the server). */
+export interface CaseSession {
+  caseId: string;
+  repo: string;
+  startedAt?: string;
+  playgroundPath?: string;
+  hintsRevealed: number;
+  verifyRuns: number;
+  solvedAt?: string;
+  gaveUpAt?: string;
+}
+
+export interface VerifyResult {
+  pass: boolean;
+  outcome: "pass" | "fail" | "hang" | "build" | "notest";
+  failingTests: string[];
+  output: string;
+  durationMs: number;
+}
+
+/** Everything the debrief shows once a case is solved or abandoned. */
+export interface Reveal {
+  fixDiff: string;
+  playerDiff: string;
+  lesson: string;
+  hints: [string, string, string];
+  original: OriginalEffort;
+  prNumber?: number;
+}
 
 export interface Funnel {
   repo: string;
@@ -109,5 +147,7 @@ export type ForgeEvent =
   | { type: "stage"; worker: number; fixSha: string; stage: ForgeStage; detail?: string }
   | { type: "run"; worker: number; fixSha: string; phase: "fail" | "pass"; attempt: number; ok: boolean }
   | { type: "result"; worker: number; fixSha: string; status: CertificationStatus }
+  | { type: "briefed"; worker: number; fixSha: string; ok: boolean; codename?: string }
+  | { type: "log"; message: string }
   | { type: "funnel"; funnel: Funnel }
   | { type: "done" };

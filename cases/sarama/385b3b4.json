@@ -16,6 +16,12 @@
     ".",
     "./mocks"
   ],
+  "testFiles": [
+    "config_test.go",
+    "mocks/async_producer_test.go",
+    "mocks/consumer_test.go",
+    "mocks/sync_producer_test.go"
+  ],
   "certification": {
     "failRuns": 3,
     "passRuns": 1,

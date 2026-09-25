@@ -17,6 +17,9 @@
   "packages": [
     "."
   ],
+  "testFiles": [
+    "consumer_test.go"
+  ],
   "certification": {
     "failRuns": 3,
     "passRuns": 1,

@@ -105,6 +105,7 @@ export function assembleCase(input: AssembleInput): Case {
     status: "certified",
     tests: candidate.tests,
     packages: candidate.packages,
+    testFiles: candidate.testFiles,
     certification: {
       failRuns: certification.failRuns,
       passRuns: certification.passRuns,
