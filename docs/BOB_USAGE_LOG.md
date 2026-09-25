@@ -5,6 +5,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | # | Member | Tier/item | Mode(s) | Bob features used | Coins | Screenshot |
 |---|---|---|---|---|---|---|
 | 1 | ahammadshawki8 | T1.1 engine plan | Plan | Plan mode, context mentions (@PROJECT.md, @types.ts), document understanding | 0.555 | dejabug_task01_engine_plan_summary.png |
+| 2 | ahammadshawki8 | T2.1 certifier core | Plan, Agent | Plan mode, Agent mode, context mentions, terminal execution (go test) | 3.33 | dejabug_task02_certifier_core_summary.png |
 
 ## Claude Code / Codex work
 
@@ -14,3 +15,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 |---|---|---|---|---|
 | 2026-09-26 | T0.3-T0.5 | Claude Code | package.json, tsconfig.base.json, eslint.config.js, vitest.config.ts, packages/engine/*, apps/web/*, .env.example, .github/workflows/ci.yml | Scaffold, config, CI |
 | 2026-09-26 | T1.2-T1.3 | Claude Code | packages/engine/src/miner.ts, git.ts, cli.ts (mine), miner.test.ts, test/fixture-repo.ts, cases/sarama/candidates.json | Miner + tests |
+| 2026-09-26 | Review of T2.1 | Claude Code | docs/reviews/REVIEW-T2.1.md | Review only, no code changes |

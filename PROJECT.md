@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T2 Certifier |
-| Next item | T2.1 |
+| Next item | T2.2 |
 | Next owner | BOB |
-| Last updated | 2026-09-26 00:15 BST |
-| Bobcoins used | 0.555 / 40 |
+| Last updated | 2026-09-26 00:45 BST |
+| Bobcoins used | 3.885 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
 ---
@@ -439,7 +439,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] **Done when:** `dejabug mine --repo workspace/sarama --out cases/sarama/candidates.json` outputs 150 or more candidates in under 30 s. **Result: 101 candidates in 10 s.** The 150 target was a pre-measurement estimate. The shortfall is sarama's broker-only functional tests (55 commits), which can never be certified locally. 101 is ample for the 12-case target (see docs/DECISIONS.md).
 
 ### T2 Certifier (4 h), target Sat 6:00 AM, **M1**
-- [ ] T2.1 [BOB] `certifier.ts` core: worktree lifecycle, test overlay from the fix commit, go test runner with timeout, output parsing (build failure vs test failure), the 3-run fail rule and 1-run pass rule, and every rejection status.
+- [x] T2.1 [BOB] `certifier.ts` core: worktree lifecycle, test overlay from the fix commit, go test runner with timeout, output parsing (build failure vs test failure), the 3-run fail rule and 1-run pass rule, and every rejection status.
 - [ ] T2.2 [BOB] Parallel certification pool (default concurrency 4) with a typed progress event emitter. This is our "parallel" evidence.
 - [ ] T2.3 [CLAUDE] `funnel.json` writer, the `dejabug certify --limit N` CLI command, and certifier unit tests.
 - [ ] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
@@ -655,3 +655,4 @@ Human, do this:
 - **2026-09-25 23:00:** Idea locked (DejaBug). Demo repo chosen: IBM/sarama, with 174 candidate fixes measured. Workspace, Bob config, submission templates, and the check scripts are in place. Bob Shell 2.0.5 is installed. Bob IDE is being installed.
 - **2026-09-26 00:10:** T0 done (Claude): npm workspaces (engine + web), TypeScript 5.9, vitest 5, eslint 10, prettier, Vite 8 + React 18, CI workflow, and .env.example. The engine has types.ts (the case contract), config.ts, and `dejabug doctor` / `serve` (health endpoint). Gate green locally. Next: T1.1 [BOB].
 - **2026-09-26 00:15:** T1 done. T1.1 (Bob, Plan mode, 0.555 coins) produced docs/ENGINE_PLAN.md. T1.2-T1.3 (Claude): miner.ts, git.ts, the `dejabug mine` CLI, and fixture-repo tests (17 tests green). sarama: 2,889 commits, 703 fix-like, 101 runnable candidates in cases/sarama/candidates.json. Next: T2.1 [BOB] certifier core.
+- **2026-09-26 00:45:** T2.1 done by Bob (3.33 coins, Plan then Agent). Claude review (docs/reviews/REVIEW-T2.1.md) found 3 correctness defects, all verified with go test: build failures read as test failures, unanchored -run, and no-tests-to-run read as a pass. It also found robustness issues and lint errors. They are bundled into Bob's T2.2 task. T2.1 is committed locally and not pushed until lint passes.
