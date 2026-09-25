@@ -1,0 +1,195 @@
+{
+  "repo": "IBM/sarama",
+  "generatedAt": "2026-09-26T05:10:00Z",
+  "cases": [
+    {
+      "fixSha": "fc42022",
+      "teachingValue": 5,
+      "difficulty": 3,
+      "precinct": "protocol",
+      "reason": "Demonstrates critical stability issue with integer overflow in byte decoding and array allocation, affecting multiple decoder layers"
+    },
+    {
+      "fixSha": "06513c1",
+      "teachingValue": 5,
+      "difficulty": 3,
+      "precinct": "producer",
+      "reason": "Resolves deadlock during broker shutdown by implementing proper goroutine synchronization with wait groups"
+    },
+    {
+      "fixSha": "40b52c5",
+      "teachingValue": 5,
+      "difficulty": 2,
+      "precinct": "consumer",
+      "reason": "FetchRequest version negotiation spans multiple API versions with complex backwards compatibility and protocol feature evolution"
+    },
+    {
+      "fixSha": "4d07ef2",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "protocol",
+      "reason": "Teaches error handling in protocol negotiation and how to distinguish between missing broker API versions and actual version negotiation failures"
+    },
+    {
+      "fixSha": "6b4f9be",
+      "teachingValue": 4,
+      "difficulty": 3,
+      "precinct": "consumer-group",
+      "reason": "Teaches synchronization and ordering guarantees in offset commit operations, demonstrating proper lock management and broker coordination"
+    },
+    {
+      "fixSha": "05cb9fa",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "consumer-group",
+      "reason": "Teaches context cancellation handling and how to avoid retries on intentional context termination"
+    },
+    {
+      "fixSha": "e9bd1b8",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "protocol",
+      "reason": "Protocol version handling for consumer group metadata - decoding logic across V0-V3 with new fields and version-aware branching"
+    },
+    {
+      "fixSha": "66e60c7",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "consumer-group",
+      "reason": "Consumer group coordinator discovery - prevents infinite retry loop by checking retry limit and decrementing count properly"
+    },
+    {
+      "fixSha": "67d977b",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "producer",
+      "reason": "Demonstrates batch error handling edge case where returning single error instead of all errors leaves messages unresolved, causing producer hang"
+    },
+    {
+      "fixSha": "3d317e1",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "consumer-group",
+      "reason": "Range balance strategy uses incorrect math formula for partition distribution; teaches debugging of algorithm-based bugs and spec compliance"
+    },
+    {
+      "fixSha": "3c1940a",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "consumer-group",
+      "reason": "OffsetsLoadInProgress error during join/sync not handled, causing session failures; shows importance of comprehensive error handling in rebalancing state machine"
+    },
+    {
+      "fixSha": "5c6b581",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "producer",
+      "reason": "Demonstrates idempotent producer epoch management and recovery from state exhaustion with MaxInt16 boundary"
+    },
+    {
+      "fixSha": "df0fb3d",
+      "teachingValue": 4,
+      "difficulty": 2,
+      "precinct": "consumer-group",
+      "reason": "Fixes protocol compliance in consumer group metadata decoding with version-aware handling of optional fields"
+    },
+    {
+      "fixSha": "385b3b4",
+      "teachingValue": 3,
+      "difficulty": 2,
+      "precinct": "client",
+      "reason": "Shows version-aware configuration validation and how to handle Kafka protocol changes across versions"
+    },
+    {
+      "fixSha": "2e077cf",
+      "teachingValue": 3,
+      "difficulty": 1,
+      "precinct": "consumer",
+      "reason": "Demonstrates proper default value handling for version-dependent offset retention semantics"
+    },
+    {
+      "fixSha": "1532d9f",
+      "teachingValue": 3,
+      "difficulty": 1,
+      "precinct": "protocol",
+      "reason": "Protocol version consistency - ensures request/response protocol versions match across DescribeConfigs with version-specific branching"
+    },
+    {
+      "fixSha": "7888004",
+      "teachingValue": 3,
+      "difficulty": 2,
+      "precinct": "admin",
+      "reason": "Admin client retry loop control - refactors retry logic to properly track attempts and handle exhaustion condition"
+    },
+    {
+      "fixSha": "ebc05cc",
+      "teachingValue": 3,
+      "difficulty": 2,
+      "precinct": "admin",
+      "reason": "DeleteRecords returns early on first broker failure instead of collecting all errors; demonstrates error aggregation pattern in multi-partition operations"
+    },
+    {
+      "fixSha": "d5f076b",
+      "teachingValue": 3,
+      "difficulty": 2,
+      "precinct": "producer",
+      "reason": "Addresses edge case where management messages leak during broker restarts and reconnection"
+    },
+    {
+      "fixSha": "6750d92",
+      "teachingValue": 3,
+      "difficulty": 1,
+      "precinct": "consumer-group",
+      "reason": "Duplicate member IDs in balance strategy cause incorrect partition assignment; shows importance of deduplication in rebalancing"
+    },
+    {
+      "fixSha": "2f8dcd0",
+      "teachingValue": 2,
+      "difficulty": 1,
+      "precinct": "consumer",
+      "reason": "Mock consumer high water mark offset - removes spurious offset increment in mock implementation"
+    },
+    {
+      "fixSha": "3ba807b",
+      "teachingValue": 2,
+      "difficulty": 1,
+      "precinct": "admin",
+      "reason": "Admin client retry boundary condition - off-by-one error in max retry count initialization"
+    },
+    {
+      "fixSha": "9b0419d",
+      "teachingValue": 2,
+      "difficulty": 1,
+      "precinct": "consumer-group",
+      "reason": "Simple nil pointer guard in client factory, demonstrates basic defensive programming"
+    },
+    {
+      "fixSha": "39cc66a",
+      "teachingValue": 2,
+      "difficulty": 1,
+      "precinct": "protocol",
+      "reason": "Unnecessary field in protocol response struct causes encoding/decoding mismatch; demonstrates struct field scope importance"
+    },
+    {
+      "fixSha": "7d8b292",
+      "teachingValue": 2,
+      "difficulty": 1,
+      "precinct": "consumer",
+      "reason": "Mock broker hardcodes version instead of echoing request version; teaches protocol version negotiation concepts through test infrastructure"
+    },
+    {
+      "fixSha": "f05189d",
+      "teachingValue": 2,
+      "difficulty": 1,
+      "precinct": "consumer",
+      "reason": "Corrects off-by-one error in mock consumer offset tracking for initial offset setup"
+    },
+    {
+      "fixSha": "f436782",
+      "teachingValue": 1,
+      "difficulty": 1,
+      "precinct": "client",
+      "reason": "Error message formatting optimization for cleaner output when multiple errors are wrapped"
+    }
+  ]
+}
