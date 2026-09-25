@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/*
+ * DejaBug design tokens (PROJECT.md 6A.3). Components use these names only; never raw hex values.
+ * Tailwind exposes them as utilities: bg-ink, text-amber, font-display, shadow-hard, and so on.
+ */
+@theme {
+  --color-ink: #0b1426;
+  --color-navy: #14223f;
+  --color-navy-2: #1e3159;
+  --color-line: #05080f;
+  --color-manila: #e8d49b;
+  --color-manila-deep: #d9c07c;
+  --color-paper: #f7f1e1;
+  --color-cork: #b98a5a;
+  --color-cork-deep: #8f6640;
+  --color-stamp: #d7263d;
+  --color-amber: #ffb627;
+  --color-pass: #2fa84f;
+  --color-muted: #8a93a6;
+  --color-text-dark: #1a1a1a;
+
+  --font-display: "Silkscreen", ui-monospace, monospace;
+  --font-typewriter: "Special Elite", "Courier New", monospace;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --shadow-hard: 4px 4px 0 var(--color-line);
+  --shadow-hard-sm: 2px 2px 0 var(--color-line);
+  --shadow-hard-lg: 6px 6px 0 var(--color-line);
+
+  --radius-game: 2px;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Visible amber focus ring on every interactive element (6A.11). */
+  :focus-visible {
+    outline: 3px solid var(--color-amber);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-line);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Cork board: a CSS pattern, no images (6A.7 W1). */
+  .cork {
+    background-color: var(--color-cork);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgb(0 0 0 / 0.08) 1px, transparent 1.5px),
+      radial-gradient(circle at 70% 60%, rgb(255 255 255 / 0.07) 1px, transparent 1.5px),
+      radial-gradient(circle at 40% 80%, rgb(0 0 0 / 0.06) 1.5px, transparent 2px);
+    background-size:
+      9px 9px,
+      13px 13px,
+      17px 17px;
+  }
+
+  /* Subtle paper grain for dossier pages. */
+  .paper-grain {
+    background-image: radial-gradient(rgb(0 0 0 / 0.035) 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  .pixelated {
+    image-rendering: pixelated;
+    shape-rendering: crispEdges;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

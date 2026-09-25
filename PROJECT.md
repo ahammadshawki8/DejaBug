@@ -9,9 +9,9 @@
 | Field | Value |
 |---|---|
 | Current tier | T5 Web core |
-| Next item | T5.1 |
-| Next owner | CLAUDE |
-| Last updated | 2026-09-26 03:40 BST (real clock) |
+| Next item | T5.4 |
+| Next owner | BOB |
+| Last updated | 2026-09-26 03:35 BST |
 | Bobcoins used | 29.445 / 40 (10.555 left, see 9.2 re-plan) |
 | Blockers | none |
 
@@ -485,9 +485,9 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] **Done when:** an end-to-end run through curl works: start, apply the real fix by hand, verify passes, reveal works. **Verified: real fixes applied to fc42022 (fail to pass) and 66e60c7 (hang to pass). curl on the live server: 27 public cases with no spoilers, start plus verify reports the real failing tests. The server integration test covers the full loop.**
 
 ### T5 Web core (6 h), target Sat 6:00 PM, **M2**
-- [ ] T5.1 [CLAUDE] Web app scaffold: Vite + React + Tailwind + Framer Motion + Zustand, routing, the typed API client, and the game state store.
-- [ ] T5.2 [CLAUDE] (re-tagged: coins) **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
-- [ ] T5.3 [CLAUDE] Game shell (6A.6) built from the Bob components.
+- [x] T5.1 [CLAUDE] Web app scaffold: Vite + React + Tailwind + Framer Motion + Zustand, routing, the typed API client, and the game state store.
+- [x] T5.2 [CLAUDE] (re-tagged: coins) **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
+- [x] T5.3 [CLAUDE] Game shell (6A.6) built from the Bob components.
 - [ ] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
 - [ ] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
 - [ ] T5.6 [CLAUDE] (re-tagged: coins) **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
@@ -692,3 +692,4 @@ Human, do this:
 - **2026-09-26 07:30:** T3.6 complete. With BOB_API_KEY (Inference scope) in .env, `brief --provider bob` ran Bob Shell headless with the deja-forger mode and forge-case skill, and wrote fc42022 "The Overflowing Slice" in 18.7 s (prompt on stdin verified). Its quality beats Granite (a richer hint ladder). Added `Case.briefedBy` (bob-shell or watsonx:<model>) and backfilled the 27 cases, so the UI can show which IBM engine wrote each brief.
 - **2026-09-26 08:30:** T4.1-T4.3 done (Claude). play.ts exports the parent commit via a worktree with autocrlf off, overlays the fix tests, and makes a fresh single-commit repo with AGENTS.md and the deja-mentor mode. verify.ts runs the adapter with a 20 s per-test timeout. forge.ts holds the pipeline shared by the CLI and the server. server.ts (Fastify) serves health, repos, cases (public view hides fixDiff, lesson, and hints), session, start, ordered hints, verify, giveup, reveal (403 until solved or given up), funnel, profile, and forge plus SSE events (one run at a time). Sessions persist in .dejabug/state.json. Case.testFiles was added and backfilled.
 - **2026-09-26 03:40 (real clock):** Note: progress-log times after 02:45 were estimates that ran ahead of the real clock; the real time is now Sat 03:40. T4.4 done: Python adapter (pytest: test file and name detection incl. classes, exit-code classification, hang = killed at timeout, the checked-out code comes first on PYTHONPATH, per-repo virtualenv at workspace/.venvs/<repo> activated automatically). T4.5 proven on **IBM/python-sdk-core**: 489 commits, 98 fix-like, 45 candidates in 3.2 s, **31 certified in 44 s**, and 28 briefed with Granite. Total: **55 cases across 2 languages and 2 IBM repos**. The privacy sanitizer now redacts home directories in any separator form plus truncated worktree names. check-cases scans every JSON file for local paths, and prose only for emails and @mentions (Python decorators in diffs are fine). 87 tests. Follow-up idea: `dejabug init` could create the Python virtualenv automatically.
+- **2026-09-26 03:35:** T5.1-T5.3 done (Claude). Web: Vite 8 + React 18 + Tailwind 4 (@theme tokens from 6A.3) + Framer Motion + Zustand + React Router 7, self-hosted fonts, pixelarticons. Typed API client (types shared from the engine via the @engine alias), game, profile, and settings stores. Design system: pixel art from character grids (5 rank insignias, 7 badges, pin, clip, magnifier pips), and the full 6A.10 component inventory (ArcadeButton, Panels, StatTile, RibbonTitle, Stamp, TypewriterText, Terminal, XpBar, CountUp, MasteryRing, BadgeCard, StreakCalendar, CaseFolder with 4 states, HintLadder, Timer, VersusPanel, Modal, Toast, Tooltip, DossierTabs, FunnelCounter, WorkerLane), shown at /styleguide. The game shell has the rail, a top bar with rank/XP/streak/mute/engine light, and a dispatch ticker. XP rules are in lib/rules.ts with tests. Visual review via Playwright screenshots, with 5 fixes applied. Engine dev script switched to node --watch (tsx watch hung under concurrently on Windows).
