@@ -6,6 +6,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 |---|---|---|---|---|---|---|
 | 1 | ahammadshawki8 | T1.1 engine plan | Plan | Plan mode, context mentions (@PROJECT.md, @types.ts), document understanding | 0.555 | dejabug_task01_engine_plan_summary.png |
 | 2 | ahammadshawki8 | T2.1 certifier core | Plan, Agent | Plan mode, Agent mode, context mentions, terminal execution (go test) | 3.33 | dejabug_task02_certifier_core_summary.png |
+| 3 | ahammadshawki8 | T2.2 parallel pool + REVIEW-T2.1 fixes | Plan, Agent | Plan mode, Agent mode, parallel execution (p-limit pool), applying a review document | 2.34 | dejabug_task03_parallel_pool_summary.png |
 
 ## Claude Code / Codex work
 

@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T2 Certifier |
-| Next item | T2.2 |
-| Next owner | BOB |
-| Last updated | 2026-09-26 00:45 BST |
-| Bobcoins used | 3.885 / 40 |
+| Next item | T2.3 |
+| Next owner | CLAUDE |
+| Last updated | 2026-09-26 01:05 BST |
+| Bobcoins used | 6.225 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
 ---
@@ -440,7 +440,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 
 ### T2 Certifier (4 h), target Sat 6:00 AM, **M1**
 - [x] T2.1 [BOB] `certifier.ts` core: worktree lifecycle, test overlay from the fix commit, go test runner with timeout, output parsing (build failure vs test failure), the 3-run fail rule and 1-run pass rule, and every rejection status.
-- [ ] T2.2 [BOB] Parallel certification pool (default concurrency 4) with a typed progress event emitter. This is our "parallel" evidence.
+- [x] T2.2 [BOB] Parallel certification pool (default concurrency 4) with a typed progress event emitter. This is our "parallel" evidence.
 - [ ] T2.3 [CLAUDE] `funnel.json` writer, the `dejabug certify --limit N` CLI command, and certifier unit tests.
 - [ ] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
 - [ ] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
