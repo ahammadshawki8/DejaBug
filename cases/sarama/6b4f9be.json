@@ -1,0 +1,50 @@
+{
+  "id": "6b4f9be",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "6b4f9becca8bc225942ba863f6f1187b07dbac82",
+  "parentSha": "d2246cc9b9df113f3ffed7c442fd81e8b9cf736e",
+  "prNumber": 2947,
+  "status": "certified",
+  "tests": [
+    "TestNewOffsetManager",
+    "TestOffsetManagerCommitSequence"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "t32) 0\n           }\n          },\n          opened: (int32) 0,\n          responses: (chan *sarama.responsePromise) <nil>,\n          done: (chan bool) <nil>,\n          metricRegistry: (metrics.Registry) <nil>,\n          incomingByteRate: (metrics.Meter) <nil>,\n          requestRate: (metrics.Meter) <nil>,\n          fetchRate: (metrics.Meter) <nil>,\n          requestSize: (metrics.Histogram) <nil>,\n          requestLatency: (metrics.Histogram) <nil>,\n          outgoingByteRate: (metrics.Meter) <nil>,\n          responseRate: (metrics.Meter) <nil>,\n          responseSize: (metrics.Histogram) <nil>,\n          requestsInFlight: (metrics.Counter) <nil>,\n          protocolRequestsRate: (map[int16]metrics.Meter) <nil>,\n          brokerIncomingByteRate: (metrics.Meter) <nil>,\n          brokerRequestRate: (metrics.Meter) <nil>,\n          brokerFetchRate: (metrics.Meter) <nil>,\n          brokerRequestSize: (metrics.Histogram) <nil>,\n          brokerRequestLatency: (metrics.Histogram) <nil>,\n          brokerOutgoingByteRate: (metrics.Meter) <nil>,\n          brokerResponseRate: (metrics.Meter) <nil>,\n          brokerResponseSize: (metrics.Histogram) <nil>,\n          brokerRequestsInFlight: (metrics.Counter) <nil>,\n          brokerThrottleTime: (metrics.Histogram) <nil>,\n          brokerProtocolRequestsRate: (map[int16]metrics.Meter) <nil>,\n          kerberosAuthenticator: (sarama.GSSAPIKerberosAuth) {\n           Config: (*sarama.GSSAPIConfig)(<nil>),\n           ticket: (messages.Ticket) {\n            TktVNO: (int) 0,\n            Realm: (string) \"\",\n            SName: (types.PrincipalName) {\n             NameType: (int32) 0,\n             NameString: ([]string) <nil>\n            },\n            EncPart: (types.EncryptedData) {\n             EType: (int32) 0,\n             KVNO: (int) 0,\n             Cipher: ([]uint8) <nil>\n            },\n            DecryptedEncPart: (messages.EncTicketPart) {\n             Flags: (asn1.BitString) {\n              Bytes: ([]uint8) <nil>,\n              BitLength: (int) 0\n             },\n             Key: (types.EncryptionKey) {\n              KeyType: (int32) 0,\n              KeyValue: ([]uint8) <nil>\n             },\n             CRealm: (string) \"\",\n             CName: (types.PrincipalName) {\n              NameType: (int32) 0,\n              NameString: ([]string) <nil>\n             },\n             Transited: (messages.TransitedEncoding) {\n              TRType: (int32) 0,\n              Contents: ([]uint8) <nil>\n             },\n             AuthTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             StartTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             EndTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             RenewTill: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             CAddr: (types.HostAddresses) <nil>,\n             AuthorizationData: (types.AuthorizationData) <nil>\n            }\n           },\n           encKey: (types.EncryptionKey) {\n            KeyType: (int32) 0,\n            KeyValue: ([]uint8) <nil>\n           },\n           NewKerberosClientFunc: (func(*sarama.GSSAPIConfig) (sarama.KerberosClient, error)) <nil>,\n           step: (int) 0\n          },\n          clientSessionReauthenticationTimeMs: (int64) 0,\n          throttleTimer: (*time.Timer)(<nil>),\n          throttleTimerLock: (sync.Mutex) {\n           _: (sync.noCopy) {\n           },\n           mu: (sync.Mutex) {\n            state: (int32) 0,\n            sema: (uint32) 0\n           }\n          }\n         })\n        })\n        \n--- FAIL: TestOffsetManagerCommitSequence (0.63s)\n    offset_manager_test.go:205: out of order commit to partition 0, current committed offset: 7, offset in request: 1\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.728s\nFAIL\ngo: downloading github.com/pierrec/lz4/v4 v4.1.21\ngo: downloading github.com/klauspost/compress v1.17.8\ngo: downloading github.com/eapache/go-resiliency v1.6.0\ngo: downloading golang.org/x/net v0.24.0\ngo: downloading github.com/stretchr/testify v1.9.0\ngo: downloading golang.org/x/crypto v0.22.0\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.349s\n",
+    "durationMs": 56742
+  },
+  "brief": {
+    "codename": "Offset Commit Ordering",
+    "symptoms": "When committing offsets under high load, the consumer reports that offsets are committed out of order, causing downstream processing to see gaps or duplicates.",
+    "evidence": "out of order commit to partition 0, current committed offset: 7, offset in request: 1",
+    "hints": [
+      "The consumer group rebalancing loop may be exiting early under certain conditions.",
+      "Look at the broker interaction when flushing offset commits.",
+      "The lock protecting the commit request is held only while sending, not while waiting for the response."
+    ],
+    "difficulty": 3,
+    "precinct": "consumer-group",
+    "lesson": "Holding a lock only around the send of an offset commit request, rather than the entire wait for the broker response, can allow concurrent commits to be reordered. The fix adds a lock around the whole commit flow, preserving order while still allowing the broker to be used concurrently for other operations.",
+    "tags": [
+      "offset-commit",
+      "consumer-group",
+      "locking"
+    ]
+  },
+  "original": {
+    "daysOpen": 14.7,
+    "comments": 5,
+    "reviewRounds": 6,
+    "mergedAt": "2024-08-07T10:17:22Z"
+  },
+  "bugAgeDays": 370,
+  "parSeconds": 1800,
+  "fixDiff": "diff --git a/offset_manager.go b/offset_manager.go\nindex 1bf54590..29486512 100644\n--- a/offset_manager.go\n+++ b/offset_manager.go\n@@ -251,18 +251,31 @@ func (om *offsetManager) Commit() {\n }\n \n func (om *offsetManager) flushToBroker() {\n+\tbroker, err := om.coordinator()\n+\tif err != nil {\n+\t\tom.handleError(err)\n+\t\treturn\n+\t}\n+\n+\t// Care needs to be taken to unlock this. Don't want to defer the unlock as this would\n+\t// cause the lock to be held while waiting for the broker to reply.\n+\tbroker.lock.Lock()\n \treq := om.constructRequest()\n \tif req == nil {\n+\t\tbroker.lock.Unlock()\n \t\treturn\n \t}\n+\tresp, rp, err := sendOffsetCommit(broker, req)\n+\tbroker.lock.Unlock()\n \n-\tbroker, err := om.coordinator()\n \tif err != nil {\n \t\tom.handleError(err)\n+\t\tom.releaseCoordinator(broker)\n+\t\t_ = broker.Close()\n \t\treturn\n \t}\n \n-\tresp, err := broker.CommitOffset(req)\n+\terr = handleResponsePromise(req, resp, rp, nil)\n \tif err != nil {\n \t\tom.handleError(err)\n \t\tom.releaseCoordinator(broker)\n@@ -270,9 +283,20 @@ func (om *offsetManager) flushToBroker() {\n \t\treturn\n \t}\n \n+\tbroker.handleThrottledResponse(resp)\n \tom.handleResponse(broker, req, resp)\n }\n \n+func sendOffsetCommit(coordinator *Broker, req *OffsetCommitRequest) (*OffsetCommitResponse, *responsePromise, error) {\n+\tresp := new(OffsetCommitResponse)\n+\tresponseHeaderVersion := resp.headerVersion()\n+\tpromise, err := coordinator.send(req, true, responseHeaderVersion)\n+\tif err != nil {\n+\t\treturn nil, nil, err\n+\t}\n+\treturn resp, promise, nil\n+}\n+\n func (om *offsetManager) constructRequest() *OffsetCommitRequest {\n \tr := &OffsetCommitRequest{\n \t\tVersion:                 1,\n"
+}

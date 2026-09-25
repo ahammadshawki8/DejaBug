@@ -22,18 +22,29 @@ export class FixtureRepo {
   }
 
   git(...args: string[]): string {
-    return execFileSync("git", args, { cwd: this.dir, env: GIT_ENV, encoding: "utf8" });
+    return this.gitWithEnv({}, ...args);
   }
 
-  /** Writes files (path -> content) and commits them with `subject`. Returns the commit sha. */
-  commit(subject: string, files: Record<string, string>): string {
+  private gitWithEnv(extra: Record<string, string>, ...args: string[]): string {
+    return execFileSync("git", args, { cwd: this.dir, env: { ...GIT_ENV, ...extra }, encoding: "utf8" });
+  }
+
+  /**
+   * Writes files (path -> content) and commits them with `subject`. Returns the commit sha.
+   * `unixSeconds` pins both author and committer dates (for age calculations).
+   */
+  commit(subject: string, files: Record<string, string>, unixSeconds?: number): string {
     for (const [file, content] of Object.entries(files)) {
       const full = path.join(this.dir, file);
       mkdirSync(path.dirname(full), { recursive: true });
       writeFileSync(full, content);
     }
+    const dates: Record<string, string> =
+      unixSeconds === undefined
+        ? {}
+        : { GIT_AUTHOR_DATE: `${unixSeconds} +0000`, GIT_COMMITTER_DATE: `${unixSeconds} +0000` };
     this.git("add", "-A");
-    this.git("commit", "-q", "-m", subject);
+    this.gitWithEnv(dates, "commit", "-q", "-m", subject);
     return this.git("rev-parse", "HEAD").trim();
   }
 }

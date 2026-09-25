@@ -7,7 +7,11 @@ import path from "node:path";
 import { Command } from "commander";
 import { ADAPTERS, detectAdapter } from "./adapters/index.js";
 import { certify } from "./certifier.js";
-import { findRepoRoot, loadConfig, normalizeSlug, type Config } from "./config.js";
+import { assembleCase, bugAgeDays } from "./assemble.js";
+import { brief } from "./briefer.js";
+import { findRepoRoot, loadConfig, normalizeSlug, type Config, type LlmProvider } from "./config.js";
+import { git } from "./git.js";
+import { createGitHubClient, fetchContext, fetchOriginalEffort } from "./github.js";
 import { runDoctor } from "./doctor.js";
 import { WatsonxClient } from "./llm/watsonx.js";
 import { mine } from "./miner.js";
@@ -15,7 +19,10 @@ import {
   computeFunnel,
   mergeCertifications,
   readCandidates,
+  readCases,
   readCertifications,
+  readRanking,
+  writeCase,
   writeFunnel,
 } from "./store.js";
 import type { CandidatesFile, ForgeEvent } from "./types.js";
@@ -172,6 +179,98 @@ program
         .join(" "),
     );
   });
+
+program
+  .command("brief")
+  .description("write spoiler-free case files for certified candidates (GitHub context + LLM brief)")
+  .option("--limit <n>", "brief at most N cases", (v) => Number(v))
+  .option("--only <shas>", "comma-separated fix shas (prefixes allowed)")
+  .option("--redo", "regenerate cases that already have a case file")
+  .option("--provider <name>", "override LLM_PROVIDER: watsonx or bob")
+  .option("--concurrency <n>", "cases briefed in parallel", (v) => Number(v), 3)
+  .action(
+    async (opts: {
+      limit?: number;
+      only?: string;
+      redo?: boolean;
+      provider?: string;
+      concurrency: number;
+    }) => {
+      const base = config();
+      if (opts.provider && opts.provider !== "watsonx" && opts.provider !== "bob") {
+        throw new Error(`--provider must be watsonx or bob, got "${opts.provider}"`);
+      }
+      const cfg: Config = opts.provider ? { ...base, llmProvider: opts.provider as LlmProvider } : base;
+      const candidates = readCandidates(cfg.casesDir);
+      const certs = readCertifications(cfg.casesDir);
+      if (!candidates || !certs) throw new Error(`run "dejabug mine" and "dejabug certify" first`);
+      const ranking = readRanking(cfg.casesDir);
+      const existing = new Set(readCases(cfg.casesDir).map((c) => c.fixSha));
+
+      const only = opts.only?.split(",").map((s) => s.trim().toLowerCase());
+      let queue = certs.results
+        .filter((r) => r.status === "certified")
+        .filter((r) =>
+          only ? only.some((p) => r.fixSha.startsWith(p)) : opts.redo || !existing.has(r.fixSha),
+        );
+      if (opts.limit) queue = queue.slice(0, opts.limit);
+      if (queue.length === 0) {
+        console.log("nothing to brief (use --redo to regenerate existing cases)");
+        return;
+      }
+
+      console.log(`briefing ${queue.length} cases with ${cfg.llmProvider}...`);
+      const gh = createGitHubClient(cfg);
+      let written = 0;
+      let next = 0;
+      const worker = async () => {
+        while (next < queue.length) {
+          const cert = queue[next++]!;
+          const candidate = candidates.candidates.find((c) => c.fixSha === cert.fixSha);
+          if (!candidate) continue;
+          const short = cert.fixSha.slice(0, 7);
+          try {
+            const [context, original] = await Promise.all([
+              fetchContext(gh, candidate),
+              fetchOriginalEffort(gh, candidate),
+            ]);
+            const fixDiff = await git(cfg.repoDir, [
+              "diff",
+              candidate.parentSha,
+              candidate.fixSha,
+              "--",
+              ...candidate.sourceFiles,
+            ]);
+            const result = await brief({ candidate, certification: cert, context, fixDiff }, cfg);
+            if (!result) {
+              console.log(`  ${short}  FAILED (no valid spoiler-free brief)`);
+              continue;
+            }
+            const c = assembleCase({
+              repo: candidates.repo,
+              candidate,
+              certification: cert,
+              brief: result,
+              ranking: ranking?.cases.find((r) => cert.fixSha.startsWith(r.fixSha)),
+              prNumber: context.prNumber,
+              original,
+              bugAgeDays: await bugAgeDays(cfg.repoDir, candidate, fixDiff),
+              fixDiff,
+            });
+            writeCase(cfg.casesDir, c);
+            written++;
+            console.log(`  ${short}  "${c.brief.codename}"  [${c.brief.precinct}, d${c.brief.difficulty}]`);
+          } catch (err) {
+            console.log(`  ${short}  ERROR ${err instanceof Error ? err.message : String(err)}`);
+          }
+        }
+      };
+      await Promise.all(Array.from({ length: Math.max(1, opts.concurrency) }, worker));
+      console.log(
+        `\n${written}/${queue.length} case files written to ${path.relative(process.cwd(), cfg.casesDir)}`,
+      );
+    },
+  );
 
 program
   .command("models")

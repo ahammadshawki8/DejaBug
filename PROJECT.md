@@ -9,9 +9,9 @@
 | Field | Value |
 |---|---|
 | Current tier | T3 Briefs |
-| Next item | T3.4b |
-| Next owner | CLAUDE |
-| Last updated | 2026-09-26 05:10 BST |
+| Next item | T3.3b |
+| Next owner | BOB |
+| Last updated | 2026-09-26 05:40 BST |
 | Bobcoins used | 14.625 / 40 |
 | Blockers | none. watsonx is live (ibm/granite-4-h-small, verified). |
 
@@ -471,7 +471,8 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
   - `briefer.ts`: prompt built from the skill, provider switch (`watsonx` for batch, `bob` = `bob run --format json --mode deja-forger --max-cost`), zod validation, one retry
 - [x] T3.4 [BOB] **Subagent task:** "Use explore subagents in parallel to inspect the certified cases and rank them by teaching value and difficulty; write `cases/sarama/ranking.json`." This is our "subagents" evidence.
 - [x] T3.5 [CLAUDE] (done early so that Bob's briefer can call it) `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
-- [ ] T3.4b [CLAUDE] `dejabug brief` CLI: for each certified case, fetch GitHub context and original effort, build the source-only fix diff, call Bob's `brief()`, then assemble and write the Case JSON (id, language, parSeconds, bugAgeDays, certification, redacted outputs).
+- [x] T3.4b [CLAUDE] `dejabug brief` CLI: for each certified case, fetch GitHub context and original effort, build the source-only fix diff, call Bob's `brief()`, then assemble and write the Case JSON (id, language, parSeconds, bugAgeDays, certification, redacted outputs).
+- [ ] T3.3b [BOB] Apply docs/reviews/REVIEW-T3.3.md (skill examples copied into briefs, codename rules, JSON retry, client reuse, bob provider on Windows).
 - [ ] T3.6 [HUMAN] Generate briefs: Granite for all certified cases, plus `LLM_PROVIDER=bob` for 2 or 3 showcase cases. Commit the case JSON.
 - [ ] **Done when:** 12 or more cases have valid, spoiler-free briefs in `cases/sarama/`.
 
@@ -683,3 +684,4 @@ Human, do this:
 - **2026-09-26 04:30:** watsonx is live. The account lists granite-4-h-small, granite-guardian-3-8b, llama-3-3-70b, llama-4-maverick, mistral-large-2512, and gpt-oss-120b (banned models are filtered). WATSONX_MODEL_ID is ibm/granite-4-h-small, and a test chat returned valid JSON in 3.7 s. The secrets had been typed into .env.example; they were moved to .env before any commit, and check-style now fails if .env.example holds a secret value.
 - **2026-09-26 04:55:** T3.3 done by Bob (4.00 coins): the deja-forger mode, the forge-case skill, and briefer.ts (watsonx and bob providers, zod, spoiler retry) with tests. Claude hygiene fix to Bob's test (vitest 5 generics, type-import lint, prettier) to keep CI green without spending coins. The Claude spoiler guard was refined: comments and plain English words are no longer spoilers, only code-shaped identifiers and literals. First real Granite brief for fc42022 succeeded in 3.9 s (PR #3579, 1.7 days open, 3 review rounds). Review notes are queued in docs/reviews/REVIEW-02-queue.md.
 - **2026-09-26 05:10:** T3.4 done by Bob (1.19 coins): 4 explore subagents in parallel ranked all 27 certified cases into cases/sarama/ranking.json (teaching value, difficulty, precinct from a fixed list, reason). Screenshots of the parallel subagents are saved. Reasons are internal only, because some hint at the fix.
+- **2026-09-26 05:40:** T3.4b done (Claude): assemble.ts (bugAgeDays via git blame of the lines the fix touched, par time 10/20/30 min, ranking overrides for precinct/difficulty, sanitized outputs) and `dejabug brief` (parallel, --only/--limit/--redo/--provider). A real run on 3 cases with Granite: 2 good, 1 with hints copied from the SKILL.md examples (file deleted). Wrote REVIEW-T3.3 and added T3.3b [BOB] before T3.6. 66 tests.

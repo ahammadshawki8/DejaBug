@@ -1,0 +1,51 @@
+{
+  "id": "fc42022",
+  "repo": "IBM/sarama",
+  "language": "go",
+  "fixSha": "fc4202228d963849541aa1ceaff4eeac4a644a46",
+  "parentSha": "4e16ab645075e9e8d3f8e103456d18c0ed9527ac",
+  "prNumber": 3579,
+  "status": "certified",
+  "tests": [
+    "TestRealDecoder_getArrayLength",
+    "TestRealFlexibleDecoderGetInt32Array"
+  ],
+  "packages": [
+    "."
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestRealDecoder_getArrayLength (0.00s)\n    --- FAIL: TestRealDecoder_getArrayLength/negative_length_other_than_null_array (0.00s)\n        real_decoder_test.go:70: getArrayLength() gotLen = -2147483648, want -1\n        real_decoder_test.go:73: getArrayLength() gotErr = <nil>, want kafka: error decoding packet: invalid array length\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.179s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/IBM/sarama\t0.086s\n",
+    "durationMs": 7564
+  },
+  "brief": {
+    "codename": "32-bit Overflow Guard",
+    "symptoms": "Running the Sarama library's metadata response tests on a 32-bit architecture causes a panic: `runtime error: makeslice: len out of range`. The failure occurs in `TestFlexibleMetadataResponseInvalidInt32ArrayLengthOverflow`.",
+    "evidence": "panic: runtime error: makeslice: len out of range\n--- FAIL: TestFlexibleMetadataResponseInvalidInt32ArrayLengthOverflow (0.00s)\nFAIL",
+    "hints": [
+      "The test failure mentions a panic about slice length being out of range, but does not name any specific function or identifier.",
+      "Inspect the metadata response decoding path, especially where array lengths are parsed from the binary payload.",
+      "Consider how signed vs unsigned integers behave differently on 32-bit systems when parsing lengths."
+    ],
+    "difficulty": 3,
+    "precinct": "protocol",
+    "lesson": "When parsing binary lengths on 32-bit platforms, always use unsigned integer types for lengths and validate that the parsed value is non-negative before allocating slices. This prevents overflow and negative length panics.",
+    "tags": [
+      "32bit",
+      "metadata",
+      "decoder",
+      "overflow"
+    ]
+  },
+  "original": {
+    "daysOpen": 1.7,
+    "comments": 3,
+    "reviewRounds": 3,
+    "mergedAt": "2026-05-26T11:45:16Z"
+  },
+  "bugAgeDays": 0,
+  "parSeconds": 1800,
+  "fixDiff": "diff --git a/broker.go b/broker.go\nindex 69eab95c..228ea83e 100644\n--- a/broker.go\n+++ b/broker.go\n@@ -1693,7 +1693,11 @@ func (b *Broker) sendAndReceiveSASLSCRAMv0() error {\n \t\t\tLogger.Printf(\"Failed to read response header while authenticating with SASL to broker %s: %s\\n\", b.addr, err.Error())\n \t\t\treturn err\n \t\t}\n-\t\tpayload := make([]byte, int32(binary.BigEndian.Uint32(header)))\n+\t\tpayloadLength := binary.BigEndian.Uint32(header)\n+\t\tif int64(payloadLength) > int64(MaxResponseSize) {\n+\t\t\treturn PacketDecodingError{fmt.Sprintf(\"SASL response of length %d too large\", payloadLength)}\n+\t\t}\n+\t\tpayload := make([]byte, int(payloadLength))\n \t\tn, err := b.readFull(payload)\n \t\tif err != nil {\n \t\t\tb.addRequestInFlightMetrics(-1)\ndiff --git a/real_decoder.go b/real_decoder.go\nindex f5d57a27..d6cdd77e 100644\n--- a/real_decoder.go\n+++ b/real_decoder.go\n@@ -119,7 +119,9 @@ func (rd *realDecoder) getArrayLength() (int, error) {\n \t// casting to int for ease of interop\n \ttmp := int(int32(binary.BigEndian.Uint32(rd.raw[rd.off:])))\n \trd.off += 4\n-\tif tmp > rd.remaining() {\n+\tif tmp < -1 {\n+\t\treturn -1, errInvalidArrayLength\n+\t} else if tmp > rd.remaining() {\n \t\trd.off = len(rd.raw)\n \t\treturn -1, ErrInsufficientData\n \t} else if tmp > int(MaxResponseSize) {\n@@ -182,6 +184,10 @@ func (rd *realDecoder) getVarintBytes() ([]byte, error) {\n \tif tmp == -1 {\n \t\treturn nil, nil\n \t}\n+\tif tmp > int64(rd.remaining()) {\n+\t\trd.off = len(rd.raw)\n+\t\treturn nil, ErrInsufficientData\n+\t}\n \n \treturn rd.getRawBytes(int(tmp))\n }\n@@ -382,7 +388,12 @@ func (rd *realFlexibleDecoder) getArrayLength() (int, error) {\n \t\treturn 0, nil\n \t}\n \n-\treturn int(n) - 1, nil\n+\tif n-1 > uint64(rd.remaining()) {\n+\t\trd.off = len(rd.raw)\n+\t\treturn 0, ErrInsufficientData\n+\t}\n+\n+\treturn int(n - 1), nil\n }\n \n func (rd *realFlexibleDecoder) getEmptyTaggedFieldArray() (int, error) {\n@@ -403,6 +414,10 @@ func (rd *realFlexibleDecoder) getEmptyTaggedFieldArray() (int, error) {\n \t\tif err != nil {\n \t\t\treturn 0, err\n \t\t}\n+\t\tif length > uint64(rd.remaining()) {\n+\t\t\trd.off = len(rd.raw)\n+\t\t\treturn 0, ErrInsufficientData\n+\t\t}\n \t\tif _, err := rd.getRawBytes(int(length)); err != nil {\n \t\t\treturn 0, err\n \t\t}\n@@ -433,6 +448,10 @@ func (rd *realFlexibleDecoder) getTaggedFieldArray(decoders taggedFieldDecoders)\n \t\tif err != nil {\n \t\t\treturn err\n \t\t}\n+\t\tif length > uint64(rd.remaining()) {\n+\t\t\trd.off = len(rd.raw)\n+\t\t\treturn ErrInsufficientData\n+\t\t}\n \t\tbytes, err := rd.getRawBytes(int(length))\n \t\tif err != nil {\n \t\t\treturn err\n@@ -453,8 +472,12 @@ func (rd *realFlexibleDecoder) getBytes() ([]byte, error) {\n \tif err != nil {\n \t\treturn nil, err\n \t}\n+\tif n > 0 && n-1 > uint64(rd.remaining()) {\n+\t\trd.off = len(rd.raw)\n+\t\treturn nil, ErrInsufficientData\n+\t}\n \n-\tlength := int(n - 1)\n+\tlength := int(n) - 1\n \treturn rd.getRawBytes(length)\n }\n \n@@ -463,15 +486,15 @@ func (rd *realFlexibleDecoder) getStringLength() (int, error) {\n \tif err != nil {\n \t\treturn 0, err\n \t}\n+\tif length > 0 && length-1 > uint64(rd.remaining()) {\n+\t\trd.off = len(rd.raw)\n+\t\treturn 0, ErrInsufficientData\n+\t}\n \n-\tn := int(length - 1)\n+\tn := int(length) - 1\n \n-\tswitch {\n-\tcase n < -1:\n+\tif n < -1 {\n \t\treturn 0, errInvalidStringLength\n-\tcase n > rd.remaining():\n-\t\trd.off = len(rd.raw)\n-\t\treturn 0, ErrInsufficientData\n \t}\n \n \treturn n, nil\n@@ -516,14 +539,14 @@ func (rd *realFlexibleDecoder) getInt32Array() ([]int32, error) {\n \t\treturn nil, nil\n \t}\n \n-\tarrayLength := int64(n) - 1\n+\tarrayLength := n - 1\n \n-\tif int64(rd.remaining())/4 < arrayLength {\n+\tif uint64(rd.remaining()/4) < arrayLength { //nolint:gosec // G115 - remaining() is non-negative\n \t\trd.off = len(rd.raw)\n \t\treturn nil, ErrInsufficientData\n \t}\n \n-\tret := make([]int32, arrayLength)\n+\tret := make([]int32, int(arrayLength)) //nolint:gosec // G115 - value bounded by remaining() above\n \n \tfor i := range ret {\n \t\tret[i] = int32(binary.BigEndian.Uint32(rd.raw[rd.off:]))\ndiff --git a/record.go b/record.go\nindex a3fe8c06..66613a31 100644\n--- a/record.go\n+++ b/record.go\n@@ -102,6 +102,9 @@ func (r *Record) decode(pd packetDecoder) (err error) {\n \t}\n \n \tif numHeaders >= 0 {\n+\t\tif numHeaders > int64(pd.remaining()) {\n+\t\t\treturn ErrInsufficientData\n+\t\t}\n \t\tr.Headers = make([]*RecordHeader, numHeaders)\n \t}\n \tfor i := int64(0); i < numHeaders; i++ {\n"
+}

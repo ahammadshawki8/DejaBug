@@ -13,3 +13,4 @@ export type { ChatMessage, ChatOptions, ModelInfo } from "./llm/watsonx.js";
 export { extractSpoilers, checkSpoilers } from "./spoiler.js";
 export { brief, briefSchema } from "./briefer.js";
 export type { BriefInput } from "./briefer.js";
+export * from "./assemble.js";

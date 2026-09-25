@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import type { RankingFile } from "./assemble.js";
 import type {
   CandidatesFile,
   Case,
@@ -84,6 +85,10 @@ export function computeFunnel(candidates: CandidatesFile, results: Certification
     byStatus,
     generatedAt: new Date().toISOString(),
   };
+}
+
+export function readRanking(casesDir: string): RankingFile | undefined {
+  return readJson<RankingFile>(path.join(casesDir, "ranking.json"));
 }
 
 export function readFunnel(casesDir: string): Funnel | undefined {
