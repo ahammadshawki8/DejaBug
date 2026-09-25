@@ -13,7 +13,7 @@
 | Next owner | BOB |
 | Last updated | 2026-09-26 04:10 BST |
 | Bobcoins used | 9.435 / 40 |
-| Blockers | watsonx account activation (requested). Bob IDE is logged in. |
+| Blockers | none. watsonx is live (ibm/granite-4-h-small, verified). |
 
 ---
 
@@ -680,3 +680,4 @@ Human, do this:
 - **2026-09-26 02:45:** T2.5a done (Claude). The engine is repository-agnostic: `adapters/` (the LanguageAdapter interface, errors, registry, and a Go adapter with anchored -run, hang/notest/build classification, ToolMissingError, and multi-module routing by nearest go.mod). The miner runs on the adapter. `Candidate.language`, `dejabug init <owner/repo>`, a global `--target`, and an adapter-driven doctor and preflight were added. 35 tests. Second repo proven at the mining level: IBM/fp-go gives 137 candidates. Its recent fix: commits are mostly API additions (genuine build rejections). REVIEW-01 item 10 added (the pass phase restores the full fix tree). Next: T2.6 [BOB].
 - **2026-09-26 03:40:** M1 reached. T2.6 (Bob, 3.21 coins): the certifier runs on adapters, and 4 of 5 hang bugs are now certified. **sarama: 27 certified of 44 attempted.** T2.7 (Claude): store sanitizes on merge (stripLocalPaths), DEJABUG_TEST_TIMEOUT_SEC added, tests for deadlock certification, ToolMissingError abort, output sanitizing, and build-output recording (42 engine tests). Queued for REVIEW-02 [BOB]: for hang results, keep the head of the output (the "panic: test timed out ... running tests: TestX" headline) instead of the tail of the goroutine dump.
 - **2026-09-26 04:10:** T3.1 (github.ts: PR resolution by commit, linked issues, ETag disk cache, gh auth token fallback, redaction of mentions/emails/attachments, original effort as counts only), T3.2 (llm/watsonx.ts: IAM token cache, chat API, banned-model guard, `dejabug models`, extractJson), and T3.5 (spoiler.ts, language-agnostic) done by Claude. 58 tests. Added T3.4b (brief CLI and case assembly). Next: T3.3 [BOB] forger.
+- **2026-09-26 04:30:** watsonx is live. The account lists granite-4-h-small, granite-guardian-3-8b, llama-3-3-70b, llama-4-maverick, mistral-large-2512, and gpt-oss-120b (banned models are filtered). WATSONX_MODEL_ID is ibm/granite-4-h-small, and a test chat returned valid JSON in 3.7 s. The secrets had been typed into .env.example; they were moved to .env before any commit, and check-style now fails if .env.example holds a secret value.

@@ -31,5 +31,21 @@ for (const file of files) {
   });
 }
 
+// .env.example is tracked by git: secret keys in it must stay empty (real values belong in .env).
+const SECRET_KEYS = /^(GITHUB_TOKEN|WATSONX_API_KEY|WATSONX_PROJECT_ID|BOB_API_KEY)=(.+)$/;
+try {
+  readFileSync(".env.example", "utf8")
+    .split("\n")
+    .forEach((line, i) => {
+      const m = SECRET_KEYS.exec(line.trim());
+      if (m) {
+        problems++;
+        console.log(`.env.example:${i + 1}: secret: ${m[1]} has a value. Move it to .env (gitignored).`);
+      }
+    });
+} catch {
+  /* no .env.example */
+}
+
 console.log(problems ? `\n${problems} style problem(s) found.` : "Style check passed.");
 process.exitCode = problems ? 1 : 0;

@@ -180,7 +180,7 @@ program
     const client = WatsonxClient.fromConfig(config());
     const models = await client.listChatModels();
     for (const m of models) console.log(`${m.modelId.padEnd(48)} ${m.provider}`);
-    const granite = models.filter((m) => m.modelId.includes("granite"));
+    const granite = models.filter((m) => m.modelId.includes("granite") && !m.modelId.includes("guardian"));
     if (granite.length) console.log(`\nsuggested for WATSONX_MODEL_ID: ${granite.at(-1)!.modelId}`);
   });
 
