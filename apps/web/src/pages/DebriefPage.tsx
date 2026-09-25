@@ -184,8 +184,8 @@ export function DebriefPage() {
             you: changedLines(reveal.playerDiff),
             them: changedLines(reveal.fixDiff),
           },
-          { label: "Discussion", you: "0 comments", them: `${reveal.original.comments ?? 0} comments` },
-          { label: "Review rounds", you: "0", them: reveal.original.reviewRounds ?? 0 },
+          { label: "Tries / reviews", you: session.verifyRuns, them: reveal.original.reviewRounds ?? 0 },
+          { label: "Discussion", you: "solo", them: `${reveal.original.comments ?? 0} comments` },
         ]}
       />
 

@@ -1,4 +1,4 @@
-import { execFile } from "node:child_process";
+import { exec } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
@@ -142,21 +142,11 @@ function callBob(user: string, config: Config): Promise<string> {
   // On Windows, "bob" resolves as a .cmd shim which execFile cannot find without shell:true.
   // Deliver the prompt via stdin to avoid cmd.exe quoting of a potentially large string.
   return new Promise((resolve, reject) => {
-    const child = execFile(
-      "bob",
-      [
-        "run",
-        "--format",
-        "json",
-        "--mode",
-        "deja-forger",
-        "--max-cost",
-        String(config.bobMaxCost),
-        "--max-turns",
-        "6",
-        "--disable-mcp",
-      ],
-      { cwd: config.repoRoot, maxBuffer: 4 * 1024 * 1024, shell: true },
+    // One command string: every part is a literal or a number, so shell interpretation is safe.
+    const command = `bob run --format json --mode deja-forger --max-cost ${Number(config.bobMaxCost)} --max-turns 6 --disable-mcp`;
+    const child = exec(
+      command,
+      { cwd: config.repoRoot, maxBuffer: 4 * 1024 * 1024 },
       (err, stdout, stderr) => {
         if (err) {
           reject(new Error(`bob run failed: ${err.message}\n${stderr.slice(0, 500)}`));

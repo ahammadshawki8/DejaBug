@@ -7,6 +7,7 @@ import {
   ArcadeButton,
   DarkPanel,
   HintLadder,
+  Modal,
   PaperPanel,
   Stamp,
   Terminal,
@@ -81,6 +82,7 @@ function Investigation({ id }: { id: string }) {
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<VerifyResult>();
   const [shakeKey, setShakeKey] = useState(0);
+  const [confirmGiveUp, setConfirmGiveUp] = useState(false);
 
   useEffect(() => {
     let live = true;
@@ -275,7 +277,7 @@ function Investigation({ id }: { id: string }) {
           it will not write the fix.{" "}
           <button
             type="button"
-            onClick={giveUp}
+            onClick={() => setConfirmGiveUp(true)}
             className="font-display text-xs uppercase text-stamp underline"
           >
             Give up and reveal
@@ -300,6 +302,23 @@ function Investigation({ id }: { id: string }) {
         </PaperPanel>
         <p className="font-mono text-[11px] text-muted">Shortcuts: R run tests, H next hint, Esc cancel.</p>
       </aside>
+
+      <Modal
+        open={confirmGiveUp}
+        onClose={() => setConfirmGiveUp(false)}
+        title="Give up this case?"
+        tone="stamp"
+      >
+        <p>You will see the original fix and the lesson, but the case pays no XP.</p>
+        <div className="mt-5 flex gap-3">
+          <ArcadeButton tone="paper" onClick={() => void giveUp()}>
+            Reveal the fix
+          </ArcadeButton>
+          <ArcadeButton tone="navy" onClick={() => setConfirmGiveUp(false)}>
+            Keep investigating
+          </ArcadeButton>
+        </div>
+      </Modal>
     </div>
   );
 }

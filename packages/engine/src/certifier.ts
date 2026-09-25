@@ -23,6 +23,11 @@ function tail(s: string, n = 4000): string {
   return s.length <= n ? s : s.slice(-n);
 }
 
+/** Keep only the first `n` characters (hang output: the headline comes first, the dump after). */
+function head(s: string, n = 4000): string {
+  return s.length <= n ? s : s.slice(0, n);
+}
+
 /**
  * Strip the worktree path from recorded output so no local temp dir or username
  * leaks into stored data (REVIEW-01 item 2).
@@ -181,7 +186,7 @@ async function certifyOne(
         emit(emitter, { type: "run", worker: workerIndex, fixSha, phase: "fail", attempt, ok });
         failOutcomes.push("fail");
         failRuns++;
-        if (failOutput === "") failOutput = tail(sanitize(result.output, wtDir));
+        if (failOutput === "") failOutput = head(sanitize(result.output, wtDir));
         continue;
       }
 

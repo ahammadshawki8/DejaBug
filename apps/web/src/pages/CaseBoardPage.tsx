@@ -65,7 +65,11 @@ export function CaseBoardPage() {
 
   // --- Derived data ---
 
-  const solveMap = useMemo(() => new Map(profile.solves.map((s) => [s.caseId, s])), [profile.solves]);
+  const repoSlug = cases[0]?.repo;
+  const solveMap = useMemo(
+    () => new Map(profile.solves.filter((s) => s.repo === repoSlug).map((s) => [s.caseId, s])),
+    [profile.solves, repoSlug],
+  );
 
   const openCount = useMemo(() => cases.filter((c) => !solveMap.has(c.id)).length, [cases, solveMap]);
 
