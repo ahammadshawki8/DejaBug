@@ -8,6 +8,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 2 | ahammadshawki8 | T2.1 certifier core | Plan, Agent | Plan mode, Agent mode, context mentions, terminal execution (go test) | 3.33 | dejabug_task02_certifier_core_summary.png |
 | 3 | ahammadshawki8 | T2.2 parallel pool + REVIEW-T2.1 fixes | Plan, Agent | Plan mode, Agent mode, parallel execution (p-limit pool), applying a review document | 2.34 | dejabug_task03_parallel_pool_summary.png |
 | 4 | ahammadshawki8 | T2.6 REVIEW-01 [BOB] items 0-5,10 (adapter migration, hang handling, sanitizing, true slots) | Plan, Agent | Plan mode, Agent mode, review-driven refactor, terminal execution (lint/test/certify rerun) | 3.21 | dejabug_task04_review01_adapter_summary.png |
+| 5 | ahammadshawki8 | T3.3 forger (deja-forger mode, forge-case skill, briefer.ts) | Plan, Agent | Custom mode, Skill, document understanding (PR/issue threads), Bob Shell headless provider, zod validation | 4.00 | dejabug_task05_forger_summary.png, dejabug_task05_forger_prompt.png |
 
 ## Claude Code / Codex work
 
@@ -23,3 +24,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T2.5a | Claude Code | packages/engine/src/adapters/*, miner.ts, config.ts, doctor.ts, cli.ts (init, --target), types.ts, tests, cases/fp-go/candidates.json, docs/reviews/REVIEW-01.md item 10 | Repository-agnostic engine |
 | 2026-09-26 | T2.7 | Claude Code | packages/engine/src/store.ts (stripLocalPaths), store.test.ts, certifier.test.ts, adapters/go.ts (DEJABUG_TEST_TIMEOUT_SEC), .env.example | REVIEW-01 Claude items |
 | 2026-09-26 | T3.1, T3.2, T3.5 | Claude Code | packages/engine/src/github.ts, llm/watsonx.ts, spoiler.ts (+ tests), cli.ts (models) | GitHub context, watsonx client, spoiler guard |
+| 2026-09-26 | T3.3 hygiene + spoiler refinement | Claude Code | packages/engine/src/briefer.test.ts (typing/lint only), spoiler.ts, spoiler.test.ts | Keep CI green; fix false positives found by the first real brief |

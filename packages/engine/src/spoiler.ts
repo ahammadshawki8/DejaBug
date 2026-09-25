@@ -97,16 +97,25 @@ const STOP = new Set([
   "would",
 ]);
 
+/**
+ * True for names that look like code rather than English: camelCase, PascalCase, snake_case,
+ * or containing digits. Plain lowercase words ("negative", "existing") describe symptoms and
+ * are allowed in briefs even when the fix happens to use them.
+ */
+function isCodeShaped(t: string): boolean {
+  return /[A-Z0-9_]/.test(t.slice(1)) || (/^[A-Z]/.test(t) && /[a-z]/.test(t) && /[A-Z]/.test(t.slice(1)));
+}
+
 function tokensOf(lines: string[]): Set<string> {
   const tokens = new Set<string>();
   for (const line of lines) {
     const literal = /"((?:[^"\\]|\\.){5,80})"/g;
     for (const m of line.matchAll(literal)) tokens.add(m[1] as string);
-    // Identifiers come from code only: words inside string literals are prose, not spoilers.
-    const code = line.replace(/"(?:[^"\\]|\\.)*"/g, '""');
+    // Identifiers come from code only: string contents and comments are prose, not spoilers.
+    const code = line.replace(/"(?:[^"\\]|\\.)*"/g, '""').replace(/\/\/.*$|#.*$|\/\*.*?\*\//g, "");
     for (const m of code.matchAll(/[A-Za-z_][A-Za-z0-9_]*/g)) {
       const t = m[0];
-      if (t.length >= MIN_LENGTH && !STOP.has(t)) tokens.add(t);
+      if (t.length >= MIN_LENGTH && !STOP.has(t) && isCodeShaped(t)) tokens.add(t);
     }
   }
   return tokens;

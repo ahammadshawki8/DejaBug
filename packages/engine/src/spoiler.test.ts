@@ -17,7 +17,7 @@ describe("extractSpoilers", () => {
   it("keeps identifiers and literals the fix introduced, not ones it only moved", () => {
     const spoilers = extractSpoilers(diff);
     expect(spoilers).toContain("deregisterBroker");
-    expect(spoilers).toContain("existing");
+    expect(spoilers).not.toContain("existing"); // plain lowercase word, allowed in prose
     expect(spoilers).toContain("replacing stale broker registration");
     expect(spoilers).not.toContain("brokers"); // also on the removed line
     expect(spoilers).not.toContain("Printf"); // stop word
@@ -49,6 +49,14 @@ describe("checkSpoilers", () => {
       ],
     };
     expect(checkSpoilers(leaky, diff)).toEqual(["deregisterBroker", "replacing stale broker registration"]);
+  });
+
+  it("ignores comments and plain English words used by the fix", () => {
+    const d =
+      "+\t// reject negative lengths other than the null marker\n+\tif n < -1 { return errInvalidArrayLength }";
+    expect(extractSpoilers(d)).toEqual(["errInvalidArrayLength"]);
+    const b = { ...clean, symptoms: "A negative length is accepted and decoding continues with garbage." };
+    expect(checkSpoilers(b, d)).toEqual([]);
   });
 
   it("does not flag substrings of longer words", () => {
