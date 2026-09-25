@@ -6,7 +6,7 @@ import { execSync } from "node:child_process";
 const BINARY = /\.(png|jpe?g|gif|webp|ico|mp4|mp3|wav|woff2?|ttf|pdf|zip)$/i;
 const RULES = [
   { name: "em dash", re: /\u2014/ },
-  { name: "emoji", re: /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}]/u },
+  { name: "emoji", re: /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]|\u{FE0F}/u },
 ];
 
 const files = execSync("git ls-files --cached --others --exclude-standard", { encoding: "utf8" })
@@ -16,7 +16,11 @@ const files = execSync("git ls-files --cached --others --exclude-standard", { en
 let problems = 0;
 for (const file of files) {
   let text;
-  try { text = readFileSync(file, "utf8"); } catch { continue; }
+  try {
+    text = readFileSync(file, "utf8");
+  } catch {
+    continue;
+  }
   text.split("\n").forEach((line, i) => {
     for (const rule of RULES) {
       if (rule.re.test(line)) {

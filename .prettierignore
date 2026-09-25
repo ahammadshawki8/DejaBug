@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+workspace
+playgrounds
+screenshots_inspired
+bob_sessions
+cases
+package-lock.json
+*.md

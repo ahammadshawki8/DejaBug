@@ -8,12 +8,12 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T0 Setup |
-| Next item | T0.3 |
-| Next owner | CLAUDE |
-| Last updated | 2026-09-25 23:00 BST |
+| Current tier | T1 Engine plan + Miner |
+| Next item | T1.1 |
+| Next owner | BOB |
+| Last updated | 2026-09-26 00:10 BST |
 | Bobcoins used | 0 / 40 |
-| Blockers | Bob IDE login (invite email). watsonx account activation (requested). |
+| Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
 ---
 
@@ -427,9 +427,9 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 ### T0 Setup (1 h), target Fri 11:59 PM
 - [x] T0.1 [HUMAN] Install Go (`winget install GoLang.Go`) and verify `go version`. Installed go1.27.0.
 - [x] T0.2 [HUMAN] Clone IBM/sarama into `workspace/sarama` (gitignored). `go test -run TestAsyncProducer -count=1 .` passes: about 30 s the first time, about 1 s after.
-- [ ] T0.3 [CLAUDE] Scaffold npm workspaces `packages/engine` and `apps/web`: shared tsconfig, eslint, prettier, vitest, and the dev scripts (`npm run dev`, `build`, `test`, `lint`, `typecheck`).
-- [ ] T0.4 [CLAUDE] `.env.example` with `GITHUB_TOKEN`, `DEJABUG_REPO_DIR`, `LLM_PROVIDER` (`watsonx` or `bob`), `WATSONX_API_KEY`, `WATSONX_PROJECT_ID`, `WATSONX_URL`, `WATSONX_MODEL_ID`, `BOB_MAX_COST`.
-- [ ] T0.5 [CLAUDE] GitHub Actions CI: lint, typecheck, unit tests, `check-style.mjs`.
+- [x] T0.3 [CLAUDE] Scaffold npm workspaces `packages/engine` and `apps/web`: shared tsconfig, eslint, prettier, vitest, and the dev scripts (`npm run dev`, `build`, `test`, `lint`, `typecheck`).
+- [x] T0.4 [CLAUDE] `.env.example` with `GITHUB_TOKEN`, `DEJABUG_REPO_DIR`, `LLM_PROVIDER` (`watsonx` or `bob`), `WATSONX_API_KEY`, `WATSONX_PROJECT_ID`, `WATSONX_URL`, `WATSONX_MODEL_ID`, `BOB_MAX_COST`.
+- [x] T0.5 [CLAUDE] GitHub Actions CI: lint, typecheck, unit tests, `check-style.mjs`.
 - [ ] **Done when:** `npm run build && npm test` passes locally and on CI.
 
 ### T1 Engine plan + Miner (2 h), target Sat 2:00 AM
@@ -653,3 +653,4 @@ Human, do this:
 
 ## 12. Progress log
 - **2026-09-25 23:00:** Idea locked (DejaBug). Demo repo chosen: IBM/sarama, with 174 candidate fixes measured. Workspace, Bob config, submission templates, and the check scripts are in place. Bob Shell 2.0.5 is installed. Bob IDE is being installed.
+- **2026-09-26 00:10:** T0 done (Claude): npm workspaces (engine + web), TypeScript 5.9, vitest 5, eslint 10, prettier, Vite 8 + React 18, CI workflow, and .env.example. The engine has types.ts (the case contract), config.ts, and `dejabug doctor` / `serve` (health endpoint). Gate green locally. Next: T1.1 [BOB].

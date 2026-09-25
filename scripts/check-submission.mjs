@@ -21,21 +21,41 @@ for (const f of ["docs/submission/01-problem-solution.md", "docs/submission/02-b
 const pngs = existsSync("bob_sessions")
   ? readdirSync("bob_sessions").filter((f) => f.toLowerCase().endsWith(".png"))
   : [];
-check(pngs.length > 0, `bob_sessions/: ${pngs.length} PNG screenshot(s)`, "add a task summary screenshot for every task");
+check(
+  pngs.length > 0,
+  `bob_sessions/: ${pngs.length} PNG screenshot(s)`,
+  "add a task summary screenshot for every task",
+);
 
 check(existsSync("LICENSE") && /MIT License/.test(readFileSync("LICENSE", "utf8")), "MIT LICENSE present");
 check(!/\bTBD\b/.test(readFileSync("AGENTS.md", "utf8")), "AGENTS.md filled in", "replace the TBD fields");
-check(readFileSync("docs/DATA_SOURCES.md", "utf8").split("\n").filter((l) => /^\|\s*[^|\s-]/.test(l)).length > 1,
-  "docs/DATA_SOURCES.md lists sources", "list every dataset, or state 'synthetic only'");
+check(
+  readFileSync("docs/DATA_SOURCES.md", "utf8")
+    .split("\n")
+    .filter((l) => /^\|\s*[^|\s-]/.test(l)).length > 1,
+  "docs/DATA_SOURCES.md lists sources",
+  "list every dataset, or state 'synthetic only'",
+);
 
 let remote = "";
-try { remote = execSync("git remote get-url origin", { stdio: "pipe" }).toString().trim(); } catch {}
+try {
+  remote = execSync("git remote get-url origin", { stdio: "pipe" }).toString().trim();
+} catch {
+  /* no remote configured */
+}
 check(Boolean(remote), `git remote: ${remote || "none"}`, "push to a PUBLIC GitHub repo");
 
 let tracked = "";
-try { tracked = execSync("git ls-files", { stdio: "pipe" }).toString(); } catch {}
+try {
+  tracked = execSync("git ls-files", { stdio: "pipe" }).toString();
+} catch {
+  /* not a git repo */
+}
 check(!/(^|\/)\.env$/m.test(tracked), "no .env committed");
 
-for (const r of results) console.log(`${r.ok ? "PASS" : "FAIL"}  ${r.label}${r.ok || !r.hint ? "" : `  -> ${r.hint}`}`);
-console.log("\nManual: video <= 3:00 with >= 90s demo · slides · cover image · app URL · feedback form after the event");
+for (const r of results)
+  console.log(`${r.ok ? "PASS" : "FAIL"}  ${r.label}${r.ok || !r.hint ? "" : `  -> ${r.hint}`}`);
+console.log(
+  "\nManual: video <= 3:00 with >= 90s demo · slides · cover image · app URL · feedback form after the event",
+);
 process.exitCode = results.every((r) => r.ok) ? 0 : 1;
