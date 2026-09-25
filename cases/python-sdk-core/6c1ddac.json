@@ -1,0 +1,56 @@
+{
+  "id": "6c1ddac",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "6c1ddacff512478ec9aaa6f5c6ff454eae780c74",
+  "parentSha": "5395f657895c3898a33bf19e3b2cd85b2d5e2421",
+  "prNumber": 121,
+  "status": "certified",
+  "tests": [
+    "test_invalid_authenticator",
+    "test_json",
+    "test_misc_methods",
+    "test_ssl_error"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "...F                                                                     [100%]\r\n================================== FAILURES ===================================\r\n__________________________________ test_json __________________________________\r\n\r\n    def test_json():\r\n        service = AnyServiceV1('2018-11-20', authenticator=NoAuthAuthenticator())\r\n        req = service.prepare_request('POST', url='', headers={\r\n                                      'X-opt-out': True}, data={'hello': 'world', 'f��': 'b�r'})\r\n>       assert req.get('data') == b'{\"hello\": \"world\", \"f\\\\u00f3\\\\u00f3\": \"b\\\\u00e5r\"}'\r\nE       assert '{\"hello\": \"world\", \"f\\\\u00f3\\\\u00f3\": \"b\\\\u00e5r\"}' == b'{\"hello\": \"world\", \"f\\\\u00f3\\\\u00f3\": \"b\\\\u00e5r\"}'\r\nE        +  where '{\"hello\": \"world\", \"f\\\\u00f3\\\\u00f3\": \"b\\\\u00e5r\"}' = <built-in method get of dict object at 0x00000200B3705740>('data')\r\nE        +    where <built-in method get of dict object at 0x00000200B3705740> = {'method': 'POST', 'url': 'https://gateway.watsonplatform.net/test/api', 'headers': {'X-opt-out': 'true', 'User-Agent': 'ibm-python-sdk-core-3.11.0 Windows 11 3.14.0', 'content-type': 'application/json'}, 'params': None, ...}.get\r\n\r\ntest\\test_base_service.py:813: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_json - assert '{\"hello\": \"world\", \"f\\\\...\r\n1 failed, 3 passed, 36 deselected in 0.34s\r\n",
+    "passOutput": "....                                                                     [100%]\r\n4 passed, 36 deselected in 0.24s\r\n",
+    "durationMs": 3087
+  },
+  "brief": {
+    "codename": "UTF-8 Encoding Glitch",
+    "symptoms": "The test `test_json` fails because the request data is not a UTF‑8 encoded string. The assertion expects a byte string but receives a Unicode string.",
+    "evidence": "assert req.get('data') == b'{\"hello\": \"world\", \"f\\u00f3\\u00f3\": \"b\\u00e5r\"}'\nE       assert '{\"hello\": \"world\", \"f\\u00f3\\u00f3\": \"b\\u00e5r\"}' == b'{\"hello\": \"world\", \"f\\u00f3\\u00f3\": \"b\\u00e5r\"}'\nE        +  where '{\"hello\": \"world\", \"f\\u00f3\\u00f3\": \"b\\u00e5r\"}' = <built-in method get of dict object at 0x00000200B3705740>('data')",
+    "hints": [
+      "The failure occurs when the request payload contains non‑ASCII characters.",
+      "Inspect the code path that builds the request data for POST calls.",
+      "Consider how Python handles string encoding for HTTP bodies."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "When a request body is a dictionary, it must be JSON‑serialized and then encoded as UTF‑8 before being sent over the wire.",
+    "tags": [
+      "encoding",
+      "http-request",
+      "json"
+    ]
+  },
+  "original": {
+    "daysOpen": 1.1,
+    "comments": 3,
+    "reviewRounds": 3,
+    "mergedAt": "2021-08-18T16:36:57Z"
+  },
+  "bugAgeDays": 12,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex bbc6dda..1bf690c 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -18,7 +18,6 @@ import gzip\n import json as json_import\n import logging\n import platform\n-import sys\n from http.cookiejar import CookieJar\n from os.path import basename\n from typing import Dict, List, Optional, Tuple, Union\n@@ -373,14 +372,13 @@ class BaseService:\n         params = cleanup_values(params)\n         request['params'] = params\n \n-        if sys.version_info >= (3, 0) and isinstance(data, str):\n+        if isinstance(data, str):\n             data = data.encode('utf-8')\n-\n-        if data and isinstance(data, dict):\n+        elif isinstance(data, dict) and data:\n             data = remove_null_values(data)\n             if headers.get('content-type') is None:\n                 headers.update({'content-type': 'application/json'})\n-            data = json_import.dumps(data)\n+            data = json_import.dumps(data).encode('utf-8')\n         request['data'] = data\n \n         self.authenticator.authenticate(request)\n"
+}

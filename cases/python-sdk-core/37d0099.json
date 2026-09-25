@@ -1,0 +1,61 @@
+{
+  "id": "37d0099",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "37d0099cfd7bfe4bdb9f1cddc6bb2b62f4609f60",
+  "parentSha": "1e29bfa6e68f43d6a8526bfb16f35d2084df2a14",
+  "prNumber": 130,
+  "status": "certified",
+  "tests": [
+    "test_json",
+    "test_reserved_keys",
+    "test_service_url_handling",
+    "test_service_url_slash",
+    "test_strip_extra_slashes",
+    "test_trailing_slash",
+    "test_user_agent_header"
+  ],
+  "packages": [
+    "test/test_base_service.py",
+    "test/test_utils.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py",
+    "test/test_utils.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "...FF.                                                                   [100%]\r\n================================== FAILURES ===================================\r\n__________________________ test_service_url_handling __________________________\r\n\r\n    def test_service_url_handling():\r\n        service = AnyServiceV1(\r\n            '2018-11-20', service_url='https://host///////', authenticator=NoAuthAuthenticator())\r\n>       assert service.service_url == 'https://host'\r\nE       AssertionError: assert 'https://host///////' == 'https://host'\r\nE         \r\nE         - https://host\r\nE         + https://host///////\r\nE         ?             +++++++\r\n\r\ntest\\test_base_service.py:821: AssertionError\r\n___________________________ test_service_url_slash ____________________________\r\n\r\n    def test_service_url_slash():\r\n        service = AnyServiceV1('2018-11-20', service_url='/',\r\n                               authenticator=NoAuthAuthenticator())\r\n>       assert service.service_url == ''\r\nE       AssertionError: assert '/' == ''\r\nE         \r\nE         + /\r\n\r\ntest\\test_base_service.py:872: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_service_url_handling - AssertionError:...\r\nFAILED test/test_base_service.py::test_service_url_slash - AssertionError: as...\r\n2 failed, 4 passed, 53 deselected in 0.42s\r\n",
+    "passOutput": "......                                                                   [100%]\r\n6 passed, 53 deselected in 0.29s\r\n",
+    "durationMs": 3399
+  },
+  "brief": {
+    "codename": "Trailing Slash Trim",
+    "symptoms": "The client reports an error after reconnecting. The test `test_service_url_handling` fails with an assertion that the service URL should be stripped of trailing slashes.",
+    "evidence": "AssertionError: assert 'https://host///////' == 'https://host'\n- https://host\n+ https://host///////\n?             +++++++",
+    "hints": [
+      "The service URL you provide contains extra slashes at the end.",
+      "Check the function that builds the request URL and see how it handles the service URL.",
+      "The fix involves removing any trailing slashes before combining the service URL with the operation path."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "The fix removes trailing slashes from the service URL to prevent double slashes in the final request URL, ensuring compatibility with servers that reject such paths.",
+    "tags": [
+      "url-handling",
+      "request-construction",
+      "trailing-slash"
+    ]
+  },
+  "original": {
+    "daysOpen": 3.7,
+    "comments": 7,
+    "reviewRounds": 3,
+    "mergedAt": "2021-11-15T15:39:23Z"
+  },
+  "bugAgeDays": 292,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 569885d..d9fc742 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -224,6 +224,8 @@ class BaseService:\n                 'The service url shouldn\\'t start or end with curly brackets or quotes. '\n                 'Be sure to remove any {} and \\\" characters surrounding your service url'\n             )\n+        if service_url is not None:\n+            service_url = service_url.rstrip('/')\n         self.service_url = service_url\n \n     def get_http_client(self) -> requests.sessions.Session:\n@@ -368,6 +370,10 @@ class BaseService:\n         # validate the service url is set\n         if not self.service_url:\n             raise ValueError('The service_url is required')\n+\n+        # Combine the service_url and operation path to form the request url.\n+        # Note: we have already stripped any trailing slashes from the service_url\n+        # and we know that the operation path ('url') will start with a slash.\n         request['url'] = strip_extra_slashes(self.service_url + url)\n \n         headers = remove_null_values(headers) if headers else {}\n"
+}

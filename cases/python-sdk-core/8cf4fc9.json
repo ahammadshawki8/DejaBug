@@ -1,0 +1,55 @@
+{
+  "id": "8cf4fc9",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "8cf4fc945a0f77fccf977bfdd0cc3cd203aac0bb",
+  "parentSha": "d995efbdb960bbc0f2fa06714301921170bde3fb",
+  "prNumber": 70,
+  "status": "certified",
+  "tests": [
+    "test_get_authenticator_from_credential_file",
+    "test_get_authenticator_from_env_variables",
+    "test_vcap_credentials_2"
+  ],
+  "packages": [
+    "test/test_utils.py"
+  ],
+  "testFiles": [
+    "test/test_utils.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F..                                                                      [100%]\r\n================================== FAILURES ===================================\r\n_________________ test_get_authenticator_from_credential_file _________________\r\n\r\n    def test_get_authenticator_from_credential_file():\r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-iam.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        authenticator = get_authenticator_from_environment('ibm watson')\r\n        assert authenticator is not None\r\n        assert authenticator.token_manager.apikey == '5678efgh'\r\n        del os.environ['IBM_CREDENTIALS_FILE']\r\n    \r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-basic.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        authenticator = get_authenticator_from_environment('watson')\r\n        assert authenticator is not None\r\n        assert authenticator.username == 'my_username'\r\n        del os.environ['IBM_CREDENTIALS_FILE']\r\n    \r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-cp4d.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        authenticator = get_authenticator_from_environment('watson')\r\n        assert authenticator is not None\r\n        assert authenticator.token_manager.username == 'my_username'\r\n        assert authenticator.token_manager.password == 'my_password'\r\n        del os.environ['IBM_CREDENTIALS_FILE']\r\n    \r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-no-auth.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        authenticator = get_authenticator_from_environment('watson')\r\n        assert authenticator is not None\r\n        del os.environ['IBM_CREDENTIALS_FILE']\r\n    \r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-bearer.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        authenticator = get_authenticator_from_environment('watson')\r\n        assert authenticator is not None\r\n        assert authenticator.bearer_token is not None\r\n        del os.environ['IBM_CREDENTIALS_FILE']\r\n    \r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        authenticator = get_authenticator_from_environment('service_1')\r\n>       assert authenticator is not None\r\nE       assert None is not None\r\n\r\ntest\\test_utils.py:143: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_utils.py::test_get_authenticator_from_credential_file - asse...\r\n1 failed, 2 passed, 7 deselected in 0.29s\r\n",
+    "passOutput": "...                                                                      [100%]\r\n3 passed, 7 deselected in 0.18s\r\n",
+    "durationMs": 2983
+  },
+  "brief": {
+    "codename": "Equal Sign Null",
+    "symptoms": "The test `test_get_authenticator_from_credential_file` fails with `assert None is not None` when reading a credential file that contains an environment variable value with an equals sign (`=`).",
+    "evidence": "    assert authenticator is not None\nE   assert None is not None",
+    "hints": [
+      "The failure occurs when the credential file contains a line with an equals sign in the value.",
+      "Look at the `utils` package - the line splitting logic in `__read_from_credential_file` stops at the first equals sign.",
+      "When a value contains an equals sign, the current split discards the rest of the value, causing the authenticator to be `None`."
+    ],
+    "difficulty": 2,
+    "precinct": "utils",
+    "lesson": "The fix introduces `split(separator, 1)` to preserve the full value after the first equals sign, allowing environment variables with `=` in their values to be parsed correctly.",
+    "tags": [
+      "environment-variables",
+      "config-parsing",
+      "authenticator"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.8,
+    "comments": 3,
+    "reviewRounds": 1,
+    "mergedAt": "2020-05-12T14:38:47Z"
+  },
+  "bugAgeDays": 195,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 9722e55..b94deae 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -231,7 +231,7 @@ def __read_from_credential_file(service_name: str, *, separator: str = '=') -> d\n     if credential_file_path is not None:\n         with open(credential_file_path, 'r') as fobj:\n             for line in fobj:\n-                key_val = line.strip().split(separator)\n+                key_val = line.strip().split(separator, 1)\n                 if len(key_val) == 2:\n                     key = key_val[0]\n                     value = key_val[1]\n"
+}

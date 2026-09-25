@@ -1,0 +1,54 @@
+{
+  "id": "6e5cad0",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "6e5cad0eb012f3339285a64695e2442210bbe511",
+  "parentSha": "a208ef2609daba669649ca257194f1ff4f588602",
+  "prNumber": 14,
+  "status": "certified",
+  "tests": [
+    "test_detailed_response_dict",
+    "test_detailed_response_list"
+  ],
+  "packages": [
+    "test/test_detailed_response.py"
+  ],
+  "testFiles": [
+    "test/test_detailed_response.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": ".F                                                                       [100%]\r\n================================== FAILURES ===================================\r\n_________________________ test_detailed_response_list _________________________\r\n\r\n    @responses.activate\r\n    def test_detailed_response_list():\r\n        responses.add(responses.GET,\r\n                      'https://test.com',\r\n                      status=200,\r\n                      body=json.dumps(['foobar', 'baz']),\r\n                      content_type='application/json')\r\n    \r\n        mock_response = requests.get('https://test.com')\r\n        detailed_response = DetailedResponse(mock_response.json(), mock_response.headers, mock_response.status_code)\r\n        assert detailed_response is not None\r\n        assert detailed_response.get_result() == ['foobar', 'baz']\r\n        assert detailed_response.get_headers() == {u'Content-Type': 'application/json'}\r\n        assert detailed_response.get_status_code() == 200\r\n    \r\n        dict_repr = detailed_response._to_dict()\r\n>       assert dict_repr['result'] == ['foobar', 'baz']\r\nE       AssertionError: assert 'HTTP response' == ['foobar', 'baz']\r\n\r\ntest\\test_detailed_response.py:42: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_detailed_response.py::test_detailed_response_list - Assertio...\r\n1 failed, 1 passed in 0.22s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed in 0.14s\r\n",
+    "durationMs": 2641
+  },
+  "brief": {
+    "codename": "Response Dict Dilemma",
+    "symptoms": "The test `test_detailed_response_list` fails because the `_to_dict` method returns the string `'HTTP response'` instead of the actual JSON array `['foobar', 'baz']`.",
+    "evidence": "AssertionError: assert 'HTTP response' == ['foobar', 'baz']\n",
+    "hints": [
+      "The client reports an error when the response is an array.",
+      "Look at `DetailedResponse` - the `_to_dict` method handles the `result` field.",
+      "When the result is a list, the current code treats it as an error case."
+    ],
+    "difficulty": 2,
+    "precinct": "detailed-response",
+    "lesson": "The `_to_dict` method must treat both dictionaries and lists as valid `result` values; otherwise the client incorrectly reports `'HTTP response'` for array payloads.",
+    "tags": [
+      "detailed-response",
+      "json-handling",
+      "array-support"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.8,
+    "comments": 7,
+    "reviewRounds": 0,
+    "mergedAt": "2019-05-08T17:52:42Z"
+  },
+  "bugAgeDays": 11,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 6dfcd5e..781c422 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -198,7 +198,7 @@ class BaseService(object):\n         self.password = password\n         self.jar = CookieJar()\n \n-    def set_token_manager(self, iam_apikey=None, iam_access_token=None, iam_url=None, \n+    def set_token_manager(self, iam_apikey=None, iam_access_token=None, iam_url=None,\n                           iam_client_id=None, iam_client_secret=None):\n         if has_bad_first_or_last_char(iam_apikey):\n             raise ValueError('The credentials shouldn\\'t start or end with curly brackets or quotes. '\ndiff --git a/ibm_cloud_sdk_core/detailed_response.py b/ibm_cloud_sdk_core/detailed_response.py\nindex 57db5dc..456fb77 100644\n--- a/ibm_cloud_sdk_core/detailed_response.py\n+++ b/ibm_cloud_sdk_core/detailed_response.py\n@@ -41,7 +41,7 @@ class DetailedResponse(object):\n     def _to_dict(self):\n         _dict = {}\n         if hasattr(self, 'result') and self.result is not None:\n-            _dict['result'] = self.result if isinstance(self.result, dict) else 'HTTP response'\n+            _dict['result'] = self.result if isinstance(self.result, (dict, list)) else 'HTTP response'\n         if hasattr(self, 'headers') and self.headers is not None:\n             _dict['headers'] = self.headers\n         if hasattr(self, 'status_code') and self.status_code is not None:\ndiff --git a/ibm_cloud_sdk_core/iam_token_manager.py b/ibm_cloud_sdk_core/iam_token_manager.py\nindex 63efd21..ace76ce 100644\n--- a/ibm_cloud_sdk_core/iam_token_manager.py\n+++ b/ibm_cloud_sdk_core/iam_token_manager.py\n@@ -25,7 +25,7 @@ class IAMTokenManager(object):\n     REQUEST_TOKEN_RESPONSE_TYPE = 'cloud_iam'\n     REFRESH_TOKEN_GRANT_TYPE = 'refresh_token'\n \n-    def __init__(self, iam_apikey=None, iam_access_token=None, iam_url=None, \n+    def __init__(self, iam_apikey=None, iam_access_token=None, iam_url=None,\n                  iam_client_id=None, iam_client_secret=None):\n         self.iam_apikey = iam_apikey\n         self.user_access_token = iam_access_token\n"
+}

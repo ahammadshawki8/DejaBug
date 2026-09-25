@@ -1,0 +1,62 @@
+{
+  "id": "f2d7225",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "f2d7225a6f8e8f4b19ed6d1858c93993d7d62cf5",
+  "parentSha": "26a42a6723b36e3c078389c6072fe9d3b296c28a",
+  "prNumber": 92,
+  "status": "certified",
+  "tests": [
+    "test_get_token",
+    "test_request_token"
+  ],
+  "packages": [
+    "test/test_base_service.py",
+    "test/test_cp4d_authenticator.py",
+    "test/test_cp4d_token_manager.py",
+    "test/test_iam_authenticator.py",
+    "test/test_iam_token_manager.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py",
+    "test/test_cp4d_authenticator.py",
+    "test/test_cp4d_token_manager.py",
+    "test/test_iam_authenticator.py",
+    "test/test_iam_token_manager.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "oken_info(token_response)\r\nibm_cloud_sdk_core\\jwt_token_manager.py:71: in _save_token_info\r\n    decoded_response = jwt.decode(self.access_token, verify=False)\r\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n..\\..\\..\\..\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:370: in decode\r\n    decoded = self.decode_complete(\r\n..\\..\\..\\..\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:267: in decode_complete\r\n    decoded = self._jws.decode_complete(\r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <jwt.api_jws.PyJWS object at 0x000001E5C0AC9FD0>\r\njwt = 'eyJhbGciOiJIUzI1NiIsImtpZCI6IjIzMDQ5ODE1MWMyMTRiNzg4ZGQ5N2YyMmI4NTQxMGE1IiwidHlwIjoiSldUIn0.eyJ1c2VybmFtZSI6ImR1bW15I...VkIjoic3NzIiwidWlkIjoic3NzIiwiaWF0IjoxNTU5MzI0NjY0LCJleHAiOjE1NTkzMjQ2NjR9.EjsLWZPwlLEiOSXyUfSDTbdsV8jMJnLntfmfxKO4_D0'\r\nkey = '', algorithms = None\r\noptions = {'verify_signature': True, 'enforce_minimum_key_length': False}\r\ndetached_payload = None, kwargs = {}\r\n\r\n    def decode_complete(\r\n        self,\r\n        jwt: str | bytes,\r\n        key: AllowedPublicKeys | PyJWK | str | bytes = \"\",\r\n        algorithms: Sequence[str] | None = None,\r\n        options: SigOptions | None = None,\r\n        detached_payload: bytes | None = None,\r\n        **kwargs: dict[str, Any],\r\n    ) -> dict[str, Any]:\r\n        if kwargs:\r\n            warnings.warn(\r\n                \"passing additional kwargs to decode_complete() is deprecated \"\r\n                \"and will be removed in pyjwt version 3. \"\r\n                f\"Unsupported kwargs: {tuple(kwargs.keys())}\",\r\n                RemovedInPyjwt3Warning,\r\n                stacklevel=2,\r\n            )\r\n        merged_options: SigOptions\r\n        if options is None:\r\n            merged_options = self.options\r\n        else:\r\n            merged_options = {**self.options, **options}\r\n    \r\n        verify_signature = merged_options[\"verify_signature\"]\r\n    \r\n        if verify_signature and not algorithms and not isinstance(key, PyJWK):\r\n>           raise DecodeError(\r\n                'It is required that you pass in a value for the \"algorithms\" argument when calling decode().'\r\n            )\r\nE           jwt.exceptions.DecodeError: It is required that you pass in a value for the \"algorithms\" argument when calling decode().\r\n\r\n..\\..\\..\\..\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jws.py:248: DecodeError\r\n============================== warnings summary ===============================\r\ntest/test_cp4d_authenticator.py::test_get_token\r\ntest/test_cp4d_token_manager.py::test_request_token\r\ntest/test_iam_authenticator.py::test_get_token\r\n  ~\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 6 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\r\n    return self._jws.encode(\r\n\r\ntest/test_cp4d_authenticator.py::test_get_token\r\ntest/test_cp4d_token_manager.py::test_request_token\r\ntest/test_iam_authenticator.py::test_get_token\r\n  ~\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:370: DeprecationWarning: The `verify` argument to `decode` does nothing in PyJWT 2.0 and newer. The equivalent is setting `verify_signature` to False in the `options` dictionary. This invocation has a mismatch between the kwarg and the option entry.\r\n    decoded = self.decode_complete(\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n=========================== short test summary info ===========================\r\nFAILED test/test_cp4d_authenticator.py::test_get_token - jwt.exceptions.Decod...\r\nFAILED test/test_cp4d_token_manager.py::test_request_token - jwt.exceptions.D...\r\nFAILED test/test_iam_authenticator.py::test_get_token - jwt.exceptions.Decode...\r\n3 failed, 10 passed, 37 deselected, 6 warnings in 0.44s\r\n",
+    "passOutput": ".............                                                            [100%]\r\n============================== warnings summary ===============================\r\ntest/test_cp4d_authenticator.py::test_get_token\r\ntest/test_cp4d_token_manager.py::test_request_token\r\ntest/test_iam_authenticator.py::test_get_token\r\n  ~\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 6 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\r\n    return self._jws.encode(\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n13 passed, 37 deselected, 3 warnings in 0.25s\r\n",
+    "durationMs": 3389
+  },
+  "brief": {
+    "codename": "Silent Token",
+    "symptoms": "The SDK throws a DecodeError when trying to retrieve a token, indicating the JWT cannot be decoded.",
+    "evidence": "jwt.exceptions.DecodeError: It is required that you pass in a value for the \"algorithms\" argument when calling decode().",
+    "hints": [
+      "The token manager attempts to decode a JWT without specifying the algorithm.",
+      "Look at the JWTTokenManager class - the decode call was changed in the diff.",
+      "When the token is fetched, the decode step now needs an algorithm and verify option."
+    ],
+    "difficulty": 2,
+    "precinct": "jwt-token-manager",
+    "lesson": "In PyJWT 2.x the `decode` function requires an explicit `algorithms` argument and the `verify_signature` option must be set to `False` when the signature verification is disabled.",
+    "tags": [
+      "jwt",
+      "token-manager",
+      "pyjwt-2"
+    ]
+  },
+  "original": {
+    "daysOpen": 1,
+    "comments": 3,
+    "reviewRounds": 2,
+    "mergedAt": "2021-01-07T14:30:26Z"
+  },
+  "bugAgeDays": 223,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/jwt_token_manager.py b/ibm_cloud_sdk_core/jwt_token_manager.py\nindex d316638..00ef721 100644\n--- a/ibm_cloud_sdk_core/jwt_token_manager.py\n+++ b/ibm_cloud_sdk_core/jwt_token_manager.py\n@@ -68,7 +68,7 @@ class JWTTokenManager(TokenManager, ABC):\n         self.access_token = token_response.get(self.token_name)\n \n         # The time of expiration is found by decoding the JWT access token\n-        decoded_response = jwt.decode(self.access_token, verify=False)\n+        decoded_response = jwt.decode(self.access_token, algorithms=[\"RS256\"], options={\"verify_signature\": False})\n         # exp is the time of expire and iat is the time of token retrieval\n         exp = decoded_response.get('exp')\n         iat = decoded_response.get('iat')\n"
+}

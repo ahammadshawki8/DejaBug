@@ -8,10 +8,10 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T4 Game server |
-| Next item | T4.4 |
+| Current tier | T5 Web core |
+| Next item | T5.1 |
 | Next owner | CLAUDE |
-| Last updated | 2026-09-26 08:30 BST |
+| Last updated | 2026-09-26 03:40 BST (real clock) |
 | Bobcoins used | 29.445 / 40 (10.555 left, see 9.2 re-plan) |
 | Blockers | none |
 
@@ -479,8 +479,8 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 ### T4 Game server + play/verify (3 h), target Sat 12:00 PM
 - [x] T4.1 [CLAUDE] `play.ts`: `git archive` export, test overlay, fresh `git init`, the playground `AGENTS.md` template, and a copy of the `deja-mentor` mode.
 - [x] T4.2 [CLAUDE] `verify.ts`: run the case's tests in the playground and parse the results.
-- [ ] T4.4 [CLAUDE] **Python adapter** (pytest): test files `test_*.py`/`*_test.py`, test names from `def test_*` diffs, targets `file::name`, output classification, and the `.venv` toolchain check. Tests on a Python fixture repo.
-- [ ] T4.5 [HUMAN] Prove the product is generic: `dejabug init` + `mine` + `certify` on a second, Python IBM repository. Record the funnel for the video and README.
+- [x] T4.4 [CLAUDE] **Python adapter** (pytest): test files `test_*.py`/`*_test.py`, test names from `def test_*` diffs, targets `file::name`, output classification, and the `.venv` toolchain check. Tests on a Python fixture repo.
+- [x] T4.5 [HUMAN, done by Claude at the human's request] Prove the product is generic: `dejabug init` + `mine` + `certify` on a second, Python IBM repository. Record the funnel for the video and README.
 - [x] T4.3 [CLAUDE] `server.ts`: all REST endpoints plus SSE forge events (Section 5). Reveal stays locked until a pass or a give-up.
 - [x] **Done when:** an end-to-end run through curl works: start, apply the real fix by hand, verify passes, reveal works. **Verified: real fixes applied to fc42022 (fail to pass) and 66e60c7 (hang to pass). curl on the live server: 27 public cases with no spoilers, start plus verify reports the real failing tests. The server integration test covers the full loop.**
 
@@ -691,3 +691,4 @@ Human, do this:
 - **2026-09-26 07:00:** Granite briefs generated for all 27 certified sarama cases in 47 s (the spoiler guard fixed 3 leaks by retry). The model reused the skill's example codename 10 times, so Claude added codenames.ts plus `dejabug codenames` (a unique-name pass with Granite, also run after every brief batch). All 27 are unique. scripts/check-cases.mjs (paths, emails, mentions, duplicate codenames) was added to CI. Highlight for the demo: 66e60c7 "Infinite Coordinator Loop" was cold for 1,513 days.
 - **2026-09-26 07:30:** T3.6 complete. With BOB_API_KEY (Inference scope) in .env, `brief --provider bob` ran Bob Shell headless with the deja-forger mode and forge-case skill, and wrote fc42022 "The Overflowing Slice" in 18.7 s (prompt on stdin verified). Its quality beats Granite (a richer hint ladder). Added `Case.briefedBy` (bob-shell or watsonx:<model>) and backfilled the 27 cases, so the UI can show which IBM engine wrote each brief.
 - **2026-09-26 08:30:** T4.1-T4.3 done (Claude). play.ts exports the parent commit via a worktree with autocrlf off, overlays the fix tests, and makes a fresh single-commit repo with AGENTS.md and the deja-mentor mode. verify.ts runs the adapter with a 20 s per-test timeout. forge.ts holds the pipeline shared by the CLI and the server. server.ts (Fastify) serves health, repos, cases (public view hides fixDiff, lesson, and hints), session, start, ordered hints, verify, giveup, reveal (403 until solved or given up), funnel, profile, and forge plus SSE events (one run at a time). Sessions persist in .dejabug/state.json. Case.testFiles was added and backfilled.
+- **2026-09-26 03:40 (real clock):** Note: progress-log times after 02:45 were estimates that ran ahead of the real clock; the real time is now Sat 03:40. T4.4 done: Python adapter (pytest: test file and name detection incl. classes, exit-code classification, hang = killed at timeout, the checked-out code comes first on PYTHONPATH, per-repo virtualenv at workspace/.venvs/<repo> activated automatically). T4.5 proven on **IBM/python-sdk-core**: 489 commits, 98 fix-like, 45 candidates in 3.2 s, **31 certified in 44 s**, and 28 briefed with Granite. Total: **55 cases across 2 languages and 2 IBM repos**. The privacy sanitizer now redacts home directories in any separator form plus truncated worktree names. check-cases scans every JSON file for local paths, and prose only for emails and @mentions (Python decorators in diffs are fine). 87 tests. Follow-up idea: `dejabug init` could create the Python virtualenv automatically.

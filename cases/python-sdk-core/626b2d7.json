@@ -1,0 +1,53 @@
+{
+  "id": "626b2d7",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "626b2d7f6fa2e5905a8200a533bd7b8e12654782",
+  "parentSha": "ef52165b4897eafe84a0c6fb548579ca3f94d14e",
+  "prNumber": 50,
+  "status": "certified",
+  "tests": [
+    "test_cwd"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n__________________________________ test_cwd ___________________________________\r\n\r\n    @responses.activate\r\n    def test_cwd():\r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials.env')\r\n        # Try changing working directories to test getting creds from cwd\r\n        cwd = os.getcwd()\r\n        os.chdir(os.path.dirname(file_path))\r\n        iam_authenticator = get_authenticator_from_environment('ibm_watson')\r\n>       service = AnyServiceV1('2017-07-07', authenticator=iam_authenticator)\r\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n\r\n\\test\\test_base_service.py:166: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\\test\\test_base_service.py:46: in __init__\r\n    BaseService.__init__(\r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <test.test_base_service.AnyServiceV1 object at 0x00000153F91A6270>\r\nservice_url = 'https://gateway.watsonplatform.net/test/api'\r\nauthenticator = None, disable_ssl_verification = False\r\n\r\n    def __init__(self,\r\n                 service_url: str = None,\r\n                 authenticator: Authenticator = None,\r\n                 disable_ssl_verification: bool = False):\r\n        self.service_url = service_url\r\n        self.http_config = {}\r\n        self.jar = CookieJar()\r\n        self.authenticator = authenticator\r\n        self.disable_ssl_verification = disable_ssl_verification\r\n        self.default_headers = None\r\n        self._set_user_agent_header(self._build_user_agent())\r\n        if not self.authenticator:\r\n>           raise ValueError('authenticator must be provided')\r\nE           ValueError: authenticator must be provided\r\n\r\n\\ibm_cloud_sdk_core\\base_service.py:79: ValueError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_cwd - ValueError: authenticator must b...\r\n1 failed, 27 deselected in 0.36s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 27 deselected in 0.20s\r\n",
+    "durationMs": 3164
+  },
+  "brief": {
+    "codename": "The Phantom Credential",
+    "symptoms": "The test fails because the authenticator cannot be found when the working directory is changed.",
+    "evidence": "ValueError: authenticator must be provided",
+    "hints": [
+      "The test changes the working directory to the location of the credential file.",
+      "Look at the utils module - the credential file lookup path was hardcoded.",
+      "When the working directory changes, the hardcoded path no longer points to the credential file."
+    ],
+    "difficulty": 2,
+    "precinct": "utils",
+    "lesson": "A credential file lookup that relied on a fixed relative path broke when the working directory changed. The fix makes the lookup use the current working directory instead.",
+    "tags": [
+      "credential-handling",
+      "file-path",
+      "working-directory"
+    ]
+  },
+  "original": {
+    "daysOpen": 2.5,
+    "comments": 11,
+    "reviewRounds": 9,
+    "mergedAt": "2019-12-18T22:41:34Z"
+  },
+  "bugAgeDays": 50,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 3be70c6..c9bb0de 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -16,8 +16,8 @@\n # from ibm_cloud_sdk_core.authenticators import Authenticator\n import datetime\n import json as json_import\n-from os import getenv, environ\n-from os.path import dirname, isfile, join, expanduser, abspath\n+from os import getenv, environ, getcwd\n+from os.path import isfile, join, expanduser\n from typing import List, Union\n \n import dateutil.parser as date_parser\n@@ -182,7 +182,7 @@ def __read_from_credential_file(service_name: str, separator: str = '=') -> dict\n     # Current working directory\n     if credential_file_path is None:\n         file_path = join(\n-            dirname(dirname(abspath(__file__))), default_credentials_file_name)\n+            getcwd(), default_credentials_file_name)\n         if isfile(file_path):\n             credential_file_path = file_path\n \n"
+}

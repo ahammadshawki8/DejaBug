@@ -3,6 +3,7 @@ import path from "node:path";
 import { ADAPTERS, detectAdapter } from "./adapters/index.js";
 import { commandVersion } from "./adapters/tool.js";
 import type { Config } from "./config.js";
+import { activateToolchain } from "./forge.js";
 
 export interface Check {
   name: string;
@@ -15,6 +16,7 @@ export function runDoctor(config: Config): Check[] {
   const git = commandVersion("git", ["--version"]);
   const bob = commandVersion("bob", ["--version"]);
   const repoOk = existsSync(path.join(config.repoDir, ".git"));
+  if (repoOk) activateToolchain(config);
   const adapter = repoOk ? detectAdapter(config.repoDir) : undefined;
   const tool = adapter?.toolCheck();
 

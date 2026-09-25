@@ -1,0 +1,56 @@
+{
+  "id": "f1149fa",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "f1149fa815f3f1585b3e02da278dd075b9a1f836",
+  "parentSha": "f67a1d97510ac9ca7d8a62a681e8920a71d1c1fc",
+  "prNumber": 56,
+  "status": "certified",
+  "tests": [
+    "test_datetime_conversion",
+    "test_datetime_to_string",
+    "test_string_to_datetime"
+  ],
+  "packages": [
+    "test/test_utils.py"
+  ],
+  "testFiles": [
+    "test/test_utils.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "FF                                                                       [100%]\r\n================================== FAILURES ===================================\r\n___________________________ test_string_to_datetime ___________________________\r\n\r\n    def test_string_to_datetime():\r\n        # If the specified string does not include a timezone, it is assumed to be UTC\r\n        date = string_to_datetime('2017-03-06 16:00:04.159338')\r\n        assert date.day == 6\r\n        assert date.hour == 16\r\n>       assert date.tzinfo.utcoffset(None) == datetime.timezone.utc.utcoffset(None)\r\n               ^^^^^^^^^^^^^^^^^^^^^\r\nE       AttributeError: 'NoneType' object has no attribute 'utcoffset'\r\n\r\ntest\\test_utils.py:15: AttributeError\r\n___________________________ test_datetime_to_string ___________________________\r\n\r\n    def test_datetime_to_string():\r\n        # If specified date is None, return None\r\n        assert datetime_to_string(None) is None\r\n        # If the specified date is \"naive\", it is interpreted as a UTC date\r\n        date = datetime.datetime(2017, 3, 6, 16, 0, 4, 159338)\r\n        res = datetime_to_string(date)\r\n>       assert res == '2017-03-06T16:00:04.159338Z'\r\nE       AssertionError: assert '2017-03-06T16:00:04.159338' == '2017-03-06T16:00:04.159338Z'\r\nE         \r\nE         - 2017-03-06T16:00:04.159338Z\r\nE         ?                           -\r\nE         + 2017-03-06T16:00:04.159338\r\n\r\ntest\\test_utils.py:33: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_utils.py::test_string_to_datetime - AttributeError: 'NoneTyp...\r\nFAILED test/test_utils.py::test_datetime_to_string - AssertionError: assert '...\r\n2 failed, 8 deselected in 0.32s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 8 deselected in 0.16s\r\n",
+    "durationMs": 3047
+  },
+  "brief": {
+    "codename": "Naive Timezone",
+    "symptoms": "The test suite fails when converting a naive datetime (without timezone) to a string and back, expecting the result to include a trailing 'Z' indicating UTC.",
+    "evidence": "AttributeError: 'NoneType' object has no attribute 'utcoffset'\nAssertionError: assert '2017-03-06T16:00:04.159338' == '2017-03-06T16:00:04.159338Z'",
+    "hints": [
+      "The failure occurs when a datetime value lacks timezone information.",
+      "Look at the `utils` module where datetime conversion functions live.",
+      "When a datetime is naive, the conversion must treat it as UTC and append 'Z'."
+    ],
+    "difficulty": 2,
+    "precinct": "utils",
+    "lesson": "Naive datetime values must be treated as UTC; the fix adds explicit handling for `tzinfo is None` in both `datetime_to_string` and `string_to_datetime`.",
+    "tags": [
+      "datetime",
+      "naive",
+      "timezone",
+      "serialization"
+    ]
+  },
+  "original": {
+    "daysOpen": 2.8,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2020-02-13T21:31:36Z"
+  },
+  "bugAgeDays": 10,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 5994804..319631b 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -71,6 +71,9 @@ def cleanup_value(value: any) -> any:\n def datetime_to_string(val: datetime.datetime) -> str:\n     \"\"\"Convert a datetime object to string.\n \n+    If the supplied datetime does not specify a timezone,\n+    it is assumed to be UTC.\n+\n     Args:\n         val: The datetime object.\n \n@@ -78,6 +81,9 @@ def datetime_to_string(val: datetime.datetime) -> str:\n         datetime serialized to iso8601 format.\n     \"\"\"\n     if isinstance(val, datetime.datetime):\n+        if val.tzinfo is None:\n+            return val.isoformat() + 'Z'\n+        val = val.astimezone(datetime.timezone.utc)\n         return val.isoformat().replace('+00:00', 'Z')\n     return val\n \n@@ -90,7 +96,10 @@ def string_to_datetime(string: str) -> datetime.datetime:\n     Returns:\n         the de-serialized string as a datetime object.\n     \"\"\"\n-    return date_parser.parse(string)\n+    val = date_parser.parse(string)\n+    if val.tzinfo is not None:\n+        return val\n+    return val.replace(tzinfo=datetime.timezone.utc)\n \n def date_to_string(val: datetime.date) -> str:\n     \"\"\"Convert a date object to string.\n"
+}

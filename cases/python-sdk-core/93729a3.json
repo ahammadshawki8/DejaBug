@@ -1,0 +1,56 @@
+{
+  "id": "93729a3",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "93729a3ee09b8011989b7679b4820d042f79964b",
+  "parentSha": "a86cdab3986aee607cba5a91565dd48c3f40d372",
+  "prNumber": 152,
+  "status": "certified",
+  "tests": [
+    "test_request_token",
+    "test_request_token_with_crn",
+    "test_request_token_with_id",
+    "test_retrieve_instance_identity_token"
+  ],
+  "packages": [
+    "test/test_vpc_instance_token_manager.py"
+  ],
+  "testFiles": [
+    "test/test_vpc_instance_token_manager.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": " token method.\r\n        def mock_retrieve_instance_identity_token():\r\n            return TEST_TOKEN\r\n    \r\n        token_manager.retrieve_instance_identity_token = mock_retrieve_instance_identity_token\r\n    \r\n        response = {\r\n            'access_token': TEST_IAM_TOKEN,\r\n        }\r\n    \r\n        responses.add(\r\n            responses.POST, 'http://169.254.169.254/instance_identity/v1/iam_token', body=json.dumps(response), status=200\r\n        )\r\n    \r\n        response = token_manager.request_token()\r\n        assert len(responses.calls) == 1\r\n        assert responses.calls[0].request.headers['Content-Type'] == 'application/json'\r\n        assert responses.calls[0].request.headers['Accept'] == 'application/json'\r\n        assert responses.calls[0].request.headers['Authorization'] == 'Bearer ' + TEST_TOKEN\r\n        assert responses.calls[0].request.body == '{\"trusted_profile\": {\"id\": \"iam-id-123\"}}'\r\n>       assert responses.calls[0].request.params['version'] == '2022-03-01'\r\nE       AssertionError: assert '2021-09-20' == '2022-03-01'\r\nE         \r\nE         - 2022-03-01\r\nE         + 2021-09-20\r\n\r\ntest\\test_vpc_instance_token_manager.py:186: AssertionError\r\n------------------------------ Captured log call ------------------------------\r\nDEBUG    ibm_cloud_sdk_core.token_managers.vpc_instance_token_manager:vpc_instance_token_manager.py:96 Invoking VPC 'create_iam_token' operation: http://169.254.169.254/instance_identity/v1/iam_token\r\nDEBUG    ibm_cloud_sdk_core.token_managers.vpc_instance_token_manager:vpc_instance_token_manager.py:104 Returned from VPC 'create_iam_token' operation.\"\r\n_____________________________ test_request_token ______________________________\r\n\r\ncaplog = <_pytest.logging.LogCaptureFixture object at 0x000002C084E889D0>\r\n\r\n    @responses.activate\r\n    def test_request_token(caplog):\r\n        caplog.set_level(logging.DEBUG)\r\n    \r\n        token_manager = VPCInstanceTokenManager()\r\n    \r\n        # Mock the retrieve instance identity token method.\r\n        def mock_retrieve_instance_identity_token():\r\n            return TEST_TOKEN\r\n    \r\n        token_manager.retrieve_instance_identity_token = mock_retrieve_instance_identity_token\r\n    \r\n        response = {\r\n            'access_token': TEST_IAM_TOKEN,\r\n        }\r\n    \r\n        responses.add(\r\n            responses.POST, 'http://169.254.169.254/instance_identity/v1/iam_token', body=json.dumps(response), status=200\r\n        )\r\n    \r\n        response = token_manager.request_token()\r\n        assert len(responses.calls) == 1\r\n        assert responses.calls[0].request.headers['Content-Type'] == 'application/json'\r\n        assert responses.calls[0].request.headers['Accept'] == 'application/json'\r\n        assert responses.calls[0].request.headers['Authorization'] == 'Bearer ' + TEST_TOKEN\r\n        assert responses.calls[0].request.body is None\r\n>       assert responses.calls[0].request.params['version'] == '2022-03-01'\r\nE       AssertionError: assert '2021-09-20' == '2022-03-01'\r\nE         \r\nE         - 2022-03-01\r\nE         + 2021-09-20\r\n\r\ntest\\test_vpc_instance_token_manager.py:222: AssertionError\r\n------------------------------ Captured log call ------------------------------\r\nDEBUG    ibm_cloud_sdk_core.token_managers.vpc_instance_token_manager:vpc_instance_token_manager.py:96 Invoking VPC 'create_iam_token' operation: http://169.254.169.254/instance_identity/v1/iam_token\r\nDEBUG    ibm_cloud_sdk_core.token_managers.vpc_instance_token_manager:vpc_instance_token_manager.py:104 Returned from VPC 'create_iam_token' operation.\"\r\n=========================== short test summary info ===========================\r\nFAILED test/test_vpc_instance_token_manager.py::test_retrieve_instance_identity_token\r\nFAILED test/test_vpc_instance_token_manager.py::test_request_token_with_crn\r\nFAILED test/test_vpc_instance_token_manager.py::test_request_token_with_id - ...\r\nFAILED test/test_vpc_instance_token_manager.py::test_request_token - Assertio...\r\n4 failed, 2 passed, 3 deselected in 0.29s\r\n",
+    "passOutput": "......                                                                   [100%]\r\n6 passed, 3 deselected in 0.16s\r\n",
+    "durationMs": 2910
+  },
+  "brief": {
+    "codename": "VPC Token Version Update",
+    "symptoms": "The VPCInstanceTokenManager fails to request a token because it uses an outdated version string (2021-09-20) that does not match the expected version (2022-03-01) required by the VPC Instance Metadata Service.",
+    "evidence": "AssertionError: assert '2021-09-20' == '2022-03-01'\n\n- 2022-03-01\n+ 2021-09-20",
+    "hints": [
+      "The failure occurs when the token manager attempts to call the VPC Instance Metadata Service to retrieve an IAM token.",
+      "The version string used in the request is defined as METADATA_SERVICE_VERSION in the VPCInstanceTokenManager class.",
+      "The test output shows the expected version (2022-03-01) differs from the actual version (2021-09-20) used in the request."
+    ],
+    "difficulty": 2,
+    "precinct": "token-manager",
+    "lesson": "The fix updates the METADATA_SERVICE_VERSION constant in the VPCInstanceTokenManager class from '2021-09-20' to '2022-03-01', aligning with the version expected by the VPC Instance Metadata Service. This resolves the version mismatch and allows the token manager to successfully request tokens.",
+    "tags": [
+      "token-manager",
+      "version-update",
+      "vpc-instance"
+    ]
+  },
+  "original": {
+    "daysOpen": 3.8,
+    "comments": 1,
+    "reviewRounds": 2,
+    "mergedAt": "2023-01-09T15:07:44Z"
+  },
+  "bugAgeDays": 427,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py b/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py\nindex 44cdd51..50eeb00 100644\n--- a/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py\n+++ b/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py\n@@ -1,6 +1,6 @@\n # coding: utf-8\n \n-# Copyright 2021 IBM All Rights Reserved.\n+# Copyright 2021, 2023 IBM All Rights Reserved.\n #\n # Licensed under the Apache License, Version 2.0 (the \"License\");\n # you may not use this file except in compliance with the License.\n@@ -52,7 +52,7 @@ class VPCInstanceTokenManager(JWTTokenManager):\n         url (str, optional): The VPC Instance Metadata Service's base endpoint URL.\n     \"\"\"\n \n-    METADATA_SERVICE_VERSION = '2021-09-20'\n+    METADATA_SERVICE_VERSION = '2022-03-01'\n     DEFAULT_IMS_ENDPOINT = 'http://169.254.169.254'\n     TOKEN_NAME = 'access_token'\n \n"
+}

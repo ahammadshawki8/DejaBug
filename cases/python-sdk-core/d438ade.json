@@ -1,0 +1,54 @@
+{
+  "id": "d438ade",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "d438ade26d0ddda65074d6c31f735cc1f53850cf",
+  "parentSha": "d6238b1fe7d86f9367d284830a93a312f05678be",
+  "prNumber": 104,
+  "status": "certified",
+  "tests": [
+    "test_read_external_sources_1",
+    "test_read_external_sources_2"
+  ],
+  "packages": [
+    "test/test_utils.py"
+  ],
+  "testFiles": [
+    "test/test_utils.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F.                                                                       [100%]\r\n================================== FAILURES ===================================\r\n________________________ test_read_external_sources_1 _________________________\r\n\r\n    def test_read_external_sources_1():\r\n        # Set IBM_CREDENTIALS_FILE to a non-existent file (should be silently ignored).\r\n        bad_file_path = os.path.join(os.path.dirname(__file__), 'NOT_A_FILE')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = bad_file_path\r\n    \r\n        # This env var should take precendence since the config file wasn't found.\r\n        os.environ['SERVICE_1_URL'] = 'https://good-url.com'\r\n    \r\n>       config = read_external_sources('service_1')\r\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n\r\ntest\\test_utils.py:405: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\nibm_cloud_sdk_core\\utils.py:195: in read_external_sources\r\n    config = __read_from_credential_file(service_name)\r\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nservice_name = 'service_1', separator = '='\r\n\r\n    def __read_from_credential_file(service_name: str,\r\n                                    *,\r\n                                    separator: str = '=') -> dict:\r\n        \"\"\"Return a config object based on credentials file for a service.\r\n    \r\n        Args:\r\n            service_name: The name of the service to look for in env variables.\r\n    \r\n        Keyword Args:\r\n            separator: The character to split on to de-serialize a line into a key-value pair.\r\n    \r\n        Returns:\r\n            A set of service configuration key-value pairs.\r\n        \"\"\"\r\n        default_credentials_file_name = 'ibm-credentials.env'\r\n    \r\n        # File path specified by an env variable\r\n        credential_file_path = getenv('IBM_CREDENTIALS_FILE')\r\n    \r\n        # Current working directory\r\n        if credential_file_path is None:\r\n            file_path = join(getcwd(), default_credentials_file_name)\r\n            if isfile(file_path):\r\n                credential_file_path = file_path\r\n    \r\n        # Home directory\r\n        if credential_file_path is None:\r\n            file_path = join(expanduser('~'), default_credentials_file_name)\r\n            if isfile(file_path):\r\n                credential_file_path = file_path\r\n    \r\n        config = {}\r\n        if credential_file_path is not None:\r\n>           with open(credential_file_path, 'r') as fobj:\r\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nE           FileNotFoundError: [Errno 2] No such file or directory: '~\\\\AppData\\\\Local\\\\Temp\\\\test\\\\NOT_A_FILE'\r\n\r\nibm_cloud_sdk_core\\utils.py:254: FileNotFoundError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_utils.py::test_read_external_sources_1 - FileNotFoundError: ...\r\n1 failed, 1 passed, 12 deselected in 0.24s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 12 deselected in 0.15s\r\n",
+    "durationMs": 2761
+  },
+  "brief": {
+    "codename": "Silent Config",
+    "symptoms": "The SDK raises a FileNotFoundError when the IBM_CREDENTIALS_FILE points to a non-existent file, causing the test to fail.",
+    "evidence": "FileNotFoundError: [Errno 2] No such file or directory: '~\\AppData\\Local\\Temp\\test\\NOT_A_FILE'",
+    "hints": [
+      "The failure occurs when the SDK tries to read a configuration file that does not exist.",
+      "Look at the utils module - the part that handles reading from the credentials file.",
+      "The fix involves catching the exception and returning an empty config instead of propagating the error."
+    ],
+    "difficulty": 1,
+    "precinct": "utils",
+    "lesson": "When a configuration file is missing, the SDK should handle the situation gracefully by returning an empty configuration rather than raising an exception.",
+    "tags": [
+      "configuration",
+      "error-handling",
+      "file-io"
+    ]
+  },
+  "original": {
+    "daysOpen": 319.3,
+    "comments": 8,
+    "reviewRounds": 1,
+    "mergedAt": "2021-02-01T19:37:48Z"
+  },
+  "bugAgeDays": 76,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 8c710e5..87411e9 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -1,6 +1,6 @@\n # coding: utf-8\n \n-# Copyright 2019 IBM All Rights Reserved.\n+# Copyright 2019, 2021 IBM All Rights Reserved.\n #\n # Licensed under the Apache License, Version 2.0 (the \"License\");\n # you may not use this file except in compliance with the License.\n@@ -234,16 +234,16 @@ def __read_from_credential_file(service_name: str,\n     \"\"\"\n     default_credentials_file_name = 'ibm-credentials.env'\n \n-    # File path specified by an env variable\n+    # 1. ${IBM_CREDENTIALS_FILE}\n     credential_file_path = getenv('IBM_CREDENTIALS_FILE')\n \n-    # Current working directory\n+    # 2. <current-working-directory>/ibm-credentials.env\n     if credential_file_path is None:\n         file_path = join(getcwd(), default_credentials_file_name)\n         if isfile(file_path):\n             credential_file_path = file_path\n \n-    # Home directory\n+    # 3. <user-home-directory>/ibm-credentials.env\n     if credential_file_path is None:\n         file_path = join(expanduser('~'), default_credentials_file_name)\n         if isfile(file_path):\n@@ -251,14 +251,19 @@ def __read_from_credential_file(service_name: str,\n \n     config = {}\n     if credential_file_path is not None:\n-        with open(credential_file_path, 'r') as fobj:\n-            for line in fobj:\n-                key_val = line.strip().split(separator, 1)\n-                if len(key_val) == 2:\n-                    key = key_val[0]\n-                    value = key_val[1]\n-                    _parse_key_and_update_config(config, service_name, key,\n-                                                 value)\n+        try:\n+            with open(credential_file_path, 'r') as fobj:\n+                for line in fobj:\n+                    key_val = line.strip().split(separator, 1)\n+                    if len(key_val) == 2:\n+                        key = key_val[0]\n+                        value = key_val[1]\n+                        _parse_key_and_update_config(config, service_name, key,\n+                                                     value)\n+        except OSError:\n+            # just absorb the exception and make sure we return an empty response\n+            config = {}\n+\n     return config\n \n \n"
+}

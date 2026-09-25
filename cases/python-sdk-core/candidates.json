@@ -1,0 +1,1027 @@
+{
+  "repo": "IBM/python-sdk-core",
+  "generatedAt": "2026-09-25T21:08:58.956Z",
+  "language": "python",
+  "scannedCommits": 489,
+  "fixLikeCommits": 98,
+  "candidates": [
+    {
+      "fixSha": "6c113d8b0a53428fe11559f0274df3c18e8b1b8c",
+      "parentSha": "c59e299a44b2601ede75f83a028c035e70e9bd9b",
+      "subject": "fix(deps): update all dependencies (#242)",
+      "date": "2026-08-31T13:19:26+02:00",
+      "prNumber": 242,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/logger.py"
+      ],
+      "testFiles": [
+        "test/test_http_adapter.py",
+        "test/test_iam_assume_token_manager.py",
+        "test/test_iam_token_manager.py",
+        "test/test_mcsp_authenticator.py",
+        "test/test_mcsp_token_manager.py",
+        "test/test_mcspv2_authenticator.py"
+      ],
+      "packages": [
+        "test/test_http_adapter.py",
+        "test/test_iam_assume_token_manager.py",
+        "test/test_iam_token_manager.py",
+        "test/test_mcsp_authenticator.py",
+        "test/test_mcsp_token_manager.py",
+        "test/test_mcspv2_authenticator.py"
+      ],
+      "tests": [
+        "test_get_refresh_token",
+        "test_get_token",
+        "test_get_token_background_refresh",
+        "test_get_token_cached",
+        "test_get_token_success",
+        "test_request_token"
+      ]
+    },
+    {
+      "fixSha": "3dc4cc47a8fa5363b1b08c9fbc1412885748af3e",
+      "parentSha": "8e8c3f5a1c0157f0dbf087252c6388d1c5e9a8c7",
+      "subject": "fix: improve the detection and loading of default certificates (#197)",
+      "date": "2024-07-11T17:16:42+02:00",
+      "prNumber": 197,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/http_adapter.py"
+      ],
+      "testFiles": [
+        "test/test_http_adapter.py"
+      ],
+      "packages": [
+        "test/test_http_adapter.py"
+      ],
+      "tests": [
+        "test_tls_v1_2"
+      ]
+    },
+    {
+      "fixSha": "ff14a4b1177b31ab2afd8aed7c6e3ffecdabfb4c",
+      "parentSha": "94f73219a6e92ef8f53848ddf8b061d461d550fe",
+      "subject": "fix: always load the default certs on our custom SSL context (#196)",
+      "date": "2024-07-09T21:14:59+02:00",
+      "prNumber": 196,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/http_adapter.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_http_adapter.py"
+      ],
+      "packages": [
+        "test/test_http_adapter.py"
+      ],
+      "tests": [
+        "test_tls_v1_1",
+        "test_tls_v1_2"
+      ]
+    },
+    {
+      "fixSha": "f4f0b5afe4746c8dfc9687ebeb9db20bf1df2414",
+      "parentSha": "41dfaece0d5a7d3d79d12aaa9824167a33b73ecd",
+      "subject": "fix: adjust IAM token expiration time (#189)",
+      "date": "2024-02-28T10:42:39-06:00",
+      "prNumber": 189,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py",
+        "ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_container_token_manager.py",
+        "test/test_iam_token_manager.py",
+        "test/test_vpc_instance_token_manager.py"
+      ],
+      "packages": [
+        "test/test_container_token_manager.py",
+        "test/test_iam_token_manager.py",
+        "test/test_vpc_instance_token_manager.py"
+      ],
+      "tests": [
+        "test_access_token",
+        "test_authenticate_success",
+        "test_get_token_success"
+      ]
+    },
+    {
+      "fixSha": "7fc172ad325545aa07bd5cbab1cb65cb0c078b9b",
+      "parentSha": "f973bdf537b4e11f75a13e07f407e305c04250cc",
+      "subject": "fix: use the correct SSL config if cert verification is disabled (#187)",
+      "date": "2024-01-24T18:42:27+01:00",
+      "prNumber": 187,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test_integration/test_ssl_verification.py"
+      ],
+      "packages": [
+        "test_integration/test_ssl_verification.py"
+      ],
+      "tests": [
+        "test_ssl_verification"
+      ]
+    },
+    {
+      "fixSha": "7e848259ca88fa1b4831786eaaae2a02f8afbcd2",
+      "parentSha": "a2f48f5fbdc7a4469db9b5f83072186c98cc1d26",
+      "subject": "fix: use retry_interval as retry backoff_max (#184)",
+      "date": "2023-12-11T14:53:18-06:00",
+      "prNumber": 184,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_retry_config_default",
+        "test_retry_config_external",
+        "test_retry_config_non_default"
+      ]
+    },
+    {
+      "fixSha": "dd1cd056ec030344e2b8fec5093b2acae53ae941",
+      "parentSha": "5d52d98618e6915f8b0a29df40a9c2385ab99b5a",
+      "subject": "fix: use on-the-fly compression only for file objects (#177)",
+      "date": "2023-10-10T11:55:44+02:00",
+      "prNumber": 177,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_gzip_compression",
+        "test_gzip_compression_external"
+      ]
+    },
+    {
+      "fixSha": "2f911055aac6ffe8e0bab056b861ce41a29ad58b",
+      "parentSha": "d155c25f75a2272d9c7135aa48266f4863c3d124",
+      "subject": "fix: add correct support for compressing file-like objects (#174)",
+      "date": "2023-10-04T21:00:00+02:00",
+      "prNumber": 174,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_gzip_compression",
+        "test_gzip_compression_external",
+        "test_gzip_compression_file_input"
+      ]
+    },
+    {
+      "fixSha": "7c6bd0f1d3521628ef0fd593f7110d9174c5b771",
+      "parentSha": "2307cb95b46008c0538f33ae2fe04892b238b4cd",
+      "subject": "fix(ContainerAuthenticator): add sa-token as default CR token filename (#165)",
+      "date": "2023-05-22T15:32:39-05:00",
+      "prNumber": 165,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/token_managers/container_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_container_token_manager.py"
+      ],
+      "packages": [
+        "test/test_container_token_manager.py"
+      ],
+      "tests": [
+        "test_authenticate_fail_no_cr_token",
+        "test_retrieve_cr_token_fail"
+      ]
+    },
+    {
+      "fixSha": "2f09503ac4ebfb6f603f142f461122c402aa03d5",
+      "parentSha": "a0d3744d83c5ad27af13a5ae6773ba117ae3e827",
+      "subject": "fix: allow control characters in JSON responses (#160)",
+      "date": "2023-03-23T15:26:59-05:00",
+      "prNumber": 160,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/api_exception.py",
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_request_success_response"
+      ]
+    },
+    {
+      "fixSha": "30d7c52659f92f8d9218b66372ef0d707a297232",
+      "parentSha": "a3481229abd805e21f33b018a514095d2da2cfbb",
+      "subject": "fix: detect JSON unmarshal errors in responses (#157)",
+      "date": "2023-03-22T13:36:09-05:00",
+      "prNumber": 157,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/detailed_response.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py",
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_base_service.py",
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_is_json_mimetype",
+        "test_request_fail_401",
+        "test_request_fail_401_badjson",
+        "test_request_fail_401_error_json",
+        "test_request_fail_401_nonerror_json",
+        "test_request_fail_401_nonjson",
+        "test_request_server_error",
+        "test_request_success_invalid_json",
+        "test_request_success_nonjson"
+      ]
+    },
+    {
+      "fixSha": "93729a3ee09b8011989b7679b4820d042f79964b",
+      "parentSha": "a86cdab3986aee607cba5a91565dd48c3f40d372",
+      "subject": "fix(VPCInstanceAuthenticator): use correct version string",
+      "date": "2023-01-09T10:07:43-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_vpc_instance_token_manager.py"
+      ],
+      "packages": [
+        "test/test_vpc_instance_token_manager.py"
+      ],
+      "tests": [
+        "test_request_token",
+        "test_request_token_with_crn",
+        "test_request_token_with_id",
+        "test_retrieve_instance_identity_token"
+      ]
+    },
+    {
+      "fixSha": "a87d66da4b9ed98b9ac910ca67c86b674aab7ef6",
+      "parentSha": "478f141302a9c12fe0383af3a24e2423a313df99",
+      "subject": "fix: avoid warning when custom headers are used (#142)",
+      "date": "2022-06-07T11:26:07-05:00",
+      "prNumber": 142,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/authenticators/authenticator.py",
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_api_exception.py",
+        "test/test_base_service.py",
+        "test/test_detailed_response.py"
+      ],
+      "packages": [
+        "test/test_api_exception.py",
+        "test/test_base_service.py",
+        "test/test_detailed_response.py"
+      ],
+      "tests": [
+        "test_api_exception",
+        "test_detailed_response_dict",
+        "test_detailed_response_list",
+        "test_reserved_keys",
+        "test_user_agent_header"
+      ]
+    },
+    {
+      "fixSha": "8d6ec4b675642664258650e7d7c12c8fc333a410",
+      "parentSha": "20cc41f58d8d449fcc679285795dd49b6464be79",
+      "subject": "fix: set minimum TLS version to v1.2 (#139)",
+      "date": "2022-03-21T12:10:58+01:00",
+      "prNumber": 139,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_min_ssl_version"
+      ]
+    },
+    {
+      "fixSha": "37d0099cfd7bfe4bdb9f1cddc6bb2b62f4609f60",
+      "parentSha": "1e29bfa6e68f43d6a8526bfb16f35d2084df2a14",
+      "subject": "fix: strip trailing slashes in BaseService.set_service_url (#130)",
+      "date": "2021-11-15T09:39:22-06:00",
+      "prNumber": 130,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py",
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_base_service.py",
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_json",
+        "test_reserved_keys",
+        "test_service_url_handling",
+        "test_service_url_slash",
+        "test_strip_extra_slashes",
+        "test_trailing_slash",
+        "test_user_agent_header"
+      ]
+    },
+    {
+      "fixSha": "b142e9ecf337f73dcfd1e577afb330e993a3371b",
+      "parentSha": "4ac1246fdee39ba79bcfb868498ffef78f7932b1",
+      "subject": "fix: multiple IAM based authenticator overrides (#124)",
+      "date": "2021-08-24T18:54:38+02:00",
+      "prNumber": 124,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/token_managers/container_token_manager.py",
+        "ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py",
+        "test/test_container_token_manager.py",
+        "test/test_detailed_response.py",
+        "test/test_iam_authenticator.py"
+      ],
+      "packages": [
+        "test/test_base_service.py",
+        "test/test_container_token_manager.py",
+        "test/test_detailed_response.py",
+        "test/test_iam_authenticator.py"
+      ],
+      "tests": [
+        "test_detailed_response_dict",
+        "test_detailed_response_list",
+        "test_files_dict",
+        "test_files_duplicate_parts",
+        "test_files_list",
+        "test_multiple_iam_authenticators",
+        "test_setter_methods",
+        "test_url_encoding"
+      ]
+    },
+    {
+      "fixSha": "3daef00a61c461512da0a3b37952ed275180569d",
+      "parentSha": "a15df4b18c7944e0d0edcdbcee64ae685e3351d5",
+      "subject": "fix(retries): change default retry_interval to 1 second (was 0.1) (#122)",
+      "date": "2021-08-20T11:14:16-05:00",
+      "prNumber": 122,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_retry_config_default"
+      ]
+    },
+    {
+      "fixSha": "6c1ddacff512478ec9aaa6f5c6ff454eae780c74",
+      "parentSha": "5395f657895c3898a33bf19e3b2cd85b2d5e2421",
+      "subject": "fix: encode serialized JSON string as UTF-8 (#121)",
+      "date": "2021-08-18T18:36:57+02:00",
+      "prNumber": 121,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_invalid_authenticator",
+        "test_json",
+        "test_misc_methods",
+        "test_ssl_error"
+      ]
+    },
+    {
+      "fixSha": "619197844e553fd4fd3c7e9ece2abae752d5dc3f",
+      "parentSha": "6614a63c3159f351b479acaef9122d045123d1df",
+      "subject": "fix: remove reserved keywords from kwargs before passing it to requests (#117)",
+      "date": "2021-07-08T17:13:50+02:00",
+      "prNumber": 117,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_reserved_keys"
+      ]
+    },
+    {
+      "fixSha": "18d64b51f0e637a01f72488635e81fc5a7bd6918",
+      "parentSha": "818f097ceae522efd4696916c871e55489661084",
+      "subject": "fix: split token manager url path",
+      "date": "2021-03-05T06:29:59-06:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/iam_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_iam_authenticator.py"
+      ],
+      "packages": [
+        "test/test_iam_authenticator.py"
+      ],
+      "tests": [
+        "test_iam_authenticator"
+      ]
+    },
+    {
+      "fixSha": "d438ade26d0ddda65074d6c31f735cc1f53850cf",
+      "parentSha": "d6238b1fe7d86f9367d284830a93a312f05678be",
+      "subject": "fix: silently ignore missing configuration file",
+      "date": "2021-02-01T13:37:47-06:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_read_external_sources_1",
+        "test_read_external_sources_2"
+      ]
+    },
+    {
+      "fixSha": "f2d7225a6f8e8f4b19ed6d1858c93993d7d62cf5",
+      "parentSha": "26a42a6723b36e3c078389c6072fe9d3b296c28a",
+      "subject": "fix: update pyjwt parameters to satisfy 2.x changes",
+      "date": "2021-01-07T08:30:25-06:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/jwt_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py",
+        "test/test_cp4d_authenticator.py",
+        "test/test_cp4d_token_manager.py",
+        "test/test_iam_authenticator.py",
+        "test/test_iam_token_manager.py"
+      ],
+      "packages": [
+        "test/test_base_service.py",
+        "test/test_cp4d_authenticator.py",
+        "test/test_cp4d_token_manager.py",
+        "test/test_iam_authenticator.py",
+        "test/test_iam_token_manager.py"
+      ],
+      "tests": [
+        "test_get_token",
+        "test_request_token"
+      ]
+    },
+    {
+      "fixSha": "b6a6da3445e70374b654221340aaebfc7f9d0ecc",
+      "parentSha": "9c3b1c24cbc7c20a89f5fb541dd23868d510b2ac",
+      "subject": "fix: replace zlib with gzip for gzip compression",
+      "date": "2020-11-11T12:58:37-06:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_gzip_compression",
+        "test_gzip_compression_external"
+      ]
+    },
+    {
+      "fixSha": "549694867285c2ba1d77187bfba108543a225e33",
+      "parentSha": "4c02d4b0da4c74c94931098cc376c693295da005",
+      "subject": "fix: Combine multiple ending slashes to one",
+      "date": "2020-06-01T10:59:07-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_json",
+        "test_trailing_slash"
+      ]
+    },
+    {
+      "fixSha": "09a193ce6b4f0b54b027df07d767f29df85ab71c",
+      "parentSha": "5da47e29e4f3d9e4429bc9a5019cf9973184dc85",
+      "subject": "fix: Revert stripping request URL trailing slashes",
+      "date": "2020-05-29T09:27:57-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_json",
+        "test_trailing_slash"
+      ]
+    },
+    {
+      "fixSha": "c960b7dc943ac7d8b1bbe748ee7079aa42497504",
+      "parentSha": "8688f2f7854083c5423633726b82aec2c0f93f9f",
+      "subject": "fix: Revert service_url slash stripping to work with current generated unit tests",
+      "date": "2020-05-22T18:58:31-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_trailing_slash"
+      ]
+    },
+    {
+      "fixSha": "091ecde7ab6c8aadc81c71aa35d6a33572856ac8",
+      "parentSha": "ea6cf85412f25aa8c5aefa123db4ebf3219a20a2",
+      "subject": "fix: Don't rstrip slash when service_url is none",
+      "date": "2020-05-22T17:05:18-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_trailing_slash"
+      ]
+    },
+    {
+      "fixSha": "47d1d99261767331a2583612ebaf048cf60d1fd3",
+      "parentSha": "5354c555a8885a65600bd6ddc0400a8874d3b47a",
+      "subject": "fix: Strip trailing slash for request url",
+      "date": "2020-05-22T10:10:40-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_trailing_slash"
+      ]
+    },
+    {
+      "fixSha": "8cf4fc945a0f77fccf977bfdd0cc3cd203aac0bb",
+      "parentSha": "d995efbdb960bbc0f2fa06714301921170bde3fb",
+      "subject": "fix: allow '=' character in environment config values",
+      "date": "2020-05-11T14:37:46-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_get_authenticator_from_credential_file",
+        "test_get_authenticator_from_env_variables",
+        "test_vcap_credentials_2"
+      ]
+    },
+    {
+      "fixSha": "f1149fa815f3f1585b3e02da278dd075b9a1f836",
+      "parentSha": "f67a1d97510ac9ca7d8a62a681e8920a71d1c1fc",
+      "subject": "fix: Handle conversions for naive datetime values",
+      "date": "2020-02-10T19:31:51-06:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_datetime_conversion",
+        "test_datetime_to_string",
+        "test_string_to_datetime"
+      ]
+    },
+    {
+      "fixSha": "8251b820e3a00db855d1960defe75279e3b02515",
+      "parentSha": "26c478cfb97206b59d93fbc38938739827c820fa",
+      "subject": "fix: Fix date/datetime_to_string handling of non-date/datetime inputs",
+      "date": "2020-02-01T06:53:52-06:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_date_conversion",
+        "test_datetime_conversion"
+      ]
+    },
+    {
+      "fixSha": "626b2d7f6fa2e5905a8200a533bd7b8e12654782",
+      "parentSha": "ef52165b4897eafe84a0c6fb548579ca3f94d14e",
+      "subject": "Update credential file path check to current working directory (#50)",
+      "date": "2019-12-18T16:41:34-06:00",
+      "prNumber": 50,
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_cwd"
+      ]
+    },
+    {
+      "fixSha": "9cb5826b08324904a7e0eebc118c71384ad1ceee",
+      "parentSha": "13b04fbc99b1d2c030f9e9a71789d88aaf4a9c4b",
+      "subject": "Move validation of authenticator back to core of service. Fix comments. code cleanup",
+      "date": "2019-10-22T16:39:59-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/authenticators/basic_authenticator.py",
+        "ibm_cloud_sdk_core/authenticators/bearer_token_authenticator.py",
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_configure_service",
+        "test_service_url_not_set"
+      ]
+    },
+    {
+      "fixSha": "0fe9482dde24b7a71cb52aa185947b1412b20213",
+      "parentSha": "1243a70359b4d7e8858b9d33c56bcb1a4d7e0451",
+      "subject": "fix(client config): merge from master client config to JWT token manager",
+      "date": "2019-10-02T14:48:19-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/jwt_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_setting_proxy"
+      ]
+    },
+    {
+      "fixSha": "dc0c515e106c3c5882494f38c31a33ef0e0661cf",
+      "parentSha": "5389d81d4af383a4982b81307fa11b91671e23de",
+      "subject": "fix(configs): Pass cllient configs to token managers",
+      "date": "2019-10-02T10:24:56-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/jwt_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_setting_proxy"
+      ]
+    },
+    {
+      "fixSha": "70cf57952aa9d2b91829d4a71211ca6e80634ec5",
+      "parentSha": "4fcaa6690dc46314434ee9b97787b4957b23badb",
+      "subject": "fix: support duplicate part names in 'files' parameter of prepare_request",
+      "date": "2019-09-27T12:07:06-05:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_files",
+        "test_files_dict",
+        "test_files_duplicate_parts",
+        "test_files_list"
+      ]
+    },
+    {
+      "fixSha": "4742b8e47e226143253e7ffdb9e760a003719d8f",
+      "parentSha": "c4ba31d44c01260d9f0f7392ac5c8fe7a6348567",
+      "subject": "fix(displlay_name): display_name unused in constructor",
+      "date": "2019-09-18T16:16:38-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_service_url_not_set"
+      ]
+    },
+    {
+      "fixSha": "414803434c6dbe370cd09eee5f4fb3d4220761e6",
+      "parentSha": "50fad59b9a9d834b683ee096497b37019ed8f50f",
+      "subject": "fix(client props): Setting of the external client config happens in individual services",
+      "date": "2019-09-18T13:50:02-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_iam",
+        "test_service_url_not_set"
+      ]
+    },
+    {
+      "fixSha": "50fad59b9a9d834b683ee096497b37019ed8f50f",
+      "parentSha": "fe36514509fbef79d8326b9dd511a6c5915703c5",
+      "subject": "fix(config): Handle multi word service name",
+      "date": "2019-09-18T09:48:12-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/utils.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py",
+        "test/test_utils.py"
+      ],
+      "packages": [
+        "test/test_base_service.py",
+        "test/test_utils.py"
+      ],
+      "tests": [
+        "test_multi_word_service_name"
+      ]
+    },
+    {
+      "fixSha": "068998592986704e1071718f18dd09cf8b041447",
+      "parentSha": "b274cc658d76278f3404278147e13d7720d5e394",
+      "subject": "fix(url): Change url to service_url",
+      "date": "2019-09-11T13:46:48-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_iam",
+        "test_set_service_url",
+        "test_set_url"
+      ]
+    },
+    {
+      "fixSha": "fbdf3d42e1b419e46277e0fefd28cb891fa9bf47",
+      "parentSha": "a7f10acf1d217a06d8f371fa97e817bdcb62425a",
+      "subject": "fix(classname): Classname is no longer needed param",
+      "date": "2019-09-03T09:21:30-07:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_misc_methods"
+      ]
+    },
+    {
+      "fixSha": "795c6300a961867ea2cdeb56b08d9b3d2cdaa1ed",
+      "parentSha": "866f279083c179bcf8cd145219bc773567eb282a",
+      "subject": "fix(value error): Throw error if authenticator is not set",
+      "date": "2019-08-21T20:23:40-04:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_default_headers",
+        "test_disable_ssl_verification",
+        "test_fail_http_config",
+        "test_files",
+        "test_http_config",
+        "test_http_head",
+        "test_misc_methods",
+        "test_request_fail_401",
+        "test_request_server_error",
+        "test_request_success_json",
+        "test_request_success_response",
+        "test_response_with_no_body",
+        "test_set_url",
+        "test_url_encoding",
+        "test_user_agent_header"
+      ]
+    },
+    {
+      "fixSha": "8a95b895640df16643ecbac3024e0606e007155b",
+      "parentSha": "bf7da48a4a0a57b1f9971c78c720ab987da6b968",
+      "subject": "fix(base service): Separate out request into prepare_request and send",
+      "date": "2019-08-20T10:12:01-04:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_disable_ssl_verification",
+        "test_files",
+        "test_for_cp4d",
+        "test_iam",
+        "test_no_auth",
+        "test_request_fail_401",
+        "test_request_server_error",
+        "test_request_success_json",
+        "test_request_success_response",
+        "test_user_agent_header"
+      ]
+    },
+    {
+      "fixSha": "6e5cad0eb012f3339285a64695e2442210bbe511",
+      "parentSha": "a208ef2609daba669649ca257194f1ff4f588602",
+      "subject": "fix(detailed response): Update _to_dict function to support json array results - Removed extra whitespace",
+      "date": "2019-05-08T10:51:14-04:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py",
+        "ibm_cloud_sdk_core/detailed_response.py",
+        "ibm_cloud_sdk_core/iam_token_manager.py"
+      ],
+      "testFiles": [
+        "test/test_detailed_response.py"
+      ],
+      "packages": [
+        "test/test_detailed_response.py"
+      ],
+      "tests": [
+        "test_detailed_response_dict",
+        "test_detailed_response_list"
+      ]
+    },
+    {
+      "fixSha": "49ed7eb64d092684dbb3f6666d0518b4a1db6a09",
+      "parentSha": "416dd820bfd93da7c29c7d157a26760358059f23",
+      "subject": "fix(user-agent): Add user agent header only if not set",
+      "date": "2019-03-15T15:26:09-04:00",
+      "language": "python",
+      "sourceFiles": [
+        "ibm_cloud_sdk_core/base_service.py"
+      ],
+      "testFiles": [
+        "test/test_base_service.py"
+      ],
+      "packages": [
+        "test/test_base_service.py"
+      ],
+      "tests": [
+        "test_default_headers",
+        "test_user_agent_header"
+      ]
+    }
+  ]
+}

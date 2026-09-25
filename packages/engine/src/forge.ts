@@ -42,8 +42,23 @@ export function initRepo(cfg: Config): LanguageAdapter | undefined {
   return detectAdapter(cfg.repoDir);
 }
 
+/**
+ * Uses a per-repository virtualenv when one exists at workspace/.venvs/<repo> (Python projects),
+ * so each repository runs its tests with its own dependencies. An explicit DEJABUG_PYTHON wins.
+ */
+export function activateToolchain(cfg: Config): void {
+  const name = path.basename(cfg.repoDir);
+  const venv = path.join(path.dirname(cfg.repoDir), ".venvs", name);
+  const exe =
+    process.platform === "win32"
+      ? path.join(venv, "Scripts", "python.exe")
+      : path.join(venv, "bin", "python");
+  if (existsSync(exe) && !process.env.DEJABUG_PYTHON_PINNED) process.env.DEJABUG_PYTHON = exe;
+}
+
 /** The target repo's language adapter, with its toolchain verified. Throws with a fix-it message otherwise. */
 export function requireAdapter(cfg: Config): LanguageAdapter {
+  activateToolchain(cfg);
   if (!existsSync(path.join(cfg.repoDir, ".git"))) {
     throw new Error(`${cfg.repoSlug} is not cloned yet. Run: dejabug init ${cfg.repoSlug}`);
   }

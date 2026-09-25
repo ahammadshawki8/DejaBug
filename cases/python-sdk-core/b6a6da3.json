@@ -1,0 +1,54 @@
+{
+  "id": "b6a6da3",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "b6a6da3445e70374b654221340aaebfc7f9d0ecc",
+  "parentSha": "9c3b1c24cbc7c20a89f5fb541dd23868d510b2ac",
+  "prNumber": 85,
+  "status": "certified",
+  "tests": [
+    "test_gzip_compression",
+    "test_gzip_compression_external"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "FF                                                                       [100%]\r\n================================== FAILURES ===================================\r\n____________________________ test_gzip_compression ____________________________\r\n\r\n    def test_gzip_compression():\r\n        # Should return uncompressed data when gzip is off\r\n        service = AnyServiceV1('2018-11-20', authenticator=NoAuthAuthenticator())\r\n        assert not service.get_enable_gzip_compression()\r\n        prepped = service.prepare_request('GET', url='', data=json.dumps({\"foo\": \"bar\"}))\r\n        assert prepped['data'] == b'{\"foo\": \"bar\"}'\r\n        assert prepped['headers'].get('content-encoding') != 'gzip'\r\n    \r\n        # Should return compressed data when gzip is on\r\n        service.set_enable_gzip_compression(True)\r\n        assert service.get_enable_gzip_compression()\r\n        prepped = service.prepare_request('GET', url='', data=json.dumps({\"foo\": \"bar\"}))\r\n>       assert prepped['data'] == gzip.compress(b'{\"foo\": \"bar\"}')\r\nE       AssertionError: assert b'x\\x9c\\xabVJ...x00 \\x98\\x04T' == b'\\x1f\\x8b\\x0...e\\x00\\x00\\x00'\r\nE         \r\nE         At index 0 diff: b'x' != b'\\x1f'\r\nE         Use -v to get more diff\r\n\r\ntest\\test_base_service.py:492: AssertionError\r\n_______________________ test_gzip_compression_external ________________________\r\n\r\n    def test_gzip_compression_external():\r\n        # Should set gzip compression from external config\r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-gzip.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        service = IncludeExternalConfigService('v1', authenticator=NoAuthAuthenticator())\r\n        assert service.service_url == 'https://mockurl'\r\n        assert service.get_enable_gzip_compression() is True\r\n        prepped = service.prepare_request('GET', url='', data=json.dumps({\"foo\": \"bar\"}))\r\n>       assert prepped['data'] == gzip.compress(b'{\"foo\": \"bar\"}')\r\nE       AssertionError: assert b'x\\x9c\\xabVJ...x00 \\x98\\x04T' == b'\\x1f\\x8b\\x0...e\\x00\\x00\\x00'\r\nE         \r\nE         At index 0 diff: b'x' != b'\\x1f'\r\nE         Use -v to get more diff\r\n\r\ntest\\test_base_service.py:539: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_gzip_compression - AssertionError: ass...\r\nFAILED test/test_base_service.py::test_gzip_compression_external - AssertionE...\r\n2 failed, 30 deselected in 0.34s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 30 deselected in 0.22s\r\n",
+    "durationMs": 3111
+  },
+  "brief": {
+    "codename": "Gzip Transition",
+    "symptoms": "Tests for gzip compression fail, reporting mismatched compressed data.",
+    "evidence": "AssertionError: assert b'x\\x9c\\xabVJ...x00 \\x98\\x04T' == b'\\x1f\\x8b\\x0...e\\x00\\x00\\x00'\\nAt index 0 diff: b'x' != b'\\x1f'",
+    "hints": [
+      "The client reports a compression mismatch when gzip is enabled.",
+      "Check the module that handles compression in the SDK.",
+      "The fix swaps one compression library for another."
+    ],
+    "difficulty": 2,
+    "precinct": "compression",
+    "lesson": "Switching from zlib to gzip resolves incompatibility in compressed payloads.",
+    "tags": [
+      "compression",
+      "gzip",
+      "library-swap"
+    ]
+  },
+  "original": {
+    "daysOpen": 5.2,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2020-11-11T18:58:38Z"
+  },
+  "bugAgeDays": 35,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 03c8600..5a1a392 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -20,7 +20,7 @@ import json as json_import\n from os.path import basename\n import platform\n import sys\n-import zlib\n+import gzip\n from typing import Dict, List, Optional, Tuple, Union\n \n import requests\n@@ -332,7 +332,7 @@ class BaseService:\n                 request['data'] is not None):\n             headers['content-encoding'] = 'gzip'\n             uncompressed_data = request['data']\n-            request_body = zlib.compress(uncompressed_data)\n+            request_body = gzip.compress(uncompressed_data)\n             request['data'] = request_body\n             request['headers'] = headers\n \n"
+}

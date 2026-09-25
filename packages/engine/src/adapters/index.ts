@@ -1,11 +1,12 @@
 import { goAdapter } from "./go.js";
+import { pythonAdapter } from "./python.js";
 import type { LanguageAdapter } from "./types.js";
 
 export * from "./errors.js";
 export type * from "./types.js";
 
 /** Registered language adapters, in detection order. */
-export const ADAPTERS: LanguageAdapter[] = [goAdapter];
+export const ADAPTERS: LanguageAdapter[] = [goAdapter, pythonAdapter];
 
 export function getAdapter(id: string): LanguageAdapter {
   const adapter = ADAPTERS.find((a) => a.id === id);

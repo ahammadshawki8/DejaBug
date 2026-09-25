@@ -1,0 +1,54 @@
+{
+  "id": "7c6bd0f",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "7c6bd0f1d3521628ef0fd593f7110d9174c5b771",
+  "parentSha": "2307cb95b46008c0538f33ae2fe04892b238b4cd",
+  "prNumber": 165,
+  "status": "certified",
+  "tests": [
+    "test_authenticate_fail_no_cr_token",
+    "test_retrieve_cr_token_fail"
+  ],
+  "packages": [
+    "test/test_container_token_manager.py"
+  ],
+  "testFiles": [
+    "test/test_container_token_manager.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "FF                                                                       [100%]\r\n================================== FAILURES ===================================\r\n_________________________ test_retrieve_cr_token_fail _________________________\r\n\r\n    def test_retrieve_cr_token_fail():\r\n        token_manager = ContainerTokenManager(\r\n            cr_token_filename='bogus-cr-token-file',\r\n        )\r\n    \r\n        with pytest.raises(Exception) as err:\r\n            token_manager.retrieve_cr_token()\r\n    \r\n>       assert (\r\n            str(err.value)\r\n            == 'Unable to retrieve the CR token: Error reading CR token from file bogus-cr-token-file: [Errno 2] No such file or directory: \\'bogus-cr-token-file\\''\r\n        )\r\nE       assert \"Unable to re...r-token-file'\" == \"Unable to re...r-token-file'\"\r\nE         \r\nE         - Unable to retrieve the CR token: Error reading CR token from file bogus-cr-token-file: [Errno 2] No such file or directory: 'bogus-cr-token-file'\r\nE         ?                                ^^^^^^^^^ --------------\r\nE         + Unable to retrieve the CR token value from file bogus-cr-token-file: [Errno 2] No such file or directory: 'bogus-cr-token-file'\r\nE         ?                                ^^^^^\r\n\r\ntest\\test_container_token_manager.py:152: AssertionError\r\n_____________________ test_authenticate_fail_no_cr_token ______________________\r\n\r\n    @responses.activate\r\n    def wrapper():\r\n        response = responses.CallbackResponse(\r\n            method=responses.POST,\r\n            url='https://iam.cloud.ibm.com/identity/token',\r\n            callback=callback,\r\n        )\r\n    \r\n        responses.add(response)\r\n    \r\n>       func()\r\n\r\ntest\\test_container_token_manager.py:79: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\n    @mock_iam_response\r\n    def test_authenticate_fail_no_cr_token():\r\n        authenticator = ContainerAuthenticator(\r\n            cr_token_filename='bogus-cr-token-file',\r\n            iam_profile_name=MOCK_IAM_PROFILE_NAME,\r\n            url='https://bogus.iam.endpoint',\r\n        )\r\n    \r\n        request = {'headers': {}}\r\n    \r\n        with pytest.raises(Exception) as err:\r\n            authenticator.authenticate(request)\r\n    \r\n>       assert (\r\n            str(err.value)\r\n            == 'Unable to retrieve the CR token: Error reading CR token from file bogus-cr-token-file: [Errno 2] No such file or directory: \\'bogus-cr-token-file\\''\r\n        )\r\nE       assert \"Unable to re...r-token-file'\" == \"Unable to re...r-token-file'\"\r\nE         \r\nE         - Unable to retrieve the CR token: Error reading CR token from file bogus-cr-token-file: [Errno 2] No such file or directory: 'bogus-cr-token-file'\r\nE         ?                                ^^^^^^^^^ --------------\r\nE         + Unable to retrieve the CR token value from file bogus-cr-token-file: [Errno 2] No such file or directory: 'bogus-cr-token-file'\r\nE         ?                                ^^^^^\r\n\r\ntest\\test_container_token_manager.py:237: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_container_token_manager.py::test_retrieve_cr_token_fail - as...\r\nFAILED test/test_container_token_manager.py::test_authenticate_fail_no_cr_token\r\n2 failed, 10 deselected in 0.28s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 10 deselected in 0.17s\r\n",
+    "durationMs": 2820
+  },
+  "brief": {
+    "codename": "CR Token Retrieval",
+    "symptoms": "The test `test_retrieve_cr_token_fail` fails because the authenticator cannot read the CR token from the specified file.",
+    "evidence": "AssertionError: \"Unable to retrieve the CR token value from file bogus-cr-token-file: [Errno 2] No such file or directory: 'bogus-cr-token-file'\" == \"Unable to retrieve the CR token: Error reading CR token from file bogus-cr-token-file: [Errno 2] No such file or directory: 'bogus-cr-token-file'\"",
+    "hints": [
+      "The authenticator is unable to find a valid CR token file when none is explicitly provided.",
+      "Look at the `ContainerTokenManager` class - it tries to read from a default file location.",
+      "When no CR token filename is given, the authenticator falls back to a default path that does not exist."
+    ],
+    "difficulty": 2,
+    "precinct": "container-token-manager",
+    "lesson": "The fix adds a second default CR token filename (`/var/run/secrets/tokens/sa-token`) so the authenticator can try an alternative location if the primary default file is missing.",
+    "tags": [
+      "container-authenticator",
+      "cr-token",
+      "fallback"
+    ]
+  },
+  "original": {
+    "daysOpen": 18.2,
+    "comments": 5,
+    "reviewRounds": 5,
+    "mergedAt": "2023-05-22T20:32:40Z"
+  },
+  "bugAgeDays": 103,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/token_managers/container_token_manager.py b/ibm_cloud_sdk_core/token_managers/container_token_manager.py\nindex 483b8fa..744d51a 100644\n--- a/ibm_cloud_sdk_core/token_managers/container_token_manager.py\n+++ b/ibm_cloud_sdk_core/token_managers/container_token_manager.py\n@@ -80,7 +80,8 @@ class ContainerTokenManager(IAMRequestBasedTokenManager):\n         This can be used to obtain an access token with a specific scope.\n     \"\"\"\n \n-    DEFAULT_CR_TOKEN_FILENAME = '/var/run/secrets/tokens/vault-token'\n+    DEFAULT_CR_TOKEN_FILENAME1 = '/var/run/secrets/tokens/vault-token'\n+    DEFAULT_CR_TOKEN_FILENAME2 = '/var/run/secrets/tokens/sa-token'\n \n     def __init__(\n         self,\n@@ -115,24 +116,26 @@ class ContainerTokenManager(IAMRequestBasedTokenManager):\n         \"\"\"Retrieves the CR token for the current compute resource by reading it from the local file system.\n \n         Raises:\n-            Exception: Cannot retrieve the compute resource token from.\n+            Exception: Error retrieving the compute resource token.\n \n         Returns:\n             A string which contains the compute resource token.\n         \"\"\"\n-        cr_token_filename = self.cr_token_filename if self.cr_token_filename else self.DEFAULT_CR_TOKEN_FILENAME\n-\n-        logger.debug('Attempting to read CR token from file: %s', cr_token_filename)\n-\n         try:\n-            with open(cr_token_filename, 'r', encoding='utf-8') as file:\n-                cr_token = file.read()\n+            cr_token = None\n+            if self.cr_token_filename:\n+                # If the user specified a filename, then use that.\n+                cr_token = self.read_file(self.cr_token_filename)\n+            else:\n+                # If the user didn't specify a filename, then try our two defaults.\n+                try:\n+                    cr_token = self.read_file(self.DEFAULT_CR_TOKEN_FILENAME1)\n+                except:\n+                    cr_token = self.read_file(self.DEFAULT_CR_TOKEN_FILENAME2)\n             return cr_token\n         except Exception as ex:\n             # pylint: disable=broad-exception-raised\n-            raise Exception(\n-                'Unable to retrieve the CR token value from file {}: {}'.format(cr_token_filename, ex)\n-            ) from None\n+            raise Exception('Unable to retrieve the CR token: {}'.format(ex)) from None\n \n     def request_token(self) -> dict:\n         \"\"\"Retrieves a CR token value from the current compute resource,\n@@ -141,11 +144,9 @@ class ContainerTokenManager(IAMRequestBasedTokenManager):\n         Returns:\n              A dictionary containing the bearer token to be subsequently used service requests.\n         \"\"\"\n-        # Retrieve the CR token for this compute resource.\n-        cr_token = self.retrieve_cr_token()\n \n         # Set the request payload.\n-        self.request_payload['cr_token'] = cr_token\n+        self.request_payload['cr_token'] = self.retrieve_cr_token()\n \n         if self.iam_profile_id:\n             self.request_payload['profile_id'] = self.iam_profile_id\n@@ -177,3 +178,22 @@ class ContainerTokenManager(IAMRequestBasedTokenManager):\n             iam_profile_id: id of the linked trusted IAM profile to be used when obtaining the IAM access token\n         \"\"\"\n         self.iam_profile_id = iam_profile_id\n+\n+    def read_file(self, filename: str) -> str:\n+        \"\"\"Read in the specified file and return the contents as a string.\n+        Args:\n+            filename: the name of the file to read\n+        Returns:\n+            The contents of the file as a string.\n+        Raises:\n+            Exception: An error occured reading the file.\n+        \"\"\"\n+        try:\n+            logger.debug('Attempting to read CR token from file: %s', filename)\n+            with open(filename, 'r', encoding='utf-8') as file:\n+                cr_token = file.read()\n+            logger.debug('Successfully read CR token from file: %s', filename)\n+            return cr_token\n+        except Exception as ex:\n+            # pylint: disable=broad-exception-raised\n+            raise Exception('Error reading CR token from file {}: {}'.format(filename, ex)) from None\n"
+}

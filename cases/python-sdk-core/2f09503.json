@@ -1,0 +1,53 @@
+{
+  "id": "2f09503",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "2f09503ac4ebfb6f603f142f461122c402aa03d5",
+  "parentSha": "a0d3744d83c5ad27af13a5ae6773ba117ae3e827",
+  "prNumber": 160,
+  "status": "certified",
+  "tests": [
+    "test_request_success_response"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\requests\\models.py:1120: JSONDecodeError\r\n\r\nThe above exception was the direct cause of the following exception:\r\n\r\n    @responses.activate\r\n    def test_request_success_response():\r\n        expected_body = '{\"foo\": \"bar\", \"description\": \"this\\nis\\na\\ndescription\"}'\r\n        responses.add(\r\n            responses.GET,\r\n            'https://gateway.watsonplatform.net/test/api',\r\n            status=200,\r\n            body=expected_body,\r\n            content_type='application/json',\r\n        )\r\n        service = AnyServiceV1('2018-11-20', authenticator=NoAuthAuthenticator())\r\n        prepped = service.prepare_request('GET', url='')\r\n>       detailed_response = service.send(prepped)\r\n                            ^^^^^^^^^^^^^^^^^^^^^\r\n\r\ntest\\test_base_service.py:419: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <test.test_base_service.AnyServiceV1 object at 0x00000224352457F0>\r\nrequest = {'method': 'GET', 'url': 'https://gateway.watsonplatform.net/test/api', 'headers': {'User-Agent': 'ibm-python-sdk-core-3.16.4 Windows 11 3.14.0'}, 'params': None, ...}\r\nkwargs = {'timeout': 60}\r\n\r\n    def send(self, request: requests.Request, **kwargs) -> DetailedResponse:\r\n        \"\"\"Send a request and wrap the response in a DetailedResponse or APIException.\r\n    \r\n        Args:\r\n            request: The request to send to the service endpoint.\r\n    \r\n        Raises:\r\n            ApiException: The exception from the API.\r\n    \r\n        Returns:\r\n            The response from the request.\r\n        \"\"\"\r\n        # Use a one minute timeout when our caller doesn't give a timeout.\r\n        # http://docs.python-requests.org/en/master/user/quickstart/#timeouts\r\n        kwargs = dict({\"timeout\": 60}, **kwargs)\r\n        kwargs = dict(kwargs, **self.http_config)\r\n    \r\n        if self.disable_ssl_verification:\r\n            kwargs['verify'] = False\r\n    \r\n        # Check to see if the caller specified the 'stream' argument.\r\n        stream_response = kwargs.get('stream') or False\r\n    \r\n        # Remove the keys we set manually, don't let the user to overwrite these.\r\n        reserved_keys = ['method', 'url', 'headers', 'params', 'cookies']\r\n        silent_keys = ['headers']\r\n        for key in reserved_keys:\r\n            if key in kwargs:\r\n                del kwargs[key]\r\n                if key not in silent_keys:\r\n                    logger.warning('\"%s\" has been removed from the request', key)\r\n        try:\r\n            response = self.http_client.request(**request, cookies=self.jar, **kwargs)\r\n    \r\n            # Process a \"success\" response.\r\n            if 200 <= response.status_code <= 299:\r\n                if response.status_code == 204 or request['method'] == 'HEAD':\r\n                    # There is no body content for a HEAD response or a 204 response.\r\n                    result = None\r\n                elif stream_response:\r\n                    result = response\r\n                elif not response.text:\r\n                    result = None\r\n                elif is_json_mimetype(response.headers.get('Content-Type')):\r\n                    # If this is a JSON response, then try to unmarshal it.\r\n                    try:\r\n                        result = response.json()\r\n                    except JSONDecodeError as err:\r\n>                       raise ApiException(\r\n                            code=response.status_code,\r\n                            http_response=response,\r\n                            message='Error processing the HTTP response',\r\n                        ) from err\r\nE                       ibm_cloud_sdk_core.api_exception.ApiException: Error: Error processing the HTTP response, Code: 200\r\n\r\nibm_cloud_sdk_core\\base_service.py:329: ApiException\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_request_success_response - ibm_cloud_s...\r\n1 failed, 46 deselected in 0.41s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 46 deselected in 0.23s\r\n",
+    "durationMs": 3200
+  },
+  "brief": {
+    "codename": "Controlled Response",
+    "symptoms": "The client reports an error after reconnecting to the service.",
+    "evidence": "JSONDecodeError: Error processing the HTTP response, Code: 200",
+    "hints": [
+      "The service returns a JSON payload that includes newline characters.",
+      "Examine the code that parses the JSON response.",
+      "The failure occurs when the JSON contains control characters."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "When a JSON response contains control characters, the parser must be tolerant; otherwise it raises an exception even though the response is technically valid.",
+    "tags": [
+      "json-parsing",
+      "error-handling",
+      "control-characters"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 1,
+    "reviewRounds": 1,
+    "mergedAt": "2023-03-23T20:27:00Z"
+  },
+  "bugAgeDays": 1,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/api_exception.py b/ibm_cloud_sdk_core/api_exception.py\nindex 0c38a76..7aeb62e 100644\n--- a/ibm_cloud_sdk_core/api_exception.py\n+++ b/ibm_cloud_sdk_core/api_exception.py\n@@ -56,7 +56,7 @@ class ApiException(Exception):\n     def _get_error_message(response: Response) -> str:\n         error_message = 'Unknown error'\n         try:\n-            error_json = response.json()\n+            error_json = response.json(strict=False)\n             if 'errors' in error_json:\n                 if isinstance(error_json['errors'], list):\n                     err = error_json['errors'][0]\ndiff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 1a9d72b..84179b5 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -324,7 +324,7 @@ class BaseService:\n                 elif is_json_mimetype(response.headers.get('Content-Type')):\n                     # If this is a JSON response, then try to unmarshal it.\n                     try:\n-                        result = response.json()\n+                        result = response.json(strict=False)\n                     except JSONDecodeError as err:\n                         raise ApiException(\n                             code=response.status_code,\n"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "6191978",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "619197844e553fd4fd3c7e9ece2abae752d5dc3f",
+  "parentSha": "6614a63c3159f351b479acaef9122d045123d1df",
+  "prNumber": 117,
+  "status": "certified",
+  "tests": [
+    "test_reserved_keys"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n_____________________________ test_reserved_keys ______________________________\r\n\r\ncaplog = <_pytest.logging.LogCaptureFixture object at 0x00000194EE174EC0>\r\n\r\n    @responses.activate\r\n    def test_reserved_keys(caplog):\r\n        service = AnyServiceV1('2021-07-02', authenticator=NoAuthAuthenticator())\r\n        responses.add(\r\n            responses.GET,\r\n            'https://gateway.watsonplatform.net/test/api',\r\n            status=200,\r\n            body='some text')\r\n        prepped = service.prepare_request('GET', url='', headers={'key': 'OK'})\r\n>       response = service.send(\r\n            prepped,\r\n            headers={'key': 'bad'},\r\n            method='POST',\r\n            url='localhost',\r\n            cookies=None,\r\n            hooks={'response': []})\r\n\r\ntest\\test_base_service.py:697: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <test.test_base_service.AnyServiceV1 object at 0x00000194EE175160>\r\nrequest = {'method': 'GET', 'url': 'https://gateway.watsonplatform.net/test/api', 'headers': {'key': 'OK', 'User-Agent': 'ibm-python-sdk-core-3.10.0 Windows 11 3.14.0'}, 'params': None, ...}\r\nkwargs = {'timeout': 60, 'headers': {'key': 'bad'}, 'method': 'POST', 'url': 'localhost', ...}\r\n\r\n    def send(self, request: requests.Request, **kwargs) -> DetailedResponse:\r\n        \"\"\"Send a request and wrap the response in a DetailedResponse or APIException.\r\n    \r\n        Args:\r\n            request: The request to send to the service endpoint.\r\n    \r\n        Raises:\r\n            ApiException: The exception from the API.\r\n    \r\n        Returns:\r\n            The response from the request.\r\n        \"\"\"\r\n        # Use a one minute timeout when our caller doesn't give a timeout.\r\n        # http://docs.python-requests.org/en/master/user/quickstart/#timeouts\r\n        kwargs = dict({\"timeout\": 60}, **kwargs)\r\n        kwargs = dict(kwargs, **self.http_config)\r\n    \r\n        if self.disable_ssl_verification:\r\n            kwargs['verify'] = False\r\n    \r\n        # Check to see if the caller specified the 'stream' argument.\r\n        stream_response = kwargs.get('stream') or False\r\n    \r\n        try:\r\n>           response = self.http_client.request(**request,\r\n                                                cookies=self.jar,\r\n                                                **kwargs)\r\nE                                               TypeError: requests.sessions.Session.request() got multiple values for keyword argument 'headers'\r\n\r\nibm_cloud_sdk_core\\base_service.py:281: TypeError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_reserved_keys - TypeError: requests.se...\r\n1 failed, 37 deselected in 0.40s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 37 deselected in 0.25s\r\n",
+    "durationMs": 3156
+  },
+  "brief": {
+    "codename": "Reserved Key Error",
+    "symptoms": "The test `test_reserved_keys` fails with a `TypeError` when the user passes extra headers that conflict with reserved request arguments.",
+    "evidence": "TypeError: requests.sessions.Session.request() got multiple values for keyword argument 'headers'",
+    "hints": [
+      "The failure occurs when extra request arguments are supplied by the caller.",
+      "The problematic code is in the `send` method of `BaseService`.",
+      "A reserved keyword is being overwritten in the request kwargs."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "Reserved request arguments (method, url, headers, etc.) must not be allowed to be overridden by the caller. The fix removes these keys from the kwargs before calling `http_client.request`.",
+    "tags": [
+      "reserved-arguments",
+      "kwargs-cleanup",
+      "requests-wrapper"
+    ]
+  },
+  "original": {
+    "daysOpen": 7.1,
+    "comments": 5,
+    "reviewRounds": 4,
+    "mergedAt": "2021-07-08T15:13:50Z"
+  },
+  "bugAgeDays": 157,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex afc8275..ae9264e 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -277,6 +277,12 @@ class BaseService:\n         # Check to see if the caller specified the 'stream' argument.\n         stream_response = kwargs.get('stream') or False\n \n+        # Remove the keys we set manually, don't let the user to overwrite these.\n+        reserved_keys = ['method', 'url', 'headers', 'params', 'cookies']\n+        for key in reserved_keys:\n+            if key in kwargs:\n+                del kwargs[key]\n+                logging.warning('\"%s\" has been removed from the request', key)\n         try:\n             response = self.http_client.request(**request,\n                                                 cookies=self.jar,\n"
+}

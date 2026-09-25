@@ -1,0 +1,54 @@
+{
+  "id": "50fad59",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "50fad59b9a9d834b683ee096497b37019ed8f50f",
+  "parentSha": "fe36514509fbef79d8326b9dd511a6c5915703c5",
+  "prNumber": 28,
+  "status": "certified",
+  "tests": [
+    "test_multi_word_service_name"
+  ],
+  "packages": [
+    "test/test_base_service.py",
+    "test/test_utils.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py",
+    "test/test_utils.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "FF                                                                       [100%]\r\n================================== FAILURES ===================================\r\n________________________ test_multi_word_service_name _________________________\r\n\r\n    def test_multi_word_service_name():\r\n        os.environ['personality-insights_url'] = 'xyz'\r\n        service = BaseService(service_url='', authenticator=NoAuthAuthenticator(), display_name='personality-insights')\r\n>       assert service.service_url == 'xyz'\r\nE       AssertionError: assert '' == 'xyz'\r\nE         \r\nE         - xyz\r\n\r\ntest\\test_base_service.py:429: AssertionError\r\n________________________ test_multi_word_service_name _________________________\r\n\r\n    def test_multi_word_service_name():\r\n        os.environ['PERSONALITY-INSIGHTS_APIKEY'] = '5678efgh'\r\n        authenticator = get_authenticator_from_environment('personality-insights')\r\n>       assert authenticator is not None\r\nE       assert None is not None\r\n\r\ntest\\test_utils.py:93: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_multi_word_service_name - AssertionErr...\r\nFAILED test/test_utils.py::test_multi_word_service_name - assert None is not ...\r\n2 failed, 26 deselected in 0.30s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 26 deselected in 0.20s\r\n",
+    "durationMs": 3029
+  },
+  "brief": {
+    "codename": "Multi Word Service",
+    "symptoms": "The client fails to connect when the service name contains spaces or hyphens.",
+    "evidence": "AssertionError: assert '' == 'xyz'\n\n- xyz\n\nAssertionError: assert None is not None",
+    "hints": [
+      "The client does not recognize the service name when it contains spaces or hyphens.",
+      "Look at the utils module - the function that reads environment variables.",
+      "When the service name is transformed, the lookup for the corresponding value fails."
+    ],
+    "difficulty": 2,
+    "precinct": "utils",
+    "lesson": "Service names are normalized by replacing spaces and hyphens with underscores and lowercasing. The lookup logic must use the normalized key.",
+    "tags": [
+      "environment-variables",
+      "service-name-normalization"
+    ]
+  },
+  "original": {
+    "daysOpen": 2.9,
+    "comments": 25,
+    "reviewRounds": 13,
+    "mergedAt": "2019-09-19T16:24:04Z"
+  },
+  "bugAgeDays": 1,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 6ddcc83..eac2897 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -94,10 +94,9 @@ def read_from_env_variables(service_name):\n     \"\"\"\n     :return dict config: parsed env variables\n     \"\"\"\n-    service_name = service_name.replace(' ', '_').replace('-', '_').lower()\n     config = {}\n     for key, value in environ.items():\n-        _parse_key_and_update_config(config, service_name.lower(), key.lower(), value)\n+        _parse_key_and_update_config(config, service_name, key, value)\n     return config\n \n def read_from_credential_file(service_name, separator='='):\n@@ -105,7 +104,6 @@ def read_from_credential_file(service_name, separator='='):\n     :param str service_name: The service name\n     :return dict config: parsed key values pairs\n     \"\"\"\n-    service_name = service_name.replace(' ', '_').replace('-', '_').lower()\n     DEFAULT_CREDENTIALS_FILE_NAME = 'ibm-credentials.env'\n \n     # File path specified by an env variable\n@@ -136,10 +134,12 @@ def read_from_credential_file(service_name, separator='='):\n     return config\n \n def _parse_key_and_update_config(config, service_name, key, value):\n+    service_name = service_name.replace(' ', '_').replace('-', '_').lower()\n+    key = key.replace(' ', '_').replace('-', '_').lower()\n     if key.startswith(service_name):\n-        index = key.find('_')\n+        index = key.find(service_name)\n         if index != -1:\n-            config[key[index + 1:]] = value\n+            config[key[index + len(service_name) + 1:]] = value\n \n def read_from_vcap_services(service_name):\n     service_name = service_name.replace(' ', '_').replace('-', '_').lower()\n"
+}

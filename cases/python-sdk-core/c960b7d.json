@@ -1,0 +1,53 @@
+{
+  "id": "c960b7d",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "c960b7dc943ac7d8b1bbe748ee7079aa42497504",
+  "parentSha": "8688f2f7854083c5423633726b82aec2c0f93f9f",
+  "prNumber": 75,
+  "status": "certified",
+  "tests": [
+    "test_trailing_slash"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n_____________________________ test_trailing_slash _____________________________\r\n\r\n    def test_trailing_slash():\r\n        service = AnyServiceV1('2018-11-20', service_url='https://trailingSlash.com/', authenticator=NoAuthAuthenticator())\r\n>       assert service.service_url == 'https://trailingSlash.com/'\r\nE       AssertionError: assert 'https://trailingSlash.com' == 'https://trailingSlash.com/'\r\nE         \r\nE         - https://trailingSlash.com/\r\nE         ?                          -\r\nE         + https://trailingSlash.com\r\n\r\ntest\\test_base_service.py:523: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_trailing_slash - AssertionError: asser...\r\n1 failed, 28 deselected in 0.30s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 28 deselected in 0.22s\r\n",
+    "durationMs": 3107
+  },
+  "brief": {
+    "codename": "Slash Reconnect Clue",
+    "symptoms": "The client reports an error after reconnecting to a service whose URL ends with a trailing slash.",
+    "evidence": "AssertionError: assert 'https://trailingSlash.com' == 'https://trailingSlash.com/'",
+    "hints": [
+      "The client fails when the service URL ends with a slash.",
+      "The failure occurs in the test that checks the service URL after initialization.",
+      "The test expects the service URL to retain its original trailing slash."
+    ],
+    "difficulty": 1,
+    "precinct": "base-service",
+    "lesson": "Removing the rstrip('/') call restores the original service URL, including any trailing slash, making the client compatible with the current unit tests.",
+    "tags": [
+      "service-url",
+      "trailing-slash",
+      "unit-test"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2020-05-22T23:58:32Z"
+  },
+  "bugAgeDays": 0,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 600,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex a79e31a..aa5f3d3 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -164,10 +164,7 @@ class BaseService:\n                 'The service url shouldn\\'t start or end with curly brackets or quotes. '\n                 'Be sure to remove any {} and \\\" characters surrounding your service url'\n             )\n-        if service_url is not None:\n-            self.service_url = service_url.rstrip('/') # remove trailing slash\n-        else:\n-            self.service_url = None\n+        self.service_url = service_url\n \n     def get_authenticator(self) -> Authenticator:\n         \"\"\"Get the authenticator currently used by the service.\n"
+}

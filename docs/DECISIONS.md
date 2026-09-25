@@ -10,3 +10,5 @@
 | 2026-09-26 | Language adapter layer (adapters/). Nothing language-specific outside it | The product must work on any maintained repository (user decision). Go first, Python next |
 | 2026-09-26 | The Go adapter runs each package from its nearest go.mod | Multi-module repositories (IBM/fp-go has 3 modules) otherwise fail with setup errors |
 | 2026-09-26 | A test that hangs until the per-test timeout counts as the bug reproducing | Deadlock and retry-forever fixes are among the most valuable training cases |
+| 2026-09-26 | The Python adapter puts the checked-out directory first on PYTHONPATH | An installed copy of the package must never shadow the version being certified or played |
+| 2026-09-26 | For Python a run killed at the timeout counts as a hang | pytest has no built-in per-test timeout; this keeps hang semantics the same as Go |

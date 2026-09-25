@@ -61,3 +61,14 @@ describe("readCase", () => {
     expect(readCase(dir, "abc1234")).toBeUndefined();
   });
 });
+
+describe("stripLocalPaths: home directories", () => {
+  it("redacts usernames in every separator form", () => {
+    expect(stripLocalPaths("name='C:\\Users\\someone\\AppData\\Local\\Temp\\tmpx'")).toBe(
+      "name='~\\AppData\\Local\\Temp\\tmpx'",
+    );
+    expect(stripLocalPaths("at /home/someone/project/x.py")).toBe("at ~/project/x.py");
+    expect(stripLocalPaths("/Users/someone/Library")).toBe("~/Library");
+    expect(stripLocalPaths("no paths here")).toBe("no paths here");
+  });
+});

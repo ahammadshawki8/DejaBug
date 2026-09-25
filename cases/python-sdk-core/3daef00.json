@@ -1,0 +1,53 @@
+{
+  "id": "3daef00",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "3daef00a61c461512da0a3b37952ed275180569d",
+  "parentSha": "a15df4b18c7944e0d0edcdbcee64ae685e3351d5",
+  "prNumber": 122,
+  "status": "certified",
+  "tests": [
+    "test_retry_config_default"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n__________________________ test_retry_config_default __________________________\r\n\r\n    def test_retry_config_default():\r\n        service = BaseService(service_url='https://mockurl/',\r\n                              authenticator=NoAuthAuthenticator())\r\n        service.enable_retries()\r\n        assert service.retry_config.total == 4\r\n>       assert service.retry_config.backoff_factor == 1.0\r\nE       assert 0.1 == 1.0\r\nE        +  where 0.1 = Retry(total=4, connect=None, read=None, redirect=None, status=None).backoff_factor\r\nE        +    where Retry(total=4, connect=None, read=None, redirect=None, status=None) = <ibm_cloud_sdk_core.base_service.BaseService object at 0x00000250F74F8980>.retry_config\r\n\r\ntest\\test_base_service.py:608: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_retry_config_default - assert 0.1 == 1.0\r\n1 failed, 39 deselected in 0.34s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 39 deselected in 0.22s\r\n",
+    "durationMs": 3080
+  },
+  "brief": {
+    "codename": "The Phantom Interval",
+    "symptoms": "A test fails because the default retry interval is too short, causing the service to give up before the operation succeeds.",
+    "evidence": "AssertionError: assert 0.1 == 1.0\n  where 0.1 = Retry(total=4, connect=None, read=None, redirect=None, status=None).backoff_factor",
+    "hints": [
+      "The service reports a failure after only a brief pause, even though the operation should be retried several times.",
+      "Check the configuration that controls how long the client waits before the first retry.",
+      "The default wait time is shorter than expected, leading to premature abandonment of the retry process."
+    ],
+    "difficulty": 2,
+    "precinct": "retries",
+    "lesson": "Changing the default retry_interval from 0.1 seconds to 1 second gives the service enough time to retry failed operations, aligning Python SDK behavior with the Go implementation.",
+    "tags": [
+      "retries",
+      "default-configuration",
+      "backoff"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.1,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2021-08-20T16:14:16Z"
+  },
+  "bugAgeDays": 148,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 1bf690c..569885d 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -97,16 +97,26 @@ class BaseService:\n         if not isinstance(self.authenticator, Authenticator):\n             raise ValueError('authenticator should be of type Authenticator')\n \n-    def enable_retries(self, max_retries: int = 4, retry_interval: float = 0.1) -> None:\n-        \"\"\"Setup http_client with retry_config and http_adapter\"\"\"\n+    def enable_retries(self, max_retries: int = 4, retry_interval: float = 1.0) -> None:\n+        \"\"\"Enable automatic retries on the underlying http client used by the BaseService instance.\n+\n+        Args:\n+          max_retries: the maximum number of retries to attempt for a failed retryable request\n+          retry_interval: the default wait time (in seconds) to use for the first retry attempt.\n+            In general, if a response includes the Retry-After header, that will be used for\n+            the wait time associated with the retry attempt.  If the Retry-After header is not\n+            present, then the wait time is based on the retry_interval and retry attempt number:\n+               wait_time = retry_interval * (2 ^ (n-1)), where n is the retry attempt number\n+        \"\"\"\n         self.retry_config = Retry(\n-            total = max_retries,\n-            backoff_factor = retry_interval,\n+            total=max_retries,\n+            backoff_factor=retry_interval,\n             # List of HTTP status codes to retry on in addition to Timeout/Connection Errors\n-            status_forcelist = [429, 500, 502, 503, 504],\n+            status_forcelist=[429, 500, 502, 503, 504],\n             # List of HTTP methods to retry on\n             # Omitting this will default to all methods except POST\n-            allowed_methods=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST']\n+            allowed_methods=['HEAD', 'GET', 'PUT',\n+                             'DELETE', 'OPTIONS', 'TRACE', 'POST']\n         )\n         self.http_adapter = HTTPAdapter(max_retries=self.retry_config)\n         self.http_client.mount('http://', self.http_adapter)\n@@ -163,7 +173,8 @@ class BaseService:\n                 if config.get('MAX_RETRIES'):\n                     kwargs[\"max_retries\"] = int(config.get('MAX_RETRIES'))\n                 if config.get('RETRY_INTERVAL'):\n-                    kwargs[\"retry_interval\"] = float(config.get('RETRY_INTERVAL'))\n+                    kwargs[\"retry_interval\"] = float(\n+                        config.get('RETRY_INTERVAL'))\n                 self.enable_retries(**kwargs)\n \n     def _set_user_agent_header(self, user_agent_string: str) -> None:\n"
+}

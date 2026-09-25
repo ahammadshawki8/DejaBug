@@ -1,0 +1,61 @@
+{
+  "id": "a87d66d",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "a87d66da4b9ed98b9ac910ca67c86b674aab7ef6",
+  "parentSha": "478f141302a9c12fe0383af3a24e2423a313df99",
+  "prNumber": 142,
+  "status": "certified",
+  "tests": [
+    "test_api_exception",
+    "test_detailed_response_dict",
+    "test_detailed_response_list",
+    "test_reserved_keys",
+    "test_user_agent_header"
+  ],
+  "packages": [
+    "test/test_api_exception.py",
+    "test/test_base_service.py",
+    "test/test_detailed_response.py"
+  ],
+  "testFiles": [
+    "test/test_api_exception.py",
+    "test/test_base_service.py",
+    "test/test_detailed_response.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "..F..                                                                    [100%]\r\n================================== FAILURES ===================================\r\n_____________________________ test_reserved_keys ______________________________\r\n\r\ncaplog = <_pytest.logging.LogCaptureFixture object at 0x000001C5FD742120>\r\n\r\n    @responses.activate\r\n    def test_reserved_keys(caplog):\r\n        service = AnyServiceV1('2021-07-02', authenticator=NoAuthAuthenticator())\r\n        responses.add(\r\n            responses.GET,\r\n            'https://gateway.watsonplatform.net/test/api',\r\n            status=200,\r\n            body='some text')\r\n        prepped = service.prepare_request('GET', url='', headers={'key': 'OK'})\r\n        response = service.send(\r\n            prepped,\r\n            headers={'key': 'bad'},\r\n            method='POST',\r\n            url='localhost',\r\n            cookies=None,\r\n            hooks={'response': []})\r\n        assert response.get_result().request.headers.get('key') == 'OK'\r\n        assert response.get_result().request.url == 'https://gateway.watsonplatform.net/test/api'\r\n        assert response.get_result().request.method == 'GET'\r\n        assert response.get_result().request.hooks == {'response': []}\r\n        assert caplog.record_tuples[0][2] == '\"method\" has been removed from the request'\r\n        assert caplog.record_tuples[1][2] == '\"url\" has been removed from the request'\r\n>       assert caplog.record_tuples[2][2] == '\"cookies\" has been removed from the request'\r\nE       assert '\"headers\" ha...m the request' == '\"cookies\" ha...m the request'\r\nE         \r\nE         - \"cookies\" has been removed from the request\r\nE         ?  ^^^^^\r\nE         + \"headers\" has been removed from the request\r\nE         ?  ^ ++++\r\n\r\ntest\\test_base_service.py:724: AssertionError\r\n------------------------------ Captured log call ------------------------------\r\nWARNING  ibm_cloud_sdk_core.base_service:base_service.py:304 \"method\" has been removed from the request\r\nWARNING  ibm_cloud_sdk_core.base_service:base_service.py:304 \"url\" has been removed from the request\r\nWARNING  ibm_cloud_sdk_core.base_service:base_service.py:304 \"headers\" has been removed from the request\r\nWARNING  ibm_cloud_sdk_core.base_service:base_service.py:304 \"cookies\" has been removed from the request\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_reserved_keys - assert '\"headers\" ha.....\r\n1 failed, 4 passed, 40 deselected in 0.50s\r\n",
+    "passOutput": ".....                                                                    [100%]\r\n5 passed, 40 deselected in 0.27s\r\n",
+    "durationMs": 3427
+  },
+  "brief": {
+    "codename": "Silent Headers",
+    "symptoms": "A test fails because a warning about the 'headers' key being removed from the request is logged.",
+    "evidence": "WARNING  ibm_cloud_sdk_core.base_service:base_service.py:304 \"headers\" has been removed from the request\nassert \"\"\"\"headers\"\"\" ha...m the request\" == \"\"\"\"cookies\"\"\" ha...m the request\"",
+    "hints": [
+      "The client logs a warning about a request parameter being removed.",
+      "The warning occurs when sending a request with custom headers.",
+      "The warning is suppressed for the 'headers' parameter."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "Custom headers are silently ignored when sent in the request, preventing unnecessary warnings.",
+    "tags": [
+      "http-client",
+      "request-parameters",
+      "logging"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.8,
+    "comments": 1,
+    "reviewRounds": 1,
+    "mergedAt": "2022-06-07T16:26:07Z"
+  },
+  "bugAgeDays": 144,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/authenticators/authenticator.py b/ibm_cloud_sdk_core/authenticators/authenticator.py\nindex 112ef35..d63662b 100644\n--- a/ibm_cloud_sdk_core/authenticators/authenticator.py\n+++ b/ibm_cloud_sdk_core/authenticators/authenticator.py\n@@ -52,7 +52,6 @@ class Authenticator(ABC):\n         \"\"\"\n         pass\n \n-    # pylint: disable=R0201\n     def authentication_type(self) -> str:\n         \"\"\"Returns the authenticator's type.  This method should be overridden by each authenticator implementation.\"\"\"\n         return Authenticator.AUTHTYPE_UNKNOWN\ndiff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 414bccd..a9ace31 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -298,10 +298,12 @@ class BaseService:\n \n         # Remove the keys we set manually, don't let the user to overwrite these.\n         reserved_keys = ['method', 'url', 'headers', 'params', 'cookies']\n+        silent_keys = ['headers']\n         for key in reserved_keys:\n             if key in kwargs:\n                 del kwargs[key]\n-                logger.warning('\"%s\" has been removed from the request', key)\n+                if key not in silent_keys:\n+                    logger.warning('\"%s\" has been removed from the request', key)\n         try:\n             response = self.http_client.request(**request,\n                                                 cookies=self.jar,\n"
+}

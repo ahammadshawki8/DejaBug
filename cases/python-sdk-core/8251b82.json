@@ -1,0 +1,54 @@
+{
+  "id": "8251b82",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "8251b820e3a00db855d1960defe75279e3b02515",
+  "parentSha": "26c478cfb97206b59d93fbc38938739827c820fa",
+  "prNumber": 55,
+  "status": "certified",
+  "tests": [
+    "test_date_conversion",
+    "test_datetime_conversion"
+  ],
+  "packages": [
+    "test/test_utils.py"
+  ],
+  "testFiles": [
+    "test/test_utils.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "FF                                                                       [100%]\r\n================================== FAILURES ===================================\r\n__________________________ test_datetime_conversion ___________________________\r\n\r\n    def test_datetime_conversion():\r\n        date = string_to_datetime('2017-03-06 16:00:04.159338')\r\n        assert date.day == 6\r\n        res = datetime_to_string(date)\r\n        assert res == '2017-03-06T16:00:04.159338'\r\n>       assert datetime_to_string(None) is None\r\n               ^^^^^^^^^^^^^^^^^^^^^^^^\r\n\r\ntest\\test_utils.py:14: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nval = None\r\n\r\n    def datetime_to_string(val: datetime.datetime) -> str:\r\n        \"\"\"Convert a datetime object to string.\r\n    \r\n        Args:\r\n            val: The datetime object.\r\n    \r\n        Returns:\r\n            datetime serialized to iso8601 format.\r\n        \"\"\"\r\n>       return val.isoformat().replace('+00:00', 'Z')\r\n               ^^^^^^^^^^^^^\r\nE       AttributeError: 'NoneType' object has no attribute 'isoformat'\r\n\r\nibm_cloud_sdk_core\\utils.py:80: AttributeError\r\n____________________________ test_date_conversion _____________________________\r\n\r\n    def test_date_conversion():\r\n        date = string_to_date('2017-03-06')\r\n        assert date.day == 6\r\n        res = date_to_string(date)\r\n        assert res == '2017-03-06'\r\n>       assert date_to_string(None) is None\r\nE       AssertionError: assert 'None' is None\r\nE        +  where 'None' = date_to_string(None)\r\n\r\ntest\\test_utils.py:21: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_utils.py::test_datetime_conversion - AttributeError: 'NoneTy...\r\nFAILED test/test_utils.py::test_date_conversion - AssertionError: assert 'Non...\r\n2 failed, 7 deselected in 0.25s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 7 deselected in 0.13s\r\n",
+    "durationMs": 2866
+  },
+  "brief": {
+    "codename": "Null Input Grace",
+    "symptoms": "The test suite fails when `datetime_to_string` and `date_to_string` are called with `None`, raising `AttributeError` and `AssertionError` respectively.",
+    "evidence": "AttributeError: 'NoneType' object has no attribute 'isoformat'\nAssertionError: assert 'None' is None",
+    "hints": [
+      "The failure occurs when the functions receive a value that is not a date or datetime.",
+      "Check the code paths that handle conversion of non-date/datetime values.",
+      "The expected behavior is to return `None` for non-date/datetime inputs."
+    ],
+    "difficulty": 2,
+    "precinct": "utils",
+    "lesson": "Functions that convert dates and datetimes must validate their input and return `None` for invalid inputs.",
+    "tags": [
+      "type-checking",
+      "error-handling",
+      "datetime"
+    ]
+  },
+  "original": {
+    "daysOpen": 3.1,
+    "comments": 2,
+    "reviewRounds": 2,
+    "mergedAt": "2020-02-04T03:07:32Z"
+  },
+  "bugAgeDays": 44,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 4e838e7..5994804 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -77,7 +77,9 @@ def datetime_to_string(val: datetime.datetime) -> str:\n     Returns:\n         datetime serialized to iso8601 format.\n     \"\"\"\n-    return val.isoformat().replace('+00:00', 'Z')\n+    if isinstance(val, datetime.datetime):\n+        return val.isoformat().replace('+00:00', 'Z')\n+    return val\n \n def string_to_datetime(string: str) -> datetime.datetime:\n     \"\"\"De-serializes string to datetime.\n@@ -99,7 +101,9 @@ def date_to_string(val: datetime.date) -> str:\n     Returns:\n         date serialized to `YYYY-MM-DD` format.\n     \"\"\"\n-    return str(val)\n+    if isinstance(val, datetime.date):\n+        return str(val)\n+    return val\n \n def string_to_date(string: str) -> datetime.date:\n     \"\"\"De-serializes string to date.\n"
+}

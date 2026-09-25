@@ -1,0 +1,53 @@
+{
+  "id": "09a193c",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "09a193ce6b4f0b54b027df07d767f29df85ab71c",
+  "parentSha": "5da47e29e4f3d9e4429bc9a5019cf9973184dc85",
+  "prNumber": 76,
+  "status": "certified",
+  "tests": [
+    "test_json",
+    "test_trailing_slash"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": ".F                                                                       [100%]\r\n================================== FAILURES ===================================\r\n_____________________________ test_trailing_slash _____________________________\r\n\r\n    def test_trailing_slash():\r\n        service = AnyServiceV1('2018-11-20', service_url='https://trailingSlash.com/', authenticator=NoAuthAuthenticator())\r\n        assert service.service_url == 'https://trailingSlash.com/'\r\n        service.set_service_url('https://trailingSlash.com/')\r\n        assert service.service_url == 'https://trailingSlash.com/'\r\n        req = service.prepare_request('POST',\r\n                                      url='/trailingSlashPath/',\r\n                                      headers={'X-opt-out': True},\r\n                                      data={'hello': 'world'})\r\n>       assert req.get('url') == 'https://trailingSlash.com//trailingSlashPath/'\r\nE       AssertionError: assert 'https://trai...lingSlashPath' == 'https://trai...ingSlashPath/'\r\nE         \r\nE         Skipping 33 identical leading characters in diff, use -v to show\r\nE         - ngSlashPath/\r\nE         ?            -\r\nE         + ngSlashPath\r\n\r\ntest\\test_base_service.py:531: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_trailing_slash - AssertionError: asser...\r\n1 failed, 1 passed, 27 deselected in 0.30s\r\n",
+    "passOutput": "..                                                                       [100%]\r\n2 passed, 27 deselected in 0.21s\r\n",
+    "durationMs": 3112
+  },
+  "brief": {
+    "codename": "Reconnect Error Trace",
+    "symptoms": "The client reports an error after reconnecting",
+    "evidence": "AssertionError: assert 'https://trai...lingSlashPath' == 'https://trai...ingSlashPath/'\n- ngSlashPath/\n?            -\n+ ngSlashPath",
+    "hints": [
+      "The client fails to reach the service after a network interruption.",
+      "Look at the base_service package - the prepare_request method handles the URL.",
+      "When the service URL ends with a slash and the request path also starts with a slash, the URL ends up with a double slash, which some servers treat as a different path."
+    ],
+    "difficulty": 2,
+    "precinct": "base_service",
+    "lesson": "Removing the trailing-slash strip restores the original URL concatenation, preserving the intended path even when the service URL already ends with a slash.",
+    "tags": [
+      "url-handling",
+      "path-concatenation"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2020-05-29T14:27:58Z"
+  },
+  "bugAgeDays": 7,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex aa5f3d3..1a44943 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -272,7 +272,7 @@ class BaseService:\n         # validate the service url is set\n         if not self.service_url:\n             raise ValueError('The service_url is required')\n-        request['url'] = self.service_url + url.rstrip('/') # strip trailing slash\n+        request['url'] = self.service_url + url\n \n         headers = remove_null_values(headers) if headers else {}\n         headers = cleanup_values(headers)\n"
+}

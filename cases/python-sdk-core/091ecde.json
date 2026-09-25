@@ -1,0 +1,53 @@
+{
+  "id": "091ecde",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "091ecde7ab6c8aadc81c71aa35d6a33572856ac8",
+  "parentSha": "ea6cf85412f25aa8c5aefa123db4ebf3219a20a2",
+  "prNumber": 74,
+  "status": "certified",
+  "tests": [
+    "test_trailing_slash"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n_____________________________ test_trailing_slash _____________________________\r\n\r\n    def test_trailing_slash():\r\n        service = AnyServiceV1('2018-11-20', service_url='https://trailingSlash.com/', authenticator=NoAuthAuthenticator())\r\n        assert service.service_url == 'https://trailingSlash.com'\r\n        service.set_service_url('https://trailingSlash.com/')\r\n        assert service.service_url == 'https://trailingSlash.com'\r\n        req = service.prepare_request('POST',\r\n                                      url='/trailingSlashPath/',\r\n                                      headers={'X-opt-out': True},\r\n                                      data={'hello': 'world'})\r\n        assert req.get('url') == 'https://trailingSlash.com/trailingSlashPath'\r\n    \r\n        service = AnyServiceV1('2018-11-20', service_url='https://trailingSlash.com/', authenticator=NoAuthAuthenticator())\r\n        assert service.service_url == 'https://trailingSlash.com'\r\n        service.set_service_url('https://trailingSlash.com/')\r\n        assert service.service_url == 'https://trailingSlash.com'\r\n        req = service.prepare_request('POST',\r\n                                      url='/',\r\n                                      headers={'X-opt-out': True},\r\n                                      data={'hello': 'world'})\r\n        assert req.get('url') == 'https://trailingSlash.com'\r\n    \r\n>       service.set_service_url(None)\r\n\r\ntest\\test_base_service.py:542: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <test.test_base_service.AnyServiceV1 object at 0x0000024297F50690>\r\nservice_url = None\r\n\r\n    def set_service_url(self, service_url: str) -> None:\r\n        \"\"\"Set the url the service will make HTTP requests too.\r\n    \r\n        Arguments:\r\n            service_url: The WHATWG URL standard origin ex. https://example.service.com\r\n    \r\n        Raises:\r\n            ValueError: Improperly formatted service_url\r\n        \"\"\"\r\n        if has_bad_first_or_last_char(service_url):\r\n            raise ValueError(\r\n                'The service url shouldn\\'t start or end with curly brackets or quotes. '\r\n                'Be sure to remove any {} and \\\" characters surrounding your service url'\r\n            )\r\n>       self.service_url = service_url.rstrip('/') # remove trailing slash\r\n                           ^^^^^^^^^^^^^^^^^^\r\nE       AttributeError: 'NoneType' object has no attribute 'rstrip'\r\n\r\nibm_cloud_sdk_core\\base_service.py:167: AttributeError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_trailing_slash - AttributeError: 'None...\r\n1 failed, 28 deselected in 0.32s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 28 deselected in 0.23s\r\n",
+    "durationMs": 3268
+  },
+  "brief": {
+    "codename": "The Phantom Slash",
+    "symptoms": "When service_url is set to None, calling set_service_url raises an AttributeError because it tries to call rstrip on a NoneType object.",
+    "evidence": "AttributeError: 'NoneType' object has no attribute 'rstrip'",
+    "hints": [
+      "The failure occurs when the service URL is cleared.",
+      "Look at the method that updates the service URL.",
+      "The bug is related to handling a None value for the URL."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "Always check for None before calling string methods that expect a string.",
+    "tags": [
+      "null-check",
+      "string-method",
+      "service-configuration"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 2,
+    "reviewRounds": 1,
+    "mergedAt": "2020-05-22T22:05:19Z"
+  },
+  "bugAgeDays": 0,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex e32be33..a79e31a 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -164,7 +164,10 @@ class BaseService:\n                 'The service url shouldn\\'t start or end with curly brackets or quotes. '\n                 'Be sure to remove any {} and \\\" characters surrounding your service url'\n             )\n-        self.service_url = service_url.rstrip('/') # remove trailing slash\n+        if service_url is not None:\n+            self.service_url = service_url.rstrip('/') # remove trailing slash\n+        else:\n+            self.service_url = None\n \n     def get_authenticator(self) -> Authenticator:\n         \"\"\"Get the authenticator currently used by the service.\n"
+}

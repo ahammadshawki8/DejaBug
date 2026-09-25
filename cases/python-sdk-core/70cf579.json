@@ -1,0 +1,56 @@
+{
+  "id": "70cf579",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "70cf57952aa9d2b91829d4a71211ca6e80634ec5",
+  "parentSha": "4fcaa6690dc46314434ee9b97787b4957b23badb",
+  "prNumber": 30,
+  "status": "certified",
+  "tests": [
+    "test_files",
+    "test_files_dict",
+    "test_files_duplicate_parts",
+    "test_files_list"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "\n        if files is not None:\r\n>           for k, file_tuple in files.items():\r\n                                 ^^^^^^^^^^^\r\nE           AttributeError: 'list' object has no attribute 'items'\r\n\r\nibm_cloud_sdk_core\\base_service.py:202: AttributeError\r\n_________________________ test_files_duplicate_parts __________________________\r\n\r\n    def test_files_duplicate_parts():\r\n        service = AnyServiceV1('2018-11-20', authenticator=NoAuthAuthenticator())\r\n    \r\n        form_data = []\r\n        file = open(\r\n            os.path.join(\r\n                os.path.dirname(__file__), '../resources/ibm-credentials-iam.env'), 'r')\r\n        form_data.append(('creds_file', (None, file, 'application/octet-stream')))\r\n        file = open(\r\n            os.path.join(\r\n                os.path.dirname(__file__), '../resources/ibm-credentials-basic.env'), 'r')\r\n        form_data.append(('creds_file', (None, file, 'application/octet-stream')))\r\n        file = open(\r\n            os.path.join(\r\n                os.path.dirname(__file__), '../resources/ibm-credentials-bearer.env'), 'r')\r\n        form_data.append(('creds_file', (None, file, 'application/octet-stream')))\r\n>       request = service.prepare_request('GET', url='', headers={'X-opt-out': True}, files=form_data)\r\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n\r\ntest\\test_base_service.py:448: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <test.test_base_service.AnyServiceV1 object at 0x000001F0F3795310>\r\nmethod = 'GET', url = ''\r\nheaders = {'X-opt-out': 'true', 'User-Agent': 'ibm-python-sdk-core-1.0.0-rc8 Windows 11 3.14.0'}\r\nparams = None, data = None\r\nfiles = [('creds_file', (None, <_io.TextIOWrapper name='test\\\\../resources/ibm-credentials-bearer.env' mode='r' encoding='cp1252'>, 'application/octet-stream'))]\r\nkwargs = {}\r\n\r\n    def prepare_request(self, method, url, headers=None,\r\n                        params=None, data=None, files=None, **kwargs):\r\n        request = {'method': method}\r\n    \r\n        # validate the service url is set\r\n        if not self.service_url:\r\n            raise ValueError('The service_url is required')\r\n        request['url'] = self.service_url + url\r\n    \r\n        headers = remove_null_values(headers) if headers else {}\r\n        headers = cleanup_values(headers)\r\n        headers = CaseInsensitiveDict(headers)\r\n        if self.default_headers is not None:\r\n            headers.update(self.default_headers)\r\n        if not any(key in headers for key in ['user-agent', 'User-Agent']):\r\n            headers.update(self.user_agent_header)\r\n        request['headers'] = headers\r\n    \r\n        params = remove_null_values(params)\r\n        params = cleanup_values(params)\r\n        request['params'] = params\r\n    \r\n        if sys.version_info >= (3, 0) and isinstance(data, str):\r\n            data = data.encode('utf-8')\r\n    \r\n        if data and isinstance(data, dict):\r\n            data = remove_null_values(data)\r\n            headers.update({'content-type': 'application/json'})\r\n            data = json_import.dumps(data)\r\n        request['data'] = data\r\n    \r\n        if self.authenticator:\r\n            self.authenticator.authenticate(request)\r\n    \r\n        files = remove_null_values(files)\r\n        if files is not None:\r\n>           for k, file_tuple in files.items():\r\n                                 ^^^^^^^^^^^\r\nE           AttributeError: 'list' object has no attribute 'items'\r\n\r\nibm_cloud_sdk_core\\base_service.py:202: AttributeError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_files_dict - AssertionError: assert False\r\nFAILED test/test_base_service.py::test_files_list - AttributeError: 'list' ob...\r\nFAILED test/test_base_service.py::test_files_duplicate_parts - AttributeError...\r\n3 failed, 21 deselected in 0.29s\r\n",
+    "passOutput": "...                                                                      [100%]\r\n3 passed, 21 deselected in 0.20s\r\n",
+    "durationMs": 3085
+  },
+  "brief": {
+    "codename": "Duplicate Part Names",
+    "symptoms": "The client raises an AttributeError when passing a list of file tuples to `prepare_request`.",
+    "evidence": "AttributeError: 'list' object has no attribute 'items' in test/test_base_service.py::test_files_duplicate_parts",
+    "hints": [
+      "The failure occurs when the caller provides a list of file tuples instead of a dictionary.",
+      "Look at the `prepare_request` method in `ibm_cloud_sdk_core/base_service.py`.",
+      "The fix adds handling for both dictionaries and lists of file tuples."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "When accepting collections of parts, support both dict and list representations to avoid breaking callers that use lists.",
+    "tags": [
+      "multipart",
+      "parameter-handling",
+      "backward-compatibility"
+    ]
+  },
+  "original": {
+    "daysOpen": 0,
+    "comments": 4,
+    "reviewRounds": 2,
+    "mergedAt": "2019-09-27T17:07:07Z"
+  },
+  "bugAgeDays": 38,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 348f0a6..d3d0f04 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -197,16 +197,26 @@ class BaseService(object):\n         if self.authenticator:\n             self.authenticator.authenticate(request)\n \n-        files = remove_null_values(files)\n+        # Next, we need to process the 'files' argument to try to fill in\n+        # any missing filenames where possible.  \n+        # 'files' can be a dictionary (i.e { '<part-name>': (<tuple>)} )\n+        # or a list of tuples [ (<part-name>, (<tuple>))... ]\n+        # If 'files' is a dictionary we'll convert it to a list of tuples.\n+        new_files = []\n         if files is not None:\n-            for k, file_tuple in files.items():\n-                if file_tuple and len(\n-                        file_tuple) == 3 and file_tuple[0] is None:\n-                    file = file_tuple[1]\n+            # If 'files' is a dictionary, transform it into a list of tuples.\n+            if isinstance(files, dict):\n+                files = remove_null_values(files)\n+                files = files.items()\n+            # Next, fill in any missing filenames from file tuples.\n+            for part_name, tuple in files:\n+                if tuple and len(tuple) == 3 and tuple[0] is None:\n+                    file = tuple[1]\n                     if file and hasattr(file, 'name'):\n                         filename = basename(file.name)\n-                        files[k] = (filename, file_tuple[1], file_tuple[2])\n-        request['files'] = files\n+                        tuple = (filename, tuple[1], tuple[2])\n+                new_files.append((part_name, tuple))\n+        request['files'] = new_files\n         return request\n \n \n"
+}

@@ -1,0 +1,15 @@
+{
+  "repo": "IBM/python-sdk-core",
+  "fixLikeCommits": 98,
+  "candidates": 45,
+  "attempted": 45,
+  "byStatus": {
+    "certified": 31,
+    "rejected:build": 3,
+    "rejected:no-fail": 4,
+    "rejected:flaky": 0,
+    "rejected:no-pass": 7,
+    "rejected:timeout": 0
+  },
+  "generatedAt": "2026-09-25T21:10:45.412Z"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "47d1d99",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "47d1d99261767331a2583612ebaf048cf60d1fd3",
+  "parentSha": "5354c555a8885a65600bd6ddc0400a8874d3b47a",
+  "prNumber": 71,
+  "status": "certified",
+  "tests": [
+    "test_trailing_slash"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n_____________________________ test_trailing_slash _____________________________\r\n\r\n    def test_trailing_slash():\r\n        service = AnyServiceV1('2018-11-20', service_url='https://trailingSlash.com/', authenticator=NoAuthAuthenticator())\r\n>       assert service.service_url == 'https://trailingSlash.com'\r\nE       AssertionError: assert 'https://trailingSlash.com/' == 'https://trailingSlash.com'\r\nE         \r\nE         - https://trailingSlash.com\r\nE         + https://trailingSlash.com/\r\nE         ?                          +\r\n\r\ntest\\test_base_service.py:523: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_trailing_slash - AssertionError: asser...\r\n1 failed, 28 deselected in 0.30s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 28 deselected in 0.21s\r\n",
+    "durationMs": 3256
+  },
+  "brief": {
+    "codename": "Trailing Slash Reconnect",
+    "symptoms": "The client reports an error after reconnecting to the service when the URL ends with a trailing slash.",
+    "evidence": "AssertionError: assert 'https://trailingSlash.com/' == 'https://trailingSlash.com'\n- https://trailingSlash.com\n+ https://trailingSlash.com/\n?                          +",
+    "hints": [
+      "The service fails to connect when the endpoint URL ends with a slash.",
+      "Check the code that builds the request URL.",
+      "A subtle string manipulation is missing for one case."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "When constructing request URLs, always strip a trailing slash from the base service URL to avoid mismatched endpoints.",
+    "tags": [
+      "url-handling",
+      "request-construction"
+    ]
+  },
+  "original": {
+    "daysOpen": 2,
+    "comments": 5,
+    "reviewRounds": 4,
+    "mergedAt": "2020-05-22T15:10:42Z"
+  },
+  "bugAgeDays": 42,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex a2347d3..e32be33 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -69,7 +69,7 @@ class BaseService:\n                  service_url: str = None,\n                  authenticator: Authenticator = None,\n                  disable_ssl_verification: bool = False) -> None:\n-        self.service_url = service_url\n+        self.set_service_url(service_url)\n         self.http_config = {}\n         self.jar = CookieJar()\n         self.authenticator = authenticator\n@@ -164,7 +164,7 @@ class BaseService:\n                 'The service url shouldn\\'t start or end with curly brackets or quotes. '\n                 'Be sure to remove any {} and \\\" characters surrounding your service url'\n             )\n-        self.service_url = service_url\n+        self.service_url = service_url.rstrip('/') # remove trailing slash\n \n     def get_authenticator(self) -> Authenticator:\n         \"\"\"Get the authenticator currently used by the service.\n@@ -272,7 +272,7 @@ class BaseService:\n         # validate the service url is set\n         if not self.service_url:\n             raise ValueError('The service_url is required')\n-        request['url'] = self.service_url + url\n+        request['url'] = self.service_url + url.rstrip('/') # strip trailing slash\n \n         headers = remove_null_values(headers) if headers else {}\n         headers = cleanup_values(headers)\n"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "9cb5826",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "9cb5826b08324904a7e0eebc118c71384ad1ceee",
+  "parentSha": "13b04fbc99b1d2c030f9e9a71789d88aaf4a9c4b",
+  "prNumber": 37,
+  "status": "certified",
+  "tests": [
+    "test_configure_service",
+    "test_service_url_not_set"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": ".F.                                                                      [100%]\r\n================================== FAILURES ===================================\r\n___________________________ test_configure_service ____________________________\r\n\r\n    def test_configure_service():\r\n        file_path = os.path.join(\r\n            os.path.dirname(__file__), '../resources/ibm-credentials-external.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        service = IncludeExternalConfigService('v1', authenticator=NoAuthAuthenticator())\r\n        assert service.service_url == 'https://externallyconfigured.com/api'\r\n        assert service.disable_ssl_verification is True\r\n        # The authenticator should not be changed as a result of configure_service()\r\n>       assert isinstance(service.get_authenticator(), NoAuthAuthenticator)\r\nE       assert False\r\nE        +  where False = isinstance(<ibm_cloud_sdk_core.authenticators.iam_authenticator.IAMAuthenticator object at 0x00000192ECCA1400>, NoAuthAuthenticator)\r\nE        +    where <ibm_cloud_sdk_core.authenticators.iam_authenticator.IAMAuthenticator object at 0x00000192ECCA1400> = get_authenticator()\r\nE        +      where get_authenticator = <test.test_base_service.IncludeExternalConfigService object at 0x00000192ECCA1010>.get_authenticator\r\n\r\ntest\\test_base_service.py:523: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_configure_service - assert False\r\n1 failed, 2 passed, 24 deselected in 0.38s\r\n",
+    "passOutput": "...                                                                      [100%]\r\n3 passed, 24 deselected in 0.24s\r\n",
+    "durationMs": 3169
+  },
+  "brief": {
+    "codename": "Phantom Authenticator",
+    "symptoms": "The test for external configuration fails because the service's authenticator is not the expected NoAuthAuthenticator.",
+    "evidence": "assert isinstance(service.get_authenticator(), NoAuthAuthenticator)\nE       assert False\nE        +  where False = isinstance(<ibm_cloud_sdk_core.authenticators.iam_authenticator.IAMAuthenticator object at 0x00000192ECCA1400>, NoAuthAuthenticator)",
+    "hints": [
+      "The service's behavior changes after external configuration is applied.",
+      "Look at the BaseService class - the authenticator is set during initialization.",
+      "When the service is created without an authenticator, a specific error is raised."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "The fix moves authenticator validation to the BaseService constructor, ensuring the service always has a valid Authenticator instance before any configuration is applied.",
+    "tags": [
+      "authentication",
+      "service-initialization"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.1,
+    "comments": 12,
+    "reviewRounds": 7,
+    "mergedAt": "2019-10-22T21:55:53Z"
+  },
+  "bugAgeDays": 0,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/authenticators/basic_authenticator.py b/ibm_cloud_sdk_core/authenticators/basic_authenticator.py\nindex 6bd150e..94cf104 100644\n--- a/ibm_cloud_sdk_core/authenticators/basic_authenticator.py\n+++ b/ibm_cloud_sdk_core/authenticators/basic_authenticator.py\n@@ -39,7 +39,6 @@ class BasicAuthenticator(Authenticator):\n     def __init__(self, username: str, password: str):\n         self.username = username\n         self.password = password\n-        self.authorization_header = None\n         self.validate()\n         self.authorization_header = self.__construct_basic_auth_header()\n \ndiff --git a/ibm_cloud_sdk_core/authenticators/bearer_token_authenticator.py b/ibm_cloud_sdk_core/authenticators/bearer_token_authenticator.py\nindex 9a43115..5968b7c 100644\n--- a/ibm_cloud_sdk_core/authenticators/bearer_token_authenticator.py\n+++ b/ibm_cloud_sdk_core/authenticators/bearer_token_authenticator.py\n@@ -67,6 +67,9 @@ class BearerTokenAuthenticator(Authenticator):\n \n         Args:\n             bearer_token: The bearer token that will be sent in service requests.\n+\n+        Raises:\n+            ValueError: The bearer token is not valid for service operations.\n         \"\"\"\n         self.bearer_token = bearer_token\n         self.validate()\ndiff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex bb5666e..c6fe729 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -23,7 +23,6 @@ import sys\n from typing import Dict, List, Optional, Tuple, Union\n from .version import __version__\n from .utils import has_bad_first_or_last_char, remove_null_values, cleanup_values, read_external_sources\n-from .get_authenticator import get_authenticator_from_environment\n from .detailed_response import DetailedResponse\n from .api_exception import ApiException\n from ibm_cloud_sdk_core.authenticators import Authenticator\n@@ -74,8 +73,12 @@ class BaseService(object):\n         self.authenticator = authenticator\n         self.disable_ssl_verification = disable_ssl_verification\n         self.default_headers = None\n-\n         self._set_user_agent_header(self._build_user_agent())\n+        if not self.authenticator:\n+            raise ValueError('authenticator must be provided')\n+        if not isinstance(self.authenticator, Authenticator):\n+            raise ValueError(\n+                'authenticator should be of type Authenticator')\n \n     def _get_system_info(self):\n         return '{0} {1} {2}'.format(\n@@ -89,7 +92,7 @@ class BaseService(object):\n                                     self._get_system_info())\n \n     def configure_service(self, service_name: str):\n-        \"\"\"Look for external configuration of a service.\n+        \"\"\"Look for external configuration of a service. Set service properties.\n \n         Try to get config from external sources, with the following priority:\n         1. Credentials file(ibm-credentials.env)\n@@ -99,9 +102,6 @@ class BaseService(object):\n         Args:\n             service_name: The service name\n \n-        Returns:\n-            A dictionary containing relevant configuration for the service if found.\n-\n         Raises:\n             ValueError: If service_name is not a string.\n         \"\"\"\n@@ -115,9 +115,6 @@ class BaseService(object):\n             self.set_disable_ssl_verification(\n                 bool(config.get('DISABLE_SSL'))\n             )\n-        authenticator = get_authenticator_from_environment(service_name)\n-        if authenticator is not None:\n-            self.authenticator = authenticator\n \n     def _set_user_agent_header(self, user_agent_string=None):\n         self.user_agent_header = {'User-Agent': user_agent_string}\n@@ -265,19 +262,9 @@ class BaseService(object):\n             files: 'files' can be a dictionary (i.e { '<part-name>': (<tuple>)}),\n                 or a list of tuples [ (<part-name>, (<tuple>))... ]\n \n-        Raises:\n-            ValueError: If service_url is not specified, or authenticator is invalid.\n-\n         Returns:\n             Prepared request dictionary.\n         \"\"\"\n-        if not self.authenticator:\n-            raise ValueError('authenticator must be provided')\n-\n-        if not isinstance(self.authenticator, Authenticator):\n-            raise ValueError(\n-                'authenticator should be of type Authenticator')\n-\n         request = {'method': method}\n \n         # validate the service url is set\n"
+}

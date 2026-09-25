@@ -1,0 +1,55 @@
+{
+  "id": "7e84825",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "7e848259ca88fa1b4831786eaaae2a02f8afbcd2",
+  "parentSha": "a2f48f5fbdc7a4469db9b5f83072186c98cc1d26",
+  "prNumber": 184,
+  "status": "certified",
+  "tests": [
+    "test_retry_config_default",
+    "test_retry_config_external",
+    "test_retry_config_non_default"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "FFF                                                                      [100%]\r\n================================== FAILURES ===================================\r\n__________________________ test_retry_config_default __________________________\r\n\r\n    def test_retry_config_default():\r\n        service = BaseService(service_url='https://mockurl/', authenticator=NoAuthAuthenticator())\r\n        service.enable_retries()\r\n        assert service.retry_config.total == 4\r\n        assert service.retry_config.backoff_factor == 1.0\r\n>       assert service.retry_config.backoff_max == 30.0\r\nE       assert 120 == 30.0\r\nE        +  where 120 = Retry(total=4, connect=None, read=None, redirect=None, status=None).backoff_max\r\nE        +    where Retry(total=4, connect=None, read=None, redirect=None, status=None) = <ibm_cloud_sdk_core.base_service.BaseService object at 0x000001E85E33D940>.retry_config\r\n\r\ntest\\test_base_service.py:727: AssertionError\r\n________________________ test_retry_config_non_default ________________________\r\n\r\n    def test_retry_config_non_default():\r\n        service = BaseService(service_url='https://mockurl/', authenticator=NoAuthAuthenticator())\r\n        service.enable_retries(2, 10.0)\r\n        assert service.retry_config.total == 2\r\n>       assert service.retry_config.backoff_factor == 1.0\r\nE       assert 10.0 == 1.0\r\nE        +  where 10.0 = Retry(total=2, connect=None, read=None, redirect=None, status=None).backoff_factor\r\nE        +    where Retry(total=2, connect=None, read=None, redirect=None, status=None) = <ibm_cloud_sdk_core.base_service.BaseService object at 0x000001E85E1E51D0>.retry_config\r\n\r\ntest\\test_base_service.py:762: AssertionError\r\n_________________________ test_retry_config_external __________________________\r\n\r\n    def test_retry_config_external():\r\n        file_path = os.path.join(os.path.dirname(__file__), '../resources/ibm-credentials-retry.env')\r\n        os.environ['IBM_CREDENTIALS_FILE'] = file_path\r\n        service = IncludeExternalConfigService('v1', authenticator=NoAuthAuthenticator())\r\n        assert service.retry_config.total == 3\r\n>       assert service.retry_config.backoff_factor == 1.0\r\nE       assert 0.2 == 1.0\r\nE        +  where 0.2 = Retry(total=3, connect=None, read=None, redirect=None, status=None).backoff_factor\r\nE        +    where Retry(total=3, connect=None, read=None, redirect=None, status=None) = <test.test_base_service.IncludeExternalConfigService object at 0x000001E85E33EF90>.retry_config\r\n\r\ntest\\test_base_service.py:780: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_retry_config_default - assert 120 == 30.0\r\nFAILED test/test_base_service.py::test_retry_config_non_default - assert 10.0...\r\nFAILED test/test_base_service.py::test_retry_config_external - assert 0.2 == 1.0\r\n3 failed, 45 deselected in 0.37s\r\n",
+    "passOutput": "...                                                                      [100%]\r\n3 passed, 45 deselected in 0.23s\r\n",
+    "durationMs": 2991
+  },
+  "brief": {
+    "codename": "The Phantom Retry",
+    "symptoms": "Tests for retry configuration report unexpected wait times after failures.",
+    "evidence": "assert 120 == 30.0\nassert 10.0 == 1.0\nassert 0.2 == 1.0",
+    "hints": [
+      "The client reports longer pauses than expected when a request fails.",
+      "Check the service's retry settings in the base class.",
+      "The default wait calculation changed to respect a maximum limit."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "The fix aligns the retry backoff with the intended maximum interval, preventing excessively long delays.",
+    "tags": [
+      "retry",
+      "backoff",
+      "configuration"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.1,
+    "comments": 1,
+    "reviewRounds": 2,
+    "mergedAt": "2023-12-11T20:53:18Z"
+  },
+  "bugAgeDays": 630,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex 52ae0c9..5984df2 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -117,20 +117,21 @@ class BaseService:\n         self.http_client.mount('http://', self.http_adapter)\n         self.http_client.mount('https://', self.http_adapter)\n \n-    def enable_retries(self, max_retries: int = 4, retry_interval: float = 1.0) -> None:\n+    def enable_retries(self, max_retries: int = 4, retry_interval: float = 30.0) -> None:\n         \"\"\"Enable automatic retries on the underlying http client used by the BaseService instance.\n \n         Args:\n           max_retries: the maximum number of retries to attempt for a failed retryable request\n-          retry_interval: the default wait time (in seconds) to use for the first retry attempt.\n+          retry_interval: the maximum wait time (in seconds) to use for retry attempts.\n             In general, if a response includes the Retry-After header, that will be used for\n             the wait time associated with the retry attempt.  If the Retry-After header is not\n-            present, then the wait time is based on the retry_interval and retry attempt number:\n-               wait_time = retry_interval * (2 ^ (n-1)), where n is the retry attempt number\n+            present, then the wait time is based on an exponential backoff policy with a maximum\n+            backoff time of \"retry_interval\".\n         \"\"\"\n         self.retry_config = Retry(\n             total=max_retries,\n-            backoff_factor=retry_interval,\n+            backoff_factor=1.0,\n+            backoff_max=retry_interval,\n             # List of HTTP status codes to retry on in addition to Timeout/Connection Errors\n             status_forcelist=[429, 500, 502, 503, 504],\n             # List of HTTP methods to retry on\n"
+}

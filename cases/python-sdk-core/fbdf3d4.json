@@ -1,0 +1,53 @@
+{
+  "id": "fbdf3d4",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "fbdf3d42e1b419e46277e0fefd28cb891fa9bf47",
+  "parentSha": "a7f10acf1d217a06d8f371fa97e817bdcb62425a",
+  "prNumber": 23,
+  "status": "certified",
+  "tests": [
+    "test_misc_methods"
+  ],
+  "packages": [
+    "test/test_base_service.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "F                                                                        [100%]\r\n================================== FAILURES ===================================\r\n______________________________ test_misc_methods ______________________________\r\n\r\n    def test_misc_methods():\r\n    \r\n        class MockModel(object):\r\n    \r\n            def __init__(self, x=None):\r\n                self.x = x\r\n    \r\n            def _to_dict(self):\r\n                _dict = {}\r\n                if hasattr(self, 'x') and self.x is not None:\r\n                    _dict['x'] = self.x\r\n                return _dict\r\n    \r\n            @classmethod\r\n            def _from_dict(cls, _dict):\r\n                args = {}\r\n                if 'x' in _dict:\r\n                    args['x'] = _dict.get('x')\r\n                return cls(**args)\r\n    \r\n        mock = MockModel('foo')\r\n        service = AnyServiceV1('2018-11-20', authenticator=NoAuthAuthenticator())\r\n        model1 = service._convert_model(mock)\r\n        assert model1 == {'x': 'foo'}\r\n    \r\n        model2 = service._convert_model(\"{\\\"x\\\": \\\"foo\\\"}\")\r\n        assert model2 is not None\r\n>       assert model2['x'] == 'foo'\r\n               ^^^^^^^^^^^\r\nE       TypeError: string indices must be integers, not 'str'\r\n\r\ntest\\test_base_service.py:348: TypeError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_base_service.py::test_misc_methods - TypeError: string indic...\r\n1 failed, 20 deselected in 0.28s\r\n",
+    "passOutput": ".                                                                        [100%]\r\n1 passed, 20 deselected in 0.19s\r\n",
+    "durationMs": 3000
+  },
+  "brief": {
+    "codename": "Phantom Classname",
+    "symptoms": "The test `test_misc_methods` fails with a `TypeError: string indices must be integers, not 'str'` when converting a JSON string to a model.",
+    "evidence": "TypeError: string indices must be integers, not 'str'\ntest/test_base_service.py:348: TypeError",
+    "hints": [
+      "The test failure occurs when the service tries to convert a JSON string into a model.",
+      "Look at the `_convert_model` method in `base_service.py` - it previously checked for a classname before parsing.",
+      "When a JSON string is passed, the method now directly parses it without the extra classname check."
+    ],
+    "difficulty": 2,
+    "precinct": "base-service",
+    "lesson": "Removing the unnecessary classname parameter and its check simplifies model conversion and avoids the string-index error.",
+    "tags": [
+      "model-conversion",
+      "json-parsing",
+      "service-base"
+    ]
+  },
+  "original": {
+    "daysOpen": 4.6,
+    "comments": 3,
+    "reviewRounds": 2,
+    "mergedAt": "2019-09-04T13:55:32Z"
+  },
+  "bugAgeDays": 4,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/base_service.py b/ibm_cloud_sdk_core/base_service.py\nindex a37d232..6701fba 100644\n--- a/ibm_cloud_sdk_core/base_service.py\n+++ b/ibm_cloud_sdk_core/base_service.py\n@@ -205,10 +205,9 @@ class BaseService(object):\n \n \n     @staticmethod\n-    def _convert_model(val, classname=None):\n-        if classname is not None:\n-            if isinstance(val, str):\n-                val = json_import.loads(val)\n+    def _convert_model(val):\n+        if isinstance(val, str):\n+            val = json_import.loads(val)\n         if hasattr(val, \"_to_dict\"):\n             return val._to_dict()\n         return val\n"
+}

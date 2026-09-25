@@ -4,7 +4,7 @@ import path from "node:path";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { detectAdapter } from "./adapters/index.js";
 import { loadConfig, normalizeSlug, type Config } from "./config.js";
-import { initRepo, runForge, type ForgeRunOptions } from "./forge.js";
+import { activateToolchain, initRepo, runForge, type ForgeRunOptions } from "./forge.js";
 import { exportPlayground, playerDiff } from "./play.js";
 import { readCandidates, readCase, readCases, readFunnel, writeJsonAtomic } from "./store.js";
 import type { Case, CaseSession, ForgeEvent, PublicCase, Reveal } from "./types.js";
@@ -159,6 +159,7 @@ export function buildServer(baseCfg: Config, deps: Partial<ServerDeps> = {}): Fa
     const c = loadCase(cfg, req.params.id);
     const s = sessionFor(c);
     requireStarted(s);
+    activateToolchain(cfg);
     const result = await d.verify(c, cfg);
     s.verifyRuns++;
     if (result.pass && !s.solvedAt && !s.gaveUpAt) s.solvedAt = new Date().toISOString();

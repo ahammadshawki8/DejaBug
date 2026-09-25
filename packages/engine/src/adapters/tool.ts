@@ -7,7 +7,10 @@ export function commandVersion(cmd: string, args: string[]): string | null {
     // The command strings passed here are fixed literals, never user input.
     const out =
       process.platform === "win32"
-        ? execSync([cmd, ...args].join(" "), { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })
+        ? execSync([cmd, ...args].map((a) => (/\s/.test(a) ? `"${a}"` : a)).join(" "), {
+            encoding: "utf8",
+            stdio: ["ignore", "pipe", "ignore"],
+          })
         : execFileSync(cmd, args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
     return out.trim().split(/\r?\n/)[0] ?? "";
   } catch {

@@ -1,0 +1,66 @@
+{
+  "id": "b142e9e",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "b142e9ecf337f73dcfd1e577afb330e993a3371b",
+  "parentSha": "4ac1246fdee39ba79bcfb868498ffef78f7932b1",
+  "prNumber": 124,
+  "status": "certified",
+  "tests": [
+    "test_detailed_response_dict",
+    "test_detailed_response_list",
+    "test_files_dict",
+    "test_files_duplicate_parts",
+    "test_files_list",
+    "test_multiple_iam_authenticators",
+    "test_setter_methods",
+    "test_url_encoding"
+  ],
+  "packages": [
+    "test/test_base_service.py",
+    "test/test_container_token_manager.py",
+    "test/test_detailed_response.py",
+    "test/test_iam_authenticator.py"
+  ],
+  "testFiles": [
+    "test/test_base_service.py",
+    "test/test_container_token_manager.py",
+    "test/test_detailed_response.py",
+    "test/test_iam_authenticator.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": ".......F                                                                 [100%]\r\n================================== FAILURES ===================================\r\n______________________ test_multiple_iam_authenticators _______________________\r\n\r\n    def test_multiple_iam_authenticators():\r\n        authenticator_1 = IAMAuthenticator('my_apikey')\r\n        assert authenticator_1.token_manager.request_payload['apikey'] == 'my_apikey'\r\n    \r\n        authenticator_2 = IAMAuthenticator('my_other_apikey')\r\n        assert authenticator_2.token_manager.request_payload['apikey'] == 'my_other_apikey'\r\n    \r\n>       assert authenticator_1.token_manager.request_payload['apikey'] == 'my_apikey'\r\nE       AssertionError: assert 'my_other_apikey' == 'my_apikey'\r\nE         \r\nE         - my_apikey\r\nE         + my_other_apikey\r\nE         ?   ++++++\r\n\r\ntest\\test_iam_authenticator.py:154: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_iam_authenticator.py::test_multiple_iam_authenticators - Ass...\r\n1 failed, 7 passed, 53 deselected in 0.48s\r\n",
+    "passOutput": "........                                                                 [100%]\r\n8 passed, 53 deselected in 0.28s\r\n",
+    "durationMs": 3393
+  },
+  "brief": {
+    "codename": "Token Revocation Riddle",
+    "symptoms": "The client reports a 403 error when listing classifiers for the second Watson service after upgrading to version 3.11.0.",
+    "evidence": "AssertionError: assert 'my_other_apikey' == 'my_apikey'\n- my_apikey\n+ my_other_apikey",
+    "hints": [
+      "The problem occurs when using more than one IAM authenticator with different credentials.",
+      "Look at the token manager class - it stores request payload as a class variable instead of an instance variable.",
+      "When the second authenticator is created, it overwrites the request payload of the first one."
+    ],
+    "difficulty": 2,
+    "precinct": "token-manager",
+    "lesson": "Using an instance variable instead of a class variable for request_payload ensures each authenticator instance maintains its own payload, preventing cross-talk between multiple Watson service connections.",
+    "tags": [
+      "iam-authentication",
+      "token-manager",
+      "instance-variable"
+    ]
+  },
+  "original": {
+    "daysOpen": 0.6,
+    "comments": 10,
+    "reviewRounds": 1,
+    "mergedAt": "2021-08-24T16:54:38Z"
+  },
+  "bugAgeDays": 12,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/token_managers/container_token_manager.py b/ibm_cloud_sdk_core/token_managers/container_token_manager.py\nindex 663e660..da4d26d 100644\n--- a/ibm_cloud_sdk_core/token_managers/container_token_manager.py\n+++ b/ibm_cloud_sdk_core/token_managers/container_token_manager.py\n@@ -114,7 +114,7 @@ class ContainerTokenManager(IAMRequestBasedTokenManager):\n                       cr_token_filename)\n \n         try:\n-            with open(cr_token_filename, 'r') as file:\n+            with open(cr_token_filename, 'r', encoding='utf-8') as file:\n                 cr_token = file.read()\n             return cr_token\n         # pylint: disable=broad-except\ndiff --git a/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py b/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py\nindex e238a59..2d095b2 100644\n--- a/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py\n+++ b/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py\n@@ -19,6 +19,7 @@ from typing import Dict, Optional\n from .jwt_token_manager import JWTTokenManager\n \n \n+#pylint: disable=too-many-instance-attributes\n class IAMRequestBasedTokenManager(JWTTokenManager):\n     \"\"\"The IamRequestBasedTokenManager class contains code relevant to any token manager that\n     interacts with the IAM service to manage a token. It stores information relevant to all\n@@ -62,8 +63,6 @@ class IAMRequestBasedTokenManager(JWTTokenManager):\n     DEFAULT_IAM_URL = 'https://iam.cloud.ibm.com'\n     OPERATION_PATH = \"/identity/token\"\n \n-    request_payload = {}\n-\n     def __init__(self,\n                  url: Optional[str] = None,\n                  client_id: Optional[str] = None,\n@@ -83,6 +82,7 @@ class IAMRequestBasedTokenManager(JWTTokenManager):\n         self.refresh_token = None\n         self.proxies = proxies\n         self.scope = scope\n+        self.request_payload = {}\n         super().__init__(\n             self.url, disable_ssl_verification=disable_ssl_verification, token_name='access_token')\n \ndiff --git a/ibm_cloud_sdk_core/utils.py b/ibm_cloud_sdk_core/utils.py\nindex 83d139c..e0742fb 100644\n--- a/ibm_cloud_sdk_core/utils.py\n+++ b/ibm_cloud_sdk_core/utils.py\n@@ -314,7 +314,7 @@ def __read_from_credential_file(service_name: str,\n     config = {}\n     if credential_file_path is not None:\n         try:\n-            with open(credential_file_path, 'r') as fobj:\n+            with open(credential_file_path, 'r', encoding='utf-8') as fobj:\n                 for line in fobj:\n                     key_val = line.strip().split(separator, 1)\n                     if len(key_val) == 2:\n"
+}

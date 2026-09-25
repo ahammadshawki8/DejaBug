@@ -1,0 +1,53 @@
+{
+  "id": "18d64b5",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "18d64b51f0e637a01f72488635e81fc5a7bd6918",
+  "parentSha": "818f097ceae522efd4696916c871e55489661084",
+  "prNumber": 108,
+  "status": "certified",
+  "tests": [
+    "test_iam_authenticator"
+  ],
+  "packages": [
+    "test/test_iam_authenticator.py"
+  ],
+  "testFiles": [
+    "test/test_iam_authenticator.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "           headers: Optional[Dict[str, str]] = None,\r\n                 proxies: Optional[Dict[str, str]] = None,\r\n                 scope: Optional[str] = None) -> None:\r\n        self.apikey = apikey\r\n        self.url = url\r\n        if url == \"\":\r\n            self.url = self.DEFAULT_IAM_URL\r\n>       elif url.endswith(self.OPERATION_PATH):\r\n             ^^^^^^^^^^^^\r\nE       AttributeError: 'NoneType' object has no attribute 'endswith'\r\n\r\nibm_cloud_sdk_core\\iam_token_manager.py:85: AttributeError\r\n_______________________________ test_get_token ________________________________\r\n\r\n    @responses.activate\r\n    def test_get_token():\r\n        url = \"https://iam.cloud.ibm.com/identity/token\"\r\n        access_token_layout = {\r\n            \"username\": \"dummy\",\r\n            \"role\": \"Admin\",\r\n            \"permissions\": [\"administrator\", \"manage_catalog\"],\r\n            \"sub\": \"admin\",\r\n            \"iss\": \"sss\",\r\n            \"aud\": \"sss\",\r\n            \"uid\": \"sss\",\r\n            \"iat\": 1559324664,\r\n            \"exp\": 1559324664\r\n        }\r\n    \r\n        access_token = jwt.encode(\r\n            access_token_layout,\r\n            'secret',\r\n            algorithm='HS256',\r\n            headers={\r\n                'kid': '230498151c214b788dd97f22b85410a5'\r\n            })\r\n        response = {\r\n            \"access_token\": access_token,\r\n            \"token_type\": \"Bearer\",\r\n            \"expires_in\": 3600,\r\n            \"expiration\": 1524167011,\r\n            \"refresh_token\": \"jy4gl91BQ\"\r\n        }\r\n        responses.add(\r\n            responses.POST, url=url, body=json.dumps(response), status=200)\r\n    \r\n>       authenticator = IAMAuthenticator('my_apikey')\r\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n\r\ntest\\test_iam_authenticator.py:105: \r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\nibm_cloud_sdk_core\\authenticators\\iam_authenticator.py:69: in __init__\r\n    self.token_manager = IAMTokenManager(\r\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\r\n\r\nself = <ibm_cloud_sdk_core.iam_token_manager.IAMTokenManager object at 0x000001F119578180>\r\napikey = 'my_apikey', url = None, client_id = None, client_secret = None\r\ndisable_ssl_verification = False, headers = None, proxies = None, scope = None\r\n\r\n    def __init__(self,\r\n                 apikey: str,\r\n                 *,\r\n                 url: Optional[str] = None,\r\n                 client_id: Optional[str] = None,\r\n                 client_secret: Optional[str] = None,\r\n                 disable_ssl_verification: bool = False,\r\n                 headers: Optional[Dict[str, str]] = None,\r\n                 proxies: Optional[Dict[str, str]] = None,\r\n                 scope: Optional[str] = None) -> None:\r\n        self.apikey = apikey\r\n        self.url = url\r\n        if url == \"\":\r\n            self.url = self.DEFAULT_IAM_URL\r\n>       elif url.endswith(self.OPERATION_PATH):\r\n             ^^^^^^^^^^^^\r\nE       AttributeError: 'NoneType' object has no attribute 'endswith'\r\n\r\nibm_cloud_sdk_core\\iam_token_manager.py:85: AttributeError\r\n============================== warnings summary ===============================\r\ntest/test_iam_authenticator.py::test_get_token\r\n  ~\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 6 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\r\n    return self._jws.encode(\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n=========================== short test summary info ===========================\r\nFAILED test/test_iam_authenticator.py::test_iam_authenticator - AttributeErro...\r\nFAILED test/test_iam_authenticator.py::test_iam_authenticator_with_scope - At...\r\nFAILED test/test_iam_authenticator.py::test_iam_authenticator_validate_failed\r\nFAILED test/test_iam_authenticator.py::test_get_token - AttributeError: 'None...\r\n4 failed, 1 warning in 0.28s\r\n",
+    "passOutput": "....                                                                     [100%]\r\n============================== warnings summary ===============================\r\ntest/test_iam_authenticator.py::test_get_token\r\n  ~\\Desktop\\IBM BOB\\workspace\\.venvs\\python-sdk-core\\Lib\\site-packages\\jwt\\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 6 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.\r\n    return self._jws.encode(\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n4 passed, 1 warning in 0.16s\r\n",
+    "durationMs": 2809
+  },
+  "brief": {
+    "codename": "Token Null Trace",
+    "symptoms": "The test `test_get_token` fails with an `AttributeError` saying that `NoneType` object has no attribute `endswith`.",
+    "evidence": "AttributeError: 'NoneType' object has no attribute 'endswith'\nibm_cloud_sdk_core\\iam_token_manager.py:85: AttributeError",
+    "hints": [
+      "The authenticator cannot determine the correct endpoint for the token request.",
+      "The URL handling logic in the token manager needs adjustment.",
+      "A condition for a missing URL is not properly checked before using it."
+    ],
+    "difficulty": 2,
+    "precinct": "iam-token-manager",
+    "lesson": "When the provided URL is empty or `None`, the token manager must fall back to the default IAM URL before attempting any string operations on it.",
+    "tags": [
+      "iam-authenticator",
+      "url-handling",
+      "token-manager"
+    ]
+  },
+  "original": {
+    "daysOpen": 8.1,
+    "comments": 5,
+    "reviewRounds": 3,
+    "mergedAt": "2021-03-05T12:29:59Z"
+  },
+  "bugAgeDays": 0,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/iam_token_manager.py b/ibm_cloud_sdk_core/iam_token_manager.py\nindex 85e6961..b904641 100644\n--- a/ibm_cloud_sdk_core/iam_token_manager.py\n+++ b/ibm_cloud_sdk_core/iam_token_manager.py\n@@ -79,11 +79,11 @@ class IAMTokenManager(JWTTokenManager):\n                  proxies: Optional[Dict[str, str]] = None,\n                  scope: Optional[str] = None) -> None:\n         self.apikey = apikey\n+        if not url:\n+            url = self.DEFAULT_IAM_URL\n+        if url.endswith(self.OPERATION_PATH):\n+            url = url[:-len(self.OPERATION_PATH)]\n         self.url = url\n-        if url == \"\":\n-            self.url = self.DEFAULT_IAM_URL\n-        elif url.endswith(self.OPERATION_PATH):\n-            self.url = url[:-len(self.OPERATION_PATH)]\n         self.client_id = client_id\n         self.client_secret = client_secret\n         self.headers = headers\n@@ -125,7 +125,7 @@ class IAMTokenManager(JWTTokenManager):\n \n         response = self._request(\n             method='POST',\n-            url=self.url + self.OPERATION_PATH,\n+            url=(self.url + self.OPERATION_PATH) if self.url else self.url,\n             headers=headers,\n             data=data,\n             auth_tuple=auth_tuple,\n"
+}

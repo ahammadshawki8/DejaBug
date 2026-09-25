@@ -1,0 +1,59 @@
+{
+  "id": "f4f0b5a",
+  "repo": "IBM/python-sdk-core",
+  "language": "python",
+  "fixSha": "f4f0b5afe4746c8dfc9687ebeb9db20bf1df2414",
+  "parentSha": "41dfaece0d5a7d3d79d12aaa9824167a33b73ecd",
+  "prNumber": 189,
+  "status": "certified",
+  "tests": [
+    "test_access_token",
+    "test_authenticate_success",
+    "test_get_token_success"
+  ],
+  "packages": [
+    "test/test_container_token_manager.py",
+    "test/test_iam_token_manager.py",
+    "test/test_vpc_instance_token_manager.py"
+  ],
+  "testFiles": [
+    "test/test_container_token_manager.py",
+    "test/test_iam_token_manager.py",
+    "test/test_vpc_instance_token_manager.py"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "iwiaXNzIjoic3NzIiwiYXVkIjoic3NzIiwidWlkIjoic3NzIiwiaWF0IjozNjAwLCJleHAiOjE2MjgwMDcwODF9.zvUDpgqWIWs7S1CuKv40ERw1IZ5FqSFqQXsrwZJyfRM\r\nE         + eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImhlbGxvIiwicm9sZSI6InVzZXIiLCJwZXJtaXNzaW9ucyI6WyJhZG1pbmlzdHJhdG9yIiwiZGVwbG95bWVudF9hZG1pbiJdLCJzdWIiOiJoZWxsbyIsImlzcyI6IkpvaG4iLCJhdWQiOiJEU1giLCJ1aWQiOiI5OTkiLCJ...\r\nE         \r\nE         ...Full output truncated (1 line hidden), use '-vv' to show\r\n\r\ntest\\test_iam_token_manager.py:349: AssertionError\r\n___________________________ test_get_token_success ____________________________\r\n\r\n    @responses.activate\r\n    def test_get_token_success():\r\n        token_manager = VPCInstanceTokenManager()\r\n    \r\n        # Mock the retrieve instance identity token method.\r\n        def mock_retrieve_instance_identity_token():\r\n            return TEST_TOKEN\r\n    \r\n        token_manager.retrieve_instance_identity_token = mock_retrieve_instance_identity_token\r\n    \r\n        response1 = {\r\n            'access_token': TEST_ACCESS_TOKEN_1,\r\n        }\r\n        response2 = {\r\n            'access_token': TEST_ACCESS_TOKEN_2,\r\n        }\r\n    \r\n        responses.add(\r\n            responses.POST, 'http://169.254.169.254/instance_identity/v1/iam_token', body=json.dumps(response1), status=200\r\n        )\r\n    \r\n        access_token = token_manager.get_token()\r\n        assert access_token == TEST_ACCESS_TOKEN_1\r\n        assert token_manager.access_token == TEST_ACCESS_TOKEN_1\r\n    \r\n        # Verify that the token manager returns the cached value.\r\n        # Before we call `get_token` again, set the expiration and refresh time\r\n        # so that we do not fetch a new access token.\r\n        # This is necessary because we are using a fixed JWT response.\r\n        token_manager.expire_time = _get_current_time() + 1000\r\n        token_manager.refresh_time = _get_current_time() + 1000\r\n        access_token = token_manager.get_token()\r\n        assert access_token == TEST_ACCESS_TOKEN_1\r\n        assert token_manager.access_token == TEST_ACCESS_TOKEN_1\r\n    \r\n        # Force expiration to get the second token.\r\n        # We'll set the expiration time to be current-time + EXPIRATION_WINDOW (10 secs)\r\n        # because we want the access token to be considered as \"expired\"\r\n        # when we reach the IAM-server reported expiration time minus 10 secs.\r\n        responses.add(\r\n            responses.POST, 'http://169.254.169.254/instance_identity/v1/iam_token', body=json.dumps(response2), status=200\r\n        )\r\n        token_manager.expire_time = _get_current_time() + EXPIRATION_WINDOW\r\n        access_token = token_manager.get_token()\r\n>       assert access_token == TEST_ACCESS_TOKEN_2\r\nE       AssertionError: assert 'eyJ0eXAiOiJK...Obt9Gkur5g1QI' == 'eyJ0eXAiOiJK...FqQXsrwZJyfRM'\r\nE         \r\nE         - eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjIzMDQ5ODE1MWMyMTRiNzg4ZGQ5N2YyMmI4NTQxMGE1In0.eyJ1c2VybmFtZSI6ImR1bW15Iiwicm9sZSI6IkFkbWluIiwicGVybWlzc2lvbnMiOlsiYWRtaW5pc3RyYXRvciIsIm1hbmFnZV9jYXRhbG9nIl0sInN1YiI6ImFkbWluIiwiaXNzIjoic3NzIiwiYXVkIjoic3NzIiwidWlkIjoic3NzIiwiaWF0IjozNjAwLCJleHAiOjE2MjgwMDcwODF9.zvUDpgqWIWs7S1CuKv40ERw1IZ5FqSFqQXsrwZJyfRM\r\nE         + eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImhlbGxvIiwicm9sZSI6InVzZXIiLCJwZXJtaXNzaW9ucyI6WyJhZG1pbmlzdHJhdG9yIiwiZGVwbG95bWVudF9hZG1pbiJdLCJzdWIiOiJoZWxsbyIsImlzcyI6IkpvaG4iLCJhdWQiOiJEU1giLCJ1aWQiOiI5OTkiLCJ...\r\nE         \r\nE         ...Full output truncated (1 line hidden), use '-vv' to show\r\n\r\ntest\\test_vpc_instance_token_manager.py:349: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED test/test_container_token_manager.py::test_get_token_success - Asserti...\r\nFAILED test/test_container_token_manager.py::test_authenticate_success - Asse...\r\nFAILED test/test_iam_token_manager.py::test_get_token_success - AssertionErro...\r\nFAILED test/test_vpc_instance_token_manager.py::test_get_token_success - Asse...\r\n4 failed, 1 passed, 30 deselected in 0.42s\r\n",
+    "passOutput": ".....                                                                    [100%]\r\n5 passed, 30 deselected in 0.23s\r\n",
+    "durationMs": 3244
+  },
+  "brief": {
+    "codename": "Token Expiration Window",
+    "symptoms": "The test suite fails with assertion errors when checking the returned IAM access token against an expected value.",
+    "evidence": "AssertionError: assert 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjIzMDQ5ODE1MWMyMTRiNzg4ZGQ5N2YyMmI4NTQxMGE1In0.eyJ1c2VybmFtZSI6ImR1bW15Iiwicm9sZSI6IkFkbWluIiwicGVybWlzc2lvbnMiOlsiYWRtaW5pc3RyYXRvciIsIm1hbmFnZV9jYXRhbG9nIl0sInN1YiI6ImFkbWluIiwiaXNzIjoic3NzIiwiYXVkIjoic3NzIiwidWlkIjoic3NzIiwiaWF0IjozNjAwLCJleHAiOjE2MjgwMDcwODF9.zvUDpgqWIWs7S1CuKv40ERw1IZ5FqSFqQXsrwZJyfRM' == 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImhlbGxvIiwicm9sZSI6InVzZXIiLCJwZXJtaXNzaW9ucyI6WyJhZG1pbmlzdHJhdG9yIiwiZGVwbG95bWVudF9hZG1pbiJdLCJzdWIiOiJoZWxsbyIsImlzcyI6IkpvaG4iLCJhdWQiOiJEU1giLCJ1aWQiOiI5OTkiLCJ...",
+    "hints": [
+      "The test expects a specific access token string but receives a different one.",
+      "Look at the token manager's token expiration logic.",
+      "The fix adds a small expiration window to consider tokens expired before their official expiration time."
+    ],
+    "difficulty": 2,
+    "precinct": "token-manager",
+    "lesson": "Adjusting token expiration windows prevents using tokens that may expire mid-transaction, avoiding intermittent failures.",
+    "tags": [
+      "token-expiration",
+      "authentication",
+      "test-failure"
+    ]
+  },
+  "original": {
+    "daysOpen": 1.8,
+    "comments": 3,
+    "reviewRounds": 4,
+    "mergedAt": "2024-02-28T16:42:40Z"
+  },
+  "bugAgeDays": 415,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py b/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py\nindex a763412..297cfb7 100644\n--- a/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py\n+++ b/ibm_cloud_sdk_core/token_managers/iam_request_based_token_manager.py\n@@ -1,6 +1,6 @@\n # coding: utf-8\n \n-# Copyright 2019 IBM All Rights Reserved.\n+# Copyright 2019, 2024 IBM All Rights Reserved.\n #\n # Licensed under the Apache License, Version 2.0 (the \"License\");\n # you may not use this file except in compliance with the License.\n@@ -63,6 +63,7 @@ class IAMRequestBasedTokenManager(JWTTokenManager):\n \n     DEFAULT_IAM_URL = 'https://iam.cloud.ibm.com'\n     OPERATION_PATH = \"/identity/token\"\n+    IAM_EXPIRATION_WINDOW = 10\n \n     def __init__(\n         self,\n@@ -167,3 +168,19 @@ class IAMRequestBasedTokenManager(JWTTokenManager):\n             value: A space seperated string that makes up the scope parameter.\n         \"\"\"\n         self.scope = value\n+\n+    def _is_token_expired(self) -> bool:\n+        \"\"\"\n+        Returns true iff the current cached token is expired.\n+        We'll consider an access token as expired when we reach its IAM server-reported expiration time\n+        minus our expiration window (10 secs).\n+        We do this to avoid using an access token that might expire in the middle of a long-running transaction\n+        within an IBM Cloud service.\n+\n+        Returns\n+        -------\n+        bool\n+            True if token is expired; False otherwise\n+        \"\"\"\n+        current_time = self._get_current_time()\n+        return current_time >= (self.expire_time - self.IAM_EXPIRATION_WINDOW)\ndiff --git a/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py b/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py\nindex 50eeb00..9d7ebc6 100644\n--- a/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py\n+++ b/ibm_cloud_sdk_core/token_managers/vpc_instance_token_manager.py\n@@ -1,6 +1,6 @@\n # coding: utf-8\n \n-# Copyright 2021, 2023 IBM All Rights Reserved.\n+# Copyright 2021, 2024 IBM All Rights Reserved.\n #\n # Licensed under the Apache License, Version 2.0 (the \"License\");\n # you may not use this file except in compliance with the License.\n@@ -55,6 +55,7 @@ class VPCInstanceTokenManager(JWTTokenManager):\n     METADATA_SERVICE_VERSION = '2022-03-01'\n     DEFAULT_IMS_ENDPOINT = 'http://169.254.169.254'\n     TOKEN_NAME = 'access_token'\n+    IAM_EXPIRATION_WINDOW = 10\n \n     def __init__(\n         self, iam_profile_crn: Optional[str] = None, iam_profile_id: Optional[str] = None, url: Optional[str] = None\n@@ -152,3 +153,19 @@ class VPCInstanceTokenManager(JWTTokenManager):\n         logger.debug('Returned from VPC \\'create_access_token\\' operation.\"')\n \n         return response['access_token']\n+\n+    def _is_token_expired(self) -> bool:\n+        \"\"\"\n+        Returns true iff the current cached token is expired.\n+        We'll consider an access token as expired when we reach its IAM server-reported expiration time\n+        minus our expiration window (10 secs).\n+        We do this to avoid using an access token that might expire in the middle of a long-running transaction\n+        within an IBM Cloud service.\n+\n+        Returns\n+        -------\n+        bool\n+            True if token is expired; False otherwise\n+        \"\"\"\n+        current_time = self._get_current_time()\n+        return current_time >= (self.expire_time - self.IAM_EXPIRATION_WINDOW)\n"
+}
