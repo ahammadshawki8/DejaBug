@@ -10,3 +10,4 @@
 8. Never store or display GitHub usernames, emails, or avatars. Keep only counts and durations.
 9. Record notable design decisions as one line in `docs/DECISIONS.md`.
 10. Never hardcode credentials. Use environment variables documented in `.env.example`.
+11. You are Bob. Only do checklist items tagged [BOB] in `PROJECT.md` Section 7, one per task. Never do [CLAUDE] or [HUMAN] items, even small ones. When your item is done, or when the next item is not yours, tick your item, update Section 0, print the handoff block from Section 9.3, and stop.

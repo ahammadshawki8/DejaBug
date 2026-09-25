@@ -9,17 +9,18 @@
 | Field | Value |
 |---|---|
 | Current tier | T0 Setup |
-| Next action | T0: scaffold the monorepo, .env.example, CI |
+| Next item | T0.3 |
+| Next owner | CLAUDE |
 | Last updated | 2026-09-25 23:00 BST |
 | Bobcoins used | 0 / 40 |
-| Blockers | Waiting for the hackathon Bob invite email (arrives after the 9:00 PM kick-off) |
+| Blockers | Bob IDE login (invite email). watsonx account activation (requested). |
 
 ---
 
 ## 1. Hackathon facts
 
 - **Event:** IBM Bob 2.0 Hackathon (lablab.ai), online.
-- **Hard deadline:** Sun Sep 27 2026, 9:00 PM BST (UTC+6).
+- **Hard deadline:** Sun Sep 27 2026, **8:00 PM BST** (10 AM ET, per the IBM account page. lablab shows 9:00 PM, and we plan for the earlier one). The watsonx cloud account closes at the same moment.
 - **Our budget:** 40 hours = **35 h development** (Fri 11 PM to Sun 10 AM) + **5 h submission** (Sun 10 AM to 3 PM). Everything after that is buffer.
 - **Team:** ahammadshawki8.
 - **Repository:** https://github.com/ahammadshawki8/DejaBug (public, MIT).
@@ -40,8 +41,8 @@
 1. **Commit identity.** Every commit is authored and committed by `ahammadshawki8`, and nobody else. Never add `Co-Authored-By` trailers, and never list Claude, Bob, srotdev, or any bot as author, committer, collaborator, or contributor. Bob's generated commit messages must be checked for trailers before committing. Before every push, run `git log --format='%an <%ae> | %cn <%ce>%n%b' origin/main..HEAD` and confirm.
 2. **No emojis and no em dashes (U+2014)** anywhere in the project: code, comments, docs, UI text, commit messages, slides. Use a plain hyphen or a colon instead. `scripts/check-style.mjs` enforces this.
 3. **No personal information in case data.** GitHub usernames, emails, and avatars from issues and PRs are never stored or shown. Store only counts, durations, and redacted text.
-4. **Bob builds the product.** Product code is written through Bob tasks (see Section 9). Claude Code reviews and writes review files. It changes product code only under the conditions in Section 9.4.
-5. **One checklist item per Bob task.** Each task gets a PNG summary screenshot saved to `bob_sessions/` as soon as it finishes.
+4. **Ownership is explicit.** Every checklist item is tagged [BOB], [CLAUDE] (Claude Code or Codex), or [HUMAN]. Agents only do their own items and hand off with the protocol in Section 9.3.
+5. **One [BOB] item per Bob task.** Each Bob task gets a PNG summary screenshot saved to `bob_sessions/` as soon as it finishes.
 6. **Keep this file current.** Tick checklist boxes, update Status, and append to the Progress Log after each work session.
 7. **Secrets** (GitHub token, API keys) live only in `.env`, never in git. `.env.example` documents them.
 8. **Working software over breadth.** A tier is done only when its "Done when" line is demonstrably true. Never start the next tier with the current one broken.
@@ -414,77 +415,102 @@ Every screen is composed from these. No page-specific one-off styling.
 
 ## 7. Implementation checklist (tier by tier)
 
-Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review (Section 9.3).
+Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review.
+
+**Every item has an ID and exactly one owner:**
+- **[BOB]:** done by IBM Bob, one item per Bob task (Section 9). These are the judged, visible, Bob-native parts.
+- **[CLAUDE]:** done by Claude Code or Codex. This is the plumbing.
+- **[HUMAN]:** done by you: an account, a command to run, a screenshot, or a decision.
+
+Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 
 ### T0 Setup (1 h), target Fri 11:59 PM
-- [x] Install Go (`winget install GoLang.Go`) and verify `go version`. Installed go1.27.0.
-- [x] Clone IBM/sarama into `workspace/sarama` (gitignored). Confirm `go test -run TestAsyncProducer -count=1 .` runs. Passes: about 30 s the first time (module download), about 1 s after.
-- [ ] Scaffold npm workspaces: `packages/engine`, `apps/web`. Add shared tsconfig, eslint, prettier, and the vitest setup.
-- [ ] Add `.env.example` (`GITHUB_TOKEN`, `DEJABUG_REPO_DIR`, `BOB_MAX_COST`).
-- [ ] Add a GitHub Actions CI: lint, typecheck, unit tests, `check-style.mjs`.
-- [ ] **Done when:** `npm run build && npm test` passes in an empty scaffold on CI.
+- [x] T0.1 [HUMAN] Install Go (`winget install GoLang.Go`) and verify `go version`. Installed go1.27.0.
+- [x] T0.2 [HUMAN] Clone IBM/sarama into `workspace/sarama` (gitignored). `go test -run TestAsyncProducer -count=1 .` passes: about 30 s the first time, about 1 s after.
+- [ ] T0.3 [CLAUDE] Scaffold npm workspaces `packages/engine` and `apps/web`: shared tsconfig, eslint, prettier, vitest, and the dev scripts (`npm run dev`, `build`, `test`, `lint`, `typecheck`).
+- [ ] T0.4 [CLAUDE] `.env.example` with `GITHUB_TOKEN`, `DEJABUG_REPO_DIR`, `LLM_PROVIDER` (`watsonx` or `bob`), `WATSONX_API_KEY`, `WATSONX_PROJECT_ID`, `WATSONX_URL`, `WATSONX_MODEL_ID`, `BOB_MAX_COST`.
+- [ ] T0.5 [CLAUDE] GitHub Actions CI: lint, typecheck, unit tests, `check-style.mjs`.
+- [ ] **Done when:** `npm run build && npm test` passes locally and on CI.
 
-### T1 Miner (2 h), target Sat 2:00 AM
-- [ ] `miner.ts`: fix-like commit filter, file classification, PR number extraction, and changed test function detection.
-- [ ] `dejabug mine --repo workspace/sarama --out cases/sarama/candidates.json`.
-- [ ] Unit tests on a fixture git repo.
-- [ ] **Done when:** the command outputs 150 or more candidates for sarama in under 30 s.
+### T1 Engine plan + Miner (2 h), target Sat 2:00 AM
+- [ ] T1.1 [BOB] **Plan mode task:** design the engine modules (miner, certifier, briefer, spoiler, play, verify, server) against Sections 4.1 and 5. Save the plan as `docs/ENGINE_PLAN.md`. This is cheap, and it is our "Plan mode" evidence.
+- [ ] T1.2 [CLAUDE] `miner.ts`: fix-like commit filter, file classification, PR number extraction, changed test function detection, and the `dejabug mine` CLI command.
+- [ ] T1.3 [CLAUDE] Miner unit tests on a fixture git repo.
+- [ ] **Done when:** `dejabug mine --repo workspace/sarama --out cases/sarama/candidates.json` outputs 150 or more candidates in under 30 s.
 
 ### T2 Certifier (4 h), target Sat 6:00 AM, **M1**
-- [ ] `certifier.ts`: worktree lifecycle, test overlay, go test runner with timeout, output parsing (build failure vs test failure), and the 3-run fail rule and 1-run pass rule.
-- [ ] Parallel pool (default concurrency 4) with a progress event emitter.
-- [ ] `funnel.json` with a count per status.
-- [ ] `dejabug certify --limit 40`.
-- [ ] **Done when:** 12 or more certified sarama cases exist with recorded fail/pass output. **Claude review #1.**
+- [ ] T2.1 [BOB] `certifier.ts` core: worktree lifecycle, test overlay from the fix commit, go test runner with timeout, output parsing (build failure vs test failure), the 3-run fail rule and 1-run pass rule, and every rejection status.
+- [ ] T2.2 [BOB] Parallel certification pool (default concurrency 4) with a typed progress event emitter. This is our "parallel" evidence.
+- [ ] T2.3 [CLAUDE] `funnel.json` writer, the `dejabug certify --limit N` CLI command, and certifier unit tests.
+- [ ] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
+- [ ] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
+- [ ] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task.
+- [ ] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
+- [ ] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output.
 
-### T3 Briefer + spoiler guard + original effort (3 h), target Sat 9:00 AM
-- [ ] `github.ts`: PR, linked issue, and comments fetch with ETag cache and username stripping.
-- [ ] `briefer.ts`: prompt build and a `bob run --format json --mode deja-forger --max-cost` call, then zod validation with one retry.
-- [ ] `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them.
-- [ ] `.bob/custom_modes.yaml` `deja-forger` + `.bob/skills/forge-case/SKILL.md`.
-- [ ] **Done when:** 12 or more cases have valid, spoiler-free briefs committed in `cases/sarama/`.
+### T3 Briefs (3 h), target Sat 9:00 AM
+- [ ] T3.1 [CLAUDE] `github.ts`: PR, linked issue, and comments fetch with an ETag cache and username/email/avatar stripping. Original-effort stats (days open, comments, review rounds).
+- [ ] T3.2 [CLAUDE] `llm/watsonx.ts`: a watsonx.ai text-generation client (IAM token exchange, Granite model from `WATSONX_MODEL_ID`, JSON output). Never use the models the hackathon bans (Section 9.8).
+- [ ] T3.3 [BOB] **The forger:**
+  - the `deja-forger` custom mode in `.bob/custom_modes.yaml`
+  - `.bob/skills/forge-case/SKILL.md` (brief schema, spoiler rules, hint ladder method)
+  - `briefer.ts`: prompt built from the skill, provider switch (`watsonx` for batch, `bob` = `bob run --format json --mode deja-forger --max-cost`), zod validation, one retry
+- [ ] T3.4 [BOB] **Subagent task:** "Use explore subagents in parallel to inspect the certified cases and rank them by teaching value and difficulty; write `cases/sarama/ranking.json`." This is our "subagents" evidence.
+- [ ] T3.5 [CLAUDE] `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
+- [ ] T3.6 [HUMAN] Generate briefs: Granite for all certified cases, plus `LLM_PROVIDER=bob` for 2 or 3 showcase cases. Commit the case JSON.
+- [ ] **Done when:** 12 or more cases have valid, spoiler-free briefs in `cases/sarama/`.
 
 ### T4 Game server + play/verify (3 h), target Sat 12:00 PM
-- [ ] `play.ts`: `git archive` export, test overlay, fresh `git init`, AGENTS.md template, `.bob/` mentor mode.
-- [ ] `verify.ts`: run tests in the playground and parse the results.
-- [ ] `server.ts`: all REST endpoints plus SSE. Reveal stays locked until a pass or a give-up.
+- [ ] T4.1 [CLAUDE] `play.ts`: `git archive` export, test overlay, fresh `git init`, the playground `AGENTS.md` template, and a copy of the `deja-mentor` mode.
+- [ ] T4.2 [CLAUDE] `verify.ts`: run the case's tests in the playground and parse the results.
+- [ ] T4.3 [CLAUDE] `server.ts`: all REST endpoints plus SSE forge events (Section 5). Reveal stays locked until a pass or a give-up.
 - [ ] **Done when:** an end-to-end run through curl works: start, apply the real fix by hand, verify passes, reveal works.
 
 ### T5 Web core (6 h), target Sat 6:00 PM, **M2**
-- [ ] Design tokens, fonts, icons, and the shared component inventory from Section 6A (6A.3-6A.5, 6A.10) built first.
-- [ ] Game shell (6A.6): nav rail, ribbon title, XP/rank/streak in the top bar, dispatch ticker, routing, and the API client.
-- [ ] Case Board, Case File, Investigation, and Debrief exactly as specified in 6A.7.
-- [ ] Error, loading, and empty states (themed, per 6A.7), keyboard shortcuts, and reduced motion (6A.8, 6A.11).
-- [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test. **Claude review #2.**
+- [ ] T5.1 [CLAUDE] Web app scaffold: Vite + React + Tailwind + Framer Motion + Zustand, routing, the typed API client, and the game state store.
+- [ ] T5.2 [BOB] **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
+- [ ] T5.3 [CLAUDE] Game shell (6A.6) built from the Bob components.
+- [ ] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
+- [ ] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
+- [ ] T5.6 [BOB] **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
+- [ ] T5.7 [CLAUDE] Themed loading, empty, and error states, keyboard shortcuts, and reduced motion (6A.7, 6A.8, 6A.11).
+- [ ] T5.8 [CLAUDE] **Review #2:** write `docs/reviews/REVIEW-02.md` with tagged items.
+- [ ] T5.9 [BOB] Apply the [BOB] items of REVIEW-02.
+- [ ] T5.10 [CLAUDE] Apply the [CLAUDE] items of REVIEW-02.
+- [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test.
 
 ### T6 Gamification (4 h), target Sat 10:00 PM
-- [ ] XP engine plus unit tests, ranks, badges, streak, precinct mastery rings, and a persisted profile.
-- [ ] Progress screen (6A.7 W5), motion (6A.8), WebAudio sounds with mute (6A.9), a rank-up modal, and the arcade leaderboard modal.
-- [ ] A shareable "Case Closed" card (PNG export).
+- [ ] T6.1 [CLAUDE] XP engine with unit tests, ranks, badges, streak, precinct mastery, and a persisted profile (Section 6 rules).
+- [ ] T6.2 [CLAUDE] Progress screen (6A.7 W5), rank-up modal, arcade leaderboard modal, and WebAudio sounds with mute (6A.9).
+- [ ] T6.3 [CLAUDE] A shareable "Case Closed" card (PNG export).
 - [ ] **Done when:** solving a case visibly awards XP and badges, and a rank-up can be triggered.
 
 ### T7 Forge Console (3 h), target Sun 1:00 AM
-- [ ] Forge Console as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons.
+- [ ] T7.1 [BOB] **Forge Console** as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons. This is the key demo moment.
 - [ ] **Done when:** clicking "Forge 8 cases" shows the lanes moving in real time against sarama.
 
-### T8 Mentor + Bob IDE integration (2 h), target Sun 3:00 AM
-- [ ] `deja-mentor` mode (groups: read only), `.bob/skills/mentor/SKILL.md`, and in-app "Ask the Mentor" instructions.
+### T8 Mentor (2 h), target Sun 3:00 AM
+- [ ] T8.1 [BOB] `deja-mentor` mode (groups: read only) and `.bob/skills/mentor/SKILL.md` (ask, point, never patch).
+- [ ] T8.2 [CLAUDE] In-app "Ask the Mentor" panel with step-by-step Bob IDE instructions.
+- [ ] T8.3 [HUMAN] Record the mentor refusing to patch and giving a Socratic hint in Bob IDE (for the video).
 - [ ] **Done when:** in Bob IDE, the mentor gives Socratic hints on a case and refuses to edit files.
 
 ### T9 Hardening + showcase deploy (4 h), target Sun 7:00 AM, **M3**
-- [ ] Engine and web tests green. Windows path handling. Timeouts and cleanup of worktrees.
-- [ ] Showcase build (static, bundled cases, labeled replayed verification) deployed to Vercel.
-- [ ] README with a GIF, architecture, and quickstart.
-- [ ] **Done when:** a fresh clone plus quickstart works, and the public URL loads. **Claude review #3, then Bob applies the fixes.**
+- [ ] T9.1 [BOB] **Bob Review workflow** over the whole repo (the built-in code review feature). Save its findings to `docs/reviews/BOB-REVIEW.md`.
+- [ ] T9.2 [CLAUDE] **Review #3:** merge the Bob review findings with Claude's own into `docs/reviews/REVIEW-03.md` with tagged items.
+- [ ] T9.3 [BOB] Apply the [BOB] items of REVIEW-03.
+- [ ] T9.4 [CLAUDE] Apply the [CLAUDE] items. Get engine and web tests green, fix Windows paths, add timeouts and worktree cleanup.
+- [ ] T9.5 [CLAUDE] Showcase build (static, bundled cases, labeled replayed verification, no watsonx calls at run time) deployed to Vercel. README with a GIF, architecture, and quickstart.
+- [ ] **Done when:** a fresh clone plus quickstart works, and the public URL loads.
 
 ### T10 Buffer (3 h), until Sun 10:00 AM
-- [ ] Fix whatever the reviews and the dry-run demo surfaced.
+- [ ] T10.1 [HUMAN] Full dry-run of the demo script (Section 8). Log the problems as tagged items in `docs/reviews/REVIEW-04.md`, then route them by owner.
 
-### S Submission (5 h), Sun 10:00 AM to 3:00 PM
-- [ ] Collect all Bob task screenshots into `bob_sessions/` (both members).
-- [ ] Problem & Solution statement and Bob Usage statement (500 words or less each).
-- [ ] Slides, cover image, and the demo video (3:00 or less, at least 90 s of the product working).
-- [ ] Run `check-submission.mjs` and `check-style.mjs`, verify commit authors, push, and submit on lablab.
+### S Submission (5 h), Sun 10:00 AM to 3:00 PM (the hard deadline is 8:00 PM BST)
+- [ ] S.1 [HUMAN] Collect every Bob task screenshot into `bob_sessions/`. Complete `docs/BOB_USAGE_LOG.md`.
+- [ ] S.2 [CLAUDE] Draft the Problem & Solution statement and the Bob Usage statement (500 words or less each) from the repo and the usage log.
+- [ ] S.3 [HUMAN] Slides, cover image, and the demo video (3:00 or less, at least 90 s of the product working).
+- [ ] S.4 [HUMAN] Run `check-submission.mjs` and `check-style.mjs`, verify commit authors, push, and submit on lablab **before 3:00 PM**.
 
 ---
 
@@ -501,72 +527,114 @@ Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review
 
 ---
 
-## 9. Bob, Bob Shell, and Bobcoin playbook
+## 9. Division of labour: Bob, Claude Code/Codex, and the handoff protocol
 
-### 9.1 Is Bob mandatory for the whole project?
-No. The rules say Bob IDE must be a **core component** and the repo must contain Bob-assisted code with task-summary screenshots. Other tools are allowed. Our policy:
-- **Bob writes the product code.**
-- **Claude Code** plans, reviews, and writes review files and non-product docs.
-- Claude only touches product code under Section 9.4.
+### 9.1 Policy
+The rules require Bob IDE to be a **core component** and the repo to contain Bob-assisted code with task-summary screenshots. Other tools are allowed. With only 40 Bobcoins, we split the work by visibility:
+- **[BOB] items:** the parts judges look at and the parts that make Bob part of the product:
+  - Plan-mode engine design
+  - the certifier (the "proof" core) and its parallel pool
+  - the forger mode and skill
+  - the subagent ranking
+  - the design system, the Case Board, the Investigation/Debrief loop, and the Forge Console
+  - the mentor mode
+  - Bob's code review
+- **[CLAUDE] items** (Claude Code or Codex): scaffolding, plumbing, API clients, server, tests, secondary screens, deployment, docs, and drafting reviews.
+- **Honesty:** every [CLAUDE] item is listed in `docs/BOB_USAGE_LOG.md` under "Claude Code / Codex work". The Bob Usage statement describes the split truthfully.
 
-This keeps the Bob Usage statement truthful and strong.
+### 9.2 Budget: 40 Bobcoins (one registered hackathon account, no top-ups)
 
-### 9.2 Budget: 40 Bobcoins total (the one registered hackathon account, no top-ups)
-
-| Tier | Coins (estimate) |
+| Bob item | Coins (estimate) |
 |---|---|
-| T0-T2 engine | 7 |
-| T3 briefs (includes runtime `bob run` for about 12 cases) | 6 |
-| T4 server | 3 |
-| T5-T7 web | 11 |
-| T8 mentor | 2 |
-| Review fix-ups (3 rounds) | 7 |
-| Reserve | 4 |
+| T1.1 engine plan (Plan mode) | 1.5 |
+| T2.1 certifier core | 5 |
+| T2.2 parallel pool | 2 |
+| T2.6 REVIEW-01 Bob items | 1.5 |
+| T3.3 forger mode + skill + briefer | 3 |
+| T3.4 subagent ranking | 1.5 |
+| T3.6 `bob run` for 2-3 showcase briefs (runtime) | 1.5 |
+| T5.2 design system | 5 |
+| T5.4 Case Board | 3.5 |
+| T5.6 Investigation + Debrief | 4.5 |
+| T5.9 REVIEW-02 Bob items | 1.5 |
+| T7.1 Forge Console | 4 |
+| T8.1 mentor mode + skill | 1 |
+| T9.1 Bob code review | 1.5 |
+| T9.3 REVIEW-03 Bob items | 1 |
+| Reserve | 1.5 |
 
-This budget is tight. To stretch it:
-- Bob does the core logic of each tier. Repetitive scaffolding (config files, boilerplate components) is batched into a few large tasks.
-- If coins run out, Section 9.4 applies and the change is logged.
+If Bob runs out of coins, the remaining [BOB] items are re-tagged [CLAUDE] in this file, with a note in the usage log. After every Bob task, check the balance (Bob IDE Settings, General, or https://bob.ibm.com/admin/subscription) and update Section 0.
 
-Check the balance after every task (Bob IDE Settings, General, or https://bob.ibm.com/admin/subscription). Log each task in `docs/BOB_USAGE_LOG.md`.
+### 9.3 Handoff protocol (Bob and Claude follow this exactly)
+**On start, every agent:**
+1. Reads Section 0 (Status) and Section 7.
+2. Finds the first unchecked item.
+3. If that item's owner is **not you**, do nothing else. Print the handoff block below and stop.
 
-### 9.3 The build loop (per checklist item)
-1. **Plan mode** (cheap): `@PROJECT.md` Section 7 item Tx.y, plus only the files it touches. Ask for a short plan.
-2. **Agent mode**: "Implement the plan. Run the tests. Stop when the Done-when line holds." Enable auto-approve for read and write in the workspace. Keep execute on approval.
-3. Verify locally. Ask Bob for the commit message and **strip any trailer**. Commit as yourself.
-4. **Screenshot the task summary** into `bob_sessions/dejabug_taskNN_<short>_summary.png`, and add a row to `docs/BOB_USAGE_LOG.md`.
-5. At each milestone (M1, M2, M3), Claude Code reads the repo and writes `docs/reviews/REVIEW-0N.md`: numbered, file-referenced fixes and enhancements with acceptance criteria. **No code changes.**
-6. A new Bob task: "Apply `@docs/reviews/REVIEW-0N.md` items 1-N. Tick each item when done." Screenshot it.
+**While working:**
+- Implement only the current item.
+- Stop when it is done or when its "Done when" condition holds. Never start an item owned by someone else, even if it is small or obvious.
+- **Bob:** one [BOB] item per Bob task. If the next item is also [BOB], say so and stop, so the human can take the task screenshot and start a fresh Bob task (fresh context saves coins).
+- **Claude:** may do several consecutive [CLAUDE] items in one session. It stops at the first [BOB] or [HUMAN] item.
 
-### 9.4 When Claude Code may write product code
-Only when:
-- a member's Bobcoins are exhausted, or
-- a blocker is burning more than 30 minutes of clock time and Bob has failed twice.
+**On finish:**
+1. Tick the finished item(s) in Section 7.
+2. Update Section 0: current tier, next item ID, next owner, last updated, Bobcoins used.
+3. Print the handoff block.
 
-Every such change is logged in `docs/BOB_USAGE_LOG.md` under "Non-Bob changes" so the usage statement stays honest.
+**Handoff block** (print it exactly in this shape):
+```
+HANDOFF
+Done: <item IDs>
+Next: <item ID> [<OWNER>] <one-line summary>
+Human, do this:
+  1. Review and commit: git add -A && git commit -m "<conventional message>"   (as ahammadshawki8, no trailers)
+  2. <If Bob just finished> Screenshot the task summary to bob_sessions/dejabug_taskNN_<short>_summary.png and log it in docs/BOB_USAGE_LOG.md
+  3. Open <Bob IDE in Plan/Agent mode | Claude Code | Codex> and paste:
+     "Read PROJECT.md. Do item <ID> only, following Section 9.3."
+```
+
+**The human** relays between the agents: commit, screenshot, then paste the next prompt into the right tool.
+
+### 9.4 Prompts to paste
+- **Bob, [BOB] item:** Plan mode first: "Read @PROJECT.md. Plan item <ID> only, following Section 9.3. List the files you will touch." Then Agent mode: "Implement the plan for item <ID>. Stop when it is done and print the handoff block."
+- **Bob, frontend item:** also add "Follow Section 6A strictly, including 6A.12."
+- **Claude Code / Codex:** "Read PROJECT.md. Do the next [CLAUDE] items in Section 7, following Section 9.3. Stop at the first item that is not yours and print the handoff block."
+- **Claude review:** "Read PROJECT.md. Do item <review ID>. Write the review file only, with items tagged [BOB] or [CLAUDE]. Do not change code."
 
 ### 9.5 Saving Bobcoins
-- **One checklist item per task.** Start a new task instead of continuing a long one, because context grows and every turn gets more expensive.
-- **Point, don't paste.** Use `@file` mentions for exact files and never @ the whole repo. `.bobignore` excludes `workspace/`, `playgrounds/`, `node_modules/`, and lock files.
-- **Use Ask mode for questions and Plan mode for design.** Agent mode is only for edits.
-- **Give Bob the acceptance test up front** ("Done when ..."), so it stops early instead of polishing.
-- **Batch small fixes** into one review-apply task instead of many tiny tasks.
+- **Fresh task per item.** Context grows with every turn and every turn gets more expensive.
+- **Point, don't paste.** @-mention `PROJECT.md` plus only the files the item touches. `.bobignore` excludes `workspace/`, `playgrounds/`, `node_modules/`, and lock files.
+- **Plan mode first** (cheap), then one Agent-mode pass. Use Ask mode for questions.
+- **Give Bob the acceptance test up front**, so it stops instead of polishing.
+- **Claude does the prep:** before a [BOB] item, the preceding [CLAUDE] items leave clean interfaces, types, and stubs, so Bob only writes the core logic.
 - **Don't let Bob run the whole sarama test suite.** Always use `-run` with specific tests.
-- **Runtime calls are capped:** `bob run --max-cost ${BOB_MAX_COST} --max-turns 6 --disable-mcp`. Briefs are cached by commit SHA and never regenerated unless the prompt changes.
-- **Parallel work saves wall-clock time, not coins.** Use two members in parallel (engine and web), not duplicate tasks.
+- **Runtime Bob calls are capped:** `bob run --max-cost ${BOB_MAX_COST} --max-turns 6 --disable-mcp`. Batch brief generation uses watsonx Granite, not Bob.
 
-### 9.6 Showing Bob 2.0 features (these are judged, so use each deliberately and screenshot it)
-- **Plan mode, then Agent mode**, for every tier.
-- **Subagents:** in T2 and T3, ask Bob to "use explore subagents in parallel to inspect these 5 candidate fixes and rank them by teaching value". Screenshot the spawn.
-- **Parallel tasks:** run the T5 web and T3/T4 engine tasks concurrently (two members, or two Bob task windows).
-- **Document understanding:** the briefer feeds PR and issue text to Bob. Also give Bob the Go testing docs and Kafka protocol docs when needed.
-- **Custom modes + skills:** `deja-forger` and `deja-mentor` are product features, not just dev conveniences.
-- **Bob Shell headless:** `bob run --format json` is called by the engine at runtime.
-- **Code review + commit messages:** use Bob's Review workflow before each milestone commit.
+### 9.6 Showing Bob 2.0 features (judged, so screenshot each one)
+
+| Feature | Where |
+|---|---|
+| Plan mode | T1.1, and the plan step of every [BOB] item |
+| Agent mode | Every [BOB] implementation |
+| Parallel tasks | T2.2 pool. Also run a Bob task while Claude works on a [CLAUDE] item |
+| Subagents | T3.4 ranking |
+| Document understanding | T3.3 forger reads PR/issue threads. T5.2 reads Section 6A and the reference screenshots |
+| Custom modes + skills | `deja-forger`, `deja-mentor`, `forge-case`, `mentor` (product features) |
+| Bob Shell headless | T3.6 `bob run --format json` inside the engine |
+| Code review | T9.1 |
 
 ### 9.7 Bob Shell quick reference
 - `bob` / `bob chat`: interactive. `/status` shows usage, `/team` switches to the hackathon team, `/mode` switches mode.
 - `bob run -p "..." --format json --mode <slug> -w <dir> --max-cost N --max-turns N`: headless.
 - `bob --list-tasks`: list tasks. `bob -r <task-id>`: resume.
+
+### 9.8 watsonx.ai
+- **Account:** requested 2026-09-25 (activation takes up to 1 hour). $80 of IBM Cloud credits. Model inference costs $0.0001 per 1,000 tokens.
+- **Use:** batch generation of case briefs and hints with an IBM Granite instruct model, through the watsonx.ai API (`llm/watsonx.ts`).
+- **Banned models** (the guide says they hurt judging): `llama-3-405b-instruct`, `mistral-medium-2505`, `mistral-small-3-1-24b-instruct-2503`.
+- **Credentials:** only in `.env`. A key exposed in a public repo gets deactivated and the account suspended.
+- **The account closes Sep 27 at 10 AM ET (8 PM BST).** The showcase deploy must never call watsonx at run time. Cases are pre-generated and committed.
 
 ---
 
@@ -580,7 +648,7 @@ Every such change is logged in `docs/BOB_USAGE_LOG.md` under "Non-Bob changes" s
 ## 11. Session resume protocol
 1. Read Section 0 (Status) and the latest Progress Log entry.
 2. Run `git log --oneline -10` and `git status`.
-3. Continue from the first unchecked box in Section 7.
+3. Continue from the first unchecked item in Section 7, but only if you are its owner. Otherwise print the handoff block (Section 9.3).
 4. At the end of the session: tick boxes, update Status, and append to the Progress Log.
 
 ## 12. Progress log

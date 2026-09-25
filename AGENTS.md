@@ -18,3 +18,11 @@ Context for IBM Bob and any other coding agent working in this repository.
 - Never store or display GitHub usernames, emails, or avatars.
 - Commit messages must have no `Co-Authored-By` or other attribution trailers.
 - Never commit secrets. Use `.env` (gitignored) and document keys in `.env.example`.
+
+## Ownership and handoff (mandatory)
+- Every item in `PROJECT.md` Section 7 is tagged [BOB], [CLAUDE] (Claude Code or Codex), or [HUMAN].
+- **If you are IBM Bob:** do only [BOB] items, one per task. If the first unchecked item is not [BOB], do nothing except print the handoff block from `PROJECT.md` Section 9.3.
+- **When your item is done:**
+  1. Tick it.
+  2. Update `PROJECT.md` Section 0 (next item, next owner, Bobcoins used).
+  3. Print the handoff block and stop.

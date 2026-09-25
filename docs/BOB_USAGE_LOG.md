@@ -5,9 +5,9 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | # | Member | Tier/item | Mode(s) | Bob features used | Coins | Screenshot |
 |---|---|---|---|---|---|---|
 
-## Non-Bob changes
+## Claude Code / Codex work
 
-Product code changes not made through Bob (see PROJECT.md Section 9.4).
+Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] items re-tagged after Bobcoins ran out.
 
-| Date | Who/tool | Files | Reason |
-|---|---|---|---|
+| Date | Item | Tool | Files | Note |
+|---|---|---|---|---|
