@@ -21,7 +21,7 @@
 - **Event:** IBM Bob 2.0 Hackathon (lablab.ai), online.
 - **Hard deadline:** Sun Sep 27 2026, 9:00 PM BST (UTC+6).
 - **Our budget:** 40 hours = **35 h development** (Fri 11 PM to Sun 10 AM) + **5 h submission** (Sun 10 AM to 3 PM). Everything after that is buffer.
-- **Team:** ahammadshawki8, ashfaqstu.
+- **Team:** ahammadshawki8.
 - **Repository:** https://github.com/ahammadshawki8/DejaBug (public, MIT).
 - **Judging:** Application of Technology, Presentation, Business Value, Originality.
 - **Hard requirements** (missing any one of these can disqualify us):
@@ -148,7 +148,7 @@ flowchart LR
 
 **Stack**
 - Engine: Node 24, TypeScript, `tsx`, `commander`, `execa`, `fastify`, `zod`, `p-limit`, `vitest`.
-- Web: Vite, React 18, TypeScript, Tailwind CSS, Framer Motion, Zustand, `canvas-confetti`, `diff2html` for diffs, WebAudio sound effects.
+- Web: Vite, React 18, TypeScript, Tailwind CSS, Framer Motion, Zustand, `pixelarticons`, `@fontsource/*` (Silkscreen, Special Elite, IBM Plex Sans/Mono), `canvas-confetti`, `diff2html` for diffs, WebAudio sound effects. Full visual spec: Section 6A.
 - Target toolchain: Go 1.22 or later (for sarama tests).
 - Monorepo: npm workspaces.
 
@@ -223,6 +223,195 @@ type Case = {
 
 ---
 
+## 6A. Frontend design directive (binding for T5-T7)
+
+Read this section, Section 4.2, and Section 6 before designing or changing any screen. If this section conflicts with a default habit, this section wins. Do not redesign functionality. Design the presentation and interaction around the functionality described in this file.
+
+**The 3-second test:** someone seeing any screen for 3 seconds should think "developer debugging game / detective investigation", not "project-management dashboard".
+
+### 6A.1 What we take from the reference screenshots (and what we do not)
+- References live in `screenshots_inspired/`. They are local only, gitignored, and never shipped (third-party designs).
+- **Take:**
+  - thick dark outlines (3 px) with **hard offset shadows** (no blur)
+  - flat, saturated color blocks
+  - pixel-art icons
+  - a ribbon-banner page title with an arrow tail
+  - chunky stat tiles
+  - a bold colored header bar on data blocks
+  - pixel-bordered progress bars with the value printed inside
+  - collectible cards for achievements
+  - an arcade-style pop-up modal (the leaderboard)
+  - a persistent left icon rail whose active item is a solid color block
+  - dense but clean information blocks
+- **Do not take:** their purple/yellow/blue palette, their layout, the "workspace/task manager" framing, generic bar charts, or photo avatars.
+
+### 6A.2 Principles
+- **Design, do not default.** No typical SaaS/admin dashboard, generic card grids, gradients, glassmorphism, shadcn or Material look, or large border radii. It is a game interface first and a developer tool second.
+- **Tactile.** The UI is built from physical detective objects, stylized and clean, never photorealistic:
+  - manila case folders and dossier tabs
+  - evidence sheets and clipped notes
+  - cork-board case cards with pins, and string where it carries meaning
+  - stamped documents and police-file labels
+  - terminal readouts
+  - worn paper edges
+- **Hierarchy through color.** Dark navy is the environment. Manila and off-white are case-file surfaces. Stamp red means danger, failure, or a key action. Neon amber means interactive, highlight, or XP. Restrained green is only for verified/pass states. No rainbow colors.
+- **Dense but clean.** Strong borders, deliberate spacing, compact information blocks, and large focal elements. No giant empty areas and no marketing-site hero typography.
+- **Every decoration has a gameplay purpose.** No stock illustrations, no emoji icons, no decorative noise.
+- **Progression is always visible** (rank, XP, streak live in the shell) and is never reduced to plain text statistics.
+
+### 6A.3 Design tokens (define once in `tailwind.config.ts` and `src/styles/tokens.css`; never hardcode hex values in components)
+
+| Token | Value | Use |
+|---|---|---|
+| `ink` | `#0B1426` | App background (navy environment) |
+| `navy` | `#14223F` | Rail, dark panels, terminal frame |
+| `navy-2` | `#1E3159` | Raised dark surfaces, hover |
+| `line` | `#05080F` | All outlines and hard shadows |
+| `manila` | `#E8D49B` | Case folders, cards |
+| `paper` | `#F7F1E1` | Documents, evidence sheets, dossier pages |
+| `cork` | `#B98A5A` | Case board surface (CSS pattern, no images) |
+| `stamp` | `#D7263D` | Fail, danger, primary irreversible actions, CASE CLOSED |
+| `amber` | `#FFB627` | Interactive highlight, XP, active nav, focus ring |
+| `pass` | `#2FA84F` | Verified, tests passing |
+| `muted` | `#8A93A6` | Secondary text on dark |
+| `text-dark` | `#1A1A1A` | Text on paper/manila |
+
+- **Outline:** `3px solid line`. **Shadow:** `4px 4px 0 line` (hard, no blur). **Pressed:** translate `2px 2px` and shadow `2px 2px 0 line`. **Radius:** 2 px (4 px max). Contrast must reach WCAG AA on every surface.
+
+### 6A.4 Typography (self-hosted via `@fontsource/*` so the demo works offline)
+- **Display / headings / labels:** `Silkscreen` (pixel). Use it for short strings only: page ribbons, codenames, stamps, button labels, stat labels.
+- **Case reports and evidence:** `Special Elite` (typewriter).
+- **Body and UI text:** `IBM Plex Sans`.
+- **Numbers, timer, terminal, code:** `IBM Plex Mono` (tabular numerals).
+- **Never** set paragraphs in the pixel font. Body copy stays 15 to 16 px and highly legible.
+
+### 6A.5 Icons and art
+- UI icons come from `pixelarticons` (MIT) as React components. Never use emoji.
+- Rank insignias (5), badge art (7), precinct seals, the cork pin, the stamp, and the paper clip are **custom pixel SVGs** drawn on a 16x16 or 32x32 grid and kept in `apps/web/src/art/`.
+
+### 6A.6 Game shell (every screen)
+- **Left rail (80 px, navy):** Case Board (board icon), Investigation (magnifier), Forge (hammer/zap), Progress (trophy), and Settings (sliders) at the bottom. The active item is a solid amber block with an ink icon, as in the references. Tooltips appear on hover and focus.
+- **Top bar:**
+  - a ribbon-banner page title in stamp red with an arrow tail
+  - on the right: rank insignia, a compact XP bar ("1,240 / 2,000 XP"), streak counter, mute toggle, and an engine status light (green = engine connected, amber = showcase mode)
+- **Dispatch ticker** (thin line above the ribbon, like the references' "quote of the day"): rotating one-line lessons from solved cases, which gives the ticker a teaching purpose.
+
+### 6A.7 Screens
+**Case Board (the hero, W1).**
+- The board is a cork surface (CSS pattern), not a table or card grid.
+- Cases are pinned manila folders in a loose grid with slight random rotation (-2 to 2 degrees, seeded by case id so it is stable).
+- Above the board, a strip of chunky stat tiles: Open cases, Closed, Best time, Current rank.
+- Precinct filters are dossier tabs: All, Producer, Consumer, Protocol, Client, Admin.
+- Each folder shows:
+  - codename in the pixel font
+  - precinct on the folder tab
+  - difficulty as 1 to 3 magnifier pips
+  - "COLD FOR 1,204 DAYS" as a stamped label
+  - reward chip "+300 XP" in amber
+- Four distinct states:
+  - **Locked:** desaturated, padlock, diagonal "LOCKED: REACH DETECTIVE" tape.
+  - **Available:** manila, lifts on hover.
+  - **Active:** amber outline, pulsing pin, "IN PROGRESS" clip.
+  - **Solved:** red CASE CLOSED stamp overlay, best time shown.
+- On hover, a red string links cases in the same precinct.
+
+**Case File (W2).**
+- Opening a case plays a folder-opening transition into a two-page dossier.
+- **Left page:** the symptom report revealed with a typewriter animation (click or press Space to finish instantly), then an evidence sheet with a paper clip holding a terminal readout of the redacted failing test output.
+- **Right page:** "MISSION PARAMETERS" as game information, not form fields: precinct seal, difficulty pips, par time, reward, tests to pass, and bug age.
+- **TAKE THE CASE** is a large stamp-red button. After it is pressed, it shows the playground path with a copy button and three steps: open in Bob IDE, switch to Deja Mentor mode, investigate.
+
+**Investigation (W3).**
+- The focal elements are:
+  - a huge live timer in Plex Mono, with a par marker that turns stamp red when exceeded
+  - the current objective ("Make TestProducerRetry pass")
+  - a remaining-XP meter that visibly drains with time and hints
+- **Hint ladder:** 3 sealed envelopes stacked vertically, each labeled with its cost ("-75 XP"). Opening one needs a confirmation. An opened hint becomes a clipped note.
+- **RUN TESTS** is a major arcade button: amber, deep press animation, shortcut `R`.
+- **Fail sequence:** the terminal types red lines, the status reads "SUSPECT STILL AT LARGE", and there is a short shake (skipped under reduced motion).
+- **Pass sequence:** green "VERIFIED" lines, then an automatic transition to the Debrief.
+- A small, secondary "Give up and reveal" action awards 0 XP.
+
+**Debrief (W4).**
+- The CASE CLOSED stamp slams in (scale 2 to 1, rotate -8 degrees, about 220 ms, one-frame screen jolt).
+- The XP counter rolls up, then time and hints used appear.
+- Newly unlocked badges flip in as collectible cards.
+- The rank bar fills, and the rank-up modal appears if a threshold is crossed.
+- Then a fighting-game style **VS panel**, "YOUR INVESTIGATION vs ORIGINAL TEAM":
+  - left: your time, hints, lines changed
+  - right: days open, comments, review rounds
+- Then the side-by-side diff (diff2html restyled to the tokens) and the lesson on an index card.
+- Actions: Share card (PNG), Next case.
+- Confetti fires only on rank-up or the first solve.
+
+**Progress (W5).**
+- A large rank insignia and a rank ladder path with 5 nodes, Rookie -> Detective -> Inspector -> Chief Inspector -> Commissioner.
+- The XP bar with the next rank.
+- A badge collection of collectible cards, with locked badges shown as silhouettes with their unlock hint.
+- Precinct mastery as segmented pixel rings.
+- A streak calendar of pixel squares, and closed cases as a file drawer list.
+- An arcade leaderboard modal inspired by the reference. It shows local player profiles only, never real names from GitHub.
+
+**Forge Console (W6, key demo moment).**
+- **Funnel:** three large counters connected by arrows, FIX COMMITS 822 -> CANDIDATES 174 -> CERTIFIED N. Each ticks up as events arrive.
+- **Worker lanes:** 4 to 8 horizontal conveyor belts. Each lane shows its current candidate chip (short sha + commit subject) moving through three stations: MINE, CERTIFY (with fail-run lights 1/2/3 and a pass light), and BRIEF (with a "Bob is writing" indicator).
+- **Outcomes:** certified cases drop into an "Evidence Locker" tray on the right as new folders. Rejected candidates fall into a discard bin with a reason tag (build, flaky, no-fail).
+- **Controls:** a terminal log ticker along the bottom, a "Forge 8 cases" button, and a concurrency selector.
+- It must read as parallel activity instantly, even to someone who does not know the implementation.
+
+**Settings.** Sound on/off and volume, a reduced-motion override, reset profile (with confirmation), engine connection details, and a showcase-mode notice.
+
+**States everywhere, all themed:**
+- **Loading:** paper sliding in.
+- **Empty board:** "No open cases. Fire up the Forge."
+- **Engine offline:** "Radio silence from HQ", with a retry button.
+- **Errors:** a stamped memo with the message and a retry button.
+
+### 6A.8 Motion (Framer Motion)
+- UI feedback takes 120 to 200 ms. Paper slides take 300 to 400 ms. The stamp impact takes about 220 ms with a slight overshoot. Counters and progress fills take 500 to 700 ms.
+- Animations never block input, and repeated actions are never slowed down.
+- Micro-interactions:
+  - buttons depress 2 px
+  - folders lift 2 to 4 px on hover
+  - stamps hit with weight
+  - XP counts upward
+  - progress fills smoothly
+  - newly unlocked items get a brief amber highlight
+- Under `prefers-reduced-motion` or the Settings override, everything becomes an opacity fade: no shake, no rotation, no confetti.
+
+### 6A.9 Sound (WebAudio, synthesized, no audio files)
+- Sounds: click (short square blip), stamp (low noise thump), fail (descending buzz), pass (ascending 3-note arpeggio), rank-up (4-note fanfare).
+- Master gain 0.3. Starts after the first user gesture. The mute state persists, and the mute toggle is always visible in the top bar.
+
+### 6A.10 Component inventory (`apps/web/src/components/game/`)
+- **Shell:** `GameShell`, `NavRail`, `RibbonTitle`, `DispatchTicker`.
+- **Surfaces:** `StatTile`, `PaperPanel`, `DarkPanel`, `DossierTabs`, `Modal` (arcade), `Toast` (clipped note), `Tooltip`.
+- **Cases:** `CaseFolder`, `Stamp`, `TypewriterText`, `Terminal`.
+- **Controls:** `ArcadeButton`, `IconButton`.
+- **Progression:** `XpBar`, `RankInsignia`, `BadgeCard`, `MasteryRing`, `StreakCalendar`.
+- **Investigation:** `HintLadder`, `Timer`, `VersusPanel`.
+- **Forge:** `WorkerLane`, `FunnelCounter`.
+
+Every screen is composed from these. No page-specific one-off styling.
+
+### 6A.11 Stack and rules
+- React 18, TypeScript, Tailwind CSS, Framer Motion, Zustand, `pixelarticons`, `@fontsource/*`, `canvas-confetti`, `diff2html`.
+- No emojis and no em dashes in UI text or source. Use icon components.
+- Accessibility:
+  - full keyboard navigation (`R` runs tests, `H` opens the next hint, `Esc` closes modals)
+  - visible amber focus rings
+  - AA contrast
+  - `aria-live` announcements for test results and XP gains
+  - reduced motion respected
+
+### 6A.12 Procedure for Bob (before editing frontend code)
+1. Inspect the existing `apps/web` structure.
+2. Read Sections 4.2, 6, and 6A.
+3. Define or extend the tokens and the shared components first.
+4. State briefly what you intend to change.
+5. Implement consistently across the affected screens.
+6. Check the 3-second test and the states list before declaring done.
+
 ## 7. Implementation checklist (tier by tier)
 
 Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review (Section 9.3).
@@ -262,19 +451,20 @@ Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review
 - [ ] **Done when:** an end-to-end run through curl works: start, apply the real fix by hand, verify passes, reveal works.
 
 ### T5 Web core (6 h), target Sat 6:00 PM, **M2**
-- [ ] App shell, routing, API client, and the dark detective theme tokens.
-- [ ] Case Board, Case File, Investigation (timer, hints, run tests), and Debrief (diff, stats, lesson).
-- [ ] Error, loading, and empty states.
-- [ ] **Done when:** a full case can be played in the browser against the local engine. **Claude review #2.**
+- [ ] Design tokens, fonts, icons, and the shared component inventory from Section 6A (6A.3-6A.5, 6A.10) built first.
+- [ ] Game shell (6A.6): nav rail, ribbon title, XP/rank/streak in the top bar, dispatch ticker, routing, and the API client.
+- [ ] Case Board, Case File, Investigation, and Debrief exactly as specified in 6A.7.
+- [ ] Error, loading, and empty states (themed, per 6A.7), keyboard shortcuts, and reduced motion (6A.8, 6A.11).
+- [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test. **Claude review #2.**
 
 ### T6 Gamification (4 h), target Sat 10:00 PM
 - [ ] XP engine plus unit tests, ranks, badges, streak, precinct mastery rings, and a persisted profile.
-- [ ] Animations (stamp, typewriter, confetti), sound effects with mute, and a rank-up modal.
+- [ ] Progress screen (6A.7 W5), motion (6A.8), WebAudio sounds with mute (6A.9), a rank-up modal, and the arcade leaderboard modal.
 - [ ] A shareable "Case Closed" card (PNG export).
 - [ ] **Done when:** solving a case visibly awards XP and badges, and a rank-up can be triggered.
 
 ### T7 Forge Console (3 h), target Sun 1:00 AM
-- [ ] SSE-driven parallel worker lanes, an animated funnel, and live Bob brief generation status.
+- [ ] Forge Console as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons.
 - [ ] **Done when:** clicking "Forge 8 cases" shows the lanes moving in real time against sarama.
 
 ### T8 Mentor + Bob IDE integration (2 h), target Sun 3:00 AM
