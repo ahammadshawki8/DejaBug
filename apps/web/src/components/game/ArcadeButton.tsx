@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { playSound } from "../../lib/sound";
 
 // Chunky arcade button (6A.3/6A.8): 3px outline, hard shadow, presses 2px on click.
 
@@ -33,11 +34,16 @@ export function ArcadeButton({
   shortcut,
   className = "",
   children,
+  onClick,
   ...rest
 }: ArcadeButtonProps) {
   return (
     <button
       type="button"
+      onClick={(e) => {
+        playSound("click");
+        onClick?.(e);
+      }}
       className={[
         "inline-flex select-none items-center justify-center border-[3px] border-line font-display uppercase",
         "rounded-[2px] shadow-hard transition-[transform,box-shadow] duration-100",

@@ -8,10 +8,10 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T6 Gamification |
-| Next item | T6.1 |
+| Current tier | T7 Forge |
+| Next item | T7.0 |
 | Next owner | CLAUDE |
-| Last updated | 2026-09-26 04:40 BST |
+| Last updated | 2026-09-26 05:05 BST |
 | Bobcoins used | 35.5 / 40 (4.5 left: only T8.1, T8.3, T9.1) |
 | Blockers | none |
 
@@ -498,9 +498,9 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test.
 
 ### T6 Gamification (4 h), target Sat 10:00 PM
-- [ ] T6.1 [CLAUDE] XP engine with unit tests, ranks, badges, streak, precinct mastery, and a persisted profile (Section 6 rules).
-- [ ] T6.2 [CLAUDE] Progress screen (6A.7 W5), rank-up modal, arcade leaderboard modal, and WebAudio sounds with mute (6A.9).
-- [ ] T6.3 [CLAUDE] A shareable "Case Closed" card (PNG export).
+- [x] T6.1 [CLAUDE] XP engine with unit tests, ranks, badges, streak, precinct mastery, and a persisted profile (Section 6 rules).
+- [x] T6.2 [CLAUDE] Progress screen (6A.7 W5), rank-up modal, arcade leaderboard modal, and WebAudio sounds with mute (6A.9).
+- [x] T6.3 [CLAUDE] A shareable "Case Closed" card (PNG export).
 - [ ] **Done when:** solving a case visibly awards XP and badges, and a rank-up can be triggered.
 
 ### T7 Forge Console (3 h), target Sun 1:00 AM
@@ -695,3 +695,4 @@ Human, do this:
 - **2026-09-26 03:35:** T5.1-T5.3 done (Claude). Web: Vite 8 + React 18 + Tailwind 4 (@theme tokens from 6A.3) + Framer Motion + Zustand + React Router 7, self-hosted fonts, pixelarticons. Typed API client (types shared from the engine via the @engine alias), game, profile, and settings stores. Design system: pixel art from character grids (5 rank insignias, 7 badges, pin, clip, magnifier pips), and the full 6A.10 component inventory (ArcadeButton, Panels, StatTile, RibbonTitle, Stamp, TypewriterText, Terminal, XpBar, CountUp, MasteryRing, BadgeCard, StreakCalendar, CaseFolder with 4 states, HintLadder, Timer, VersusPanel, Modal, Toast, Tooltip, DossierTabs, FunnelCounter, WorkerLane), shown at /styleguide. The game shell has the rail, a top bar with rank/XP/streak/mute/engine light, and a dispatch ticker. XP rules are in lib/rules.ts with tests. Visual review via Playwright screenshots, with 5 fixes applied. Engine dev script switched to node --watch (tsx watch hung under concurrently on Windows).
 - **2026-09-26 04:10:** T5.4 done by Bob (4.43 coins): Case Board with stat tiles, precinct tabs, cork grid, the four folder states, red string on hover, and loading/error/empty states. Claude fixes: precinct tabs are derived from the data instead of hardcoded sarama areas (Rule 10; consumer-group had no tab), and a stray footer was removed. T5.5 done (Claude): Case File dossier (two pages sliding in, typewriter symptoms, wrapped evidence terminal, mission parameters incl. "Briefed by IBM Bob/Granite", Take the case, playground path with copy, Bob IDE + Deja Mentor steps). **Only 4.5 Bobcoins left** (35.5 used, per the user): Bob does only T8.1 mentor mode, T8.3 live mentor demo, and T9.1 code review. T5.9 is re-tagged to Claude. Note: dev servers were stopped by Claude Code for low system memory; visual checks resume when they are restarted.
 - **2026-09-26 04:40:** T5.6-T5.10 done (Claude): Investigation (live timer, objective, draining XP meter, 3-envelope hint ladder with confirmation, big RUN TESTS with R shortcut, verdict terminal for pass/fail/hang/build/notest, give-up with confirmation), Debrief (CASE CLOSED slam, XP count-up with breakdown, rank bar, promotion modal and confetti only on first solve or rank-up, VS panel, your diff vs the original fix via diff2html, lesson card, next case), Settings (repository switcher across IBM repos, sound, volume, reduced motion, profile reset), lazy routes, and REVIEW-02 (7 items, all applied). Solve logic in lib/solve.ts with tests. The M2 visual check of the full loop is still pending until dev servers can run again (memory).
+- **2026-09-26 05:05:** T6 done (Claude): badge rules (lib/badges.ts, 7 badges, tests) awarded on solve and shown flipping in on the debrief; WebAudio sounds (click, hint, stamp, fail, pass, rank-up; mute and volume respected); the Progress screen (rank ladder, XP bar, badge collection with locked silhouettes, precinct mastery rings, 35-day streak calendar, closed files table, Hall of fame modal with the speed factor vs the original team); and a Case Closed share card (canvas PNG, no personal data). 96 tests. Browser verification is still pending (memory).

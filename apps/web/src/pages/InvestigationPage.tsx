@@ -17,7 +17,10 @@ import {
   type TerminalTone,
 } from "../components/game";
 import { baseXp, remainingXp } from "../lib/rules";
+import { awardBadges } from "../lib/badges";
 import { applySolve } from "../lib/solve";
+import { playSound } from "../lib/sound";
+import { useGame } from "../state/game";
 import { useProfile } from "../state/profile";
 import { useSettings } from "../state/settings";
 import { usePageTitle } from "./pageTitle";
@@ -73,6 +76,7 @@ function Investigation({ id }: { id: string }) {
   const push = useToasts((s) => s.push);
   const profile = useProfile((s) => s.profile);
   const saveProfile = useProfile((s) => s.save);
+  const allCases = useGame((s) => s.cases);
 
   const [c, setCase] = useState<PublicCase>();
   const [session, setSession] = useState<CaseSession>();
@@ -113,17 +117,27 @@ function Investigation({ id }: { id: string }) {
       setResult(res.result);
       setSession(res.session);
       if (res.result.pass && res.session.solvedAt) {
+        playSound("pass");
         const outcome = applySolve(profile, c, res.session);
-        await saveProfile(outcome.profile);
+        const withBadges = awardBadges(
+          outcome.profile,
+          allCases.some((x) => x.id === c.id) ? allCases : [...allCases, c],
+        );
+        await saveProfile(withBadges.profile);
         setActiveCase(undefined);
         window.setTimeout(
           () =>
             navigate(`/case/${id}/debrief`, {
-              state: { rankUp: outcome.rankUp, firstSolve: outcome.firstSolve },
+              state: {
+                rankUp: outcome.rankUp,
+                firstSolve: outcome.firstSolve,
+                unlocked: withBadges.unlocked,
+              },
             }),
           1400,
         );
       } else {
+        playSound("fail");
         setShakeKey((k) => k + 1);
       }
     } catch (e) {
@@ -131,12 +145,13 @@ function Investigation({ id }: { id: string }) {
     } finally {
       setRunning(false);
     }
-  }, [c, running, id, repo, profile, saveProfile, setActiveCase, navigate, push]);
+  }, [c, running, id, repo, profile, allCases, saveProfile, setActiveCase, navigate, push]);
 
   const openHint = useCallback(async () => {
     if (confirming === undefined) return;
     try {
       const res = await api.hint(id, confirming, repo);
+      playSound("hint");
       setHints((h) => [...h, res.hint]);
       setSession(res.session);
       push(`Hint ${res.n} opened: -${hintCost} XP`, "info");

@@ -1,11 +1,13 @@
 import confetti from "canvas-confetti";
+import { motion } from "framer-motion";
 import { Trophy } from "pixelarticons/react/Trophy.js";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { api, type CaseSession, type PublicCase, type Reveal } from "../api/client";
-import { RankInsignia } from "../art/sprites";
+import { RankInsignia, type BadgeId } from "../art/sprites";
 import {
   ArcadeButton,
+  BadgeCard,
   CountUp,
   DarkPanel,
   Modal,
@@ -16,7 +18,10 @@ import {
 } from "../components/game";
 import { DiffView } from "../components/game/DiffView";
 import { formatDuration } from "../lib/format";
+import { BADGES } from "../lib/badges";
 import { rankFor, scoreSolve } from "../lib/rules";
+import { downloadShareCard } from "../lib/shareCard";
+import { playSound } from "../lib/sound";
 import { changedLines, formatDays, solveSeconds } from "../lib/solve";
 import { useGame } from "../state/game";
 import { useProfile } from "../state/profile";
@@ -29,7 +34,8 @@ export function DebriefPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const flags = (location.state ?? {}) as { rankUp?: boolean; firstSolve?: boolean };
+  const flags = (location.state ?? {}) as { rankUp?: boolean; firstSolve?: boolean; unlocked?: BadgeId[] };
+  const unlocked = BADGES.filter((b) => flags.unlocked?.includes(b.id));
   const repo = useSettings((s) => s.repo);
   const reduced = useReducedMotion();
   const profile = useProfile((s) => s.profile);
@@ -55,6 +61,12 @@ export function DebriefPage() {
       live = false;
     };
   }, [id, repo]);
+
+  useEffect(() => {
+    if (!reveal) return;
+    const t = window.setTimeout(() => playSound(flags.rankUp ? "rankup" : "stamp"), 250);
+    return () => window.clearTimeout(t);
+  }, [reveal, flags.rankUp]);
 
   // Confetti only for meaningful moments: the first solve ever, or a rank-up (6A.7 W4).
   useEffect(() => {
@@ -171,6 +183,24 @@ export function DebriefPage() {
         </div>
       </DarkPanel>
 
+      {unlocked.length ? (
+        <section aria-label="Badges unlocked" className="flex flex-col gap-3">
+          <h3 className="font-display text-sm uppercase text-amber">Badges unlocked</h3>
+          <div className="flex flex-wrap gap-4">
+            {unlocked.map((b, i) => (
+              <motion.div
+                key={b.id}
+                initial={reduced ? { opacity: 0 } : { rotateY: 90, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                transition={{ delay: 0.4 + i * 0.15, duration: 0.35 }}
+              >
+                <BadgeCard badge={b.id} name={b.name} description={b.description} locked={false} highlight />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <VersusPanel
         rows={[
           {
@@ -219,6 +249,25 @@ export function DebriefPage() {
         {nextCase ? (
           <ArcadeButton size="lg" onClick={() => navigate(`/case/${nextCase.id}`)}>
             Next case
+          </ArcadeButton>
+        ) : null}
+        {solved && record ? (
+          <ArcadeButton
+            tone="navy"
+            size="lg"
+            onClick={() =>
+              void downloadShareCard({
+                codename: c.brief.codename,
+                repo: c.repo,
+                seconds,
+                hints: session.hintsRevealed,
+                xp: record.xp,
+                originalDays: reveal.original.daysOpen,
+                rank: rank.name,
+              })
+            }
+          >
+            Share card
           </ArcadeButton>
         ) : null}
         <ArcadeButton tone="paper" size="lg" onClick={() => navigate("/")}>
