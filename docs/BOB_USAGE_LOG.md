@@ -4,6 +4,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 
 | # | Member | Tier/item | Mode(s) | Bob features used | Coins | Screenshot |
 |---|---|---|---|---|---|---|
+| 1 | ahammadshawki8 | T1.1 engine plan | Plan | Plan mode, context mentions (@PROJECT.md, @types.ts), document understanding | 0.555 | dejabug_task01_engine_plan_summary.png |
 
 ## Claude Code / Codex work
 

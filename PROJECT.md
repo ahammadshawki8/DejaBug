@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T1 Engine plan + Miner |
-| Next item | T1.1 |
-| Next owner | BOB |
-| Last updated | 2026-09-26 00:10 BST |
-| Bobcoins used | 0 / 40 |
+| Next item | T1.2 |
+| Next owner | CLAUDE |
+| Last updated | 2026-09-26 00:30 BST |
+| Bobcoins used | 0.555 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
 ---
@@ -433,7 +433,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [ ] **Done when:** `npm run build && npm test` passes locally and on CI.
 
 ### T1 Engine plan + Miner (2 h), target Sat 2:00 AM
-- [ ] T1.1 [BOB] **Plan mode task:** design the engine modules (miner, certifier, briefer, spoiler, play, verify, server) against Sections 4.1 and 5. Save the plan as `docs/ENGINE_PLAN.md`. This is cheap, and it is our "Plan mode" evidence.
+- [x] T1.1 [BOB] **Plan mode task:** design the engine modules (miner, certifier, briefer, spoiler, play, verify, server) against Sections 4.1 and 5. Save the plan as `docs/ENGINE_PLAN.md`. This is cheap, and it is our "Plan mode" evidence.
 - [ ] T1.2 [CLAUDE] `miner.ts`: fix-like commit filter, file classification, PR number extraction, changed test function detection, and the `dejabug mine` CLI command.
 - [ ] T1.3 [CLAUDE] Miner unit tests on a fixture git repo.
 - [ ] **Done when:** `dejabug mine --repo workspace/sarama --out cases/sarama/candidates.json` outputs 150 or more candidates in under 30 s.
