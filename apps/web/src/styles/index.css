@@ -98,3 +98,40 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* diff2html restyled to the game tokens (DiffView). */
+.dejabug-diff .d2h-wrapper {
+  font-family: var(--font-mono);
+}
+.dejabug-diff .d2h-file-wrapper {
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+}
+.dejabug-diff .d2h-file-header {
+  background: var(--color-navy);
+  color: var(--color-paper);
+  border-bottom: 3px solid var(--color-line);
+  font-family: var(--font-mono);
+}
+.dejabug-diff .d2h-file-name,
+.dejabug-diff .d2h-tag {
+  color: var(--color-paper);
+  border-color: var(--color-muted);
+}
+.dejabug-diff .d2h-code-linenumber,
+.dejabug-diff .d2h-code-side-linenumber {
+  background: var(--color-manila);
+  color: var(--color-text-dark);
+  border-color: var(--color-manila-deep);
+}
+.dejabug-diff .d2h-ins {
+  background: #dff3e4;
+}
+.dejabug-diff .d2h-del {
+  background: #f9dde1;
+}
+.dejabug-diff .d2h-info {
+  background: var(--color-paper);
+  color: var(--color-muted);
+}
