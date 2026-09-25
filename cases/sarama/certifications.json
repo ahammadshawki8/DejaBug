@@ -7,7 +7,7 @@
       "status": "certified",
       "failRuns": 3,
       "passRuns": 1,
-      "failOutput": "--- FAIL: TestRestrictApiVersion (0.00s)\n    --- FAIL: TestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised (0.00s)\n        api_versions_test.go:72: \n            \tError Trace:\tC:/Users/Shawki/AppData/Local/Temp/dejabug-wt-4d07ef2ec3f5307e12dc1ee66e6c7d0b885d0e2a/api_versions_test.go:72\n            \tError:      \tExpected error with \"kafka server: The version of API is not supported\" in chain but got nil.\n            \tTest:       \tTestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.180s\nFAIL\n",
+      "failOutput": "--- FAIL: TestRestrictApiVersion (0.00s)\n    --- FAIL: TestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised (0.00s)\n        api_versions_test.go:72: \n            \tError Trace:\tapi_versions_test.go:72\n            \tError:      \tExpected error with \"kafka server: The version of API is not supported\" in chain but got nil.\n            \tTest:       \tTestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.180s\nFAIL\n",
       "passOutput": "ok  \tgithub.com/IBM/sarama\t0.087s\n",
       "durationMs": 7587
     },
