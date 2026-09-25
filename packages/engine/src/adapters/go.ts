@@ -8,7 +8,11 @@ import type { LanguageAdapter, RunOptions, RunResult } from "./types.js";
 
 const execFileAsync = promisify(execFile);
 
-const DEFAULT_TEST_TIMEOUT_SEC = 45;
+/** Per-test timeout; a breach is a "hang". Override with DEJABUG_TEST_TIMEOUT_SEC (tests use a small value). */
+function defaultTestTimeoutSec(): number {
+  const v = Number(process.env.DEJABUG_TEST_TIMEOUT_SEC);
+  return Number.isFinite(v) && v > 0 ? v : 45;
+}
 
 export function isGoTestFile(file: string): boolean {
   return file.endsWith("_test.go");
@@ -153,7 +157,7 @@ async function runGoTests(
   tests: string[],
   options: RunOptions = {},
 ): Promise<RunResult> {
-  const testTimeoutSec = options.testTimeoutSec ?? DEFAULT_TEST_TIMEOUT_SEC;
+  const testTimeoutSec = options.testTimeoutSec ?? defaultTestTimeoutSec();
   const processTimeoutMs = options.processTimeoutMs ?? (testTimeoutSec + 30) * 1000;
   const groups = groupByModule(targets, (rel) => existsSync(path.join(dir, rel, "go.mod")));
 

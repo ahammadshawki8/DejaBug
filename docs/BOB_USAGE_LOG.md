@@ -21,3 +21,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T2.3 | Claude Code | packages/engine/src/store.ts, cli.ts (certify), certifier.test.ts, types.ts (Funnel.attempted, CertificationsFile), .github/workflows/ci.yml (Go) | Store, certify CLI, tests |
 | 2026-09-26 | T2.4 support + T2.5 | Claude Code | packages/engine/src/cli.ts (Go preflight), cases/sarama/certifications.json (rerun, path scrub), docs/reviews/REVIEW-01.md | Batch rerun + review |
 | 2026-09-26 | T2.5a | Claude Code | packages/engine/src/adapters/*, miner.ts, config.ts, doctor.ts, cli.ts (init, --target), types.ts, tests, cases/fp-go/candidates.json, docs/reviews/REVIEW-01.md item 10 | Repository-agnostic engine |
+| 2026-09-26 | T2.7 | Claude Code | packages/engine/src/store.ts (stripLocalPaths), store.test.ts, certifier.test.ts, adapters/go.ts (DEJABUG_TEST_TIMEOUT_SEC), .env.example | REVIEW-01 Claude items |

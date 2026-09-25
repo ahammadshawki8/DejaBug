@@ -43,6 +43,13 @@ export function readCertifications(casesDir: string): CertificationsFile | undef
   return readJson<CertificationsFile>(path.join(casesDir, "certifications.json"));
 }
 
+/** Local temp worktree prefixes (they contain the OS username). Stripped before anything is persisted. */
+const LOCAL_WORKTREE_PATH = /(?:[A-Za-z]:)?[\\/](?:[^\\/\s"]+[\\/])*?dejabug-wt-[0-9a-f]+[\\/]/g;
+
+export function stripLocalPaths(text: string): string {
+  return text.replace(LOCAL_WORKTREE_PATH, "");
+}
+
 /** Merges new results into certifications.json (keyed by fixSha; newer results win). */
 export function mergeCertifications(
   casesDir: string,
@@ -50,7 +57,13 @@ export function mergeCertifications(
   results: Certification[],
 ): CertificationsFile {
   const byId = new Map((readCertifications(casesDir)?.results ?? []).map((r) => [r.fixSha, r]));
-  for (const r of results) byId.set(r.fixSha, r);
+  for (const r of results) {
+    byId.set(r.fixSha, {
+      ...r,
+      failOutput: stripLocalPaths(r.failOutput),
+      passOutput: stripLocalPaths(r.passOutput),
+    });
+  }
   const file: CertificationsFile = {
     repo,
     updatedAt: new Date().toISOString(),

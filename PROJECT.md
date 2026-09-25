@@ -8,10 +8,10 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T2 Certifier |
-| Next item | T2.7 |
+| Current tier | T3 Briefs |
+| Next item | T3.1 |
 | Next owner | CLAUDE |
-| Last updated | 2026-09-26 03:20 BST |
+| Last updated | 2026-09-26 03:40 BST |
 | Bobcoins used | 9.435 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
@@ -459,7 +459,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
 - [x] T2.5a [CLAUDE] **Repository-agnostic engine:** `adapters/` (interface, errors, registry, Go adapter with the REVIEW-01 item 1 and 4 output classification), the miner refactored onto the adapter, `Candidate.language`, `dejabug init <owner/repo>`, and a global `--target` option. Update the engine tests.
 - [x] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task, and make `certifier.ts` call `adapter.runTests()` (no Go literals left in the certifier).
-- [ ] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
+- [x] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
 - [x] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output. **Result: 23 certified of 44 attempted.**
 
 ### T3 Briefs (3 h), target Sat 9:00 AM
@@ -677,3 +677,4 @@ Human, do this:
 - **2026-09-26 01:50:** T2.4 batch: the first run was invalid (no Go on PATH in that terminal, so 40 were misread as build failures). The CLI now has a Go preflight. The rerun gives **23 certified of 44 attempted** (9 build, 5 no-fail, 2 no-pass, 5 timeout; the timeouts are hang bugs). Temp paths were scrubbed from the data. T2.5 REVIEW-01 is written (5 [BOB] items, 4 [CLAUDE] items). Next: T2.6 [BOB].
 - **2026-09-26 02:00:** Product decision (user): DejaBug must work on any well-maintained repository, not just sarama. Added Rule 10, F0 Onboard, the language adapter architecture, and new items T2.5a (adapter refactor, Claude, before Bob's T2.6), T4.4 (Python adapter), T4.5 (second-repo proof), and T7.0 (repo picker). REVIEW-01 items 1 and 4 move into the Go adapter.
 - **2026-09-26 02:45:** T2.5a done (Claude). The engine is repository-agnostic: `adapters/` (the LanguageAdapter interface, errors, registry, and a Go adapter with anchored -run, hang/notest/build classification, ToolMissingError, and multi-module routing by nearest go.mod). The miner runs on the adapter. `Candidate.language`, `dejabug init <owner/repo>`, a global `--target`, and an adapter-driven doctor and preflight were added. 35 tests. Second repo proven at the mining level: IBM/fp-go gives 137 candidates. Its recent fix: commits are mostly API additions (genuine build rejections). REVIEW-01 item 10 added (the pass phase restores the full fix tree). Next: T2.6 [BOB].
+- **2026-09-26 03:40:** M1 reached. T2.6 (Bob, 3.21 coins): the certifier runs on adapters, and 4 of 5 hang bugs are now certified. **sarama: 27 certified of 44 attempted.** T2.7 (Claude): store sanitizes on merge (stripLocalPaths), DEJABUG_TEST_TIMEOUT_SEC added, tests for deadlock certification, ToolMissingError abort, output sanitizing, and build-output recording (42 engine tests). Queued for REVIEW-02 [BOB]: for hang results, keep the head of the output (the "panic: test timed out ... running tests: TestX" headline) instead of the tail of the goroutine dump.

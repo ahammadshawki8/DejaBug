@@ -1,8 +1,10 @@
 import { execFileSync } from "node:child_process";
 import { EventEmitter } from "node:events";
-import { rmSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
+import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { FixtureRepo, goFile, goTest } from "../test/fixture-repo.js";
+import { ToolMissingError } from "./adapters/errors.js";
 import { certify } from "./certifier.js";
 import type { Candidate, Certification, ForgeEvent } from "./types.js";
 
@@ -106,20 +108,54 @@ describe.skipIf(!hasGo())("certify (Go fixture repository)", () => {
       ["TestThree"],
     );
 
+    // Hang: the buggy Wait blocks forever, the fix returns. Hangs count as reproduced failures.
+    repo.commit("feat: add Wait", {
+      "calc.go": goFile(
+        "calc",
+        "func Add(a, b int) int { return a + b }\n\nfunc Two() int { return 2 }\n\nfunc Sub(a, b int) int { return a - b }\n\nfunc Wait() int { ch := make(chan int); return <-ch }\n",
+      ),
+    });
+    candidate(
+      "hang",
+      repo.commit("fix: Wait deadlocks", {
+        "calc.go": goFile(
+          "calc",
+          "func Add(a, b int) int { return a + b }\n\nfunc Two() int { return 2 }\n\nfunc Sub(a, b int) int { return a - b }\n\nfunc Wait() int { return 1 }\n",
+        ),
+        "calc_test.go": goFile(
+          "calc",
+          TESTING + goTest("TestWait", "\tif Wait() != 1 {\n\t\tt.Fatal()\n\t}"),
+        ),
+      }),
+      ["TestWait"],
+    );
+
     // Test names that do not exist: rejected, never certified.
     candidate("missingTest", candidates.certified!.fixSha, ["TestDoesNotExist"]);
 
     const emitter = new EventEmitter();
     emitter.on("forge", (e: ForgeEvent) => events.push(e));
 
-    const list = [candidates.certified!, candidates.build!, candidates.noFail!, candidates.noPass!];
-    const main = await certify(list, repo.dir, emitter, 2);
+    const list = [
+      candidates.certified!,
+      candidates.build!,
+      candidates.noFail!,
+      candidates.noPass!,
+      candidates.hang!,
+    ];
+    const savedTimeout = process.env.DEJABUG_TEST_TIMEOUT_SEC;
+    process.env.DEJABUG_TEST_TIMEOUT_SEC = "3";
+    const main = await certify(list, repo.dir, emitter, 2).finally(() => {
+      if (savedTimeout === undefined) delete process.env.DEJABUG_TEST_TIMEOUT_SEC;
+      else process.env.DEJABUG_TEST_TIMEOUT_SEC = savedTimeout;
+    });
     const missing = await certify([candidates.missingTest!], repo.dir, new EventEmitter(), 1);
     results = new Map([
       ["certified", main[0]!],
       ["build", main[1]!],
       ["noFail", main[2]!],
       ["noPass", main[3]!],
+      ["hang", main[4]!],
       ["missing", missing[0]!],
     ]);
   }, 180_000);
@@ -135,8 +171,23 @@ describe.skipIf(!hasGo())("certify (Go fixture repository)", () => {
     expect(r.passOutput).toMatch(/^ok\s/m);
   });
 
-  it("rejects a test that does not compile before the fix", () => {
-    expect(results.get("build")!.status).toBe("rejected:build");
+  it("rejects a test that does not compile before the fix, recording the compiler output", () => {
+    const r = results.get("build")!;
+    expect(r.status).toBe("rejected:build");
+    expect(r.failOutput).toMatch(/undefined: Sub|build failed/);
+  });
+
+  it("certifies a deadlock fix: three hangs before, a pass after", () => {
+    const r = results.get("hang")!;
+    expect(r.status).toBe("certified");
+    expect(r.failRuns).toBe(3);
+    expect(r.failOutput).toMatch(/test timed out|TestWait/);
+  });
+
+  it("never records local worktree paths", () => {
+    for (const r of results.values()) {
+      expect(r.failOutput + r.passOutput).not.toMatch(/dejabug-wt-|AppData/);
+    }
   });
 
   it("rejects a test that already passes before the fix", () => {
@@ -153,8 +204,24 @@ describe.skipIf(!hasGo())("certify (Go fixture repository)", () => {
 
   it("emits one result event per candidate with worker slots below the concurrency", () => {
     const resultEvents = events.filter((e) => e.type === "result");
-    expect(resultEvents).toHaveLength(4);
+    expect(resultEvents).toHaveLength(5);
     for (const e of events) if ("worker" in e) expect(e.worker).toBeLessThan(2);
+  });
+
+  it("aborts the whole run when the toolchain is missing", async () => {
+    const exe = process.platform === "win32" ? "go.exe" : "go";
+    const saved = process.env.PATH ?? "";
+    process.env.PATH = saved
+      .split(path.delimiter)
+      .filter((dir) => dir && !existsSync(path.join(dir, exe)))
+      .join(path.delimiter);
+    try {
+      await expect(certify([candidates.certified!], repo.dir, new EventEmitter(), 1)).rejects.toBeInstanceOf(
+        ToolMissingError,
+      );
+    } finally {
+      process.env.PATH = saved;
+    }
   });
 
   it("cleans up its worktrees", () => {
