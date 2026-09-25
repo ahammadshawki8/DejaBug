@@ -270,6 +270,8 @@ program
               prNumber: context.prNumber,
               original,
               bugAgeDays: await bugAgeDays(cfg.repoDir, candidate, fixDiff),
+              briefedBy:
+                cfg.llmProvider === "bob" ? "bob-shell" : `watsonx:${cfg.watsonx.modelId ?? "unknown"}`,
               fixDiff,
             });
             writeCase(cfg.casesDir, c);

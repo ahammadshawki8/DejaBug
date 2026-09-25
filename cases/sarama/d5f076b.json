@@ -44,6 +44,7 @@
     "mergedAt": "2022-03-30T17:32:27Z"
   },
   "bugAgeDays": 715,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/async_producer.go b/async_producer.go\nindex 27398bcd..343d3de9 100644\n--- a/async_producer.go\n+++ b/async_producer.go\n@@ -840,6 +840,14 @@ func (bp *brokerProducer) run() {\n \t\t\t\tcontinue\n \t\t\t}\n \n+\t\t\tif msg.flags&fin == fin {\n+\t\t\t\t// New broker producer that was caught up by the retry loop\n+\t\t\t\tbp.parent.retryMessage(msg, ErrShuttingDown)\n+\t\t\t\tDebugLogger.Printf(\"producer/broker/%d state change to [dying-%d] on %s/%d\\n\",\n+\t\t\t\t\tbp.broker.ID(), msg.retries, msg.Topic, msg.Partition)\n+\t\t\t\tcontinue\n+\t\t\t}\n+\n \t\t\tif bp.buffer.wouldOverflow(msg) {\n \t\t\t\tLogger.Printf(\"producer/broker/%d maximum request accumulated, waiting for space\\n\", bp.broker.ID())\n \t\t\t\tif err := bp.waitForSpace(msg, false); err != nil {\n"
 }

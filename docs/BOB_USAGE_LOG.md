@@ -11,6 +11,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 5 | ahammadshawki8 | T3.3 forger (deja-forger mode, forge-case skill, briefer.ts) | Plan, Agent | Custom mode, Skill, document understanding (PR/issue threads), Bob Shell headless provider, zod validation | 4.00 | dejabug_task05_forger_summary.png, dejabug_task05_forger_prompt.png |
 | 6 | ahammadshawki8 | T3.4 case ranking | Agent | 4 explore subagents in parallel, todo list, document understanding of review packs | 1.19 | dejabug_task06_ranking_*.png (todo, subagents running, subagents done, summary, prompt) |
 | 7 | ahammadshawki8 | T3.3b forger fixes (REVIEW-T3.3) | Plan, Agent | Plan mode, Agent mode, todo list, skill rewrite, Bob Shell output-format analysis | 14.82 | dejabug_task07_forger_fixes_summary.png |
+| 8 | ahammadshawki8 | T3.6 live Bob Shell headless brief (fc42022) | bob run --mode deja-forger | Bob Shell headless inside the product pipeline, custom mode, skill | (see Bob usage dashboard) | terminal output in PROJECT.md progress log |
 
 ## Claude Code / Codex work
 

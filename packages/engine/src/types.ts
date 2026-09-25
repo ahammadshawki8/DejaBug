@@ -78,6 +78,7 @@ export interface Case {
   brief: Brief;
   original: OriginalEffort;
   bugAgeDays: number;
+  briefedBy?: string; // "bob-shell" or "watsonx:<model id>"
   parSeconds: number;
   fixDiff: string; // revealed only in the debrief
 }

@@ -44,6 +44,7 @@
     "mergedAt": "2023-08-03T13:42:51Z"
   },
   "bugAgeDays": 1,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 600,
   "fixDiff": "diff --git a/describe_configs_request.go b/describe_configs_request.go\nindex 2d2d906c..d0ab0d6e 100644\n--- a/describe_configs_request.go\n+++ b/describe_configs_request.go\n@@ -109,11 +109,13 @@ func (r *DescribeConfigsRequest) isValidVersion() bool {\n \n func (r *DescribeConfigsRequest) requiredVersion() KafkaVersion {\n \tswitch r.Version {\n-\tcase 1:\n-\t\treturn V1_1_0_0\n \tcase 2:\n \t\treturn V2_0_0_0\n-\tdefault:\n+\tcase 1:\n+\t\treturn V1_1_0_0\n+\tcase 0:\n \t\treturn V0_11_0_0\n+\tdefault:\n+\t\treturn V2_0_0_0\n \t}\n }\ndiff --git a/describe_configs_response.go b/describe_configs_response.go\nindex 772d06b8..8aed5de8 100644\n--- a/describe_configs_response.go\n+++ b/describe_configs_response.go\n@@ -122,12 +122,14 @@ func (r *DescribeConfigsResponse) isValidVersion() bool {\n \n func (r *DescribeConfigsResponse) requiredVersion() KafkaVersion {\n \tswitch r.Version {\n-\tcase 1:\n-\t\treturn V1_0_0_0\n \tcase 2:\n \t\treturn V2_0_0_0\n-\tdefault:\n+\tcase 1:\n+\t\treturn V1_1_0_0\n+\tcase 0:\n \t\treturn V0_11_0_0\n+\tdefault:\n+\t\treturn V2_0_0_0\n \t}\n }\n \n"
 }

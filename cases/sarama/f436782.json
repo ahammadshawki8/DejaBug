@@ -45,6 +45,7 @@
     "mergedAt": "2022-02-27T14:06:53Z"
   },
   "bugAgeDays": 3,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 600,
   "fixDiff": "diff --git a/errors.go b/errors.go\nindex ba27d38b..507002bf 100644\n--- a/errors.go\n+++ b/errors.go\n@@ -3,6 +3,7 @@ package sarama\n import (\n \t\"errors\"\n \t\"fmt\"\n+\t\"strings\"\n \n \t\"github.com/hashicorp/go-multierror\"\n )\n@@ -63,8 +64,23 @@ var ErrReassignPartitions = errors.New(\"failed to reassign partitions for topic\"\n // ErrDeleteRecords is the type of error returned when fail to delete the required records\n var ErrDeleteRecords = errors.New(\"kafka server: failed to delete records\")\n \n-// The formatter used to format multierrors\n-var MultiErrorFormat multierror.ErrorFormatFunc\n+// MultiErrorFormat specifies the formatter applied to format multierrors. The\n+// default implementation is a consensed version of the hashicorp/go-multierror\n+// default one\n+var MultiErrorFormat multierror.ErrorFormatFunc = func(es []error) string {\n+\tif len(es) == 1 {\n+\t\treturn es[0].Error()\n+\t}\n+\n+\tpoints := make([]string, len(es))\n+\tfor i, err := range es {\n+\t\tpoints[i] = fmt.Sprintf(\"* %s\", err)\n+\t}\n+\n+\treturn fmt.Sprintf(\n+\t\t\"%d errors occurred:\\n\\t%s\\n\",\n+\t\tlen(es), strings.Join(points, \"\\n\\t\"))\n+}\n \n type sentinelError struct {\n \tsentinel error\n"
 }

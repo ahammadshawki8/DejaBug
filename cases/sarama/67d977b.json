@@ -44,6 +44,7 @@
     "mergedAt": "2022-12-22T11:31:55Z"
   },
   "bugAgeDays": 1543,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/async_producer.go b/async_producer.go\nindex 61746c8f..50f226f8 100644\n--- a/async_producer.go\n+++ b/async_producer.go\n@@ -1161,7 +1161,7 @@ func (p *asyncProducer) retryBatch(topic string, partition int32, pSet *partitio\n \tproduceSet.bufferCount += len(pSet.msgs)\n \tfor _, msg := range pSet.msgs {\n \t\tif msg.retries >= p.conf.Producer.Retry.Max {\n-\t\t\tp.returnError(msg, kerr)\n+\t\t\tp.returnErrors(pSet.msgs, kerr)\n \t\t\treturn\n \t\t}\n \t\tmsg.retries++\n"
 }

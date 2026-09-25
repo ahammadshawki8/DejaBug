@@ -44,6 +44,7 @@
     "mergedAt": "2023-09-01T10:26:11Z"
   },
   "bugAgeDays": 1644,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 600,
   "fixDiff": "diff --git a/consumer_group.go b/consumer_group.go\nindex a0a1e1a4..01cdb669 100644\n--- a/consumer_group.go\n+++ b/consumer_group.go\n@@ -114,6 +114,9 @@ func NewConsumerGroup(addrs []string, groupID string, config *Config) (ConsumerG\n // necessary to call Close() on the underlying client when shutting down this consumer.\n // PLEASE NOTE: consumer groups can only re-use but not share clients.\n func NewConsumerGroupFromClient(groupID string, client Client) (ConsumerGroup, error) {\n+\tif client == nil {\n+\t\treturn nil, ConfigurationError(\"client must not be nil\")\n+\t}\n \t// For clients passed in by the client, ensure we don't\n \t// call Close() on it.\n \tcli := &nopCloserClient{client}\n"
 }

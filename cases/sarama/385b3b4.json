@@ -48,6 +48,7 @@
     "mergedAt": "2023-11-07T11:20:53Z"
   },
   "bugAgeDays": 2694,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/config.go b/config.go\nindex f9299a8c..ad970a3f 100644\n--- a/config.go\n+++ b/config.go\n@@ -15,7 +15,9 @@ import (\n \n const defaultClientID = \"sarama\"\n \n-var validID = regexp.MustCompile(`\\A[A-Za-z0-9._-]+\\z`)\n+// validClientID specifies the permitted characters for a client.id when\n+// connecting to Kafka versions before 1.0.0 (KIP-190)\n+var validClientID = regexp.MustCompile(`\\A[A-Za-z0-9._-]+\\z`)\n \n // Config is used to pass multiple configuration options to Sarama's constructors.\n type Config struct {\n@@ -846,8 +848,11 @@ func (c *Config) Validate() error {\n \tswitch {\n \tcase c.ChannelBufferSize < 0:\n \t\treturn ConfigurationError(\"ChannelBufferSize must be >= 0\")\n-\tcase !validID.MatchString(c.ClientID):\n-\t\treturn ConfigurationError(\"ClientID is invalid\")\n+\t}\n+\n+\t// only validate clientID locally for Kafka versions before KIP-190 was implemented\n+\tif !c.Version.IsAtLeast(V1_0_0_0) && !validClientID.MatchString(c.ClientID) {\n+\t\treturn ConfigurationError(fmt.Sprintf(\"ClientID value %q is not valid for Kafka versions before 1.0.0\", c.ClientID))\n \t}\n \n \treturn nil\n"
 }

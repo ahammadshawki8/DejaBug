@@ -44,6 +44,7 @@
     "mergedAt": "2023-01-25T22:07:22Z"
   },
   "bugAgeDays": 1513,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/consumer_group.go b/consumer_group.go\nindex ecdbcfa6..140d9f7e 100644\n--- a/consumer_group.go\n+++ b/consumer_group.go\n@@ -252,7 +252,10 @@ func (c *consumerGroup) retryNewSession(ctx context.Context, topics []string, ha\n \tif refreshCoordinator {\n \t\terr := c.client.RefreshCoordinator(c.groupID)\n \t\tif err != nil {\n-\t\t\treturn c.retryNewSession(ctx, topics, handler, retries, true)\n+\t\t\tif retries <= 0 {\n+\t\t\t\treturn nil, err\n+\t\t\t}\n+\t\t\treturn c.retryNewSession(ctx, topics, handler, retries-1, true)\n \t\t}\n \t}\n \n"
 }

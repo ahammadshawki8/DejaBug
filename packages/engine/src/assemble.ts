@@ -88,6 +88,7 @@ export interface AssembleInput {
   original: OriginalEffort;
   bugAgeDays: number;
   fixDiff: string;
+  briefedBy?: string;
 }
 
 /** Builds the Case JSON. Ranking (from Bob's subagents) wins for difficulty and precinct. */
@@ -114,6 +115,7 @@ export function assembleCase(input: AssembleInput): Case {
     brief: { ...input.brief, difficulty, precinct: ranking?.precinct ?? input.brief.precinct },
     original: input.original,
     bugAgeDays: input.bugAgeDays,
+    briefedBy: input.briefedBy,
     parSeconds: parSecondsFor(difficulty),
     fixDiff: input.fixDiff,
   };

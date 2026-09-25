@@ -45,6 +45,7 @@
     "mergedAt": "2023-03-23T22:40:58Z"
   },
   "bugAgeDays": 426,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 600,
   "fixDiff": "diff --git a/mocks/consumer.go b/mocks/consumer.go\nindex 37a07cf3..03283f8f 100644\n--- a/mocks/consumer.go\n+++ b/mocks/consumer.go\n@@ -343,7 +343,7 @@ func (pc *PartitionConsumer) Messages() <-chan *sarama.ConsumerMessage {\n }\n \n func (pc *PartitionConsumer) HighWaterMarkOffset() int64 {\n-\treturn atomic.LoadInt64(&pc.highWaterMarkOffset) + 1\n+\treturn atomic.LoadInt64(&pc.highWaterMarkOffset)\n }\n \n // Pause implements the Pause method from the sarama.PartitionConsumer interface.\n"
 }

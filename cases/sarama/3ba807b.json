@@ -44,6 +44,7 @@
     "mergedAt": "2023-07-23T16:28:59Z"
   },
   "bugAgeDays": 0,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 600,
   "fixDiff": "diff --git a/admin.go b/admin.go\nindex b04102e2..d64652c2 100644\n--- a/admin.go\n+++ b/admin.go\n@@ -207,7 +207,7 @@ func isErrNoController(err error) bool {\n // provided retryable func) up to the maximum number of tries permitted by\n // the admin client configuration\n func (ca *clusterAdmin) retryOnError(retryable func(error) bool, fn func() error) error {\n-\tfor attemptsRemaining := ca.conf.Admin.Retry.Max; ; {\n+\tfor attemptsRemaining := ca.conf.Admin.Retry.Max + 1; ; {\n \t\terr := fn()\n \t\tattemptsRemaining--\n \t\tif err == nil || attemptsRemaining == 0 || !retryable(err) {\n"
 }

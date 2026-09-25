@@ -44,6 +44,7 @@
     "mergedAt": "2023-07-23T11:32:46Z"
   },
   "bugAgeDays": 816,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/admin.go b/admin.go\nindex f5d1427a..b04102e2 100644\n--- a/admin.go\n+++ b/admin.go\n@@ -207,19 +207,17 @@ func isErrNoController(err error) bool {\n // provided retryable func) up to the maximum number of tries permitted by\n // the admin client configuration\n func (ca *clusterAdmin) retryOnError(retryable func(error) bool, fn func() error) error {\n-\tvar err error\n-\tfor attempt := 0; attempt < ca.conf.Admin.Retry.Max; attempt++ {\n-\t\terr = fn()\n-\t\tif err == nil || !retryable(err) {\n+\tfor attemptsRemaining := ca.conf.Admin.Retry.Max; ; {\n+\t\terr := fn()\n+\t\tattemptsRemaining--\n+\t\tif err == nil || attemptsRemaining == 0 || !retryable(err) {\n \t\t\treturn err\n \t\t}\n \t\tLogger.Printf(\n \t\t\t\"admin/request retrying after %dms... (%d attempts remaining)\\n\",\n-\t\t\tca.conf.Admin.Retry.Backoff/time.Millisecond, ca.conf.Admin.Retry.Max-attempt)\n+\t\t\tca.conf.Admin.Retry.Backoff/time.Millisecond, attemptsRemaining)\n \t\ttime.Sleep(ca.conf.Admin.Retry.Backoff)\n-\t\tcontinue\n \t}\n-\treturn err\n }\n \n func (ca *clusterAdmin) CreateTopic(topic string, detail *TopicDetail, validateOnly bool) error {\n"
 }

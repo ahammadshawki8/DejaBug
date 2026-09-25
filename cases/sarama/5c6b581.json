@@ -44,6 +44,7 @@
     "mergedAt": "2022-04-13T22:26:52Z"
   },
   "bugAgeDays": 48,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/async_producer.go b/async_producer.go\nindex ad0c789f..4f7ece58 100644\n--- a/async_producer.go\n+++ b/async_producer.go\n@@ -4,6 +4,7 @@ import (\n \t\"encoding/binary\"\n \t\"errors\"\n \t\"fmt\"\n+\t\"math\"\n \t\"sync\"\n \t\"time\"\n \n@@ -1135,13 +1136,30 @@ func (p *asyncProducer) shutdown() {\n \tclose(p.successes)\n }\n \n+func (p *asyncProducer) bumpIdempotentProducerEpoch() {\n+\t_, epoch := p.txnmgr.getProducerID()\n+\tif epoch == math.MaxInt16 {\n+\t\tLogger.Println(\"producer/txnmanager epoch exhausted, requesting new producer ID\")\n+\t\ttxnmgr, err := newTransactionManager(p.conf, p.client)\n+\t\tif err != nil {\n+\t\t\tLogger.Println(err)\n+\t\t\treturn\n+\t\t}\n+\n+\t\tp.txnmgr = txnmgr\n+\t} else {\n+\t\tp.txnmgr.bumpEpoch()\n+\t}\n+}\n+\n func (p *asyncProducer) returnError(msg *ProducerMessage, err error) {\n \t// We need to reset the producer ID epoch if we set a sequence number on it, because the broker\n \t// will never see a message with this number, so we can never continue the sequence.\n \tif msg.hasSequence {\n \t\tLogger.Printf(\"producer/txnmanager rolling over epoch due to publish failure on %s/%d\", msg.Topic, msg.Partition)\n-\t\tp.txnmgr.bumpEpoch()\n+\t\tp.bumpIdempotentProducerEpoch()\n \t}\n+\n \tmsg.clear()\n \tpErr := &ProducerError{Msg: msg, Err: err}\n \tif p.conf.Producer.Return.Errors {\n"
 }

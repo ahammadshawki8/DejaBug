@@ -8,12 +8,12 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T3 Briefs |
-| Next item | T3.6 |
-| Next owner | HUMAN |
-| Last updated | 2026-09-26 07:00 BST |
+| Current tier | T4 Game server |
+| Next item | T4.1 |
+| Next owner | CLAUDE |
+| Last updated | 2026-09-26 07:30 BST |
 | Bobcoins used | 29.445 / 40 (10.555 left, see 9.2 re-plan) |
-| Blockers | none. The live `--provider bob` check happens in T3.6 (stdin prompt delivery is unverified). |
+| Blockers | none |
 
 ---
 
@@ -473,7 +473,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T3.5 [CLAUDE] (done early so that Bob's briefer can call it) `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
 - [x] T3.4b [CLAUDE] `dejabug brief` CLI: for each certified case, fetch GitHub context and original effort, build the source-only fix diff, call Bob's `brief()`, then assemble and write the Case JSON (id, language, parSeconds, bugAgeDays, certification, redacted outputs).
 - [x] T3.3b [BOB] Apply docs/reviews/REVIEW-T3.3.md (skill examples copied into briefs, codename rules, JSON retry, client reuse, bob provider on Windows).
-- [ ] T3.6 [HUMAN] Generate briefs: Granite for all certified cases (**done, 27/27**), plus `--provider bob` for 1 showcase case (about 1 coin, pending). Commit the case JSON.
+- [x] T3.6 [HUMAN] Generate briefs: Granite for all certified cases (**done, 27/27**), plus `--provider bob` for 1 showcase case (**done: fc42022 "The Overflowing Slice", written by Bob Shell headless in 18.7 s**). Commit the case JSON.
 - [x] **Done when:** 12 or more cases have valid, spoiler-free briefs in `cases/sarama/`. **Result: 27 case files (Granite, 47 s), unique codenames, and scripts/check-cases.mjs passes in CI.**
 
 ### T4 Game server + play/verify (3 h), target Sat 12:00 PM
@@ -689,3 +689,4 @@ Human, do this:
 - **2026-09-26 05:40:** T3.4b done (Claude): assemble.ts (bugAgeDays via git blame of the lines the fix touched, par time 10/20/30 min, ranking overrides for precinct/difficulty, sanitized outputs) and `dejabug brief` (parallel, --only/--limit/--redo/--provider). A real run on 3 cases with Granite: 2 good, 1 with hints copied from the SKILL.md examples (file deleted). Wrote REVIEW-T3.3 and added T3.3b [BOB] before T3.6. 66 tests.
 - **2026-09-26 06:30:** T3.3b done by Bob (14.82 coins, far over budget: 142k context from reading the bob.js bundle). Result is good: skill examples removed, codename rules added, JSON retry, client reuse, the bob provider parses the `last_message` envelope, and it uses shell on Windows with the prompt on stdin (unverified until T3.6). Coin re-plan: T5.2, T5.6, T7.1, and T9.3 re-tagged to Claude, and cost guards added (Section 9.2 and .bob/rules).
 - **2026-09-26 07:00:** Granite briefs generated for all 27 certified sarama cases in 47 s (the spoiler guard fixed 3 leaks by retry). The model reused the skill's example codename 10 times, so Claude added codenames.ts plus `dejabug codenames` (a unique-name pass with Granite, also run after every brief batch). All 27 are unique. scripts/check-cases.mjs (paths, emails, mentions, duplicate codenames) was added to CI. Highlight for the demo: 66e60c7 "Infinite Coordinator Loop" was cold for 1,513 days.
+- **2026-09-26 07:30:** T3.6 complete. With BOB_API_KEY (Inference scope) in .env, `brief --provider bob` ran Bob Shell headless with the deja-forger mode and forge-case skill, and wrote fc42022 "The Overflowing Slice" in 18.7 s (prompt on stdin verified). Its quality beats Granite (a richer hint ladder). Added `Case.briefedBy` (bob-shell or watsonx:<model>) and backfilled the 27 cases, so the UI can show which IBM engine wrote each brief.

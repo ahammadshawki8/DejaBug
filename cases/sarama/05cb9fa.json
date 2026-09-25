@@ -44,6 +44,7 @@
     "mergedAt": "2023-09-06T10:31:45Z"
   },
   "bugAgeDays": 592,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
   "parSeconds": 1200,
   "fixDiff": "diff --git a/consumer_group.go b/consumer_group.go\nindex 01cdb669..91b6e584 100644\n--- a/consumer_group.go\n+++ b/consumer_group.go\n@@ -242,6 +242,8 @@ func (c *consumerGroup) ResumeAll() {\n \n func (c *consumerGroup) retryNewSession(ctx context.Context, topics []string, handler ConsumerGroupHandler, retries int, refreshCoordinator bool) (*consumerGroupSession, error) {\n \tselect {\n+\tcase <-ctx.Done():\n+\t\treturn nil, ctx.Err()\n \tcase <-c.closed:\n \t\treturn nil, ErrClosedConsumerGroup\n \tcase <-time.After(c.config.Consumer.Group.Rebalance.Retry.Backoff):\n@@ -261,6 +263,9 @@ func (c *consumerGroup) retryNewSession(ctx context.Context, topics []string, ha\n }\n \n func (c *consumerGroup) newSession(ctx context.Context, topics []string, handler ConsumerGroupHandler, retries int) (*consumerGroupSession, error) {\n+\tif ctx.Err() != nil {\n+\t\treturn nil, ctx.Err()\n+\t}\n \tcoordinator, err := c.client.Coordinator(c.groupID)\n \tif err != nil {\n \t\tif retries <= 0 {\n"
 }
