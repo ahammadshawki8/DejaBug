@@ -1,10 +1,12 @@
 import { execFileSync } from "node:child_process";
 import { EventEmitter } from "node:events";
-import { existsSync, rmSync } from "node:fs";
-import path from "node:path";
+import { rmSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { FixtureRepo, goFile, goTest } from "../test/fixture-repo.js";
 import { ToolMissingError } from "./adapters/errors.js";
+import { goAdapter } from "./adapters/go.js";
+import { ADAPTERS } from "./adapters/index.js";
+import type { LanguageAdapter } from "./adapters/types.js";
 import { certify } from "./certifier.js";
 import type { Candidate, Certification, ForgeEvent } from "./types.js";
 
@@ -209,18 +211,20 @@ describe.skipIf(!hasGo())("certify (Go fixture repository)", () => {
   });
 
   it("aborts the whole run when the toolchain is missing", async () => {
-    const exe = process.platform === "win32" ? "go.exe" : "go";
-    const saved = process.env.PATH ?? "";
-    process.env.PATH = saved
-      .split(path.delimiter)
-      .filter((dir) => dir && !existsSync(path.join(dir, exe)))
-      .join(path.delimiter);
+    // A fake language whose toolchain is never installed. Deterministic on every OS and CI image.
+    const missing: LanguageAdapter = {
+      ...goAdapter,
+      id: "missing-toolchain",
+      runTests: () => Promise.reject(new ToolMissingError("missing-tool")),
+    };
+    ADAPTERS.push(missing);
     try {
-      await expect(certify([candidates.certified!], repo.dir, new EventEmitter(), 1)).rejects.toBeInstanceOf(
+      const doomed = { ...candidates.certified!, language: missing.id };
+      await expect(certify([doomed], repo.dir, new EventEmitter(), 1)).rejects.toBeInstanceOf(
         ToolMissingError,
       );
     } finally {
-      process.env.PATH = saved;
+      ADAPTERS.splice(ADAPTERS.indexOf(missing), 1);
     }
   });
 
