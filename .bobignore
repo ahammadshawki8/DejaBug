@@ -21,3 +21,4 @@ media/
 *.jpg
 workspace/
 playgrounds/
+.cache/

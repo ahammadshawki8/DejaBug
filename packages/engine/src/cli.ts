@@ -9,6 +9,7 @@ import { ADAPTERS, detectAdapter } from "./adapters/index.js";
 import { certify } from "./certifier.js";
 import { findRepoRoot, loadConfig, normalizeSlug, type Config } from "./config.js";
 import { runDoctor } from "./doctor.js";
+import { WatsonxClient } from "./llm/watsonx.js";
 import { mine } from "./miner.js";
 import {
   computeFunnel,
@@ -170,6 +171,17 @@ program
         .map(([k, v]) => `${k}=${v}`)
         .join(" "),
     );
+  });
+
+program
+  .command("models")
+  .description("list the watsonx.ai chat models available to this account (banned models are hidden)")
+  .action(async () => {
+    const client = WatsonxClient.fromConfig(config());
+    const models = await client.listChatModels();
+    for (const m of models) console.log(`${m.modelId.padEnd(48)} ${m.provider}`);
+    const granite = models.filter((m) => m.modelId.includes("granite"));
+    if (granite.length) console.log(`\nsuggested for WATSONX_MODEL_ID: ${granite.at(-1)!.modelId}`);
   });
 
 program

@@ -9,9 +9,9 @@
 | Field | Value |
 |---|---|
 | Current tier | T3 Briefs |
-| Next item | T3.1 |
-| Next owner | CLAUDE |
-| Last updated | 2026-09-26 03:40 BST |
+| Next item | T3.3 |
+| Next owner | BOB |
+| Last updated | 2026-09-26 04:10 BST |
 | Bobcoins used | 9.435 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
@@ -463,14 +463,15 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output. **Result: 23 certified of 44 attempted.**
 
 ### T3 Briefs (3 h), target Sat 9:00 AM
-- [ ] T3.1 [CLAUDE] `github.ts`: PR, linked issue, and comments fetch with an ETag cache and username/email/avatar stripping. Original-effort stats (days open, comments, review rounds).
-- [ ] T3.2 [CLAUDE] `llm/watsonx.ts`: a watsonx.ai text-generation client (IAM token exchange, Granite model from `WATSONX_MODEL_ID`, JSON output). Never use the models the hackathon bans (Section 9.8).
+- [x] T3.1 [CLAUDE] `github.ts`: PR, linked issue, and comments fetch with an ETag cache and username/email/avatar stripping. Original-effort stats (days open, comments, review rounds).
+- [x] T3.2 [CLAUDE] `llm/watsonx.ts`: a watsonx.ai text-generation client (IAM token exchange, Granite model from `WATSONX_MODEL_ID`, JSON output). Never use the models the hackathon bans (Section 9.8).
 - [ ] T3.3 [BOB] **The forger:**
   - the `deja-forger` custom mode in `.bob/custom_modes.yaml`
   - `.bob/skills/forge-case/SKILL.md` (brief schema, spoiler rules, hint ladder method)
   - `briefer.ts`: prompt built from the skill, provider switch (`watsonx` for batch, `bob` = `bob run --format json --mode deja-forger --max-cost`), zod validation, one retry
 - [ ] T3.4 [BOB] **Subagent task:** "Use explore subagents in parallel to inspect the certified cases and rank them by teaching value and difficulty; write `cases/sarama/ranking.json`." This is our "subagents" evidence.
-- [ ] T3.5 [CLAUDE] `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
+- [x] T3.5 [CLAUDE] (done early so that Bob's briefer can call it) `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
+- [ ] T3.4b [CLAUDE] `dejabug brief` CLI: for each certified case, fetch GitHub context and original effort, build the source-only fix diff, call Bob's `brief()`, then assemble and write the Case JSON (id, language, parSeconds, bugAgeDays, certification, redacted outputs).
 - [ ] T3.6 [HUMAN] Generate briefs: Granite for all certified cases, plus `LLM_PROVIDER=bob` for 2 or 3 showcase cases. Commit the case JSON.
 - [ ] **Done when:** 12 or more cases have valid, spoiler-free briefs in `cases/sarama/`.
 
@@ -678,3 +679,4 @@ Human, do this:
 - **2026-09-26 02:00:** Product decision (user): DejaBug must work on any well-maintained repository, not just sarama. Added Rule 10, F0 Onboard, the language adapter architecture, and new items T2.5a (adapter refactor, Claude, before Bob's T2.6), T4.4 (Python adapter), T4.5 (second-repo proof), and T7.0 (repo picker). REVIEW-01 items 1 and 4 move into the Go adapter.
 - **2026-09-26 02:45:** T2.5a done (Claude). The engine is repository-agnostic: `adapters/` (the LanguageAdapter interface, errors, registry, and a Go adapter with anchored -run, hang/notest/build classification, ToolMissingError, and multi-module routing by nearest go.mod). The miner runs on the adapter. `Candidate.language`, `dejabug init <owner/repo>`, a global `--target`, and an adapter-driven doctor and preflight were added. 35 tests. Second repo proven at the mining level: IBM/fp-go gives 137 candidates. Its recent fix: commits are mostly API additions (genuine build rejections). REVIEW-01 item 10 added (the pass phase restores the full fix tree). Next: T2.6 [BOB].
 - **2026-09-26 03:40:** M1 reached. T2.6 (Bob, 3.21 coins): the certifier runs on adapters, and 4 of 5 hang bugs are now certified. **sarama: 27 certified of 44 attempted.** T2.7 (Claude): store sanitizes on merge (stripLocalPaths), DEJABUG_TEST_TIMEOUT_SEC added, tests for deadlock certification, ToolMissingError abort, output sanitizing, and build-output recording (42 engine tests). Queued for REVIEW-02 [BOB]: for hang results, keep the head of the output (the "panic: test timed out ... running tests: TestX" headline) instead of the tail of the goroutine dump.
+- **2026-09-26 04:10:** T3.1 (github.ts: PR resolution by commit, linked issues, ETag disk cache, gh auth token fallback, redaction of mentions/emails/attachments, original effort as counts only), T3.2 (llm/watsonx.ts: IAM token cache, chat API, banned-model guard, `dejabug models`, extractJson), and T3.5 (spoiler.ts, language-agnostic) done by Claude. 58 tests. Added T3.4b (brief CLI and case assembly). Next: T3.3 [BOB] forger.

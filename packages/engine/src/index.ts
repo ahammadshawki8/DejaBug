@@ -7,3 +7,7 @@ export type { MineResult, MineOptions } from "./miner.js";
 export { certify } from "./certifier.js";
 export * from "./store.js";
 export * from "./adapters/index.js";
+export * from "./github.js";
+export { WatsonxClient, extractJson, BANNED_MODELS } from "./llm/watsonx.js";
+export type { ChatMessage, ChatOptions, ModelInfo } from "./llm/watsonx.js";
+export { extractSpoilers, checkSpoilers } from "./spoiler.js";
