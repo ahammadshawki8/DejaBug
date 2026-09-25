@@ -11,8 +11,17 @@ export interface Candidate {
   prNumber?: number;
   sourceFiles: string[];
   testFiles: string[];
-  packages: string[]; // go package dirs relative to repo root, "." for root
+  packages: string[]; // go test package args: "." for the repo root, "./sub/dir" otherwise
   tests: string[]; // test function names added or changed by the fix
+}
+
+/** Output of `dejabug mine` (cases/<repo>/candidates.json), input of `dejabug certify`. */
+export interface CandidatesFile {
+  repo: string;
+  generatedAt: string;
+  scannedCommits: number;
+  fixLikeCommits: number;
+  candidates: Candidate[];
 }
 
 export type CertificationStatus =

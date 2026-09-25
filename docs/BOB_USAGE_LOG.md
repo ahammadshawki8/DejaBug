@@ -13,3 +13,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | Date | Item | Tool | Files | Note |
 |---|---|---|---|---|
 | 2026-09-26 | T0.3-T0.5 | Claude Code | package.json, tsconfig.base.json, eslint.config.js, vitest.config.ts, packages/engine/*, apps/web/*, .env.example, .github/workflows/ci.yml | Scaffold, config, CI |
+| 2026-09-26 | T1.2-T1.3 | Claude Code | packages/engine/src/miner.ts, git.ts, cli.ts (mine), miner.test.ts, test/fixture-repo.ts, cases/sarama/candidates.json | Miner + tests |

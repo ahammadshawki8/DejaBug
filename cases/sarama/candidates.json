@@ -1,0 +1,2114 @@
+{
+  "repo": "IBM/sarama",
+  "generatedAt": "2026-09-25T18:07:05.230Z",
+  "scannedCommits": 2889,
+  "fixLikeCommits": 703,
+  "candidates": [
+    {
+      "fixSha": "4d07ef2ec3f5307e12dc1ee66e6c7d0b885d0e2a",
+      "parentSha": "5dd9f4c6ef74ee3281479bc234644441b2893ac6",
+      "subject": "fix(protocol): return ErrUnsupportedVersion for absent broker API keys (#3741)",
+      "date": "2026-09-22T01:14:48+01:00",
+      "prNumber": 3741,
+      "sourceFiles": [
+        "api_versions.go",
+        "broker.go"
+      ],
+      "testFiles": [
+        "api_versions_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestRestrictApiVersion",
+        "TestRestrictApiVersionDoesNotRaiseVersionBeyondUserSetMax",
+        "TestRestrictApiVersionDoesNothingIfBrokerVersionRangeMissing",
+        "TestRestrictApiVersionLeavesVersionUnchangedWhenWithinRange",
+        "TestRestrictApiVersionLowersVersionToBrokerMax"
+      ]
+    },
+    {
+      "fixSha": "fc4202228d963849541aa1ceaff4eeac4a644a46",
+      "parentSha": "4e16ab645075e9e8d3f8e103456d18c0ed9527ac",
+      "subject": "fix: guard against 32-bit integer overflow in flexible decoder and record header allocation",
+      "date": "2026-05-26T12:45:15+01:00",
+      "sourceFiles": [
+        "broker.go",
+        "real_decoder.go",
+        "record.go"
+      ],
+      "testFiles": [
+        "real_decoder_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestRealDecoder_getArrayLength",
+        "TestRealFlexibleDecoderGetInt32Array"
+      ]
+    },
+    {
+      "fixSha": "fa624c04a746c7682770a708df0f9244bd971106",
+      "parentSha": "6677d9814f6b274266e778eb2d11913ed58b2426",
+      "subject": "fix(client): scope metadata refresh errors to requested topics (#3532)",
+      "date": "2026-05-13T09:22:51+01:00",
+      "prNumber": 3532,
+      "sourceFiles": [
+        "client.go",
+        "metadata.go"
+      ],
+      "testFiles": [
+        "metadata_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestMetadataRefreshFiltersSharedTopicErrors"
+      ]
+    },
+    {
+      "fixSha": "2f15dc6c8dc5c68256dc1a5d69f94330ce3f9e53",
+      "parentSha": "58355b5a8a21eb6d893eb6677980b01094e82785",
+      "subject": "fix(decoder): handle null arrays correctly (#3144)",
+      "date": "2025-08-06T13:13:43+01:00",
+      "prNumber": 3144,
+      "sourceFiles": [
+        "real_decoder.go"
+      ],
+      "testFiles": [
+        "real_decoder_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestRealDecoder_getArrayLength"
+      ]
+    },
+    {
+      "fixSha": "6b4f9becca8bc225942ba863f6f1187b07dbac82",
+      "parentSha": "d2246cc9b9df113f3ffed7c442fd81e8b9cf736e",
+      "subject": "fix(consumer): maintain ordering of offset commit requests (#2947)",
+      "date": "2024-08-07T11:17:22+01:00",
+      "prNumber": 2947,
+      "sourceFiles": [
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestNewOffsetManager",
+        "TestOffsetManagerCommitSequence"
+      ]
+    },
+    {
+      "fixSha": "385b3b435e85e6e3d1e29299b49330a0e9954f98",
+      "parentSha": "3364ff02d7e986ba0eb75d1c2dbb9a62a614dd15",
+      "subject": "fix(config): relax ClientID validation after 1.0.0 (#2706)",
+      "date": "2023-11-07T11:20:52Z",
+      "prNumber": 2706,
+      "sourceFiles": [
+        "config.go"
+      ],
+      "testFiles": [
+        "config_test.go",
+        "mocks/async_producer_test.go",
+        "mocks/consumer_test.go",
+        "mocks/sync_producer_test.go"
+      ],
+      "packages": [
+        ".",
+        "./mocks"
+      ],
+      "tests": [
+        "TestConsumerInvalidConfiguration",
+        "TestInvalidClientIDValidated",
+        "TestProducerWithInvalidConfiguration",
+        "TestSyncProducerInvalidConfiguration"
+      ]
+    },
+    {
+      "fixSha": "e0c3c627b80ae4468f9e1dee60306dc2ce3fb284",
+      "parentSha": "2e077cf8d86cc06bffc2614b80a699caa868ad2b",
+      "subject": "fix(txmgr): ErrOffsetsLoadInProgress is retriable",
+      "date": "2023-11-02T17:47:50Z",
+      "sourceFiles": [
+        "errors.go",
+        "mockresponses.go",
+        "transaction_manager.go"
+      ],
+      "testFiles": [
+        "transaction_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestTxnmgrInitProducerIdTxnCoordinatorLoading"
+      ]
+    },
+    {
+      "fixSha": "2e077cf8d86cc06bffc2614b80a699caa868ad2b",
+      "parentSha": "f97ced28dc79cdd25985ef4e95bfd538c63bbffe",
+      "subject": "Fix default retention time value in offset commit (#2700)",
+      "date": "2023-11-02T15:55:24Z",
+      "prNumber": 2700,
+      "sourceFiles": [
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConstructRequestRetentionTime"
+      ]
+    },
+    {
+      "fixSha": "c42b2e0ed061fbdbade7fcb86ddf88a000a7bc4d",
+      "parentSha": "6678dd106e2f676cc99ecc28e5593407e5cb53c7",
+      "subject": "fix(client): ignore empty Metadata responses when refreshing (#2672)",
+      "date": "2023-10-13T21:54:35+01:00",
+      "prNumber": 2672,
+      "sourceFiles": [
+        "client.go"
+      ],
+      "testFiles": [
+        "client_test.go",
+        "client_tls_test.go",
+        "offset_manager_test.go",
+        "sync_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientAutorefreshShutdownRace",
+        "TestClientCoordinatorConnectionRefused",
+        "TestClientCoordinatorWithoutConsumerOffsetsTopic",
+        "TestClientDoesntCachePartitionsForTopicsWithErrors",
+        "TestClientMetadataTimeout",
+        "TestClientReceivingUnknownTopic",
+        "TestClientReceivingUnknownTopicWithBackoffFunc",
+        "TestClientRefreshBehaviourWhenEmptyMetadataResponse",
+        "TestClientResurrectDeadSeeds",
+        "TestInitProducerIDConnectionRefused",
+        "TestMetricsCleanup",
+        "TestNewOffsetManager",
+        "TestSimpleClient",
+        "TestSyncProducerToNonExistingTopic"
+      ]
+    },
+    {
+      "fixSha": "98ec384372ecbb9d86036c6f210f840c45dbfa70",
+      "parentSha": "4b55bb3e68a75de12a68b62d2a04490c112c5f2d",
+      "subject": "fix: use least loaded broker to refresh metadata",
+      "date": "2023-09-12T09:18:34+01:00",
+      "sourceFiles": [
+        "client.go",
+        "mockbroker.go"
+      ],
+      "testFiles": [
+        "admin_test.go",
+        "async_producer_test.go",
+        "client_test.go",
+        "consumer_test.go",
+        "offset_manager_test.go",
+        "sync_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerBrokerBounce",
+        "TestAsyncProducerBrokerRestart",
+        "TestAsyncProducerFlusherRetryCondition",
+        "TestAsyncProducerMultipleRetries",
+        "TestAsyncProducerMultipleRetriesWithBackoffFunc",
+        "TestAsyncProducerRetryShutdown",
+        "TestAsyncProducerRetryWithReferenceOpen",
+        "TestClientCoordinatorChangeWithConsumerOffsetsTopic",
+        "TestClientCoordinatorWithConsumerOffsetsTopic",
+        "TestClientGetBroker",
+        "TestClientGetOffset",
+        "TestClientReceivingPartialMetadata",
+        "TestClientRefreshBehaviour",
+        "TestClientRefreshMetadataBrokerOffline",
+        "TestConsumeMessagesTrackLeader",
+        "TestConsumerBounceWithReferenceOpen",
+        "TestConsumerRebalancingMultiplePartitions",
+        "TestOffsetManagerFetchInitialFail",
+        "TestPartitionOffsetManagerCommitErr",
+        "TestRefreshMetaDataWithDifferentController",
+        "TestSyncProducerTransactional"
+      ]
+    },
+    {
+      "fixSha": "05cb9fa28349a2092fb03a0f781455c9a383c9e3",
+      "parentSha": "0b17025c0445bcc75cb709249c25fcaba8b77aab",
+      "subject": "fix(consumer): don't retry session if ctx canceled",
+      "date": "2023-09-06T11:18:30+01:00",
+      "sourceFiles": [
+        "consumer_group.go"
+      ],
+      "testFiles": [
+        "consumer_group_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerShouldNotRetrySessionIfContextCancelled"
+      ]
+    },
+    {
+      "fixSha": "9b0419df27c05795758306ab66ffb0befc7b34e7",
+      "parentSha": "f3c419405d597f94ea995e229ebd58bd1fab61e1",
+      "subject": "fix(consumer): guard against nil client",
+      "date": "2023-08-31T16:30:31+01:00",
+      "sourceFiles": [
+        "consumer_group.go"
+      ],
+      "testFiles": [
+        "consumer_group_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestNewConsumerGroupFromClient"
+      ]
+    },
+    {
+      "fixSha": "e9bd1b89e144d3cd07125938129b1092503c0e94",
+      "parentSha": "96c37d1b6359913c1c2a46252dd63ac5be78a5e8",
+      "subject": "fix(proto): handle V3 member metadata and empty owned partitions",
+      "date": "2023-08-21T22:48:31+01:00",
+      "sourceFiles": [
+        "consumer_group_members.go"
+      ],
+      "testFiles": [
+        "consumer_group_members_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerGroupMemberMetadataV3Decode"
+      ]
+    },
+    {
+      "fixSha": "29487f1bb310a3c514509c6f8fd8a82b83a82d66",
+      "parentSha": "f35d212197859d2b3170a28ffef405ffdebe6ed1",
+      "subject": "bug: implement unsigned modulus for partitioning with crc32 hashing",
+      "date": "2023-08-07T10:32:06+01:00",
+      "sourceFiles": [
+        "partitioner.go"
+      ],
+      "testFiles": [
+        "partitioner_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsistentCRCHashPartitioner",
+        "TestCustomPartitionerWithConsistentHashing"
+      ]
+    },
+    {
+      "fixSha": "09ced0bb61d8c92757f75bf0bde6744471e28d38",
+      "parentSha": "8c40629324ad438d3dfed8b4504b6d4886cbfb47",
+      "subject": "fix(proto): use full range of MetadataRequest",
+      "date": "2023-08-04T10:31:07+01:00",
+      "sourceFiles": [
+        "metadata_request.go",
+        "metadata_response.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go",
+        "client_test.go",
+        "sync_producer_test.go",
+        "transaction_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAddOffsetsToTxn",
+        "TestAsyncProducerIdempotentEpochExhaustion",
+        "TestAsyncProducerIdempotentEpochRollover",
+        "TestAsyncProducerIdempotentErrorOnOutOfSeq",
+        "TestAsyncProducerIdempotentGoldenPath",
+        "TestAsyncProducerIdempotentRetryCheckBatch",
+        "TestAsyncProducerIdempotentRetryCheckBatch_2378",
+        "TestEndTxn",
+        "TestInitProducerIDConnectionRefused",
+        "TestMaybeAddPartitionToCurrentTxn",
+        "TestPublishPartitionToTxn",
+        "TestSyncProducerTransactional",
+        "TestTxmngInitProducerId",
+        "TestTxnCanAbort",
+        "TestTxnOffsetsCommit",
+        "TestTxnProduceBatchAddPartition",
+        "TestTxnProduceRecordWithAbort",
+        "TestTxnProduceRecordWithCommit",
+        "TestTxnmgrInitProducerIdTxn"
+      ]
+    },
+    {
+      "fixSha": "40b52c569d38625f42bfb9a9b2e2280066a731d8",
+      "parentSha": "5530d61b4d94a159c420b29c84ef86829946c81c",
+      "subject": "fix(consumer): use full range of FetchRequest vers",
+      "date": "2023-08-03T21:38:43+01:00",
+      "sourceFiles": [
+        "consumer.go",
+        "fetch_request.go",
+        "fetch_response.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumeMessageWithNewerFetchAPIVersion",
+        "TestConsumerExtraOffsets",
+        "TestConsumerNonSequentialOffsets",
+        "TestConsumerReceivingFetchResponseWithTooOldRecords",
+        "TestConsumerTimestamps",
+        "TestExcludeUncommitted"
+      ]
+    },
+    {
+      "fixSha": "1532d9f6ed61e181f7f13ce8c7f2d9ade3230f5b",
+      "parentSha": "2a5f0f6578e61e68fc9843802f384a098d32ac04",
+      "subject": "fix(proto): ensure req+resp requiredVersion match (#2548)",
+      "date": "2023-08-03T14:42:50+01:00",
+      "prNumber": 2548,
+      "sourceFiles": [
+        "describe_configs_request.go",
+        "describe_configs_response.go"
+      ],
+      "testFiles": [
+        "request_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAllocateBodyProtocolVersions"
+      ]
+    },
+    {
+      "fixSha": "3ba807b5fb307fb30f7d7f8bab1850ecbb6157d1",
+      "parentSha": "08ff0ff4023bf1afcba58576d7f3d35e50c9e7c1",
+      "subject": "fix: admin retry logic",
+      "date": "2023-07-23T13:40:46+01:00",
+      "sourceFiles": [
+        "admin.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "Test_retryOnError"
+      ]
+    },
+    {
+      "fixSha": "788800447f73697483d9f08566787532c1602cce",
+      "parentSha": "6ecdb50a30c3f2897be5e863aa7c854781e389be",
+      "subject": "fix: admin retry logic",
+      "date": "2023-07-23T11:46:48+01:00",
+      "sourceFiles": [
+        "admin.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "Test_retryOnError"
+      ]
+    },
+    {
+      "fixSha": "4b9e8f6681955d56471eafa1b43b62085a58e1c6",
+      "parentSha": "c2cab9d229a22140f8660eaa82e5d3b4a3221383",
+      "subject": "fix: restore (*OffsetCommitRequest) AddBlock func",
+      "date": "2023-07-17T13:09:30+01:00",
+      "sourceFiles": [
+        "offset_commit_request.go",
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "offset_commit_request_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestOffsetCommitRequestV0",
+        "TestOffsetCommitRequestV1",
+        "TestOffsetCommitRequestV2ToV4"
+      ]
+    },
+    {
+      "fixSha": "2f8dcd0731e524b14f4b714902e1039982654b66",
+      "parentSha": "7dbf0b5d85538641227a30a281f1a54e18a94cb7",
+      "subject": "fix(mock consumer): HighWaterMarkOffset (#2447)",
+      "date": "2023-03-23T22:40:58Z",
+      "prNumber": 2447,
+      "sourceFiles": [
+        "mocks/consumer.go"
+      ],
+      "testFiles": [
+        "mocks/consumer_test.go"
+      ],
+      "packages": [
+        "./mocks"
+      ],
+      "tests": [
+        "TestConsumerHandlesExpectationsPausingResuming",
+        "TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset"
+      ]
+    },
+    {
+      "fixSha": "66e60c7ec6012a1943bd2853fd20051edf4310ee",
+      "parentSha": "6acb2767144a840d9cc423f2917617e3372da7be",
+      "subject": "fix(consumer): don't retry FindCoordinator forever (#2427)",
+      "date": "2023-01-25T22:07:22Z",
+      "prNumber": 2427,
+      "sourceFiles": [
+        "consumer_group.go"
+      ],
+      "testFiles": [
+        "consumer_group_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerGroupSessionDoesNotRetryForever"
+      ]
+    },
+    {
+      "fixSha": "b0eda59d1827af48c016d0626d967a61610f5b31",
+      "parentSha": "67d977b9197bd3993b1dfc606f46b5fa097f5bba",
+      "subject": "fix(metrics): fix race when accessing metric registry (#2409)",
+      "date": "2023-01-10T09:57:07Z",
+      "prNumber": 2409,
+      "sourceFiles": [
+        "broker.go"
+      ],
+      "testFiles": [
+        "broker_test.go",
+        "consumer_group_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsume_RaceTest",
+        "TestSimpleBrokerCommunication"
+      ]
+    },
+    {
+      "fixSha": "67d977b9197bd3993b1dfc606f46b5fa097f5bba",
+      "parentSha": "e5f5d5b31329759cfd024a822c7a5a65a35fa34c",
+      "subject": "fix(producer): return errors for every message in retryBatch to avoid producer hang forever (#2378)",
+      "date": "2022-12-22T11:31:54Z",
+      "prNumber": 2378,
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerIdempotentRetryCheckBatch_2378"
+      ]
+    },
+    {
+      "fixSha": "034046e839036f2b8896c1e18ef91d26807363f9",
+      "parentSha": "8a001b4551d610183bcf06c538e3e2cdc02fda17",
+      "subject": "fix: include assignment-less members in SyncGroup",
+      "date": "2022-07-22T16:41:55+01:00",
+      "sourceFiles": [
+        "consumer_group.go",
+        "sync_group_request.go",
+        "sync_group_response.go"
+      ],
+      "testFiles": [
+        "request_test.go",
+        "sync_group_request_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSyncGroupRequestV3AndPlus"
+      ]
+    },
+    {
+      "fixSha": "6750d926bb1148bab75ac05865df05b41013ce20",
+      "parentSha": "6228349b4f9206c2b9b84d7b79be03beefcb06d5",
+      "subject": "fix(balance): sort and de-deplicate memberIDs",
+      "date": "2022-07-20T15:22:44+01:00",
+      "sourceFiles": [
+        "balance_strategy.go"
+      ],
+      "testFiles": [
+        "balance_strategy_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestBalanceStrategyRange"
+      ]
+    },
+    {
+      "fixSha": "efa83c46a6911e697ac19edc5f149985b9a41534",
+      "parentSha": "23c42869222b1467841a9b6318a7ceb159c6a6fd",
+      "subject": "fix: fix metadata retry backoff invalid when get metadata failed",
+      "date": "2022-06-19T19:50:15+08:00",
+      "sourceFiles": [
+        "client.go"
+      ],
+      "testFiles": [
+        "client_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientUpdateMetadataErrorAndRetry"
+      ]
+    },
+    {
+      "fixSha": "41bea2ecc98a2932ad8915f783da635a43cd5c4b",
+      "parentSha": "9bf344fc6f900fc6d3bc2b0746d63e4f21017771",
+      "subject": "fix(protocol): tidyup DescribeGroupsResponse",
+      "date": "2022-06-07T13:50:29+01:00",
+      "sourceFiles": [
+        "describe_groups_response.go"
+      ],
+      "testFiles": [
+        "describe_groups_response_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestDescribeGroupsResponseV1plus"
+      ]
+    },
+    {
+      "fixSha": "39cc66a4594c07b4f8eada621145fa0d092a4506",
+      "parentSha": "0c4ba61b272cf7bb88872e5698aab5053637b8e5",
+      "subject": "Fix: fix describe group failed",
+      "date": "2022-06-07T16:46:43+08:00",
+      "sourceFiles": [
+        "describe_groups_response.go"
+      ],
+      "testFiles": [
+        "describe_groups_response_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestDescribeGroupsResponseV1plus"
+      ]
+    },
+    {
+      "fixSha": "3d317e1fb775c76cad88d11a926ae6e59cf20721",
+      "parentSha": "0c4ba61b272cf7bb88872e5698aab5053637b8e5",
+      "subject": "fix: range balance strategy not like reference",
+      "date": "2022-06-06T16:54:33-05:00",
+      "sourceFiles": [
+        "balance_strategy.go"
+      ],
+      "testFiles": [
+        "balance_strategy_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestBalanceStrategyRange"
+      ]
+    },
+    {
+      "fixSha": "8e58c772b1f6a38fe846d9e5c6800b75d97869eb",
+      "parentSha": "1cbdb49dd3be553e96301d185603b5ab7bee1005",
+      "subject": "fix: use receiver goroutine to process all sasl v1 responses (#2234)",
+      "date": "2022-05-30T12:49:30+01:00",
+      "prNumber": 2234,
+      "sourceFiles": [
+        "broker.go",
+        "response_header.go"
+      ],
+      "testFiles": [
+        "broker_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestGSSAPIKerberosAuth_Authorize",
+        "TestSASLOAuthBearer",
+        "TestSASLPlainAuth",
+        "TestSASLReadTimeout",
+        "TestSASLSCRAMSHAXXX"
+      ]
+    },
+    {
+      "fixSha": "ebc05cc93ab4483e294affa4c37359dd375f4493",
+      "parentSha": "0fe5d534ef6247cf4492a6f2233ef248891a2204",
+      "subject": "fix(admin): make DeleteRecords err consistent",
+      "date": "2022-05-11T18:22:23+01:00",
+      "sourceFiles": [
+        "admin.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClusterAdminDeleteRecordsWithLeaderNotAvailable",
+        "TestClusterAdminDeleteRecordsWithUnsupportedVersion"
+      ]
+    },
+    {
+      "fixSha": "3c1940a12474b3506ee23e239a6924e74c2cb926",
+      "parentSha": "30855f030980209083bef1a360452980e794eb3e",
+      "subject": "fix: cope with OffsetsLoadInProgress on Join+Sync",
+      "date": "2022-04-14T01:37:42+01:00",
+      "sourceFiles": [
+        "consumer_group.go"
+      ],
+      "testFiles": [
+        "consumer_group_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerGroupNewSessionDuringOffsetLoad"
+      ]
+    },
+    {
+      "fixSha": "7d8b29209023924b972dadda288f302ea0e994f9",
+      "parentSha": "43bd56231eda7d971c8cc0ee562bbc69c25f5788",
+      "subject": "fix(test): mockbroker offsetResponse vers behavior",
+      "date": "2022-04-14T01:30:54+01:00",
+      "sourceFiles": [
+        "mockresponses.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumeMessageWithNewerFetchAPIVersion",
+        "TestConsumeMessageWithSessionIDs",
+        "TestConsumeMessagesFromReadReplica",
+        "TestConsumeMessagesFromReadReplicaErrorReplicaNotAvailable",
+        "TestConsumeMessagesFromReadReplicaErrorUnknown",
+        "TestConsumeMessagesFromReadReplicaLeaderFallback",
+        "TestConsumeMessagesTrackLeader",
+        "TestConsumerExtraOffsets",
+        "TestConsumerNonSequentialOffsets",
+        "TestConsumerReceivingFetchResponseWithTooOldRecords",
+        "TestConsumerTimestamps",
+        "TestExcludeUncommitted"
+      ]
+    },
+    {
+      "fixSha": "5c6b581244ef80b9cbad9852025dbd2c3d70cd60",
+      "parentSha": "8f8d8daa0703daa7420dbb6490e8304244094beb",
+      "subject": "fix: prevent idempotent producer epoch exhaustion",
+      "date": "2022-04-13T22:59:33+01:00",
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerIdempotentEpochExhaustion"
+      ]
+    },
+    {
+      "fixSha": "132afa552e706dd7669670e47d4a916d76ec0e27",
+      "parentSha": "3144ec856137b7f67c72a11bd945b8bc501534e1",
+      "subject": "fix: prevent RefreshBrokers leaking old brokers",
+      "date": "2022-04-13T22:18:05+01:00",
+      "sourceFiles": [
+        "client.go"
+      ],
+      "testFiles": [
+        "client_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientRefreshBrokers"
+      ]
+    },
+    {
+      "fixSha": "d5f076b9e2010975bdaa3891427fda0becd95cae",
+      "parentSha": "f07b7b87556741de750337199ccd02aa2a996fe2",
+      "subject": "producer: ensure that the management message (fin) is never \"leaked\" (#2182)",
+      "date": "2022-03-30T18:32:27+01:00",
+      "prNumber": 2182,
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerBrokerRestart"
+      ]
+    },
+    {
+      "fixSha": "376a8b842a417a0e4ccba51c720aeb2f1d4b5036",
+      "parentSha": "f07b7b87556741de750337199ccd02aa2a996fe2",
+      "subject": "Remediate a number go-routine leaks.",
+      "date": "2022-03-30T18:03:18+01:00",
+      "sourceFiles": [
+        "admin.go"
+      ],
+      "testFiles": [
+        "admin_test.go",
+        "client_test.go",
+        "consumer_test.go",
+        "offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAbortPartitionOffsetManager",
+        "TestClientAutorefreshShutdownRace",
+        "TestClientGetBroker",
+        "TestClientRefreshBrokers",
+        "TestClientRefreshMetadataBrokerOffline",
+        "TestClientResurrectDeadSeeds",
+        "TestConsumeMessagesTrackLeader",
+        "TestDeleteConsumerGroup",
+        "TestDeleteOffset",
+        "TestRefreshMetaDataWithDifferentController"
+      ]
+    },
+    {
+      "fixSha": "f43678235d7245fec7473f4ace652a5e849c2884",
+      "parentSha": "f1fd15e9c6faea6744c92773d9c7dc1794b94765",
+      "subject": "fix: reduce verbosity and whitespace of multierror",
+      "date": "2022-02-27T13:32:55Z",
+      "sourceFiles": [
+        "errors.go"
+      ],
+      "testFiles": [
+        "errors_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSentinelWithSingleWrappedError",
+        "TestSentinelWithWrappedError"
+      ]
+    },
+    {
+      "fixSha": "5fdeb7726ea3b57c821695efb340c84c57c60de0",
+      "parentSha": "8f626c8aa121d23f03b180e84761fb15b3844b26",
+      "subject": "fix: make ErrOutOfBrokers wrap underlying net err",
+      "date": "2022-02-24T17:51:07Z",
+      "sourceFiles": [
+        "admin.go",
+        "client.go",
+        "errors.go"
+      ],
+      "testFiles": [
+        "admin_test.go",
+        "client_test.go",
+        "errors_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientConnectionRefused",
+        "TestClientCoordinatorConnectionRefused",
+        "TestClusterAdminDeleteRecordsWithDiffVersion",
+        "TestInitProducerIDConnectionRefused",
+        "TestSentinelWithMultipleWrappedErrors",
+        "TestSentinelWithWrappedError"
+      ]
+    },
+    {
+      "fixSha": "06513c1bde5e48747a3e34e642a4f7e68c642d4e",
+      "parentSha": "6693712f54b76066ea239255c30585832983947d",
+      "subject": "Fix deadlock when closing Broker in brokerProducer (#2133)",
+      "date": "2022-02-13T14:28:21Z",
+      "prNumber": 2133,
+      "sourceFiles": [
+        "async_producer.go",
+        "broker.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerMultipleRetriesWithConcurrentRequests",
+        "TestBrokerProducerShutdown"
+      ]
+    },
+    {
+      "fixSha": "df0fb3d1f471b0177682afe4903e8ab5c99e1e65",
+      "parentSha": "0fcf75bf394f4bd6af6e3dd5984b3dd79f281361",
+      "subject": "fix: correct bugs in DescribeGroupsResponse",
+      "date": "2022-01-13T13:53:23Z",
+      "sourceFiles": [
+        "consumer_group_members.go",
+        "describe_groups_response.go"
+      ],
+      "testFiles": [
+        "consumer_group_members_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerGroupMemberAssignment",
+        "TestConsumerGroupMemberMetadata",
+        "TestConsumerGroupMemberMetadataV1Decode"
+      ]
+    },
+    {
+      "fixSha": "f05189d68316e59046c1e00fe183aba87ae36286",
+      "parentSha": "6a2f0c282c2cc45b51d2b22995cd857993166011",
+      "subject": "Fix wrong offsets in mock Consumer",
+      "date": "2021-12-17T18:25:07+01:00",
+      "sourceFiles": [
+        "mocks/consumer.go"
+      ],
+      "testFiles": [
+        "mocks/consumer_test.go"
+      ],
+      "packages": [
+        "./mocks"
+      ],
+      "tests": [
+        "TestConsumerOffsetsAreManagedCorrectlyWithOffsetOldest",
+        "TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset"
+      ]
+    },
+    {
+      "fixSha": "a8a9228310b5bdfab18aee73eb77507495a5e2c3",
+      "parentSha": "31a5d23e7e5b8b9a0f25ddc30209b1ba46cd7e53",
+      "subject": "fix: stuck on the batch with zero records length",
+      "date": "2021-11-02T16:01:02+01:00",
+      "sourceFiles": [
+        "consumer.go",
+        "fetch_response.go",
+        "records.go"
+      ],
+      "testFiles": [
+        "consumer_test.go",
+        "fetch_response_test.go",
+        "records_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestDefaultRecords",
+        "TestEmptyRecordsFetchResponse",
+        "TestLegacyRecords",
+        "Test_partitionConsumer_parseResponseEmptyBatch"
+      ]
+    },
+    {
+      "fixSha": "8a2c8bae2c5f49d915fdb8121c3ad73e83c0938a",
+      "parentSha": "01c7c43010fd8dc00778f2741a328fd63c659a9d",
+      "subject": "fix(test): use copy in mockbroker SetHandlersByMap",
+      "date": "2021-09-22T14:46:16+01:00",
+      "sourceFiles": [
+        "mockbroker.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestDeleteOffset"
+      ]
+    },
+    {
+      "fixSha": "aa7ce8517c409b882ffefc07140fdfd0a64150ff",
+      "parentSha": "1cdea0aa2e8fe50e4702dac828c7c1da72c19773",
+      "subject": "fix: prevent data race on conf.Version",
+      "date": "2021-09-22T13:31:47+01:00",
+      "sourceFiles": [
+        "broker.go"
+      ],
+      "testFiles": [
+        "client_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientController"
+      ]
+    },
+    {
+      "fixSha": "e14db2e8abf9b6cccd9b8649476978426923adc3",
+      "parentSha": "aa15a3e29920bd1f9fa65ee07886f2c501c068d9",
+      "subject": "Fix format",
+      "date": "2021-09-08T14:12:13+02:00",
+      "sourceFiles": [
+        "admin.go",
+        "mockresponses.go"
+      ],
+      "testFiles": [
+        "delete_offsets_request_test.go",
+        "delete_offsets_response_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestDeleteOffsetsResponse"
+      ]
+    },
+    {
+      "fixSha": "ec23e46b2420d69c89aa455da1ea43d501c35634",
+      "parentSha": "0676fc297fca0c5dfba927c0c4f6925ce2ae1e77",
+      "subject": "Fixed WithCustomFallbackPartitioner implementation. Fixes #1913",
+      "date": "2021-07-16T13:03:03-07:00",
+      "sourceFiles": [
+        "partitioner.go"
+      ],
+      "testFiles": [
+        "partitioner_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestWithCustomFallbackPartitioner"
+      ]
+    },
+    {
+      "fixSha": "7333678a3c5f025503fe29f93457c2d70b4c65b1",
+      "parentSha": "784e2498f13f984efe762b62a877a1bca425311b",
+      "subject": "feat(lint): enable and fix more linting rules",
+      "date": "2021-04-30T12:45:10+01:00",
+      "sourceFiles": [
+        "broker.go",
+        "tools/tls/config.go"
+      ],
+      "testFiles": [
+        "client_test.go",
+        "client_tls_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientDoesntCachePartitionsForTopicsWithErrors",
+        "TestClientGetBroker",
+        "TestSetServerName",
+        "TestTLS"
+      ]
+    },
+    {
+      "fixSha": "f8d4ccd0bcb4d6dd79315f9038a74c1adf47350e",
+      "parentSha": "7285d6cc347789da5886f1cf5b9c044d13f5ee24",
+      "subject": "fix: tidyup code quality warnings (#1887)",
+      "date": "2021-03-15T11:58:40Z",
+      "prNumber": 1887,
+      "sourceFiles": [
+        "admin.go",
+        "client.go",
+        "examples/sasl_scram_client/scram_client.go"
+      ],
+      "testFiles": [
+        "alter_partition_reassignments_response_test.go",
+        "client_test.go",
+        "examples/http_server/http_server_test.go",
+        "list_partition_reassignments_request_test.go",
+        "list_partition_reassignments_response_test.go"
+      ],
+      "packages": [
+        ".",
+        "./examples/http_server"
+      ],
+      "tests": [
+        "TestAlterPartitionReassignmentResponse",
+        "TestCachedPartitions",
+        "TestCollectSuccessfully",
+        "TestListPartitionReassignmentRequest",
+        "TestListPartitionReassignmentResponse"
+      ]
+    },
+    {
+      "fixSha": "f2674320a9074e58a836365f44cd08e33822f39e",
+      "parentSha": "7df2cf0db526b2b47cb71f8ec023d7bf941b3145",
+      "subject": "fix and replace original implementation",
+      "date": "2020-12-24T15:14:15+08:00",
+      "sourceFiles": [
+        "balance_strategy.go"
+      ],
+      "testFiles": [
+        "balance_strategy_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestBalanceStrategyFairRoundRobin",
+        "TestBalanceStrategyRoundRobin"
+      ]
+    },
+    {
+      "fixSha": "95b78dda07176f927aaa5d7e5bfa455fff0af217",
+      "parentSha": "4bc9b8f84adfed7a16fa21798ab07118381e0a84",
+      "subject": "fix: mock sync producer does not handle the offset while sending messages",
+      "date": "2020-07-16T11:01:12+08:00",
+      "sourceFiles": [
+        "mocks/sync_producer.go"
+      ],
+      "testFiles": [
+        "mocks/sync_producer_test.go"
+      ],
+      "packages": [
+        "./mocks"
+      ],
+      "tests": [
+        "TestSyncProducerWithCheckerFunctionForSendMessagesWithoutError"
+      ]
+    },
+    {
+      "fixSha": "d871f336e630a41a3ed0e238d921d54225856b87",
+      "parentSha": "8b91b872756c4220f47cc69f2e115a4641908446",
+      "subject": "Set server name only for the current broker",
+      "date": "2020-05-12T15:22:50-07:00",
+      "sourceFiles": [
+        "broker.go"
+      ],
+      "testFiles": [
+        "client_tls_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSetServerName"
+      ]
+    },
+    {
+      "fixSha": "c6eb1d42e7342efbe9f7074add2efad3d0de5bd1",
+      "parentSha": "f7b64cfa1243b7020abda6e2b671d14eb2e3ca05",
+      "subject": "fix: Allow TLS to work over socks proxy. (#1666)",
+      "date": "2020-05-05T14:21:22+01:00",
+      "prNumber": 1666,
+      "sourceFiles": [
+        "broker.go",
+        "config.go"
+      ],
+      "testFiles": [
+        "broker_test.go",
+        "client_tls_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestBuildClientFirstMessage",
+        "TestGSSAPIKerberosAuth_Authorize",
+        "TestSASLOAuthBearer",
+        "TestSASLPlainAuth",
+        "TestSASLSCRAMSHAXXX",
+        "TestSimpleBrokerCommunication",
+        "TestTLS"
+      ]
+    },
+    {
+      "fixSha": "9df3038ad4f9579970464498bc8b349f4169e5a5",
+      "parentSha": "6159078aacb29adb9ecbd2a83ab9c2732c80add2",
+      "subject": "Fix \"broker received out of order sequence\" when brokers die",
+      "date": "2020-04-14T16:05:05+10:00",
+      "sourceFiles": [
+        "async_producer.go",
+        "produce_set.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerIdempotentEpochRollover"
+      ]
+    },
+    {
+      "fixSha": "b9b3d095f504c13f89b1773c6ac3eada2e67a776",
+      "parentSha": "9501120220783df659f2e405635a20cacc3655e0",
+      "subject": "Fix brokers continually allocating new Session IDs",
+      "date": "2020-04-09T09:06:14+10:00",
+      "sourceFiles": [
+        "consumer.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumeMessageWithSessionIDs",
+        "TestConsumerReceivingFetchResponseWithTooOldRecords"
+      ]
+    },
+    {
+      "fixSha": "5160d7db7127d68cf4befa70fc56b98177f9161f",
+      "parentSha": "30e70940f141017978d859145f48ab6b87d9997e",
+      "subject": "fix: retry topic request on ControllerNotAvailable",
+      "date": "2020-01-24T13:40:02Z",
+      "sourceFiles": [
+        "admin.go",
+        "client.go",
+        "config.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestRefreshMetaDataWithDifferentController"
+      ]
+    },
+    {
+      "fixSha": "1799d6c8db086479c828909d8ac75862c66b3a73",
+      "parentSha": "7a7d874396a0431b0a20de48593b7dad1f4c3419",
+      "subject": "fix: fill in the Fetch{Request,Response} protocol",
+      "date": "2020-01-17T14:14:12Z",
+      "sourceFiles": [
+        "fetch_request.go",
+        "fetch_response.go",
+        "request.go"
+      ],
+      "testFiles": [
+        "fetch_request_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestFetchRequest"
+      ]
+    },
+    {
+      "fixSha": "5de8dba37c3a7c131d24d99ea9fb7cf38c19e0c0",
+      "parentSha": "94fa8ffe4e11b7b57d2b2fb14f5a10fbddd8d6c2",
+      "subject": "fix: set DescribeConfigRequest Version field",
+      "date": "2020-01-16T09:41:14Z",
+      "sourceFiles": [
+        "admin.go",
+        "mockresponses.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClusterAdminDescribeConfig"
+      ]
+    },
+    {
+      "fixSha": "fb8b9b5a1016356f4b2df40ea7123010f799a2c8",
+      "parentSha": "a20d26723487482b4f1af8b8537657a5ba72ae37",
+      "subject": "fix: use the broker for any admin on BrokerConfig",
+      "date": "2020-01-15T14:07:24Z",
+      "sourceFiles": [
+        "admin.go",
+        "config_resource_type.go",
+        "mockresponses.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClusterAdminAlterBrokerConfig",
+        "TestClusterAdminDescribeBrokerConfig"
+      ]
+    },
+    {
+      "fixSha": "72a629d7d1ac130c1f1221e66396e0b54dfeef3f",
+      "parentSha": "bb74e49545653206693c03ce785366a3e928f43d",
+      "subject": "Allow the Consumer to disable auto-commit offsets (#1164)",
+      "date": "2019-11-21T18:50:03-06:00",
+      "prNumber": 1164,
+      "sourceFiles": [
+        "config.go",
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestNewOffsetManagerOffsetsAutoCommit",
+        "TestOffsetManagerFetchInitialLoadInProgress"
+      ]
+    },
+    {
+      "fixSha": "267f69c80251dcfd36878e32f80ae78b4f7baf16",
+      "parentSha": "96122a6f6bbfd131ccb4b225127f46a74018e917",
+      "subject": "fix: ensure consistent use of read/write deadlines",
+      "date": "2019-10-30T22:26:59Z",
+      "sourceFiles": [
+        "broker.go"
+      ],
+      "testFiles": [
+        "broker_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSASLReadTimeout"
+      ]
+    },
+    {
+      "fixSha": "9f8650a8fae4146c405d80081b48ec64f3a7ca3a",
+      "parentSha": "6996f4c70e1bc712357e5f723537580ab2474a07",
+      "subject": "fix brokerProducer goroutine leak (#1442)",
+      "date": "2019-08-07T19:32:11-05:00",
+      "prNumber": 1442,
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerFailureRetry",
+        "TestAsyncProducerRecoveryWithRetriesDisabled",
+        "TestBrokerProducerShutdown"
+      ]
+    },
+    {
+      "fixSha": "6fce0f9c8dd5eb2fd0d7d216deca9eb50e90d317",
+      "parentSha": "d1948414ad5ca980ff1506c4ca7cb99de2bdeaff",
+      "subject": "fix bug deleteRecord (#1425)",
+      "date": "2019-07-20T13:57:00-05:00",
+      "prNumber": 1425,
+      "sourceFiles": [
+        "admin.go",
+        "errors.go"
+      ],
+      "testFiles": [
+        "admin_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClusterAdminDeleteRecords",
+        "TestClusterAdminDeleteRecordsWithDiffVersion",
+        "TestClusterAdminDeleteRecordsWithInCorrectBroker"
+      ]
+    },
+    {
+      "fixSha": "b5630e543b4c61fb6ed744c6c0d155ee5d02e4a6",
+      "parentSha": "41f00bce7fd3fb0f5c556458480aa59ed9fe079c",
+      "subject": "bug: handle and log throttled FetchResponses",
+      "date": "2019-05-29T12:56:29+01:00",
+      "sourceFiles": [
+        "consumer.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "Test_partitionConsumer_parseResponse"
+      ]
+    },
+    {
+      "fixSha": "c547697705ab13bbab85835cea6e233d280beeca",
+      "parentSha": "2b824357033b9904e3a32bf7fae2efe76f1591fd",
+      "subject": "bug: V5 MetadataRequest nullable topics array",
+      "date": "2019-04-10T22:57:28+01:00",
+      "sourceFiles": [
+        "metadata_request.go"
+      ],
+      "testFiles": [
+        "metadata_request_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestMetadataRequestV1",
+        "TestMetadataRequestV2",
+        "TestMetadataRequestV3",
+        "TestMetadataRequestV4",
+        "TestMetadataRequestV5"
+      ]
+    },
+    {
+      "fixSha": "077e5d4f7b8baa608d513569a62f1728dc86706b",
+      "parentSha": "6b86562f5c88b1d9dbaf802ec84f213a2e101500",
+      "subject": "PR fixes: - clean up config test - clarify comment on batch - rm none - rm naked error - clarify producerList logic",
+      "date": "2019-03-30T16:41:15+01:00",
+      "sourceFiles": [
+        "consumer.go",
+        "control_record.go",
+        "fetch_response.go"
+      ],
+      "testFiles": [
+        "config_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerConfigValidates",
+        "TestProducerConfigValidates"
+      ]
+    },
+    {
+      "fixSha": "587c5f694aa205b2eab61b1dceedf9d17250bee7",
+      "parentSha": "f3f4f5f1acf1a26acb582cfb158c2433f37288b4",
+      "subject": "Revert to individual msg retries for non-idempotent",
+      "date": "2018-10-30T17:45:39Z",
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerFailureRetry",
+        "TestAsyncProducerFlusherRetryCondition",
+        "TestAsyncProducerMultipleRetries"
+      ]
+    },
+    {
+      "fixSha": "459e548c022c39db4e91ff03831c3400eadb4b35",
+      "parentSha": "9f69c419039f6c4d60ba5bb74a394131ad2a933c",
+      "subject": "simplified code for abandoned connection check, attempt to fix racy sync producer test",
+      "date": "2018-10-08T16:40:36-07:00",
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go",
+        "sync_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerRecoveryWithRetriesDisabled",
+        "TestSyncProducerRecoveryWithRetriesDisabled"
+      ]
+    },
+    {
+      "fixSha": "8d1bd4c0d6e7249e04399ce9dbc7501ef39c26db",
+      "parentSha": "ed280996b51ddb92b2cf90947a4ba12d695a1f36",
+      "subject": "Handle overflow-only batch",
+      "date": "2018-08-16T17:18:11+01:00",
+      "sourceFiles": [
+        "fetch_response.go",
+        "message_set.go",
+        "records.go"
+      ],
+      "testFiles": [
+        "fetch_response_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestOverflowMessageFetchResponse"
+      ]
+    },
+    {
+      "fixSha": "682468dcc75130e0813107ef154784a8b9e17c09",
+      "parentSha": "e7238b119b7daab993720f0153eafb88e2b0ac1f",
+      "subject": "Fix partial messages handling",
+      "date": "2018-08-10T17:21:03+01:00",
+      "sourceFiles": [
+        "length_field.go"
+      ],
+      "testFiles": [
+        "fetch_response_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestOverflowMessageFetchResponse"
+      ]
+    },
+    {
+      "fixSha": "c1a36ee2308b81cad0a5e95fcc27624a33a3aa32",
+      "parentSha": "f7df95cff1bc4d14a4194a5be4c88a86253afb98",
+      "subject": "Simpler offset management, fixed minor race",
+      "date": "2018-07-10T10:25:28+01:00",
+      "sourceFiles": [
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestNewOffsetManager",
+        "TestPartitionOffsetManagerCommitErr"
+      ]
+    },
+    {
+      "fixSha": "c7d4e043bf880de825a9dbcbabef2c26a75d80d4",
+      "parentSha": "f7466ea37d994396e26da2a8b7ca33e6691abafd",
+      "subject": "Proper mock expectations in SyncProducer.SendMessages",
+      "date": "2018-02-06T13:01:10+01:00",
+      "sourceFiles": [
+        "mocks/sync_producer.go"
+      ],
+      "testFiles": [
+        "mocks/sync_producer_test.go"
+      ],
+      "packages": [
+        "./mocks"
+      ],
+      "tests": [
+        "TestSyncProducerWithCheckerFunctionForSendMessagesWithError",
+        "TestSyncProducerWithCheckerFunctionForSendMessagesWithoutError"
+      ]
+    },
+    {
+      "fixSha": "d9ef2bef2e2d07ba76b7719f0a38e1b0eefb000e",
+      "parentSha": "1fcddd9b8ef8dce0ac165ea3da25556d0fe42f22",
+      "subject": "advance partition consumer offset after compacted messages",
+      "date": "2017-12-23T16:44:58+01:00",
+      "sourceFiles": [
+        "consumer.go",
+        "errors.go",
+        "fetch_response.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerExtraOffsets",
+        "TestConsumerNonSequentialOffsets"
+      ]
+    },
+    {
+      "fixSha": "3d3e318b0dc5bc6177a80e70d6b641081d905824",
+      "parentSha": "6a8d89d71d22bbdc14b6cb52778889a710be19a7",
+      "subject": "Fix header references during record build.",
+      "date": "2017-12-04T14:10:07Z",
+      "sourceFiles": [
+        "produce_set.go"
+      ],
+      "testFiles": [
+        "produce_set_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestProduceSetV3RequestBuilding"
+      ]
+    },
+    {
+      "fixSha": "920e2d0f8dd38b06817c70b80f746a3d2a612b3f",
+      "parentSha": "55b3f6a77f08038b1e82c3db3c1ce619e46de9b6",
+      "subject": "make decoding unknown message versions error",
+      "date": "2017-08-25T16:02:25+01:00",
+      "sourceFiles": [
+        "message.go"
+      ],
+      "testFiles": [
+        "message_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestMessageDecodingUnknownVersions",
+        "TestMessageDecodingVersion1"
+      ]
+    },
+    {
+      "fixSha": "240ddc7211fe7da27738ba6c8715206f881257cc",
+      "parentSha": "2fd980e23bdcbb8edeb78fc704de0c39a6567ffc",
+      "subject": "FIX: It shouldn't sort the replicas and isr while the order is meaningful to Kafka(preferred leader)",
+      "date": "2017-08-12T12:13:20+08:00",
+      "sourceFiles": [
+        "client.go",
+        "utils.go"
+      ],
+      "testFiles": [
+        "client_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientMetadata"
+      ]
+    },
+    {
+      "fixSha": "f3b2363114a32a50b935b035410470538a4b0d7a",
+      "parentSha": "088e47274c3c2dbb8851067a2212f8c89a094fe5",
+      "subject": "Fix concurrency issue in hashedPartitioner",
+      "date": "2017-03-02T15:40:55+01:00",
+      "sourceFiles": [
+        "partitioner.go"
+      ],
+      "testFiles": [
+        "partitioner_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestHashPartitionerWithHasherMinInt32",
+        "TestNewHashPartitionerWithHasher"
+      ]
+    },
+    {
+      "fixSha": "133322fbfe5f73863d9548c1c17af325706c301f",
+      "parentSha": "af0513c4d97979eb876d201391fac6475ec08268",
+      "subject": "Fix compression timestamps (#759)",
+      "date": "2016-10-06T11:29:08-04:00",
+      "prNumber": 759,
+      "sourceFiles": [
+        "produce_set.go"
+      ],
+      "testFiles": [
+        "produce_set_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestProduceSetCompressedRequestBuilding"
+      ]
+    },
+    {
+      "fixSha": "ccab789d4428bce232daba2273adb3fb73f67d36",
+      "parentSha": "fde67d333550a7e2b9046140befe6d93756a6669",
+      "subject": "OffsetManager: match upstream mark/next behaviour",
+      "date": "2016-07-26T13:17:33-04:00",
+      "sourceFiles": [
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "functional_offset_manager_test.go",
+        "offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestFuncOffsetManager",
+        "TestPartitionOffsetManagerMarkOffset",
+        "TestPartitionOffsetManagerMarkOffsetWithRetention",
+        "TestPartitionOffsetManagerNextOffset"
+      ]
+    },
+    {
+      "fixSha": "0b1355f294ef9943fc46541abbe738a6cc5ecf2e",
+      "parentSha": "7fbb591e578ef78a88ed72f3ea7156a086a680be",
+      "subject": "Fix HashPartitioner's negative result by applying modulo before checking negative",
+      "date": "2016-07-18T20:19:19+07:00",
+      "sourceFiles": [
+        "partitioner.go"
+      ],
+      "testFiles": [
+        "partitioner_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestHashPartitionerMinInt32"
+      ]
+    },
+    {
+      "fixSha": "b7f401f9d42c86ee247a4620b244f8dfeb906a20",
+      "parentSha": "f9642ad29d5d0e6273e5b84cf56c89eb9f8c4707",
+      "subject": "Fix race condition with graceful shutdown of MockBroker",
+      "date": "2016-07-13T11:16:49-07:00",
+      "sourceFiles": [
+        "mockbroker.go"
+      ],
+      "testFiles": [
+        "broker_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSimpleBrokerCommunication"
+      ]
+    },
+    {
+      "fixSha": "63431f77f0c45c94a5f6f3bb7a70335769460bfd",
+      "parentSha": "f26080eb84027ccbd6aca4565b540be1baafbc05",
+      "subject": "Validate client ID",
+      "date": "2016-03-17T17:04:27-04:00",
+      "sourceFiles": [
+        "config.go"
+      ],
+      "testFiles": [
+        "config_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientIDValidates"
+      ]
+    },
+    {
+      "fixSha": "5d23f48cfe61b4f1f72e9243ac0da7a2dc9c2667",
+      "parentSha": "ffff88f338c62e1d901f6ee8d76eb825a68affaf",
+      "subject": "Makes newMockMetadataResponse exported (fixes #609)",
+      "date": "2016-02-19T14:09:11-08:00",
+      "sourceFiles": [
+        "mockresponses.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerBounceWithReferenceOpen",
+        "TestConsumerClosePartitionWithoutLeader",
+        "TestConsumerDuplicate",
+        "TestConsumerExtraOffsets",
+        "TestConsumerInterleavedClose",
+        "TestConsumerInvalidTopic",
+        "TestConsumerLeaderRefreshError",
+        "TestConsumerNonSequentialOffsets",
+        "TestConsumerOffsetManual",
+        "TestConsumerOffsetNewest",
+        "TestConsumerOffsetOutOfRange",
+        "TestConsumerRebalancingMultiplePartitions",
+        "TestConsumerRecreate",
+        "TestConsumerShutsDownOutOfRange"
+      ]
+    },
+    {
+      "fixSha": "1e5cc31d7c08ddc38f98997b734e5a13d20034b9",
+      "parentSha": "87ec8d76e89cc002ff5673ee7598ae1db2f32424",
+      "subject": "Fix offset_manager for Kafka 0.9.0.0",
+      "date": "2015-12-13T10:19:03-08:00",
+      "sourceFiles": [
+        "offset_manager.go"
+      ],
+      "testFiles": [
+        "functional_offset_manager_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestFuncOffsetManager"
+      ]
+    },
+    {
+      "fixSha": "733c74f30dedcabeb062f1c01d115c790a7859ad",
+      "parentSha": "f0e1e8afb3b67d285dc988fc9c71ed26436827ac",
+      "subject": "Refactor the producer, part 2",
+      "date": "2015-10-14T17:34:41-04:00",
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerEncoderFailures"
+      ]
+    },
+    {
+      "fixSha": "dd6ba39a5cac0fd76dac704022f399878ced7503",
+      "parentSha": "0fc41057b8778e403af500c680970a992be9bdbb",
+      "subject": "client: stop the background thread before closing",
+      "date": "2015-04-15T19:11:27Z",
+      "sourceFiles": [
+        "client.go"
+      ],
+      "testFiles": [
+        "client_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientAutorefreshShutdownRace"
+      ]
+    },
+    {
+      "fixSha": "7e0bb5aa676804ed01a9f192416889339f4468cb",
+      "parentSha": "264b5e585624de58b4185f7c2cedde83c92ee486",
+      "subject": "Fix OffsetCommitRequest",
+      "date": "2015-03-24T13:31:25Z",
+      "sourceFiles": [
+        "offset_commit_request.go"
+      ],
+      "testFiles": [
+        "offset_commit_request_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestOffsetCommitRequest"
+      ]
+    },
+    {
+      "fixSha": "24b047c7ff209832f669e690e653fe52a197336e",
+      "parentSha": "4f41ea618633c54155adb3a4dcf43651fdc2ac9d",
+      "subject": "producer: bugfix for broker flushers getting stuck",
+      "date": "2015-03-18T22:21:28Z",
+      "sourceFiles": [
+        "async_producer.go"
+      ],
+      "testFiles": [
+        "async_producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestAsyncProducerRetryWithReferenceOpen"
+      ]
+    },
+    {
+      "fixSha": "256991db833f40a5874aafcf11078e756d3594f9",
+      "parentSha": "33c59fc879acc3a69310bec6bda47c26e97c9c4e",
+      "subject": "Don't pre-emptively test the leader connectedness",
+      "date": "2015-02-23T16:00:24Z",
+      "sourceFiles": [
+        "producer.go"
+      ],
+      "testFiles": [
+        "producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestProducerBrokerBounceWithStaleMetadata"
+      ]
+    },
+    {
+      "fixSha": "d33e005ce009000967e1a6b8a5bb7eb4e1773d70",
+      "parentSha": "1b465e78c274a76c0a522272cac25e39ddaa0d07",
+      "subject": "Implement Client.WritablePartitions",
+      "date": "2014-11-28T15:04:26-05:00",
+      "sourceFiles": [
+        "client.go",
+        "metadata_response.go"
+      ],
+      "testFiles": [
+        "client_test.go",
+        "consumer_test.go",
+        "producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientMetadata",
+        "TestClientRefreshBehaviour",
+        "TestConcurrentSimpleProducer",
+        "TestConsumerLatestOffset",
+        "TestConsumerPrelude",
+        "TestConsumerRawOffset",
+        "TestProducer",
+        "TestProducerFailureRetry",
+        "TestProducerMultipleBrokers",
+        "TestProducerMultipleFlushes",
+        "TestSimpleConsumer",
+        "TestSimpleProducer"
+      ]
+    },
+    {
+      "fixSha": "38d4c4754dc8d2d9f9aa2a6d8459cb01df377fa4",
+      "parentSha": "1618fc4ef2ceb7ff2f1fea846dde4469e22d01a2",
+      "subject": "Fix bug #179",
+      "date": "2014-11-19T09:37:52-05:00",
+      "sourceFiles": [
+        "producer.go"
+      ],
+      "testFiles": [
+        "functional_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestFuncMultiPartitionProduce"
+      ]
+    },
+    {
+      "fixSha": "f77e4b63b851b74eefd79646f647aaa3c1591c37",
+      "parentSha": "0b9addd1e08548b523db2d936949016305dd5f60",
+      "subject": "Fix test raciness",
+      "date": "2014-11-16T09:14:12-05:00",
+      "sourceFiles": [
+        "mockbroker.go"
+      ],
+      "testFiles": [
+        "producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestProducerFailureRetry"
+      ]
+    },
+    {
+      "fixSha": "ec83442d1defda7f6a3b434829f57bc64ed3e4fb",
+      "parentSha": "bedb1a471f81878f1783591d968c0b7f757306d2",
+      "subject": "Add some tests",
+      "date": "2014-11-11T11:53:14-05:00",
+      "sourceFiles": [
+        "producer.go"
+      ],
+      "testFiles": [
+        "producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestProducer",
+        "TestProducerFailureRetry",
+        "TestProducerMultipleBrokers",
+        "TestProducerMultipleFlushes"
+      ]
+    },
+    {
+      "fixSha": "39a066ae3dfb6be3718b3425add76124f9588feb",
+      "parentSha": "6c7468fa03fc6508b9b35776eccf47670111c8c3",
+      "subject": "consumer: add unit test",
+      "date": "2014-11-03T11:34:42-05:00",
+      "sourceFiles": [
+        "consumer.go",
+        "fetch_response.go"
+      ],
+      "testFiles": [
+        "consumer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestConsumerPrelude",
+        "TestSimpleConsumer"
+      ]
+    },
+    {
+      "fixSha": "5c9e5571ffce83492b1a6606dbfa2e5fd9ad88ff",
+      "parentSha": "03fbf23be5bcba2b8380425cc6c3c6d1f5f38c9a",
+      "subject": "fix compression",
+      "date": "2013-11-14T15:55:23-05:00",
+      "sourceFiles": [
+        "produce_message.go",
+        "producer.go"
+      ],
+      "testFiles": [
+        "producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestFailureRetry"
+      ]
+    },
+    {
+      "fixSha": "3a0483dc2b7e70832a6f639bc63b053d75ef6aaa",
+      "parentSha": "ae8685c89014546904dcfb00e7cf9dab3f4689f1",
+      "subject": "Allow configuration of per-broker concurrency.",
+      "date": "2013-10-01T21:33:47-05:00",
+      "sourceFiles": [
+        "broker.go",
+        "client.go"
+      ],
+      "testFiles": [
+        "broker_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSimpleBrokerCommunication"
+      ]
+    },
+    {
+      "fixSha": "f8f6c2a832042e317925c9636ca4d2e445ce92c8",
+      "parentSha": "907691e531e50898fed450cac1d1a5c014ea0909",
+      "subject": "Fix HashPartitioner returning negative partitions.",
+      "date": "2013-08-26T10:25:46-04:00",
+      "sourceFiles": [
+        "partitioner.go",
+        "producer.go"
+      ],
+      "testFiles": [
+        "partitioner_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestHashPartitioner",
+        "TestRoundRobinPartitioner"
+      ]
+    },
+    {
+      "fixSha": "013a53b38160effe4b97c9604ce390f3a7059b2c",
+      "parentSha": "98ac318f22209c6b6585c57f001f8f3ac8a379f5",
+      "subject": "Fix message compression flag.",
+      "date": "2013-08-22T09:42:49-04:00",
+      "sourceFiles": [
+        "message.go"
+      ],
+      "testFiles": [
+        "message_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestMessageDecoding",
+        "TestMessageEncoding"
+      ]
+    },
+    {
+      "fixSha": "34918e6fce0e92696aa4fe4a4cc2665813336a02",
+      "parentSha": "dae9785f7e142d43da2ffbd1de966b20f2d5d044",
+      "subject": "Permit creating client with multiple broker addresses",
+      "date": "2013-08-15T09:51:35-04:00",
+      "sourceFiles": [
+        "client.go"
+      ],
+      "testFiles": [
+        "client_test.go",
+        "consumer_test.go",
+        "producer_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClientExtraBrokers",
+        "TestClientMetadata",
+        "TestClientRefreshBehaviour",
+        "TestSimpleClient",
+        "TestSimpleConsumer",
+        "TestSimpleProducer"
+      ]
+    },
+    {
+      "fixSha": "19409ffdc558cbfa217652f510fdfb1ea96e53ec",
+      "parentSha": "163e743eb7660749bccd4b58269425efd1f29d56",
+      "subject": "Add a test, fix a bug.",
+      "date": "2013-07-29T09:50:39-04:00",
+      "sourceFiles": [
+        "kafka/client.go"
+      ],
+      "testFiles": [
+        "kafka/client_test.go"
+      ],
+      "packages": [
+        "./kafka"
+      ],
+      "tests": [
+        "TestClientExtraBrokers",
+        "TestClientMetadata"
+      ]
+    }
+  ]
+}
