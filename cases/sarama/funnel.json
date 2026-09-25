@@ -2,14 +2,14 @@
   "repo": "IBM/sarama",
   "fixLikeCommits": 703,
   "candidates": 101,
-  "attempted": 4,
+  "attempted": 44,
   "byStatus": {
-    "certified": 2,
-    "rejected:build": 1,
-    "rejected:no-fail": 1,
+    "certified": 23,
+    "rejected:build": 9,
+    "rejected:no-fail": 5,
     "rejected:flaky": 0,
-    "rejected:no-pass": 0,
-    "rejected:timeout": 0
+    "rejected:no-pass": 2,
+    "rejected:timeout": 5
   },
-  "generatedAt": "2026-09-25T18:47:14.235Z"
+  "generatedAt": "2026-09-25T18:58:51.477Z"
 }

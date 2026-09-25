@@ -76,6 +76,13 @@ program
     const config = loadConfig();
     const file = readCandidates(config.casesDir);
     if (!file) throw new Error(`no candidates.json in ${config.casesDir}; run "dejabug mine" first`);
+    const go = runDoctor(config).find((c) => c.name === "go");
+    if (!go?.ok) {
+      throw new Error(
+        "go is not on PATH in this terminal, so every candidate would be misread as a build failure. " +
+          "Open a new terminal (or restart the IDE) after installing Go, then run `dejabug doctor`.",
+      );
+    }
 
     const done = new Set((readCertifications(config.casesDir)?.results ?? []).map((r) => r.fixSha));
     const only = opts.only?.split(",").map((s) => s.trim().toLowerCase());

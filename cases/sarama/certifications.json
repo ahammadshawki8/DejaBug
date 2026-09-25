@@ -1,6 +1,6 @@
 {
   "repo": "IBM/sarama",
-  "updatedAt": "2026-09-25T18:47:14.233Z",
+  "updatedAt": "2026-09-25T18:58:51.467Z",
   "results": [
     {
       "fixSha": "4d07ef2ec3f5307e12dc1ee66e6c7d0b885d0e2a",
@@ -37,6 +37,366 @@
       "failOutput": "",
       "passOutput": "",
       "durationMs": 24996
+    },
+    {
+      "fixSha": "6b4f9becca8bc225942ba863f6f1187b07dbac82",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "t32) 0\n           }\n          },\n          opened: (int32) 0,\n          responses: (chan *sarama.responsePromise) <nil>,\n          done: (chan bool) <nil>,\n          metricRegistry: (metrics.Registry) <nil>,\n          incomingByteRate: (metrics.Meter) <nil>,\n          requestRate: (metrics.Meter) <nil>,\n          fetchRate: (metrics.Meter) <nil>,\n          requestSize: (metrics.Histogram) <nil>,\n          requestLatency: (metrics.Histogram) <nil>,\n          outgoingByteRate: (metrics.Meter) <nil>,\n          responseRate: (metrics.Meter) <nil>,\n          responseSize: (metrics.Histogram) <nil>,\n          requestsInFlight: (metrics.Counter) <nil>,\n          protocolRequestsRate: (map[int16]metrics.Meter) <nil>,\n          brokerIncomingByteRate: (metrics.Meter) <nil>,\n          brokerRequestRate: (metrics.Meter) <nil>,\n          brokerFetchRate: (metrics.Meter) <nil>,\n          brokerRequestSize: (metrics.Histogram) <nil>,\n          brokerRequestLatency: (metrics.Histogram) <nil>,\n          brokerOutgoingByteRate: (metrics.Meter) <nil>,\n          brokerResponseRate: (metrics.Meter) <nil>,\n          brokerResponseSize: (metrics.Histogram) <nil>,\n          brokerRequestsInFlight: (metrics.Counter) <nil>,\n          brokerThrottleTime: (metrics.Histogram) <nil>,\n          brokerProtocolRequestsRate: (map[int16]metrics.Meter) <nil>,\n          kerberosAuthenticator: (sarama.GSSAPIKerberosAuth) {\n           Config: (*sarama.GSSAPIConfig)(<nil>),\n           ticket: (messages.Ticket) {\n            TktVNO: (int) 0,\n            Realm: (string) \"\",\n            SName: (types.PrincipalName) {\n             NameType: (int32) 0,\n             NameString: ([]string) <nil>\n            },\n            EncPart: (types.EncryptedData) {\n             EType: (int32) 0,\n             KVNO: (int) 0,\n             Cipher: ([]uint8) <nil>\n            },\n            DecryptedEncPart: (messages.EncTicketPart) {\n             Flags: (asn1.BitString) {\n              Bytes: ([]uint8) <nil>,\n              BitLength: (int) 0\n             },\n             Key: (types.EncryptionKey) {\n              KeyType: (int32) 0,\n              KeyValue: ([]uint8) <nil>\n             },\n             CRealm: (string) \"\",\n             CName: (types.PrincipalName) {\n              NameType: (int32) 0,\n              NameString: ([]string) <nil>\n             },\n             Transited: (messages.TransitedEncoding) {\n              TRType: (int32) 0,\n              Contents: ([]uint8) <nil>\n             },\n             AuthTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             StartTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             EndTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             RenewTill: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n             CAddr: (types.HostAddresses) <nil>,\n             AuthorizationData: (types.AuthorizationData) <nil>\n            }\n           },\n           encKey: (types.EncryptionKey) {\n            KeyType: (int32) 0,\n            KeyValue: ([]uint8) <nil>\n           },\n           NewKerberosClientFunc: (func(*sarama.GSSAPIConfig) (sarama.KerberosClient, error)) <nil>,\n           step: (int) 0\n          },\n          clientSessionReauthenticationTimeMs: (int64) 0,\n          throttleTimer: (*time.Timer)(<nil>),\n          throttleTimerLock: (sync.Mutex) {\n           _: (sync.noCopy) {\n           },\n           mu: (sync.Mutex) {\n            state: (int32) 0,\n            sema: (uint32) 0\n           }\n          }\n         })\n        })\n        \n--- FAIL: TestOffsetManagerCommitSequence (0.63s)\n    offset_manager_test.go:205: out of order commit to partition 0, current committed offset: 7, offset in request: 1\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.728s\nFAIL\ngo: downloading github.com/pierrec/lz4/v4 v4.1.21\ngo: downloading github.com/klauspost/compress v1.17.8\ngo: downloading github.com/eapache/go-resiliency v1.6.0\ngo: downloading golang.org/x/net v0.24.0\ngo: downloading github.com/stretchr/testify v1.9.0\ngo: downloading golang.org/x/crypto v0.22.0\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.349s\n",
+      "durationMs": 56742
+    },
+    {
+      "fixSha": "385b3b435e85e6e3d1e29299b49330a0e9954f98",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestInvalidClientIDValidated (0.00s)\n    config_test.go:50: \n        \tError Trace:\tconfig_test.go:50\n        \tError:      \tError \"kafka: invalid configuration (ClientID is invalid)\" does not contain \"ClientID value \\\"\\\" is not valid for Kafka versions before 1.0.0\"\n        \tTest:       \tTestInvalidClientIDValidated\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.103s\n--- FAIL: TestProducerWithInvalidConfiguration (0.00s)\n    async_producer_test.go:263: Unexpected error: Invalid mock configuration provided: kafka: invalid configuration (ClientID is invalid)\n--- FAIL: TestConsumerInvalidConfiguration (0.00s)\n    consumer_test.go:418: Unexpected error: Invalid mock configuration provided: kafka: invalid configuration (ClientID is invalid)\n--- FAIL: TestSyncProducerInvalidConfiguration (0.00s)\n    sync_producer_test.go:369: Unexpected error: Invalid mock configuration provided: kafka: invalid configuration (ClientID is invalid)\nFAIL\nFAIL\tgithub.com/IBM/sarama/mocks\t0.312s\nFAIL\ngo: downloading github.com/eapache/go-resiliency v1.4.0\ngo: downloading github.com/klauspost/compress v1.16.7\ngo: downloading github.com/pierrec/lz4/v4 v4.1.18\ngo: downloading github.com/stretchr/testify v1.8.4\ngo: downloading golang.org/x/net v0.17.0\ngo: downloading golang.org/x/crypto v0.14.0\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.085s\nok  \tgithub.com/IBM/sarama/mocks\t0.287s\n",
+      "durationMs": 53029
+    },
+    {
+      "fixSha": "e0c3c627b80ae4468f9e1dee60306dc2ce3fb284",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 2143
+    },
+    {
+      "fixSha": "2e077cf8d86cc06bffc2614b80a699caa868ad2b",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConstructRequestRetentionTime (0.00s)\n    --- FAIL: TestConstructRequestRetentionTime/version_0.9.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.9.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.1.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.1.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.2.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.2.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.10.2.2_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.11.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.11.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_0.11.0.2_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.0.2_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.1.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_1.1.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_2.0.0_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\n    --- FAIL: TestConstructRequestRetentionTime/version_2.0.1_retention:_0s (0.00s)\n        offset_manager_test.go:630: expected retention time -1, got: 0\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.086s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.094s\n",
+      "durationMs": 9737
+    },
+    {
+      "fixSha": "c42b2e0ed061fbdbade7fcb86ddf88a000a7bc4d",
+      "status": "rejected:no-pass",
+      "failRuns": 3,
+      "passRuns": 0,
+      "failOutput": "er) <nil>,\n           fetchRate: (metrics.Meter) <nil>,\n           requestSize: (metrics.Histogram) <nil>,\n           requestLatency: (metrics.Histogram) <nil>,\n           outgoingByteRate: (metrics.Meter) <nil>,\n           responseRate: (metrics.Meter) <nil>,\n           responseSize: (metrics.Histogram) <nil>,\n           requestsInFlight: (metrics.Counter) <nil>,\n           protocolRequestsRate: (map[int16]metrics.Meter) <nil>,\n           brokerIncomingByteRate: (metrics.Meter) <nil>,\n           brokerRequestRate: (metrics.Meter) <nil>,\n           brokerFetchRate: (metrics.Meter) <nil>,\n           brokerRequestSize: (metrics.Histogram) <nil>,\n           brokerRequestLatency: (metrics.Histogram) <nil>,\n           brokerOutgoingByteRate: (metrics.Meter) <nil>,\n           brokerResponseRate: (metrics.Meter) <nil>,\n           brokerResponseSize: (metrics.Histogram) <nil>,\n           brokerRequestsInFlight: (metrics.Counter) <nil>,\n           brokerThrottleTime: (metrics.Histogram) <nil>,\n           brokerProtocolRequestsRate: (map[int16]metrics.Meter) <nil>,\n           kerberosAuthenticator: (sarama.GSSAPIKerberosAuth) {\n            Config: (*sarama.GSSAPIConfig)(<nil>),\n            ticket: (messages.Ticket) {\n             TktVNO: (int) 0,\n             Realm: (string) \"\",\n             SName: (types.PrincipalName) {\n              NameType: (int32) 0,\n              NameString: ([]string) <nil>\n             },\n             EncPart: (types.EncryptedData) {\n              EType: (int32) 0,\n              KVNO: (int) 0,\n              Cipher: ([]uint8) <nil>\n             },\n             DecryptedEncPart: (messages.EncTicketPart) {\n              Flags: (asn1.BitString) {\n               Bytes: ([]uint8) <nil>,\n               BitLength: (int) 0\n              },\n              Key: (types.EncryptionKey) {\n               KeyType: (int32) 0,\n               KeyValue: ([]uint8) <nil>\n              },\n              CRealm: (string) \"\",\n              CName: (types.PrincipalName) {\n               NameType: (int32) 0,\n               NameString: ([]string) <nil>\n              },\n              Transited: (messages.TransitedEncoding) {\n               TRType: (int32) 0,\n               Contents: ([]uint8) <nil>\n              },\n              AuthTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n              StartTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n              EndTime: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n              RenewTill: (time.Time) 0001-01-01 00:00:00 +0000 UTC,\n              CAddr: (types.HostAddresses) <nil>,\n              AuthorizationData: (types.AuthorizationData) <nil>\n             }\n            },\n            encKey: (types.EncryptionKey) {\n             KeyType: (int32) 0,\n             KeyValue: ([]uint8) <nil>\n            },\n            NewKerberosClientFunc: (func(*sarama.GSSAPIConfig) (sarama.KerberosClient, error)) <nil>,\n            step: (int) 0\n           },\n           clientSessionReauthenticationTimeMs: (int64) 0,\n           throttleTimer: (*time.Timer)(<nil>)\n          })\n         },\n         ClusterID: (*string)(<nil>),\n         ControllerID: (int32) 0,\n         Topics: ([]*sarama.TopicMetadata) <nil>,\n         ClusterAuthorizedOperations: (int32) 0\n        })\n        \n--- FAIL: TestInitProducerIDConnectionRefused (0.00s)\n    client_test.go:1223: unexpected error: kafka: client has run out of available brokers to talk to: 2 errors occurred:\n        \t* dial tcp 127.0.0.1:59785: connectex: No connection could be made because the target machine actively refused it.\n        \t* read tcp 127.0.0.1:59788->127.0.0.1:59785: wsarecv: An established connection was aborted by the software in your host machine.\n--- FAIL: TestClientCoordinatorConnectionRefused (0.75s)\n    client_test.go:1189: unexpected error: kafka: client has run out of available brokers to talk to: dial tcp 127.0.0.1:59786: connectex: No connection could be made because the target machine actively refused it.\nFAIL\nFAIL\tgithub.com/IBM/sarama\t5.463s\nFAIL\n",
+      "passOutput": "",
+      "durationMs": 30877
+    },
+    {
+      "fixSha": "98ec384372ecbb9d86036c6f210f840c45dbfa70",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 7212
+    },
+    {
+      "fixSha": "05cb9fa28349a2092fb03a0f781455c9a383c9e3",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerShouldNotRetrySessionIfContextCancelled (0.00s)\npanic: runtime error: invalid memory address or nil pointer dereference [recovered, repanicked]\n[signal 0xc0000005 code=0x0 addr=0x48 pc=0x7ff78cc6540c]\n\ngoroutine 20 [running]:\ntesting.tRunner.func1.2({0x7ff78d28ad20, 0x7ff78d348d60})\n\tC:/Program Files/Go/src/testing/testing.go:2123 +0x239\ntesting.tRunner.func1()\n\tC:/Program Files/Go/src/testing/testing.go:2126 +0x329\npanic({0x7ff78d28ad20?, 0x7ff78d348d60?})\n\tC:/Program Files/Go/src/runtime/panic.go:859 +0x125\ngithub.com/IBM/sarama.(*consumerGroup).newSession(0x3df32fa383c0, {0x7ff78d2f1e90, 0x3df32fa78640}, {0x0, 0x0, 0x0}, {0x0, 0x0}, 0x400)\n\tconsumer_group.go:264 +0x6c\ngithub.com/IBM/sarama.TestConsumerShouldNotRetrySessionIfContextCancelled(0x3df32fa98400)\n\tconsumer_group_test.go:242 +0xa9\ntesting.tRunner(0x3df32fa98400, 0x7ff78d2f6af0)\n\tC:/Program Files/Go/src/testing/testing.go:2193 +0xc3\ncreated by testing.(*T).Run in goroutine 1\n\tC:/Program Files/Go/src/testing/testing.go:2258 +0x4b4\nFAIL\tgithub.com/IBM/sarama\t0.093s\nFAIL\ngo: downloading golang.org/x/net v0.15.0\ngo: downloading golang.org/x/crypto v0.13.0\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.117s\n",
+      "durationMs": 11690
+    },
+    {
+      "fixSha": "9b0419df27c05795758306ab66ffb0befc7b34e7",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestNewConsumerGroupFromClient (0.00s)\n    --- FAIL: TestNewConsumerGroupFromClient/should_not_permit_nil_client (0.00s)\npanic: runtime error: invalid memory address or nil pointer dereference [recovered, repanicked]\n[signal 0xc0000005 code=0x0 addr=0x38 pc=0x7ff77897b367]\n\ngoroutine 8 [running]:\ntesting.tRunner.func1.2({0x7ff778e8ab20, 0x7ff778f48d60})\n\tC:/Program Files/Go/src/testing/testing.go:2123 +0x239\ntesting.tRunner.func1()\n\tC:/Program Files/Go/src/testing/testing.go:2126 +0x329\npanic({0x7ff778e8ab20?, 0x7ff778f48d60?})\n\tC:/Program Files/Go/src/runtime/panic.go:859 +0x125\ngithub.com/IBM/sarama.(*nopCloserClient).Config(0x7ff7785f9d68?)\n\t<autogenerated>:1 +0x7\ngithub.com/IBM/sarama.newConsumerGroup({0x7ff7789f07ca, 0x5}, {0x7ff778ef5d90, 0x2df928f5d9d0})\n\tconsumer_group.go:124 +0x43\ngithub.com/IBM/sarama.NewConsumerGroupFromClient(...)\n\tconsumer_group.go:120\ngithub.com/IBM/sarama.TestNewConsumerGroupFromClient.func1(0x2df928f26800)\n\tconsumer_group_test.go:32 +0x49\ntesting.tRunner(0x2df928f26800, 0x7ff778ef74c8)\n\tC:/Program Files/Go/src/testing/testing.go:2193 +0xc3\ncreated by testing.(*T).Run in goroutine 7\n\tC:/Program Files/Go/src/testing/testing.go:2258 +0x4b4\nFAIL\tgithub.com/IBM/sarama\t0.096s\nFAIL\ngo: downloading golang.org/x/net v0.14.0\ngo: downloading golang.org/x/crypto v0.12.0\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.076s\n",
+      "durationMs": 15131
+    },
+    {
+      "fixSha": "e9bd1b89e144d3cd07125938129b1092503c0e94",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerGroupMemberMetadataV3Decode (0.00s)\n    consumer_group_members_test.go:93: Failed to decode V3 data kafka: error decoding packet: invalid length\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.104s\nFAIL\ngo: downloading golang.org/x/net v0.14.0\ngo: downloading golang.org/x/crypto v0.12.0\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.080s\n",
+      "durationMs": 12570
+    },
+    {
+      "fixSha": "29487f1bb310a3c514509c6f8fd8a82b83a82d66",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 25972
+    },
+    {
+      "fixSha": "09ced0bb61d8c92757f75bf0bde6744471e28d38",
+      "status": "rejected:timeout",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 120342
+    },
+    {
+      "fixSha": "40b52c569d38625f42bfb9a9b2e2280066a731d8",
+      "status": "rejected:timeout",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 120323
+    },
+    {
+      "fixSha": "1532d9f6ed61e181f7f13ce8c7f2d9ade3230f5b",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestAllocateBodyProtocolVersions (0.00s)\n    --- FAIL: TestAllocateBodyProtocolVersions/1.1.0-DescribeConfigsRequest (0.00s)\n        request_test.go:244: \n            \tError Trace:\trequest_test.go:244\n            \tError:      \tNot equal: \n            \t            \texpected: sarama.KafkaVersion{version:[4]uint{0x1, 0x1, 0x0, 0x0}}\n            \t            \tactual  : sarama.KafkaVersion{version:[4]uint{0x1, 0x0, 0x0, 0x0}}\n            \t            \t\n            \t            \tDiff:\n            \t            \t--- Expected\n            \t            \t+++ Actual\n            \t            \t@@ -3,3 +3,3 @@\n            \t            \t   (uint) 1,\n            \t            \t-  (uint) 1,\n            \t            \t+  (uint) 0,\n            \t            \t   (uint) 0,\n            \tTest:       \tTestAllocateBodyProtocolVersions/1.1.0-DescribeConfigsRequest\n            \tMessages:   \t*sarama.DescribeConfigsRequest requiredVersion should match *sarama.DescribeConfigsResponse\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.086s\nFAIL\ngo: downloading github.com/klauspost/compress v1.16.6\ngo: downloading github.com/pierrec/lz4/v4 v4.1.17\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.085s\n",
+      "durationMs": 16111
+    },
+    {
+      "fixSha": "3ba807b5fb307fb30f7d7f8bab1850ecbb6157d1",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: Test_retryOnError (0.20s)\n    --- FAIL: Test_retryOnError/failing_all_attempts (0.20s)\n        admin_test.go:1856: expected 4 attempts to have been made but was 3\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.282s\nFAIL\ngo: downloading golang.org/x/net v0.12.0\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.380s\n",
+      "durationMs": 12122
+    },
+    {
+      "fixSha": "788800447f73697483d9f08566787532c1602cce",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: Test_retryOnError (0.30s)\n    --- FAIL: Test_retryOnError/failing_all_attempts (0.30s)\n        admin_test.go:1859: attempt+sleep+attempt+sleep+attempt should take less than 3 * backoff time\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.386s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.281s\n",
+      "durationMs": 8379
+    },
+    {
+      "fixSha": "4b9e8f6681955d56471eafa1b43b62085a58e1c6",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 14786
+    },
+    {
+      "fixSha": "2f8dcd0731e524b14f4b714902e1039982654b66",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerHandlesExpectationsPausingResuming (0.00s)\n    consumer_test.go:103: High water mark offset with value different from the expected:  1\n    consumer_test.go:116: High water mark offset with value different from the expected:  2\n    consumer_test.go:129: High water mark offset with value different from the expected:  -998\n    consumer_test.go:144: High water mark offset with value different from the expected:  3\n--- FAIL: TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset (0.00s)\n    consumer_test.go:401: Difference between highwatermarkoffset and last message offset greater than 1, got: 2\nFAIL\nFAIL\tgithub.com/Shopify/sarama/mocks\t0.312s\nFAIL\ngo: downloading github.com/klauspost/compress v1.15.14\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama/mocks\t0.308s\n",
+      "durationMs": 16229
+    },
+    {
+      "fixSha": "66e60c7ec6012a1943bd2853fd20051edf4310ee",
+      "status": "rejected:timeout",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 120361
+    },
+    {
+      "fixSha": "b0eda59d1827af48c016d0626d967a61610f5b31",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 28260
+    },
+    {
+      "fixSha": "67d977b9197bd3993b1dfc606f46b5fa097f5bba",
+      "status": "rejected:timeout",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 120329
+    },
+    {
+      "fixSha": "034046e839036f2b8896c1e18ef91d26807363f9",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 25165
+    },
+    {
+      "fixSha": "6750d926bb1148bab75ac05865df05b41013ce20",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestBalanceStrategyRange (0.00s)\n    --- FAIL: TestBalanceStrategyRange/2_members,_1_topic_with_duplicate_assignments,_8_partitions_each (0.00s)\n        balance_strategy_test.go:92: Plan does not match expectation\n            expected: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1, 2, 3}}, \"M2\":map[string][]int32{\"T1\":[]int32{4, 5, 6, 7}}}\n            actual: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1, 2, 3, 4, 5, 6, 7}}}\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.075s\nFAIL\ngo: downloading github.com/jcmturner/gofork v1.0.0\ngo: downloading github.com/eapache/go-resiliency v1.2.0\ngo: downloading github.com/jcmturner/gokrb5/v8 v8.4.2\ngo: downloading golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2\ngo: downloading github.com/klauspost/compress v1.15.6\ngo: downloading github.com/pierrec/lz4/v4 v4.1.14\ngo: downloading github.com/stretchr/testify v1.7.1\ngo: downloading gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b\ngo: downloading golang.org/x/crypto v0.0.0-20220214200702-86341886e292\ngo: downloading github.com/hashicorp/go-uuid v1.0.2\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.076s\n",
+      "durationMs": 44200
+    },
+    {
+      "fixSha": "efa83c46a6911e697ac19edc5f149985b9a41534",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 19066
+    },
+    {
+      "fixSha": "41bea2ecc98a2932ad8915f783da635a43cd5c4b",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 1531
+    },
+    {
+      "fixSha": "39cc66a4594c07b4f8eada621145fa0d092a4506",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestDescribeGroupsResponseV1plus (0.00s)\n    request_test.go:33: Decoding empty version 3 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case empty decode failed, expected:&{Version:3 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:0} got &{Version:3 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:-1}\n    request_test.go:19: Encoding empty failed\n        got  [0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 0]\n    request_test.go:33: Decoding populated version 3 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case populated decode failed, expected:&{Version:3 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce5a0 0x2dcaaa0ce5f0] AuthorizedOperations:0} got &{Version:3 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce730 0x2dcaaa0ce780] AuthorizedOperations:0}\n    request_test.go:19: Encoding populated failed\n        got  [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 0 0 0 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\n    request_test.go:33: Decoding empty version 4 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case empty decode failed, expected:&{Version:4 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:0} got &{Version:4 ThrottleTimeMs:0 Groups:[] AuthorizedOperations:-1}\n    request_test.go:19: Encoding empty failed\n        got  [0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 0]\n    request_test.go:33: Decoding populated version 4 failed: kafka: insufficient data to decode packet, more bytes expected\n    describe_groups_response_test.go:270: case populated decode failed, expected:&{Version:4 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce640 0x2dcaaa0ce690] AuthorizedOperations:0} got &{Version:4 ThrottleTimeMs:0 Groups:[0x2dcaaa0ce870 0x2dcaaa0ce8c0] AuthorizedOperations:0}\n    request_test.go:19: Encoding populated failed\n        got  [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 3 103 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] \n        want [0 0 0 0 0 0 0 2 0 0 0 3 102 111 111 0 3 98 97 114 0 8 99 111 110 115 117 109 101 114 0 3 98 97 122 0 0 0 1 0 2 105 100 0 3 103 105 100 0 6 115 97 114 97 109 97 0 9 108 111 99 97 108 104 111 115 116 0 0 0 3 1 2 3 0 0 0 3 4 5 6 0 0 0 0 0 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.484s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.534s\n",
+      "durationMs": 9295
+    },
+    {
+      "fixSha": "3d317e1fb775c76cad88d11a926ae6e59cf20721",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestBalanceStrategyRange (0.00s)\n    --- FAIL: TestBalanceStrategyRange/2_members,_2_topics,_4_partitions_each (0.00s)\n        balance_strategy_test.go:83: Plan does not match expectation\n            expected: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1}, \"T2\":[]int32{0, 1}}, \"M2\":map[string][]int32{\"T1\":[]int32{2, 3}, \"T2\":[]int32{2, 3}}}\n            actual: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1}, \"T2\":[]int32{2, 3}}, \"M2\":map[string][]int32{\"T1\":[]int32{2, 3}, \"T2\":[]int32{0, 1}}}\n    --- FAIL: TestBalanceStrategyRange/3_members,_1_topic,_1_partition_each (0.00s)\n        balance_strategy_test.go:83: Plan does not match expectation\n            expected: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0}}}\n            actual: sarama.BalanceStrategyPlan{\"M3\":map[string][]int32{\"T1\":[]int32{0}}}\n    --- FAIL: TestBalanceStrategyRange/2_members,_2_topics,_3_partitions_each (0.00s)\n        balance_strategy_test.go:83: Plan does not match expectation\n            expected: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1}, \"T2\":[]int32{0, 1}}, \"M2\":map[string][]int32{\"T1\":[]int32{2}, \"T2\":[]int32{2}}}\n            actual: sarama.BalanceStrategyPlan{\"M1\":map[string][]int32{\"T1\":[]int32{0, 1}, \"T2\":[]int32{2}}, \"M2\":map[string][]int32{\"T1\":[]int32{2}, \"T2\":[]int32{0, 1}}}\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.497s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.561s\n",
+      "durationMs": 9315
+    },
+    {
+      "fixSha": "8e58c772b1f6a38fe846d9e5c6800b75d97869eb",
+      "status": "rejected:no-pass",
+      "failRuns": 3,
+      "passRuns": 0,
+      "failOutput": "--- FAIL: TestGSSAPIKerberosAuth_Authorize (0.01s)\n    --- FAIL: TestGSSAPIKerberosAuth_Authorize/Kerberos_client_creation_fails (0.00s)\n        broker_test.go:743: [3] Expected error:configuration file could not be opened: krb5.conf open krb5.conf: no such file or directory, got:configuration file could not be opened: krb5.conf open krb5.conf: The system cannot find the file specified..\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.485s\nFAIL\ngo: downloading github.com/klauspost/compress v1.15.0\n",
+      "passOutput": "",
+      "durationMs": 15692
+    },
+    {
+      "fixSha": "ebc05cc93ab4483e294affa4c37359dd375f4493",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestClusterAdminDeleteRecordsWithLeaderNotAvailable (0.00s)\n    admin_test.go:674: kafka server: In the middle of a leadership election, there is currently no leader for this partition and hence it is unavailable for writes\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.481s\nFAIL\ngo: downloading github.com/pierrec/lz4 v2.6.1+incompatible\ngo: downloading golang.org/x/net v0.0.0-20220225172249-27dd8689420f\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.587s\n",
+      "durationMs": 29547
+    },
+    {
+      "fixSha": "3c1940a12474b3506ee23e239a6924e74c2cb926",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerGroupNewSessionDuringOffsetLoad (0.01s)\n    consumer_group_test.go:90: kafka server: The broker is still loading offsets after a leader change for that offset's topic partition\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.485s\nFAIL\ngo: downloading github.com/pierrec/lz4 v2.6.1+incompatible\ngo: downloading golang.org/x/net v0.0.0-20220225172249-27dd8689420f\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t4.691s\n",
+      "durationMs": 33333
+    },
+    {
+      "fixSha": "7d8b29209023924b972dadda288f302ea0e994f9",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerExtraOffsets (0.11s)\n    consumer_test.go:604: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumerReceivingFetchResponseWithTooOldRecords (0.00s)\n    consumer_test.go:664: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessageWithNewerFetchAPIVersion (0.00s)\n    consumer_test.go:710: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessageWithSessionIDs (0.00s)\n    consumer_test.go:753: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessagesFromReadReplica (0.00s)\n    consumer_test.go:831: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessagesFromReadReplicaLeaderFallback (0.00s)\n    consumer_test.go:883: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessagesFromReadReplicaErrorReplicaNotAvailable (0.00s)\n    consumer_test.go:952: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessagesFromReadReplicaErrorUnknown (0.00s)\n    consumer_test.go:1022: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumeMessagesTrackLeader (0.00s)\n    consumer_test.go:1087: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumerNonSequentialOffsets (0.10s)\n    consumer_test.go:1189: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestConsumerTimestamps (0.31s)\n    consumer_test.go:1714: kafka: insufficient data to decode packet, more bytes expected\n--- FAIL: TestExcludeUncommitted (0.00s)\n    consumer_test.go:1776: kafka: insufficient data to decode packet, more bytes expected\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t1.021s\nFAIL\ngo: downloading github.com/pierrec/lz4 v2.6.1+incompatible\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t17.419s\n",
+      "durationMs": 39804
+    },
+    {
+      "fixSha": "5c6b581244ef80b9cbad9852025dbd2c3d70cd60",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestAsyncProducerIdempotentEpochExhaustion (0.03s)\n    mockbroker.go:145: mockbroker/1: not all expectations were satisfied! Still waiting on:\n        (*sarama.InitProducerIDResponse)(0x27bd05514000)({\n         ThrottleTime: (time.Duration) 0s,\n         Err: (sarama.KError) kafka server: Not an error, why are you printing me?,\n         ProducerID: (int64) 1001,\n         ProducerEpoch: (int16) 0\n        })\n        \npanic: interface conversion: sarama.protocolBody is *sarama.InitProducerIDRequest, not *sarama.ProduceRequest [recovered, repanicked]\n\ngoroutine 7 [running]:\ntesting.tRunner.func1.2({0x7ff6297aaa60, 0x27bd056002d0})\n\tC:/Program Files/Go/src/testing/testing.go:2123 +0x239\ntesting.tRunner.func1()\n\tC:/Program Files/Go/src/testing/testing.go:2126 +0x329\npanic({0x7ff6297aaa60?, 0x27bd056002d0?})\n\tC:/Program Files/Go/src/runtime/panic.go:859 +0x125\ngithub.com/Shopify/sarama.TestAsyncProducerIdempotentEpochExhaustion(0x27bd052a0600)\n\tasync_producer_test.go:1479 +0x80f\ntesting.tRunner(0x27bd052a0600, 0x7ff62987b758)\n\tC:/Program Files/Go/src/testing/testing.go:2193 +0xc3\ncreated by testing.(*T).Run in goroutine 1\n\tC:/Program Files/Go/src/testing/testing.go:2258 +0x4b4\nFAIL\tgithub.com/Shopify/sarama\t0.782s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.504s\n",
+      "durationMs": 10061
+    },
+    {
+      "fixSha": "132afa552e706dd7669670e47d4a916d76ec0e27",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 6348
+    },
+    {
+      "fixSha": "d5f076b9e2010975bdaa3891427fda0becd95cae",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestAsyncProducerBrokerRestart (15.81s)\n    async_producer_test.go:72: Unexpected successes 35 or errors 0\n    async_producer_test.go:26: timeout\n    async_producer_test.go:835: 1 empty values\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t16.277s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t1.525s\n",
+      "durationMs": 57239
+    },
+    {
+      "fixSha": "376a8b842a417a0e4ccba51c720aeb2f1d4b5036",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 21211
+    },
+    {
+      "fixSha": "f43678235d7245fec7473f4ace652a5e849c2884",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestSentinelWithSingleWrappedError (0.00s)\n    errors_test.go:18: unexpected value 'kafka: client has run out of available brokers to talk to: mock: op error' vs 'kafka: client has run out of available brokers to talk to: 1 error occurred:\n        \t* mock: op error\n        \n        '\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.460s\nFAIL\ngo: downloading github.com/klauspost/compress v1.14.4\ngo: downloading golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.478s\n",
+      "durationMs": 17343
+    },
+    {
+      "fixSha": "5fdeb7726ea3b57c821695efb340c84c57c60de0",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 1987
+    },
+    {
+      "fixSha": "06513c1bde5e48747a3e34e642a4f7e68c642d4e",
+      "status": "rejected:timeout",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 120304
+    },
+    {
+      "fixSha": "df0fb3d1f471b0177682afe4903e8ab5c99e1e65",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerGroupMemberMetadataV1Decode (0.00s)\n    consumer_group_members_test.go:73: Failed to decode V1 data kafka: error decoding packet: invalid length\nFAIL\nFAIL\tgithub.com/Shopify/sarama\t0.500s\nFAIL\ngo: downloading golang.org/x/net v0.0.0-20220105145211-5b0dc2dfae98\ngo: downloading github.com/klauspost/compress v1.13.6\ngo: downloading golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama\t0.438s\n",
+      "durationMs": 21813
+    },
+    {
+      "fixSha": "f05189d68316e59046c1e00fe183aba87ae36286",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestConsumerOffsetsAreManagedCorrectlyWithOffsetOldest (0.00s)\n    consumer_test.go:266: Expected offset of first message in the partition to be 0, got 1\n    consumer_test.go:271: Expected offset of second message in the partition to be 1, got 2\n--- FAIL: TestConsumerOffsetsAreManagedCorrectlyWithSpecifiedOffset (0.00s)\n    consumer_test.go:299: Expected offset of first message to be 123, got 1\n    consumer_test.go:304: Expected offset of second message to be 124, got 2\nFAIL\nFAIL\tgithub.com/Shopify/sarama/mocks\t0.315s\nFAIL\ngo: downloading github.com/klauspost/compress v1.13.6\ngo: downloading golang.org/x/net v0.0.0-20210917221730-978cfadd31cf\ngo: downloading golang.org/x/crypto v0.0.0-20210920023735-84f357641f63\n",
+      "passOutput": "ok  \tgithub.com/Shopify/sarama/mocks\t0.280s\n",
+      "durationMs": 17095
+    },
+    {
+      "fixSha": "a8a9228310b5bdfab18aee73eb77507495a5e2c3",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 1674
     }
   ]
 }

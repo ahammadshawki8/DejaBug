@@ -9,9 +9,9 @@
 | Field | Value |
 |---|---|
 | Current tier | T2 Certifier |
-| Next item | T2.4 |
-| Next owner | HUMAN |
-| Last updated | 2026-09-26 01:20 BST |
+| Next item | T2.6 |
+| Next owner | BOB |
+| Last updated | 2026-09-26 01:50 BST |
 | Bobcoins used | 6.225 / 40 |
 | Blockers | watsonx account activation (requested). Bob IDE is logged in. |
 
@@ -442,11 +442,11 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T2.1 [BOB] `certifier.ts` core: worktree lifecycle, test overlay from the fix commit, go test runner with timeout, output parsing (build failure vs test failure), the 3-run fail rule and 1-run pass rule, and every rejection status.
 - [x] T2.2 [BOB] Parallel certification pool (default concurrency 4) with a typed progress event emitter. This is our "parallel" evidence.
 - [x] T2.3 [CLAUDE] `funnel.json` writer, the `dejabug certify --limit N` CLI command, and certifier unit tests.
-- [ ] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
-- [ ] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
+- [x] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
+- [x] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
 - [ ] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task.
 - [ ] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
-- [ ] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output.
+- [x] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output. **Result: 23 certified of 44 attempted.**
 
 ### T3 Briefs (3 h), target Sat 9:00 AM
 - [ ] T3.1 [CLAUDE] `github.ts`: PR, linked issue, and comments fetch with an ETag cache and username/email/avatar stripping. Original-effort stats (days open, comments, review rounds).
@@ -657,3 +657,4 @@ Human, do this:
 - **2026-09-26 00:15:** T1 done. T1.1 (Bob, Plan mode, 0.555 coins) produced docs/ENGINE_PLAN.md. T1.2-T1.3 (Claude): miner.ts, git.ts, the `dejabug mine` CLI, and fixture-repo tests (17 tests green). sarama: 2,889 commits, 703 fix-like, 101 runnable candidates in cases/sarama/candidates.json. Next: T2.1 [BOB] certifier core.
 - **2026-09-26 00:45:** T2.1 done by Bob (3.33 coins, Plan then Agent). Claude review (docs/reviews/REVIEW-T2.1.md) found 3 correctness defects, all verified with go test: build failures read as test failures, unanchored -run, and no-tests-to-run read as a pass. It also found robustness issues and lint errors. They are bundled into Bob's T2.2 task. T2.1 is committed locally and not pushed until lint passes.
 - **2026-09-26 01:20:** T2.2 done by Bob (2.34 coins): p-limit pool plus all 7 REVIEW-T2.1 fixes. T2.3 done by Claude: store.ts (atomic JSON, merge, funnel), `dejabug certify` (--limit/--concurrency/--only/--redo), and certifier tests on a real Go fixture covering all statuses (21 tests). Go added to CI. Smoke run on sarama: 2 of 4 certified in 25 s with 4 workers. Notes for REVIEW-01: (a) worker slot is i % concurrency, not a true slot, (b) fail output contains the local temp path, which includes the Windows username, (c) rejected:build stores no output.
+- **2026-09-26 01:50:** T2.4 batch: the first run was invalid (no Go on PATH in that terminal, so 40 were misread as build failures). The CLI now has a Go preflight. The rerun gives **23 certified of 44 attempted** (9 build, 5 no-fail, 2 no-pass, 5 timeout; the timeouts are hang bugs). Temp paths were scrubbed from the data. T2.5 REVIEW-01 is written (5 [BOB] items, 4 [CLAUDE] items). Next: T2.6 [BOB].
