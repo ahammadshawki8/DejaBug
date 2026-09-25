@@ -1,0 +1,42 @@
+{
+  "repo": "IBM/sarama",
+  "updatedAt": "2026-09-25T18:47:14.233Z",
+  "results": [
+    {
+      "fixSha": "4d07ef2ec3f5307e12dc1ee66e6c7d0b885d0e2a",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestRestrictApiVersion (0.00s)\n    --- FAIL: TestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised (0.00s)\n        api_versions_test.go:72: \n            \tError Trace:\tC:/Users/Shawki/AppData/Local/Temp/dejabug-wt-4d07ef2ec3f5307e12dc1ee66e6c7d0b885d0e2a/api_versions_test.go:72\n            \tError:      \tExpected error with \"kafka server: The version of API is not supported\" in chain but got nil.\n            \tTest:       \tTestRestrictApiVersion/rejects_an_API_absent_from_what_the_broker_advertised\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.180s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.087s\n",
+      "durationMs": 7587
+    },
+    {
+      "fixSha": "fc4202228d963849541aa1ceaff4eeac4a644a46",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestRealDecoder_getArrayLength (0.00s)\n    --- FAIL: TestRealDecoder_getArrayLength/negative_length_other_than_null_array (0.00s)\n        real_decoder_test.go:70: getArrayLength() gotLen = -2147483648, want -1\n        real_decoder_test.go:73: getArrayLength() gotErr = <nil>, want kafka: error decoding packet: invalid array length\nFAIL\nFAIL\tgithub.com/IBM/sarama\t0.179s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/IBM/sarama\t0.086s\n",
+      "durationMs": 7564
+    },
+    {
+      "fixSha": "fa624c04a746c7682770a708df0f9244bd971106",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 6375
+    },
+    {
+      "fixSha": "2f15dc6c8dc5c68256dc1a5d69f94330ce3f9e53",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 24996
+    }
+  ]
+}

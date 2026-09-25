@@ -18,6 +18,7 @@ export class FixtureRepo {
     this.dir = mkdtempSync(path.join(os.tmpdir(), "dejabug-fixture-"));
     this.git("init", "-q", "-b", "main");
     this.git("config", "commit.gpgsign", "false");
+    this.git("config", "core.autocrlf", "false");
   }
 
   git(...args: string[]): string {

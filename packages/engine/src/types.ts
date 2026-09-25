@@ -86,8 +86,16 @@ export interface Funnel {
   repo: string;
   fixLikeCommits: number;
   candidates: number;
+  attempted: number; // candidates that went through certification so far
   byStatus: Record<CertificationStatus, number>;
   generatedAt: string;
+}
+
+/** Accumulated certification results (cases/<repo>/certifications.json). */
+export interface CertificationsFile {
+  repo: string;
+  updatedAt: string;
+  results: Certification[];
 }
 
 /** Progress events emitted by the forge pipeline and streamed over SSE (T2.2, T4.3). */
