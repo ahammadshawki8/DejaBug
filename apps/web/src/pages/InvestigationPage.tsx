@@ -2,7 +2,7 @@ import { Play } from "pixelarticons/react/Play.js";
 import { Search } from "pixelarticons/react/Search.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import { api, type CaseSession, type PublicCase, type VerifyResult } from "../api/client";
+import { api, SHOWCASE, type CaseSession, type PublicCase, type VerifyResult } from "../api/client";
 import {
   ArcadeButton,
   DarkPanel,
@@ -271,6 +271,18 @@ function Investigation({ id }: { id: string }) {
           >
             {running ? "Running..." : "Run the tests"}
           </ArcadeButton>
+          {SHOWCASE && result && !result.pass && api.replayFix ? (
+            <ArcadeButton
+              tone="navy"
+              size="lg"
+              onClick={() => {
+                void api.replayFix?.(id, repo).then(() => runTests());
+              }}
+              disabled={running}
+            >
+              Replay the original fix
+            </ArcadeButton>
+          ) : null}
           {pass ? (
             <Stamp slam tone="pass" size="lg">
               Verified
@@ -287,7 +299,14 @@ function Investigation({ id }: { id: string }) {
           wrap
         />
 
-        <MentorPanel c={c} playgroundPath={session.playgroundPath} />
+        {SHOWCASE ? (
+          <p className="rounded-[2px] border-[3px] border-amber bg-navy p-4 text-sm">
+            Showcase mode: runs replay real recorded results from the engine. Install DejaBug locally to fix
+            the bug yourself in IBM Bob with the Deja Mentor.
+          </p>
+        ) : (
+          <MentorPanel c={c} playgroundPath={session.playgroundPath} />
+        )}
 
         <p className="text-sm text-muted">
           Out of ideas?{" "}

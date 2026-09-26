@@ -5,7 +5,15 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: ["**/dist/**", "**/node_modules/**", "workspace/**", "playgrounds/**", "coverage/**"],
+    ignores: [
+      "**/dist/**",
+      "**/dist-showcase/**",
+      "apps/web/public/showcase/**",
+      "**/node_modules/**",
+      "workspace/**",
+      "playgrounds/**",
+      "coverage/**",
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

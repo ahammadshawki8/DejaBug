@@ -24,3 +24,6 @@ screenshots_inspired/
 .cache/
 .dejabug/
 .playwright-mcp/
+dist-showcase/
+apps/web/public/showcase/
+!apps/web/.env.showcase

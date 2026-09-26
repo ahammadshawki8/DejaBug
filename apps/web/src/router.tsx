@@ -34,77 +34,80 @@ function Page({ children }: { children: ReactNode }) {
   );
 }
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <AppLayout />,
-    children: [
-      { index: true, element: <CaseBoardPage /> },
-      {
-        path: "case/:id",
-        element: (
-          <Page>
-            <CaseFilePage />
-          </Page>
-        ),
-      },
-      {
-        path: "case/:id/investigate",
-        element: (
-          <Page>
-            <InvestigationPage />
-          </Page>
-        ),
-      },
-      {
-        path: "case/:id/debrief",
-        element: (
-          <Page>
-            <DebriefPage />
-          </Page>
-        ),
-      },
-      {
-        path: "investigate",
-        element: (
-          <Page>
-            <InvestigationPage />
-          </Page>
-        ),
-      },
-      {
-        path: "forge",
-        element: (
-          <Page>
-            <ForgePage />
-          </Page>
-        ),
-      },
-      {
-        path: "progress",
-        element: (
-          <Page>
-            <ProgressPage />
-          </Page>
-        ),
-      },
-      {
-        path: "settings",
-        element: (
-          <Page>
-            <SettingsPage />
-          </Page>
-        ),
-      },
-      {
-        path: "styleguide",
-        element: (
-          <Page>
-            <StyleguidePage />
-          </Page>
-        ),
-      },
-      { path: "*", element: <NotFoundPage /> },
-    ],
-  },
-]);
+export const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <AppLayout />,
+      children: [
+        { index: true, element: <CaseBoardPage /> },
+        {
+          path: "case/:id",
+          element: (
+            <Page>
+              <CaseFilePage />
+            </Page>
+          ),
+        },
+        {
+          path: "case/:id/investigate",
+          element: (
+            <Page>
+              <InvestigationPage />
+            </Page>
+          ),
+        },
+        {
+          path: "case/:id/debrief",
+          element: (
+            <Page>
+              <DebriefPage />
+            </Page>
+          ),
+        },
+        {
+          path: "investigate",
+          element: (
+            <Page>
+              <InvestigationPage />
+            </Page>
+          ),
+        },
+        {
+          path: "forge",
+          element: (
+            <Page>
+              <ForgePage />
+            </Page>
+          ),
+        },
+        {
+          path: "progress",
+          element: (
+            <Page>
+              <ProgressPage />
+            </Page>
+          ),
+        },
+        {
+          path: "settings",
+          element: (
+            <Page>
+              <SettingsPage />
+            </Page>
+          ),
+        },
+        {
+          path: "styleguide",
+          element: (
+            <Page>
+              <StyleguidePage />
+            </Page>
+          ),
+        },
+        { path: "*", element: <NotFoundPage /> },
+      ],
+    },
+  ],
+  { basename: import.meta.env.BASE_URL.replace(/\/$/, "") || "/" },
+);

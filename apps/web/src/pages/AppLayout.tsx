@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { api } from "../api/client";
+import { api, SHOWCASE } from "../api/client";
 import { DispatchTicker, NavRail, ToastStack, TopBar, type EngineStatus } from "../components/game";
 import { useGame } from "../state/game";
 import { useProfile } from "../state/profile";
@@ -21,7 +21,7 @@ export function AppLayout() {
     const check = () =>
       api
         .health()
-        .then(() => !stop && setEngine("connected"))
+        .then(() => !stop && setEngine(SHOWCASE ? "showcase" : "connected"))
         .catch(() => !stop && setEngine("offline"));
     void check();
     const id = window.setInterval(check, 10_000);

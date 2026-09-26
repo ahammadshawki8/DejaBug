@@ -8,6 +8,7 @@ import { runDoctor } from "./doctor.js";
 import { initRepo, renameDuplicateCodenames, runBrief, runCertify, runMine } from "./forge.js";
 import { WatsonxClient } from "./llm/watsonx.js";
 import { exportPlayground } from "./play.js";
+import { exportShowcase } from "./showcase.js";
 import { readCase } from "./store.js";
 import { startServer } from "./server.js";
 import type { ForgeEvent } from "./types.js";
@@ -172,6 +173,19 @@ program
     console.log(`${res.created ? "exported" : "kept existing"} playground for "${c.brief.codename}":`);
     console.log(`  ${res.path}`);
     console.log("  Open it in IBM Bob and switch to the Deja Mentor mode.");
+  });
+
+program
+  .command("export-showcase")
+  .description("export public cases, reveals and recorded runs for the static showcase build")
+  .option("--out <dir>", "output directory", "apps/web/public/showcase")
+  .action((opts: { out: string }) => {
+    const cfg = config();
+    const out = path.resolve(cfg.repoRoot, opts.out);
+    const res = exportShowcase(path.dirname(cfg.casesDir), out, path.basename(cfg.casesDir));
+    console.log(
+      `exported ${res.cases} cases from ${res.repos} repositories to ${path.relative(cfg.repoRoot, out)}`,
+    );
   });
 
 program

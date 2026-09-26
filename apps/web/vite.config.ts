@@ -5,7 +5,9 @@ import { defineConfig } from "vite";
 
 const enginePort = process.env.DEJABUG_PORT ?? "4317";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // The showcase is served from GitHub Pages at /DejaBug/.
+  base: mode === "showcase" ? "/DejaBug/" : "/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: { "@engine": path.resolve(import.meta.dirname, "../../packages/engine/src") },
@@ -16,4 +18,4 @@ export default defineConfig({
       "/api": { target: `http://localhost:${enginePort}`, changeOrigin: true },
     },
   },
-});
+}));

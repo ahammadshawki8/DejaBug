@@ -42,3 +42,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T6.1-T6.3 | Claude Code | apps/web/src/lib/badges.ts (+ tests), sound.ts, shareCard.ts, pages/ProgressPage.tsx, DebriefPage.tsx, InvestigationPage.tsx, ArcadeButton.tsx | Gamification |
 | 2026-09-26 | T7.0, T7.1 | Claude Code | apps/web/src/pages/ForgePage.tsx, lib/forgeView.ts (+ tests), packages/engine/src/forge.ts (subject relay) | Forge Console and repo picker |
 | 2026-09-26 | T8.2 | Claude Code | apps/web/src/components/game/MentorPanel.tsx, InvestigationPage.tsx, packages/engine/src/cli.ts (start) | Mentor panel and CLI start |
+| 2026-09-26 | T9.5 (showcase part) | Claude Code | packages/engine/src/showcase.ts, cli.ts (export-showcase), apps/web/src/api/showcase.ts, client.ts, InvestigationPage.tsx, AppLayout.tsx, router.tsx, vite.config.ts, .github/workflows/pages.yml | Static showcase on GitHub Pages |

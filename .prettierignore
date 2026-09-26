@@ -8,3 +8,5 @@ bob_sessions
 cases
 package-lock.json
 *.md
+dist-showcase
+apps/web/public/showcase
