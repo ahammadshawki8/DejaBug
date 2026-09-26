@@ -1,53 +1,78 @@
 # DejaBug: Project Memory
 
-> This file is the single source of truth for the project. Read it at the start of every session (human, Bob, or Claude). Update the **Status** and **Progress Log** sections at the end of every work session.
+> The single source of truth for this project, for the human, IBM Bob, Claude Code and Codex. Read Section 0 first at the start of every session. At the end of a session, update Section 0 and append to the Progress Log (Section 12).
+
+**DejaBug** mines a repository's git history for real bug fixes, proves each one (the fix's own test fails 3 out of 3 times on the code before the fix and passes on the fix), and serves the proven bugs as cold cases in a gamified detective web app. A new developer solves each case in IBM Bob, coached by **Deja Mentor**, a read-only Bob mode that cannot write the fix.
+
+*Debug the past. Level up the future.*
 
 ---
 
-## 0. Status (update every session)
+## 0. Status
 
 | Field | Value |
 |---|---|
-| Current tier | S Submission |
-| Next item | S.4 |
+| Phase | Submission. Development is finished (T0 to T10 done). |
+| Next item | S.4: record and upload the demo video, then submit on lablab |
 | Next owner | HUMAN |
-| Last updated | 2026-09-26 17:30 BST |
-| Bobcoins used | 37.37 / 40 (about 2.6 left, reserve) |
-| Blockers | none |
+| Last updated | 2026-09-26 18:00 BST |
+| Bobcoins used | 37.37 / 40 (about 2.6 left, reserved for the video: a live Deja Mentor chat and a Bob Shell brief) |
+| Blockers | The pitch deck PDF must be exported once more (the ligature fix, see the Progress Log). |
+
+**Links**
+- Repository: https://github.com/ahammadshawki8/DejaBug (public, MIT)
+- Live showcase: https://ahammadshawki8.github.io/DejaBug/ (GitHub Pages, rebuilt on every push to `main`)
+- Pitch deck: `docs/submission/DejaBug Pitch Deck.pdf` (source: the Slides artifact "DejaBug Pitch Deck")
+
+**Deliverables**
+
+| Deliverable | Where | State |
+|---|---|---|
+| Working product (engine + game) | `packages/engine`, `apps/web` | Done, 106 tests passing |
+| Public showcase | GitHub Pages | Live |
+| README with GIF, architecture, quickstart | `README.md` | Done |
+| Problem & Solution statement (500 words max) | `docs/submission/01-problem-solution.md` | Done (446 words) |
+| Bob Usage statement (500 words max) | `docs/submission/02-bob-usage.md` | Done (448 words) |
+| Short description, title, tags | `docs/submission/03-short-description.md` | Done |
+| Video script and shooting guide | `docs/submission/04-video-script.md` | Done |
+| Posters (cover images) | `docs/submission/poster16_9.png`, `poster4_3.png` | Done |
+| Pitch deck | `docs/submission/DejaBug Pitch Deck.pdf` | Re-export pending |
+| Bob task screenshots | `bob_sessions/` | Done (all 12 tasks) |
+| Demo video (MP4, 3:00 max) | uploaded with the submission | To record |
 
 ---
 
 ## 1. Hackathon facts
 
-- **Event:** IBM Bob 2.0 Hackathon (lablab.ai), online.
-- **Hard deadline:** Sun Sep 27 2026, **8:00 PM BST** (10 AM ET, per the IBM account page. lablab shows 9:00 PM, and we plan for the earlier one). The watsonx cloud account closes at the same moment.
-- **Our budget:** 40 hours = **35 h development** (Fri 11 PM to Sun 10 AM) + **5 h submission** (Sun 10 AM to 3 PM). Everything after that is buffer.
-- **Team:** ahammadshawki8.
-- **Repository:** https://github.com/ahammadshawki8/DejaBug (public, MIT).
+- **Event:** IBM Bob 2.0 Hackathon (lablab.ai), online, Sep 25 to 27 2026.
+- **Hard deadline:** Sun Sep 27 2026, **8:00 PM BST** (10 AM ET per the IBM account page; lablab shows 9:00 PM, and we plan for the earlier one). The watsonx account closes at the same moment, so anything that calls watsonx live (forging new cases) must be recorded before then.
+- **Team:** ahammadshawki8 only. All work is by ahammadshawki8.
 - **Judging:** Application of Technology, Presentation, Business Value, Originality.
-- **Hard requirements** (missing any one of these can disqualify us):
-  - Bob IDE is a core part of the solution.
-  - `bob_sessions/` contains PNG task-summary screenshots from each member.
-  - Problem & Solution statement and Bob Usage statement are each 500 words or less.
-  - Video is MP4, 3:00 or less, with at least 90 s of the product working and narration.
-  - Repo is public with an MIT license.
-  - No personal, client, confidential, or social-media data. Every public source is listed in `docs/DATA_SOURCES.md`.
-- **Pre-submit check:** `node scripts/check-submission.mjs` and `node scripts/check-style.mjs`.
+- **Hard requirements** (missing one can disqualify):
+  - IBM Bob is a core part of the solution.
+  - `bob_sessions/` holds PNG task-summary screenshots of every Bob task.
+  - The Problem & Solution and Bob Usage statements are 500 words or less each.
+  - The video is an MP4 of 3:00 or less, with at least 90 s of the product working, and narration.
+  - The repository is public with an MIT license.
+  - No personal, client, confidential or social-media data; every public source is listed in `docs/DATA_SOURCES.md`.
+- **Pre-submit checks:** `node scripts/check-submission.mjs` and `node scripts/check-style.mjs`.
 
 ---
 
-## 2. Rules (must be followed for the whole project)
+## 2. Rules (always in force)
 
-1. **Commit identity.** Every commit is authored and committed by `ahammadshawki8`, and nobody else. Never add `Co-Authored-By` trailers, and never list Claude, Bob, srotdev, or any bot as author, committer, collaborator, or contributor. Bob's generated commit messages must be checked for trailers before committing. Before every push, run `git log --format='%an <%ae> | %cn <%ce>%n%b' origin/main..HEAD` and confirm.
-2. **No emojis and no em dashes (U+2014)** anywhere in the project: code, comments, docs, UI text, commit messages, slides. Use a plain hyphen or a colon instead. `scripts/check-style.mjs` enforces this.
-3. **No personal information in case data.** GitHub usernames, emails, and avatars from issues and PRs are never stored or shown. Store only counts, durations, and redacted text.
-4. **Ownership is explicit.** Every checklist item is tagged [BOB], [CLAUDE] (Claude Code or Codex), or [HUMAN]. Agents only do their own items and hand off with the protocol in Section 9.3.
-5. **One [BOB] item per Bob task.** Each Bob task gets a PNG summary screenshot saved to `bob_sessions/` as soon as it finishes.
-6. **Keep this file current.** Tick checklist boxes, update Status, and append to the Progress Log after each work session.
-7. **Secrets** (GitHub token, API keys) live only in `.env`, never in git. `.env.example` documents them.
-8. **Working software over breadth.** A tier is done only when its "Done when" line is demonstrably true. Never start the next tier with the current one broken.
-9. **The frontend must feel like a game**, not an admin panel (see Section 6).
-10. **Repository-agnostic.** DejaBug must work on any well-maintained repository with a test suite, not only sarama. No language- or repo-specific literals (`go test`, `_test.go`, `IBM/sarama`) outside `packages/engine/src/adapters/` and config defaults. sarama is only the demo target.
+1. **Commit identity.** Every commit is authored and committed by `ahammadshawki8` only. No `Co-Authored-By` or any other attribution line in commits or PRs, and never list Claude, Bob or a bot as author, committer or contributor. Check before every push: `git log --format='%an <%ae> | %cn%n%b' origin/main..HEAD`.
+2. **No emojis and no em dashes** anywhere: code, comments, docs, UI text, commit messages, slides. `scripts/check-style.mjs` enforces it.
+3. **No personal information.** GitHub usernames, emails, avatars and local paths (they contain the Windows username) never appear in case data, screenshots, docs or videos. Store only counts, durations and redacted text. `scripts/check-cases.mjs` checks the case files.
+4. **Secrets** live only in `.env` (gitignored). Every key is documented, empty, in `.env.example`. Never show `.env` on screen. An IBM Cloud key found in a public repo is deactivated and the account suspended.
+5. **Honest claims only.** Every number in the README, statements, slides and video comes from real data (`cases/*/funnel.json`, test runs, the usage log). No unverified studies or statistics. Showcase runs are replays of real recorded results and are labelled as replays.
+6. **Data sources.** Every repository, dataset and asset is listed with its license in `docs/DATA_SOURCES.md`. Sounds and music are generated in code; no audio files.
+7. **Banned watsonx models:** `llama-3-405b-instruct`, `mistral-medium-2505`, `mistral-small-3-1-24b-instruct-2503`. Briefs use `ibm/granite-4-h-small`.
+8. **Repository-agnostic.** DejaBug must work on any maintained repository with tests. Language- or repository-specific code (`go test`, `_test.go`, `IBM/sarama`) lives only in `packages/engine/src/adapters/` and config defaults.
+9. **The frontend is a game**, not an admin panel (Section 6).
+10. **Ownership and handoff.** Every checklist item is tagged [BOB], [CLAUDE] (Claude Code or Codex) or [HUMAN]. Agents do only their own items, plus anything the user asks for directly, and hand off with Section 9.3. One [BOB] item per Bob task, each followed by a summary screenshot in `bob_sessions/`.
+11. **Verify before claiming.** Run the gate (Section 5.6) before every commit; check UI changes in a browser.
+12. **Tidy up.** The machine is short on memory: stop servers and browsers you start, and remove test playgrounds, sessions and profiles you create.
 
 ---
 
@@ -56,621 +81,414 @@
 **One-liner:** *Pilots train on replays of real incidents. Your new hires train on your team's real bugs.*
 
 **Problem.**
-- New engineers take months to become productive, and 67% say their first production-ready contribution took over 4 weeks.
-- AI assistants can make it worse for the skill that matters most: when the AI writes the fix, the new hire skips the practice that builds the skill. (An unverified study citation was removed on 2026-09-26 at the user's request.)
-- Meanwhile every repository holds a perfect, unused curriculum: hundreds of real bugs, each with a known fix and a test that proves it.
+- A new engineer's hardest early job is debugging code they did not write, and the first real practice usually happens in production, under pressure.
+- AI assistants can make this worse: when the AI writes the fix, the new hire skips the practice that builds the skill.
+- Every mature repository already holds the missing curriculum: hundreds of fixed bugs, each with a test that proves it. Turning one into a safe exercise by hand takes hours, so it goes unused.
 
-**Solution.** DejaBug mines a repository's history for real bug fixes and turns each one into a **certified training case**:
-1. Restore the code as it was just before the fix.
-2. Add the fix's own test.
-3. Prove that the test fails on the buggy code and passes on the real fix.
+**Solution.** DejaBug turns that history into **proven training cases**:
+1. **Mine** commits that fixed a bug and came with a test.
+2. **Prove** each one: the test fails 3/3 on the code before the fix and passes on the fix.
+3. **Brief:** IBM Granite (batch) or IBM Bob Shell (headless, `deja-forger` mode) writes a spoiler-free case file from the PR and issue thread.
+4. **Play:** the player gets a clean playground and fixes the bug in IBM Bob with Deja Mentor.
+5. **Debrief:** CASE CLOSED, XP, ranks and badges, and a comparison with the original team.
 
-Bob turns each fix's PR and issue thread into a spoiler-free case file. The new hire then debugs the real bug in Bob IDE, coached by a **read-only Bob Mentor mode that physically cannot write the fix**. They earn XP, ranks, and badges. At the end they get a debrief comparing their fix and time with the original team's.
+**Results (all measured)**
 
-**Works on any repository with tests.** A language adapter layer (Go first, then Python) detects the repo's language, finds its tests, runs them, and classifies the results. `dejabug init <owner/repo>` onboards a new repository in one command. Each repository gets its own `cases/<name>/`.
+| Repository | Language | Commits | Fix-like | Candidates | Certified | Cases |
+|---|---|---|---|---|---|---|
+| IBM/sarama | Go | 2,889 | 703 | 101 | 27 of 44 attempted | 27 |
+| IBM/python-sdk-core | Python | 489 | 98 | 45 | 31 of 45 attempted | 28 |
+| google/uuid (connected from the app, never seen before) | Go | | 29 | 10 | 1 of 8 attempted | 1 |
 
-**Primary demo repository:** [IBM/sarama](https://github.com/IBM/sarama), a Go client for Apache Kafka (12.5k stars, MIT license).
-- Measured by `dejabug mine` on 2026-09-26: 2,889 commits, 703 fix-like, and **101 runnable candidates** that change tests plus 1-3 source files. Commits whose only test changes are in sarama's `functional` tests are excluded, because those need a live Kafka broker.
-- Go modules make historical snapshots build reliably.
+**56 cases** in total, none written by hand. google/uuid went from a pasted URL to a proven, briefed case in about 90 seconds.
 
-**Why it wins:**
-- **Originality:** SWE-bench-style replay is used to benchmark AI models. We point it at onboarding humans, and we found no existing product that does this.
-- **Proof:** every case is verified fail-then-pass, so nothing is guessed.
-- **Bob-native:** parallel case forging, subagents, document understanding of PR and issue threads, a custom mode with restricted permissions, and Bob Shell headless runs inside the pipeline.
-
----
-
-## 4. Features
-
-### 4.1 Engine (CLI + local server)
-- **F0 Onboard.** `dejabug init <owner/repo | url>` clones into `workspace/<name>` and detects the language adapter (`go.mod` means Go, `pyproject.toml`/`setup.py`/`pytest.ini` means Python). The toolchain is checked by `dejabug doctor`. Every command takes `--target <owner/name>`.
-- **F1 Mine.** Scan `git log` for fix-like commits. Keep those that change the adapter's test files plus 1 to 3 source files. (For Go these are `_test.go` files.) Record the PR number from the commit message. Output a candidate list with metadata.
-- **F2 Certify.** For each candidate, in parallel isolated worktrees:
-  1. Check out the parent commit.
-  2. Overlay the fix commit's test files.
-  3. Detect which test functions were added or changed.
-  4. Run them 3 times. They must **fail** every time with a test failure, not a build failure.
-  5. Overlay the fix's source files and run again. They must **pass**.
-
-  Each candidate gets one status: `certified`, `rejected:build`, `rejected:no-fail`, `rejected:flaky`, `rejected:no-pass`, or `rejected:timeout`. The funnel counts are persisted.
-- **F3 Brief (Bob).** For each certified case, fetch the PR and linked issue text through the GitHub REST API. Then call `bob run --format json --mode deja-forger` to produce a case file:
-  - codename
-  - symptom report written like a user report
-  - evidence snippet
-  - 3 tiered hints (nudge, direction, near-answer)
-  - difficulty 1 to 3
-  - precinct (code area)
-  - lesson learned
-  - tags
-
-  The output is validated with a schema, with one retry.
-- **F4 Spoiler guard.** Reject or regenerate any brief that contains identifiers or literals introduced by the fix diff.
-- **F5 Original effort.** From the GitHub API: time from issue opened to PR merged, comment count, and review rounds. Counts only, no usernames.
-- **F6 Play export.** `dejabug start <case>` exports a clean playground:
-  - It contains the snapshot at the parent commit plus the fix's tests, as a fresh git repo with **no future history**, so the answer can't be peeked at.
-  - It includes an `AGENTS.md` telling Bob this is a training case, and the `deja-mentor` mode.
-- **F7 Verify.** Run the case's tests in the playground and return pass/fail with the parsed failing test names and output.
-- **F8 Reveal.** Return the original fix diff, the player's diff, the lesson, and the original-effort stats.
-- **F9 Local server.** A REST API plus SSE progress events for forge runs. It serves the web app.
-
-### 4.2 Web app (gamified)
-- **W1 Case Board.** A detective cork board of case cards: codename, difficulty stars, precinct, "cold for N days" (age of the bug), and a locked/solved state.
-- **W2 Case File.** The symptom report, evidence, precinct, par time, and a "Take the case" button that exports the playground and shows its path.
-- **W3 Investigation screen.** A live timer, a hint ladder (each hint costs XP and needs a confirmation), a "Run the tests" button with animated pass/fail, and an "Ask the Mentor" panel explaining how to open the case in Bob IDE with Deja Mentor mode.
-- **W4 Debrief.** A case-closed stamp animation, "You: 11m 32s, 1 hint" against "Original team: 3 days, 41 comments", a side-by-side diff (yours vs theirs), the lesson learned, and XP gained.
-- **W5 Progression.** XP, ranks (Rookie, Detective, Inspector, Chief Inspector, Commissioner), badges, streak, and a mastery ring per precinct.
-- **W6 Forge Console.** A live view of the pipeline: parallel worker lanes, each candidate moving through mine, certify, and brief with a status, plus an animated funnel (703 fix commits, 101 candidates, N certified). This is the "Application of Technology" moment in the video.
-- **W7 Showcase mode.** A static build deployed publicly with bundled, pre-forged cases. Verification results in showcase mode are replays of real recorded local runs and are labeled as such.
-
-### 4.3 Bob-native pieces (shipped in the repo)
-- **B1** `.bob/custom_modes.yaml`: `deja-forger` (read-only, writes case JSON only) and `deja-mentor` (read-only: can read code and run nothing, Socratic, never writes the fix).
-- **B2** `.bob/skills/forge-case/SKILL.md`: instructions and the JSON schema for writing a spoiler-free case file.
-- **B3** `.bob/skills/mentor/SKILL.md`: the coaching method (ask, point, never patch).
-- **B4** The playground `AGENTS.md` template that tells Bob it is inside a training case.
+**Why it can win**
+- **Originality:** SWE-bench-style replay is used to benchmark AI models; DejaBug points it at training people. We found no existing product that does this.
+- **Proof:** every case is verified fail-then-pass on the project's own tests.
+- **Bob-native:** Bob is inside the product (Bob Shell headless in the pipeline, a read-only custom mode shipped in every playground) and built its core (Plan and Agent modes, parallel subagents, custom modes and skills, code review).
+- **Business value:** zero authoring, trustworthy content, private by design (code and test runs stay on each machine; only PR text goes to IBM's AI). Next step: a team server for a shared case library, leaderboards and a manager's view.
 
 ---
 
-## 5. Architecture
+## 4. Features (as built)
+
+### 4.1 Engine (`packages/engine`, CLI and local server)
+- **F0 Onboard.** `dejabug init <owner/repo | URL>` clones into `workspace/<name>` and detects the adapter (`go.mod` = Go; `pyproject.toml`, `setup.py`, `pytest.ini` = Python). `dejabug doctor` checks git, the toolchain, Bob Shell and watsonx. Every command takes `--target <owner/name>`.
+- **F1 Mine.** Fix-like commits that change test files plus 1 to 3 source files; PR number from the message; candidates in `cases/<repo>/candidates.json`.
+- **F2 Certify.** Parallel git worktrees (default 4 workers): check out the parent, overlay the fix's tests, run the touched tests 3 times (all must fail with a test failure or a hang, not a build error), then the fix tree once (must pass). Statuses: `certified`, `rejected:build`, `rejected:no-fail`, `rejected:flaky`, `rejected:no-pass`, `rejected:timeout`. Results in `certifications.json` and `funnel.json`.
+- **F3 Brief.** GitHub PR, linked issue and comments (ETag cache, usernames, emails and avatars stripped). The briefer writes codename, symptoms, evidence, 3 tiered hints, difficulty, precinct, lesson and tags, validated with zod, with one retry. Providers: `watsonx` (Granite, batch) or `bob` (`bob run --format json --mode deja-forger`, prompt on stdin). `Case.briefedBy` records which one.
+- **F4 Spoiler guard.** Rejects briefs containing code-shaped identifiers or literals the fix introduced; codename pass keeps codenames unique.
+- **F5 Original effort.** Days open, comments and review rounds from GitHub (counts only).
+- **F6 Play export.** `dejabug start <id>` (or Take the case) exports the parent commit plus the fix's tests into `playgrounds/<id>` as a fresh single-commit repo (no future history), with `AGENTS.md` and `.bob/` holding the Deja Mentor mode and skill.
+- **F7 Verify.** Runs the case's tests on the player's edited playground; reports pass, fail, hang, build or notest with failing test names.
+- **F8 Reveal.** The original fix, the player's diff, the lesson and the hints, only after a pass or a give-up.
+- **F9 Local server.** Fastify REST API plus SSE forge events; one forge run at a time. Accepts requests only from this machine (Host and Origin checks, JSON bodies only).
+- **F10 Showcase export.** `dejabug export-showcase` writes public cases, reveals, recorded runs and forge records for the static build.
+
+### 4.2 Web app (`apps/web`, the game)
+- **W1 Case Board.** Cork board of pinned manila folders (codename, precinct tab, difficulty pips, "Cold for N days", XP reward; locked, available, active and solved states), stat tiles, precinct tabs from the data, red string on hover, and an **Archive** switcher so each repository's cases stay separate.
+- **W2 Case File.** Two-page dossier: typewriter symptoms, evidence terminal, mission parameters ("Briefed by IBM Bob / Granite"), Take the case, playground path and the Bob steps.
+- **W3 Investigation.** Live timer with par, objective, draining XP meter, 3-envelope hint ladder with confirmation, RUN TESTS (shortcut R) with a verdict terminal, give-up with confirmation, and the Ask the Deja Mentor panel.
+- **W4 Debrief.** CASE CLOSED stamp, XP count-up with breakdown, rank bar and promotion, badges, the VS panel (you vs the original team), both diffs, the lesson, and a share card (PNG).
+- **W5 Progress.** Rank ladder, XP bar, badge collection, precinct mastery rings, streak calendar, closed files, hall of fame.
+- **W6 Forge Console.** Repository picker and "open a new precinct", funnel counters, 4 to 8 live worker lanes (Mine, Certify with 3 fail lights and a pass light, Brief), Evidence Locker, discard bin with plain reasons, log terminal.
+- **W7 Settings.** Active repository, **Connect a repository** (owner/name or URL; runs the whole pipeline through the Forge), sound effects and volume, **lofi radio** (on/off, volume, 3 stations), reduced motion, profile reset, engine details.
+- **W8 Showcase mode.** The same app with bundled data and localStorage progress; runs replay real recorded results, "Replay the original fix" stands in for the edit, and a "How it works when installed" panel explains the two-window setup.
+- **W9 Lofi radio.** Three generated stations (Night Shift 72 BPM, Rainy Precinct 66 BPM, Coffee and Code 84 BPM) with a play button in the top bar.
+
+### 4.3 Bob-native pieces (in the repository)
+- `.bob/custom_modes.yaml`: `deja-forger` (writes case files), `deja-mentor` (groups: `read` and `skill` only, so it cannot edit files), `submission-writer`.
+- `.bob/skills/forge-case/SKILL.md` (brief schema, spoiler rules, hint ladder) and `.bob/skills/mentor/SKILL.md` (ask, point, never patch).
+- `.bob/rules/`: project rules and cost guards for Bob.
+- The playground `AGENTS.md` template that tells Bob it is inside a training case.
+
+---
+
+## 5. Architecture and development
+
+### 5.1 Overview
 
 ```mermaid
 flowchart LR
   subgraph Engine["packages/engine (Node 24, TypeScript)"]
-    M[Miner] --> C[Certifier pool]
-    C --> B[Briefer]
-    B --> S[(cases/*.json)]
-    G[GitHub API] --> B
-    B -->|bob run --mode deja-forger| BOB[Bob Shell]
-    P[Play exporter] --> PG[(playgrounds/)]
-    V[Verifier] --> PG
-    API[Fastify REST + SSE]
+    M[Miner] --> C[Certifier<br/>parallel worktrees]
+    C --> B[Briefer<br/>Granite or Bob Shell<br/>+ spoiler guard]
+    B --> S[(cases/&lt;repo&gt;/*.json)]
+    S --> API[Fastify API + SSE]
+    API --> P[Playground export]
+    API --> V[Verify]
+    A[Language adapters: Go, Python] -.-> C
+    A -.-> V
   end
-  R[(workspace/sarama)] --> M
-  R --> C
-  S --> API
-  API <--> W[apps/web React game UI]
-  PG --> IDE[Bob IDE + deja-mentor mode]
+  GH[(GitHub PR and issue text)] --> B
+  API <--> W[apps/web game]
+  P --> IDE[IBM Bob IDE + Deja Mentor]
 ```
 
-**Language adapters** (`packages/engine/src/adapters/`). One interface, `LanguageAdapter`:
-- `detect(repoDir)`
-- `isTestFile` / `isSourceFile` / `isRunnableTestFile` (for example, excluding Go build-tagged files)
-- `testsTouched(diff)` and `testTargets(testFiles)`
-- `runTests(dir, targets, tests)`, which returns `pass | fail | hang | build | notest` plus the failing test names; it throws `ToolMissingError` or `TimeoutError`
-- `toolCheck()`
+**Language adapters** (`packages/engine/src/adapters/`), one `LanguageAdapter` interface: `detect`, `isTestFile`, `isSourceFile`, `isRunnableTestFile`, `testsTouched`, `testTargets`, `runTests` (returns `pass | fail | hang | build | notest` plus failing tests; throws `ToolMissingError` or `TimeoutError`) and `toolCheck`. The miner, certifier and verifier use only this interface. Python repositories use a per-repo virtualenv at `workspace/.venvs/<repo>` when one exists.
 
-The miner, certifier, and verifier call only this interface.
+### 5.2 Stack
+- **Engine:** Node 24, TypeScript 5.9, `commander`, `fastify`, `zod`, `tsx`, `vitest`.
+- **Web:** Vite 8, React 18, React Router 7, Tailwind 4 (`@theme` tokens), Framer Motion, Zustand, `pixelarticons`, `@fontsource` (Silkscreen, Special Elite, IBM Plex Sans and Mono), `canvas-confetti`, `diff2html`, WebAudio.
+- **Toolchains for the demo repositories:** a current Go release, Python 3 with pytest.
+- **CI:** `.github/workflows/ci.yml` (lint, typecheck, tests with Go, build, style and case checks) and `pages.yml` (showcase deploy).
 
-**Stack**
-- Engine: Node 24, TypeScript, `tsx`, `commander`, `execa`, `fastify`, `zod`, `p-limit`, `vitest`.
-- Web: Vite, React 18, TypeScript, Tailwind CSS, Framer Motion, Zustand, `pixelarticons`, `@fontsource/*` (Silkscreen, Special Elite, IBM Plex Sans/Mono), `canvas-confetti`, `diff2html` for diffs, WebAudio sound effects. Full visual spec: Section 6A.
-- Target toolchain: Go 1.22 or later (for sarama tests).
-- Monorepo: npm workspaces.
+### 5.3 Repository map
 
-**Directory layout**
-```
-DejaBug/
-  PROJECT.md  AGENTS.md  README.md  LICENSE
-  .bob/  custom_modes.yaml  rules/  skills/
-  packages/engine/src/  miner.ts certifier.ts briefer.ts spoiler.ts github.ts
-                        play.ts verify.ts server.ts cli.ts store.ts types.ts
-  apps/web/src/         pages/ components/ game/ api/ sounds/
-  cases/sarama/         <sha>.json (committed, pre-forged)  funnel.json
-  workspace/            (gitignored) sarama clone, worktrees
-  playgrounds/          (gitignored) exported cases
-  docs/  reviews/ submission/ DATA_SOURCES.md DECISIONS.md BOB_USAGE_LOG.md
-  bob_sessions/  scripts/
-```
+| Path | What |
+|---|---|
+| `packages/engine/src/` | miner, certifier, briefer, spoiler, codenames, github, llm/watsonx, assemble, play, verify, forge, server, store, showcase, cli, types |
+| `packages/engine/src/adapters/` | Go and Python adapters |
+| `apps/web/src/` | `pages/`, `components/game/` (design system), `art/` (pixel sprites), `lib/` (rules, solve, badges, sound, lofi, forgeView), `state/`, `api/` (live engine or showcase) |
+| `cases/<repo>/` | Case files plus candidates, certifications and funnel (sarama, python-sdk-core, uuid) |
+| `.bob/` | Custom modes, skills, rules |
+| `bob_sessions/` | Bob task summary screenshots |
+| `docs/` | `submission/`, `reviews/` (REVIEW-01 to 04, BOB-REVIEW), `media/` (GIF and screenshots), `BOB_USAGE_LOG.md`, `DATA_SOURCES.md`, `DECISIONS.md`, `ENGINE_PLAN.md` |
+| `scripts/` | `check-style.mjs`, `check-cases.mjs`, `check-submission.mjs` |
+| `workspace/`, `playgrounds/`, `.dejabug/` | Cloned repositories, exported playgrounds, local engine state (all gitignored) |
 
-**Case JSON (contract between engine and web)**
+### 5.4 Case JSON (the contract between engine and web)
+
 ```ts
-type Case = {
-  id: string;              // short sha of fix commit
-  repo: "IBM/sarama";
+interface Case {
+  id: string;             // short sha of the fix commit
+  repo: string;           // "IBM/sarama"
+  language: string;       // adapter id
   fixSha: string; parentSha: string; prNumber?: number;
   status: "certified";
-  tests: string[];         // Go test names
-  packages: string[];      // go packages to test
+  tests: string[]; packages: string[]; testFiles: string[];
   certification: { failRuns: number; passRuns: number; failOutput: string; passOutput: string; durationMs: number };
   brief: { codename: string; symptoms: string; evidence: string; hints: [string, string, string];
            difficulty: 1 | 2 | 3; precinct: string; lesson: string; tags: string[] };
   original: { daysOpen?: number; comments?: number; reviewRounds?: number; mergedAt: string };
-  bugAgeDays: number;      // commit date of fix minus date the buggy code was introduced (approx)
-  parSeconds: number;
-  fixDiff: string;         // revealed only in debrief
-};
+  bugAgeDays: number; parSeconds: number;
+  briefedBy?: string;     // "bob-shell" or "watsonx:<model id>"
+  fixDiff: string;        // revealed only in the debrief
+}
+```
+The public view (before a solve) hides `fixDiff`, the lesson and the hints.
+
+### 5.5 REST API
+`GET /api/health`, `GET /api/repos`, `GET /api/cases`, `GET /api/cases/:id`, `GET /api/cases/:id/session`, `POST /api/cases/:id/start`, `POST /api/cases/:id/hint/:n`, `POST /api/cases/:id/verify`, `POST /api/cases/:id/giveup`, `GET /api/cases/:id/reveal` (403 until solved or given up), `GET /api/funnel`, `GET|PUT /api/profile`, `POST /api/forge` (any `owner/name` or a known repository), `GET /api/forge/status`, `GET /api/forge/events` (SSE). All take `?repo=<name>` where relevant.
+
+### 5.6 Commands and the gate
+
+```bash
+npm install
+npm run dev                       # engine on :4317 (local only) and web on http://localhost:5173
+npm run dejabug -- <command>      # doctor, init, mine, certify, brief, start, serve, export-showcase, codenames, models
+npm run dejabug -- --target owner/name mine
+npm run showcase                  # static showcase build
 ```
 
-**REST API**
-- `GET /api/cases`
-- `GET /api/cases/:id` (no fixDiff)
-- `POST /api/cases/:id/start`
-- `POST /api/cases/:id/verify`
-- `POST /api/cases/:id/hint/:n`
-- `GET /api/cases/:id/reveal` (only after a pass, or after giving up)
-- `GET /api/funnel`
-- `POST /api/forge` + `GET /api/forge/events` (SSE)
-- `GET/PUT /api/profile`
+**The gate** (before every commit):
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+npx prettier --check .
+node scripts/check-style.mjs && node scripts/check-cases.mjs && node scripts/check-submission.mjs
+```
+On Windows, Go is at `C:\Program Files\Go\bin`; a shell opened before Go was installed may lack it on PATH, which skips the Go tests. All 106 tests should run with none skipped.
 
-**Key decisions** (details in `docs/DECISIONS.md`):
-- The playground is exported with `git archive` into a fresh repo, so there is no future history and no answer peeking.
-- Cases are pre-forged and committed, so the demo is deterministic and live runs spend no Bobcoins.
-- A certified case needs 3 of 3 failing runs, which rejects flaky race tests.
+### 5.7 Key decisions (details in `docs/DECISIONS.md`)
+- Playgrounds are fresh single-commit repositories: no future history, no answer peeking.
+- Cases are pre-forged and committed, so the demo is deterministic and costs no Bobcoins at run time.
+- 3 of 3 failing runs are required, which rejects flaky tests; a hang counts as a reproduced deadlock.
+- The engine is a local tool: it runs strangers' test code, so it never runs as a public server. The public face is the static showcase.
+
+### 5.8 Known limitations
+- Only Go and Python adapters today.
+- A new repository needs its toolchain installed and an AI key (watsonx or Bob) for the briefs.
+- GitHub Pages answers deep links with HTTP 404 (the app still loads from the fallback page); share the root URL.
+- The mentor demo case (The Overflowing Slice) is difficulty 3 and locked for a new Rookie.
 
 ---
 
 ## 6. Game design
 
-- **Theme:** a cold-case detective agency. Palette: dark navy, case-file manila, stamp red, neon amber accents. Typewriter font for briefs, bold display font for headings.
-- **Core loop:** pick a case, read the file, investigate in Bob IDE, run the tests, close the case, then debrief and earn XP. This unlocks harder cases.
-- **XP:** base 100 / 200 / 300 by difficulty. Each hint costs 25% of base. A time bonus of up to +50% applies when under par. A no-hint solve gets a x1.2 multiplier.
-- **Ranks:** Rookie 0, Detective 300, Inspector 900, Chief Inspector 2000, Commissioner 4000.
-- **Badges:**
-  - Cold Case Closed (first solve)
-  - Clean Hands (no hints)
-  - Beat the Clock (under par)
-  - Race Hunter (concurrency tag)
-  - Protocol Whisperer (3 protocol cases)
-  - Precinct Master (all cases in one precinct)
-  - Faster Than The Original (solve time under 1% of the original fix time)
-- **Feel:** stamp and paper-slide animations, a typewriter reveal of the symptoms, a red/green terminal for test runs, confetti plus a CASE CLOSED stamp on success, and subtle sound effects with a mute toggle.
-- **Accessibility:** keyboard navigable, sufficient contrast, and `prefers-reduced-motion` respected.
+- **Theme:** a cold-case detective agency. Navy environment, manila and paper case files, stamp red for failure and key actions, amber for interaction and XP, green only for verified.
+- **Core loop:** pick a case, read the file, investigate in IBM Bob, run the tests, close the case, debrief, earn XP, unlock harder cases.
+- **XP:** base 100 / 200 / 300 by difficulty; each hint costs 25% of base; up to +50% time bonus under par; x1.2 for a no-hint solve.
+- **Ranks:** Rookie 0, Detective 300, Inspector 900, Chief Inspector 2000, Commissioner 4000. Difficulty 3 cases unlock at Detective.
+- **Badges:** Cold Case Closed (first solve), Clean Hands (no hints), Beat the Clock (under par), Race Hunter (concurrency case), Protocol Whisperer (3 protocol cases), Precinct Master (all cases in a precinct), Faster Than The Original (under 1% of the original fix time).
+- **Feel:** stamp and paper-slide animations, typewriter symptoms, a red and green test terminal, confetti only on a first solve or rank-up, synthesized sounds and an optional lofi radio.
+- **Accessibility:** keyboard shortcuts (R runs tests, H opens the next hint, Esc closes modals), amber focus rings, AA contrast, `aria-live` for results, reduced motion respected.
 
 ---
 
-## 6A. Frontend design directive (binding for T5-T7)
+## 6A. Frontend design system (as built)
 
-Read this section, Section 4.2, and Section 6 before designing or changing any screen. If this section conflicts with a default habit, this section wins. Do not redesign functionality. Design the presentation and interaction around the functionality described in this file.
+**The 3-second test:** any screen seen for 3 seconds should read "detective debugging game", never "admin dashboard".
 
-**The 3-second test:** someone seeing any screen for 3 seconds should think "developer debugging game / detective investigation", not "project-management dashboard".
-
-### 6A.1 What we take from the reference screenshots (and what we do not)
-- References live in `screenshots_inspired/`. They are local only, gitignored, and never shipped (third-party designs).
-- **Take:**
-  - thick dark outlines (3 px) with **hard offset shadows** (no blur)
-  - flat, saturated color blocks
-  - pixel-art icons
-  - a ribbon-banner page title with an arrow tail
-  - chunky stat tiles
-  - a bold colored header bar on data blocks
-  - pixel-bordered progress bars with the value printed inside
-  - collectible cards for achievements
-  - an arcade-style pop-up modal (the leaderboard)
-  - a persistent left icon rail whose active item is a solid color block
-  - dense but clean information blocks
-- **Do not take:** their purple/yellow/blue palette, their layout, the "workspace/task manager" framing, generic bar charts, or photo avatars.
-
-### 6A.2 Principles
-- **Design, do not default.** No typical SaaS/admin dashboard, generic card grids, gradients, glassmorphism, shadcn or Material look, or large border radii. It is a game interface first and a developer tool second.
-- **Tactile.** The UI is built from physical detective objects, stylized and clean, never photorealistic:
-  - manila case folders and dossier tabs
-  - evidence sheets and clipped notes
-  - cork-board case cards with pins, and string where it carries meaning
-  - stamped documents and police-file labels
-  - terminal readouts
-  - worn paper edges
-- **Hierarchy through color.** Dark navy is the environment. Manila and off-white are case-file surfaces. Stamp red means danger, failure, or a key action. Neon amber means interactive, highlight, or XP. Restrained green is only for verified/pass states. No rainbow colors.
-- **Dense but clean.** Strong borders, deliberate spacing, compact information blocks, and large focal elements. No giant empty areas and no marketing-site hero typography.
-- **Every decoration has a gameplay purpose.** No stock illustrations, no emoji icons, no decorative noise.
-- **Progression is always visible** (rank, XP, streak live in the shell) and is never reduced to plain text statistics.
-
-### 6A.3 Design tokens (define once in `tailwind.config.ts` and `src/styles/tokens.css`; never hardcode hex values in components)
+- **Principles:** tactile detective objects (manila folders, dossier tabs, evidence sheets, cork board, stamps, terminal readouts), thick dark outlines with hard offset shadows, flat colour blocks, pixel art, dense but clean blocks. No SaaS look, gradients, glassmorphism or large radii. Every decoration has a gameplay purpose; progression is always visible in the shell.
+- **Tokens** (`apps/web/src/styles/index.css`, `@theme`; never hardcode hex in components):
 
 | Token | Value | Use |
 |---|---|---|
-| `ink` | `#0B1426` | App background (navy environment) |
+| `ink` | `#0B1426` | App background |
 | `navy` | `#14223F` | Rail, dark panels, terminal frame |
-| `navy-2` | `#1E3159` | Raised dark surfaces, hover |
-| `line` | `#05080F` | All outlines and hard shadows |
-| `manila` | `#E8D49B` | Case folders, cards |
-| `paper` | `#F7F1E1` | Documents, evidence sheets, dossier pages |
-| `cork` | `#B98A5A` | Case board surface (CSS pattern, no images) |
-| `stamp` | `#D7263D` | Fail, danger, primary irreversible actions, CASE CLOSED |
-| `amber` | `#FFB627` | Interactive highlight, XP, active nav, focus ring |
-| `pass` | `#2FA84F` | Verified, tests passing |
+| `navy-2` | `#1E3159` | Raised dark surfaces |
+| `line` | `#05080F` | Outlines and hard shadows |
+| `manila` | `#E8D49B` | Folders, cards |
+| `paper` | `#F7F1E1` | Documents |
+| `cork` | `#B98A5A` | Case board |
+| `stamp` | `#D7263D` | Fail, danger, CASE CLOSED |
+| `amber` | `#FFB627` | Interaction, XP, active nav, focus |
+| `pass` | `#2FA84F` | Verified |
 | `muted` | `#8A93A6` | Secondary text on dark |
-| `text-dark` | `#1A1A1A` | Text on paper/manila |
+| `text-dark` | `#1A1A1A` | Text on paper and manila |
 
-- **Outline:** `3px solid line`. **Shadow:** `4px 4px 0 line` (hard, no blur). **Pressed:** translate `2px 2px` and shadow `2px 2px 0 line`. **Radius:** 2 px (4 px max). Contrast must reach WCAG AA on every surface.
-
-### 6A.4 Typography (self-hosted via `@fontsource/*` so the demo works offline)
-- **Display / headings / labels:** `Silkscreen` (pixel). Use it for short strings only: page ribbons, codenames, stamps, button labels, stat labels.
-- **Case reports and evidence:** `Special Elite` (typewriter).
-- **Body and UI text:** `IBM Plex Sans`.
-- **Numbers, timer, terminal, code:** `IBM Plex Mono` (tabular numerals).
-- **Never** set paragraphs in the pixel font. Body copy stays 15 to 16 px and highly legible.
-
-### 6A.5 Icons and art
-- UI icons come from `pixelarticons` (MIT) as React components. Never use emoji.
-- Rank insignias (5), badge art (7), precinct seals, the cork pin, the stamp, and the paper clip are **custom pixel SVGs** drawn on a 16x16 or 32x32 grid and kept in `apps/web/src/art/`.
-
-### 6A.6 Game shell (every screen)
-- **Left rail (80 px, navy):** Case Board (board icon), Investigation (magnifier), Forge (hammer/zap), Progress (trophy), and Settings (sliders) at the bottom. The active item is a solid amber block with an ink icon, as in the references. Tooltips appear on hover and focus.
-- **Top bar:**
-  - a ribbon-banner page title in stamp red with an arrow tail
-  - on the right: rank insignia, a compact XP bar ("1,240 / 2,000 XP"), streak counter, mute toggle, and an engine status light (green = engine connected, amber = showcase mode)
-- **Dispatch ticker** (thin line above the ribbon, like the references' "quote of the day"): rotating one-line lessons from solved cases, which gives the ticker a teaching purpose.
-
-### 6A.7 Screens
-**Case Board (the hero, W1).**
-- The board is a cork surface (CSS pattern), not a table or card grid.
-- Cases are pinned manila folders in a loose grid with slight random rotation (-2 to 2 degrees, seeded by case id so it is stable).
-- Above the board, a strip of chunky stat tiles: Open cases, Closed, Best time, Current rank.
-- Precinct filters are dossier tabs: All, Producer, Consumer, Protocol, Client, Admin.
-- Each folder shows:
-  - codename in the pixel font
-  - precinct on the folder tab
-  - difficulty as 1 to 3 magnifier pips
-  - "COLD FOR 1,204 DAYS" as a stamped label
-  - reward chip "+300 XP" in amber
-- Four distinct states:
-  - **Locked:** desaturated, padlock, diagonal "LOCKED: REACH DETECTIVE" tape.
-  - **Available:** manila, lifts on hover.
-  - **Active:** amber outline, pulsing pin, "IN PROGRESS" clip.
-  - **Solved:** red CASE CLOSED stamp overlay, best time shown.
-- On hover, a red string links cases in the same precinct.
-
-**Case File (W2).**
-- Opening a case plays a folder-opening transition into a two-page dossier.
-- **Left page:** the symptom report revealed with a typewriter animation (click or press Space to finish instantly), then an evidence sheet with a paper clip holding a terminal readout of the redacted failing test output.
-- **Right page:** "MISSION PARAMETERS" as game information, not form fields: precinct seal, difficulty pips, par time, reward, tests to pass, and bug age.
-- **TAKE THE CASE** is a large stamp-red button. After it is pressed, it shows the playground path with a copy button and three steps: open in Bob IDE, switch to Deja Mentor mode, investigate.
-
-**Investigation (W3).**
-- The focal elements are:
-  - a huge live timer in Plex Mono, with a par marker that turns stamp red when exceeded
-  - the current objective ("Make TestProducerRetry pass")
-  - a remaining-XP meter that visibly drains with time and hints
-- **Hint ladder:** 3 sealed envelopes stacked vertically, each labeled with its cost ("-75 XP"). Opening one needs a confirmation. An opened hint becomes a clipped note.
-- **RUN TESTS** is a major arcade button: amber, deep press animation, shortcut `R`.
-- **Fail sequence:** the terminal types red lines, the status reads "SUSPECT STILL AT LARGE", and there is a short shake (skipped under reduced motion).
-- **Pass sequence:** green "VERIFIED" lines, then an automatic transition to the Debrief.
-- A small, secondary "Give up and reveal" action awards 0 XP.
-
-**Debrief (W4).**
-- The CASE CLOSED stamp slams in (scale 2 to 1, rotate -8 degrees, about 220 ms, one-frame screen jolt).
-- The XP counter rolls up, then time and hints used appear.
-- Newly unlocked badges flip in as collectible cards.
-- The rank bar fills, and the rank-up modal appears if a threshold is crossed.
-- Then a fighting-game style **VS panel**, "YOUR INVESTIGATION vs ORIGINAL TEAM":
-  - left: your time, hints, lines changed
-  - right: days open, comments, review rounds
-- Then the side-by-side diff (diff2html restyled to the tokens) and the lesson on an index card.
-- Actions: Share card (PNG), Next case.
-- Confetti fires only on rank-up or the first solve.
-
-**Progress (W5).**
-- A large rank insignia and a rank ladder path with 5 nodes, Rookie -> Detective -> Inspector -> Chief Inspector -> Commissioner.
-- The XP bar with the next rank.
-- A badge collection of collectible cards, with locked badges shown as silhouettes with their unlock hint.
-- Precinct mastery as segmented pixel rings.
-- A streak calendar of pixel squares, and closed cases as a file drawer list.
-- An arcade leaderboard modal inspired by the reference. It shows local player profiles only, never real names from GitHub.
-
-**Forge Console (W6, key demo moment).**
-- **Funnel:** three large counters connected by arrows, FIX COMMITS 703 -> CANDIDATES 101 -> CERTIFIED N. Each ticks up as events arrive.
-- **Worker lanes:** 4 to 8 horizontal conveyor belts. Each lane shows its current candidate chip (short sha + commit subject) moving through three stations: MINE, CERTIFY (with fail-run lights 1/2/3 and a pass light), and BRIEF (with a "Bob is writing" indicator).
-- **Outcomes:** certified cases drop into an "Evidence Locker" tray on the right as new folders. Rejected candidates fall into a discard bin with a reason tag (build, flaky, no-fail).
-- **Controls:** a terminal log ticker along the bottom, a "Forge 8 cases" button, and a concurrency selector.
-- It must read as parallel activity instantly, even to someone who does not know the implementation.
-
-**Settings.** Sound on/off and volume, a reduced-motion override, reset profile (with confirmation), engine connection details, and a showcase-mode notice.
-
-**States everywhere, all themed:**
-- **Loading:** paper sliding in.
-- **Empty board:** "No open cases. Fire up the Forge."
-- **Engine offline:** "Radio silence from HQ", with a retry button.
-- **Errors:** a stamped memo with the message and a retry button.
-
-### 6A.8 Motion (Framer Motion)
-- UI feedback takes 120 to 200 ms. Paper slides take 300 to 400 ms. The stamp impact takes about 220 ms with a slight overshoot. Counters and progress fills take 500 to 700 ms.
-- Animations never block input, and repeated actions are never slowed down.
-- Micro-interactions:
-  - buttons depress 2 px
-  - folders lift 2 to 4 px on hover
-  - stamps hit with weight
-  - XP counts upward
-  - progress fills smoothly
-  - newly unlocked items get a brief amber highlight
-- Under `prefers-reduced-motion` or the Settings override, everything becomes an opacity fade: no shake, no rotation, no confetti.
-
-### 6A.9 Sound (WebAudio, synthesized, no audio files)
-- Sounds: click (short square blip), stamp (low noise thump), fail (descending buzz), pass (ascending 3-note arpeggio), rank-up (4-note fanfare).
-- Master gain 0.3. Starts after the first user gesture. The mute state persists, and the mute toggle is always visible in the top bar.
-
-### 6A.10 Component inventory (`apps/web/src/components/game/`)
-- **Shell:** `GameShell`, `NavRail`, `RibbonTitle`, `DispatchTicker`.
-- **Surfaces:** `StatTile`, `PaperPanel`, `DarkPanel`, `DossierTabs`, `Modal` (arcade), `Toast` (clipped note), `Tooltip`.
-- **Cases:** `CaseFolder`, `Stamp`, `TypewriterText`, `Terminal`.
-- **Controls:** `ArcadeButton`, `IconButton`.
-- **Progression:** `XpBar`, `RankInsignia`, `BadgeCard`, `MasteryRing`, `StreakCalendar`.
-- **Investigation:** `HintLadder`, `Timer`, `VersusPanel`.
-- **Forge:** `WorkerLane`, `FunnelCounter`.
-
-Every screen is composed from these. No page-specific one-off styling.
-
-### 6A.11 Stack and rules
-- React 18, TypeScript, Tailwind CSS, Framer Motion, Zustand, `pixelarticons`, `@fontsource/*`, `canvas-confetti`, `diff2html`.
-- No emojis and no em dashes in UI text or source. Use icon components.
-- Accessibility:
-  - full keyboard navigation (`R` runs tests, `H` opens the next hint, `Esc` closes modals)
-  - visible amber focus rings
-  - AA contrast
-  - `aria-live` announcements for test results and XP gains
-  - reduced motion respected
-
-### 6A.12 Procedure for Bob (before editing frontend code)
-1. Inspect the existing `apps/web` structure.
-2. Read Sections 4.2, 6, and 6A.
-3. Define or extend the tokens and the shared components first.
-4. State briefly what you intend to change.
-5. Implement consistently across the affected screens.
-6. Check the 3-second test and the states list before declaring done.
-
-## 7. Implementation checklist (tier by tier)
-
-Hour estimates add up to 35. "M" marks a milestone that triggers a Claude review.
-
-**Every item has an ID and exactly one owner:**
-- **[BOB]:** done by IBM Bob, one item per Bob task (Section 9). These are the judged, visible, Bob-native parts.
-- **[CLAUDE]:** done by Claude Code or Codex. This is the plumbing.
-- **[HUMAN]:** done by you: an account, a command to run, a screenshot, or a decision.
-
-Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
-
-### T0 Setup (1 h), target Fri 11:59 PM
-- [x] T0.1 [HUMAN] Install Go (`winget install GoLang.Go`) and verify `go version`. Installed go1.27.0.
-- [x] T0.2 [HUMAN] Clone IBM/sarama into `workspace/sarama` (gitignored). `go test -run TestAsyncProducer -count=1 .` passes: about 30 s the first time, about 1 s after.
-- [x] T0.3 [CLAUDE] Scaffold npm workspaces `packages/engine` and `apps/web`: shared tsconfig, eslint, prettier, vitest, and the dev scripts (`npm run dev`, `build`, `test`, `lint`, `typecheck`).
-- [x] T0.4 [CLAUDE] `.env.example` with `GITHUB_TOKEN`, `DEJABUG_REPO_DIR`, `LLM_PROVIDER` (`watsonx` or `bob`), `WATSONX_API_KEY`, `WATSONX_PROJECT_ID`, `WATSONX_URL`, `WATSONX_MODEL_ID`, `BOB_MAX_COST`.
-- [x] T0.5 [CLAUDE] GitHub Actions CI: lint, typecheck, unit tests, `check-style.mjs`.
-- [ ] **Done when:** `npm run build && npm test` passes locally and on CI.
-
-### T1 Engine plan + Miner (2 h), target Sat 2:00 AM
-- [x] T1.1 [BOB] **Plan mode task:** design the engine modules (miner, certifier, briefer, spoiler, play, verify, server) against Sections 4.1 and 5. Save the plan as `docs/ENGINE_PLAN.md`. This is cheap, and it is our "Plan mode" evidence.
-- [x] T1.2 [CLAUDE] `miner.ts`: fix-like commit filter, file classification, PR number extraction, changed test function detection, and the `dejabug mine` CLI command.
-- [x] T1.3 [CLAUDE] Miner unit tests on a fixture git repo.
-- [x] **Done when:** `dejabug mine --repo workspace/sarama --out cases/sarama/candidates.json` outputs 150 or more candidates in under 30 s. **Result: 101 candidates in 10 s.** The 150 target was a pre-measurement estimate. The shortfall is sarama's broker-only functional tests (55 commits), which can never be certified locally. 101 is ample for the 12-case target (see docs/DECISIONS.md).
-
-### T2 Certifier (4 h), target Sat 6:00 AM, **M1**
-- [x] T2.1 [BOB] `certifier.ts` core: worktree lifecycle, test overlay from the fix commit, go test runner with timeout, output parsing (build failure vs test failure), the 3-run fail rule and 1-run pass rule, and every rejection status.
-- [x] T2.2 [BOB] Parallel certification pool (default concurrency 4) with a typed progress event emitter. This is our "parallel" evidence.
-- [x] T2.3 [CLAUDE] `funnel.json` writer, the `dejabug certify --limit N` CLI command, and certifier unit tests.
-- [x] T2.4 [HUMAN] Run `dejabug certify --limit 40` and commit the results.
-- [x] T2.5 [CLAUDE] **Review #1:** write `docs/reviews/REVIEW-01.md`, with each item tagged [BOB] or [CLAUDE] by the file it touches. No code changes.
-- [x] T2.5a [CLAUDE] **Repository-agnostic engine:** `adapters/` (interface, errors, registry, Go adapter with the REVIEW-01 item 1 and 4 output classification), the miner refactored onto the adapter, `Candidate.language`, `dejabug init <owner/repo>`, and a global `--target` option. Update the engine tests.
-- [x] T2.6 [BOB] Apply the [BOB] items of REVIEW-01 in one task, and make `certifier.ts` call `adapter.runTests()` (no Go literals left in the certifier).
-- [x] T2.7 [CLAUDE] Apply the [CLAUDE] items of REVIEW-01.
-- [x] **Done when:** 12 or more certified sarama cases exist with recorded fail and pass output. **Result: 23 certified of 44 attempted.**
-
-### T3 Briefs (3 h), target Sat 9:00 AM
-- [x] T3.1 [CLAUDE] `github.ts`: PR, linked issue, and comments fetch with an ETag cache and username/email/avatar stripping. Original-effort stats (days open, comments, review rounds).
-- [x] T3.2 [CLAUDE] `llm/watsonx.ts`: a watsonx.ai text-generation client (IAM token exchange, Granite model from `WATSONX_MODEL_ID`, JSON output). Never use the models the hackathon bans (Section 9.8).
-- [x] T3.3 [BOB] **The forger:**
-  - the `deja-forger` custom mode in `.bob/custom_modes.yaml`
-  - `.bob/skills/forge-case/SKILL.md` (brief schema, spoiler rules, hint ladder method)
-  - `briefer.ts`: prompt built from the skill, provider switch (`watsonx` for batch, `bob` = `bob run --format json --mode deja-forger --max-cost`), zod validation, one retry
-- [x] T3.4 [BOB] **Subagent task:** "Use explore subagents in parallel to inspect the certified cases and rank them by teaching value and difficulty; write `cases/sarama/ranking.json`." This is our "subagents" evidence.
-- [x] T3.5 [CLAUDE] (done early so that Bob's briefer can call it) `spoiler.ts`: extract identifiers and literals from the fix's added lines and reject briefs that contain them. Includes tests.
-- [x] T3.4b [CLAUDE] `dejabug brief` CLI: for each certified case, fetch GitHub context and original effort, build the source-only fix diff, call Bob's `brief()`, then assemble and write the Case JSON (id, language, parSeconds, bugAgeDays, certification, redacted outputs).
-- [x] T3.3b [BOB] Apply docs/reviews/REVIEW-T3.3.md (skill examples copied into briefs, codename rules, JSON retry, client reuse, bob provider on Windows).
-- [x] T3.6 [HUMAN] Generate briefs: Granite for all certified cases (**done, 27/27**), plus `--provider bob` for 1 showcase case (**done: fc42022 "The Overflowing Slice", written by Bob Shell headless in 18.7 s**). Commit the case JSON.
-- [x] **Done when:** 12 or more cases have valid, spoiler-free briefs in `cases/sarama/`. **Result: 27 case files (Granite, 47 s), unique codenames, and scripts/check-cases.mjs passes in CI.**
-
-### T4 Game server + play/verify (3 h), target Sat 12:00 PM
-- [x] T4.1 [CLAUDE] `play.ts`: `git archive` export, test overlay, fresh `git init`, the playground `AGENTS.md` template, and a copy of the `deja-mentor` mode.
-- [x] T4.2 [CLAUDE] `verify.ts`: run the case's tests in the playground and parse the results.
-- [x] T4.4 [CLAUDE] **Python adapter** (pytest): test files `test_*.py`/`*_test.py`, test names from `def test_*` diffs, targets `file::name`, output classification, and the `.venv` toolchain check. Tests on a Python fixture repo.
-- [x] T4.5 [HUMAN, done by Claude at the human's request] Prove the product is generic: `dejabug init` + `mine` + `certify` on a second, Python IBM repository. Record the funnel for the video and README.
-- [x] T4.3 [CLAUDE] `server.ts`: all REST endpoints plus SSE forge events (Section 5). Reveal stays locked until a pass or a give-up.
-- [x] **Done when:** an end-to-end run through curl works: start, apply the real fix by hand, verify passes, reveal works. **Verified: real fixes applied to fc42022 (fail to pass) and 66e60c7 (hang to pass). curl on the live server: 27 public cases with no spoilers, start plus verify reports the real failing tests. The server integration test covers the full loop.**
-
-### T5 Web core (6 h), target Sat 6:00 PM, **M2**
-- [x] T5.1 [CLAUDE] Web app scaffold: Vite + React + Tailwind + Framer Motion + Zustand, routing, the typed API client, and the game state store.
-- [x] T5.2 [CLAUDE] (re-tagged: coins) **Design system:** tokens, fonts, icons, custom pixel art, and the full component inventory (6A.3-6A.5, 6A.10), shown on a `/styleguide` route.
-- [x] T5.3 [CLAUDE] Game shell (6A.6) built from the Bob components.
-- [x] T5.4 [BOB] **Case Board**, the hero screen (6A.7 W1).
-- [x] T5.5 [CLAUDE] Case File dossier (6A.7 W2).
-- [x] T5.6 [CLAUDE] (re-tagged: coins) **Investigation + Debrief**, the core game loop (6A.7 W3 and W4).
-- [x] T5.7 [CLAUDE] Themed loading, empty, and error states, keyboard shortcuts, and reduced motion (6A.7, 6A.8, 6A.11).
-- [x] T5.8 [CLAUDE] **Review #2:** write `docs/reviews/REVIEW-02.md` with tagged items.
-- [x] T5.9 [CLAUDE] (re-tagged: coins) Apply the REVIEW-02 items.
-- [x] T5.10 [CLAUDE] Apply the [CLAUDE] items of REVIEW-02.
-- [ ] **Done when:** a full case can be played in the browser against the local engine, and the screens pass the 3-second test.
-
-### T6 Gamification (4 h), target Sat 10:00 PM
-- [x] T6.1 [CLAUDE] XP engine with unit tests, ranks, badges, streak, precinct mastery, and a persisted profile (Section 6 rules).
-- [x] T6.2 [CLAUDE] Progress screen (6A.7 W5), rank-up modal, arcade leaderboard modal, and WebAudio sounds with mute (6A.9).
-- [x] T6.3 [CLAUDE] A shareable "Case Closed" card (PNG export).
-- [ ] **Done when:** solving a case visibly awards XP and badges, and a rank-up can be triggered.
-
-### T7 Forge Console (3 h), target Sun 1:00 AM
-- [x] T7.0 [CLAUDE] "Open a new precinct": server endpoint `POST /api/repos` (init + mine) and a repo picker in the Forge Console header, so any GitHub repository can be forged from the UI.
-- [x] T7.1 [CLAUDE] (re-tagged: coins) **Forge Console** as specified in 6A.7 W6: SSE-driven worker lanes, funnel counters, the Evidence Locker, and the discard bin with reasons. This is the key demo moment.
-- [ ] **Done when:** clicking "Forge 8 cases" shows the lanes moving in real time against sarama.
-
-### T8 Mentor (2 h), target Sun 3:00 AM
-- [x] T8.1 [BOB] `deja-mentor` mode (groups: read only) and `.bob/skills/mentor/SKILL.md` (ask, point, never patch).
-- [x] T8.2 [CLAUDE] In-app "Ask the Mentor" panel with step-by-step Bob IDE instructions.
-- [x] T8.3 [HUMAN] Record the mentor refusing to patch and giving a Socratic hint in Bob IDE (for the video).
-- [x] **Done when:** in Bob IDE, the mentor gives Socratic hints on a case and refuses to edit files.
-
-### T9 Hardening + showcase deploy (4 h), target Sun 7:00 AM, **M3**
-- [x] T9.1 [BOB] **Bob Review workflow** over the whole repo (the built-in code review feature). Save its findings to `docs/reviews/BOB-REVIEW.md`.
-- [x] T9.2 [CLAUDE] **Review #3:** merge the Bob review findings with Claude's own into `docs/reviews/REVIEW-03.md` with tagged items.
-- [x] T9.3 [CLAUDE] (re-tagged: coins) Apply the review items of REVIEW-03.
-- [x] T9.4 [CLAUDE] Apply the [CLAUDE] items. Get engine and web tests green, fix Windows paths, add timeouts and worktree cleanup.
-- [x] T9.5 [CLAUDE] Showcase build (static, bundled cases, labeled replayed verification, no watsonx calls at run time) deployed to Vercel (done on GitHub Pages instead). README with a GIF, architecture, and quickstart.
-- [x] **Done when:** a fresh clone plus quickstart works, and the public URL loads.
-
-### T10 Buffer (3 h), until Sun 10:00 AM
-- [x] T10.1 [HUMAN] (done by Claude on request) Full dry-run of the demo script (Section 8). Log the problems as tagged items in `docs/reviews/REVIEW-04.md`, then route them by owner.
-
-### S Submission (5 h), Sun 10:00 AM to 3:00 PM (the hard deadline is 8:00 PM BST)
-- [x] S.1 [HUMAN] (audited by Claude) Collect every Bob task screenshot into `bob_sessions/`. Complete `docs/BOB_USAGE_LOG.md`.
-- [x] S.2 [CLAUDE] Draft the Problem & Solution statement and the Bob Usage statement (500 words or less each) from the repo and the usage log.
-- [x] S.3 [HUMAN] (slides and posters done; the video is being recorded from docs/submission/04-video-script.md) Slides, cover image, and the demo video (3:00 or less, at least 90 s of the product working).
-- [ ] S.4 [HUMAN] Run `check-submission.mjs` and `check-style.mjs`, verify commit authors, push, and submit on lablab **before 3:00 PM**.
+  Outline 3 px; shadow `4px 4px 0 line`; pressed = translate 2 px; radius 2 px.
+- **Type:** Silkscreen (pixel) for short labels, ribbons, codenames and stamps only; Special Elite for case reports; IBM Plex Sans for UI text; IBM Plex Mono for numbers, timer and code. Never paragraphs in the pixel font. (The pitch deck uses Pixelify Sans instead of Silkscreen for readability at slide size.)
+- **Art:** UI icons from `pixelarticons`; rank insignias (5), badges (7), pin, clip and magnifier are custom pixel sprites in `apps/web/src/art/sprites.tsx`, the source for any artwork.
+- **Shell:** sticky 80 px navy rail (Case Board, Investigation, Forge, Progress, Settings), sticky top bar (ribbon title, rank insignia and XP bar, streak, lofi and sound buttons, engine light) and a dispatch ticker of lessons.
+- **Components** (`apps/web/src/components/game/`): ArcadeButton, IconButton, PaperPanel, DarkPanel, StatTile, RibbonTitle, Stamp, TypewriterText, Terminal, CaseFolder, DossierTabs, HintLadder, Timer, VersusPanel, XpBar, CountUp, MasteryRing, BadgeCard, StreakCalendar, WorkerLane, FunnelCounter, Modal, Toast, Tooltip, DiffView, MentorPanel, HowItWorks. Screens are composed from these, with no page-specific one-off styling.
+- **Motion:** UI feedback 120 to 200 ms, paper slides 300 to 400 ms, stamp about 220 ms with overshoot, counters 500 to 700 ms; under reduced motion everything becomes a fade.
+- **Sound:** synthesized (click, stamp, fail, pass, rank-up, hint) plus the lofi radio; audio starts only after the first user gesture.
+- **States:** themed loading (paper sliding in), empty ("No open cases. Fire up the Forge."), engine offline ("Radio silence from HQ"), and errors as stamped memos with a retry; a stale chunk after a deploy reloads once.
 
 ---
 
-## 8. Demo script (3:00)
+## 7. Checklist
 
-| Time | Show |
+Every item has one owner: **[BOB]** (IBM Bob, one item per task), **[CLAUDE]** (Claude Code or Codex), **[HUMAN]**. "(re-tagged)" marks items moved from Bob to Claude to save Bobcoins (Section 9.2).
+
+### T0 Setup
+- [x] T0.1 [HUMAN] Install Go (go1.27.0).
+- [x] T0.2 [HUMAN] Clone IBM/sarama into `workspace/sarama`.
+- [x] T0.3 [CLAUDE] npm workspaces, tsconfig, eslint, prettier, vitest, dev scripts.
+- [x] T0.4 [CLAUDE] `.env.example`.
+- [x] T0.5 [CLAUDE] CI: lint, typecheck, tests, style check.
+- [x] **Done when:** build and tests pass locally and on CI.
+
+### T1 Engine plan + Miner
+- [x] T1.1 [BOB] Plan mode: engine design in `docs/ENGINE_PLAN.md`.
+- [x] T1.2 [CLAUDE] `miner.ts` and `dejabug mine`.
+- [x] T1.3 [CLAUDE] Miner tests on a fixture repository.
+- [x] **Done when:** candidates mined in under 30 s. Result: 101 sarama candidates in 10 s (functional tests that need a live Kafka broker are excluded).
+
+### T2 Certifier (M1)
+- [x] T2.1 [BOB] Certifier core: worktrees, test overlay, runner, fail/pass rules, statuses.
+- [x] T2.2 [BOB] Parallel certification pool with progress events.
+- [x] T2.3 [CLAUDE] Funnel writer, `dejabug certify`, tests.
+- [x] T2.4 [HUMAN] First certification batch.
+- [x] T2.5 [CLAUDE] REVIEW-01.
+- [x] T2.5a [CLAUDE] Repository-agnostic engine: adapters, `dejabug init`, `--target`.
+- [x] T2.6 [BOB] REVIEW-01 [BOB] items; the certifier runs on adapters.
+- [x] T2.7 [CLAUDE] REVIEW-01 [CLAUDE] items.
+- [x] **Done when:** 12 or more certified sarama cases. Result: 27 of 44 attempted.
+
+### T3 Briefs
+- [x] T3.1 [CLAUDE] `github.ts` with redaction and original effort.
+- [x] T3.2 [CLAUDE] `llm/watsonx.ts` (Granite).
+- [x] T3.3 [BOB] The forger: `deja-forger` mode, `forge-case` skill, `briefer.ts`.
+- [x] T3.4 [BOB] Four parallel subagents rank the cases (`cases/sarama/ranking.json`).
+- [x] T3.5 [CLAUDE] `spoiler.ts`.
+- [x] T3.4b [CLAUDE] `dejabug brief` and case assembly.
+- [x] T3.3b [BOB] REVIEW-T3.3 fixes.
+- [x] T3.6 [HUMAN] Granite briefs for all 27 cases, plus one Bob Shell headless brief (fc42022, 18.7 s).
+- [x] **Done when:** 12 or more spoiler-free briefs. Result: 27, unique codenames, checked in CI.
+
+### T4 Game server, play, verify
+- [x] T4.1 [CLAUDE] `play.ts`.
+- [x] T4.2 [CLAUDE] `verify.ts`.
+- [x] T4.3 [CLAUDE] `server.ts` with SSE.
+- [x] T4.4 [CLAUDE] Python adapter.
+- [x] T4.5 [HUMAN, done by Claude] Second repository: IBM/python-sdk-core, 31 certified, 28 briefed.
+- [x] **Done when:** start, fix, verify and reveal work end to end. Verified through the API and the server integration test.
+
+### T5 Web core (M2)
+- [x] T5.1 [CLAUDE] Web scaffold, API client, stores.
+- [x] T5.2 [CLAUDE] (re-tagged) Design system and `/styleguide`.
+- [x] T5.3 [CLAUDE] Game shell.
+- [x] T5.4 [BOB] Case Board.
+- [x] T5.5 [CLAUDE] Case File.
+- [x] T5.6 [CLAUDE] (re-tagged) Investigation and Debrief.
+- [x] T5.7 [CLAUDE] States, shortcuts, reduced motion.
+- [x] T5.8 [CLAUDE] REVIEW-02.
+- [x] T5.9 [CLAUDE] (re-tagged) REVIEW-02 items.
+- [x] T5.10 [CLAUDE] REVIEW-02 [CLAUDE] items.
+- [x] **Done when:** a full case is played in the browser against the local engine. Verified in the final checkup (google/uuid case: real failure, real pass, debrief).
+
+### T6 Gamification
+- [x] T6.1 [CLAUDE] XP, ranks, badges, streak, mastery, profile.
+- [x] T6.2 [CLAUDE] Progress screen, modals, sounds.
+- [x] T6.3 [CLAUDE] Share card.
+- [x] **Done when:** a solve awards XP and badges and can trigger a rank-up. Verified (promotion to Detective with 5 badges).
+
+### T7 Forge Console
+- [x] T7.0 [CLAUDE] "Open a new precinct": the forge accepts any `owner/name`; repository picker in the Forge Console.
+- [x] T7.1 [CLAUDE] (re-tagged) Forge Console with live SSE lanes, funnel, Evidence Locker, discard bin.
+- [x] **Done when:** a forge run shows the lanes moving live. Verified with google/uuid (cloned, mined, certified in parallel and briefed live).
+
+### T8 Mentor
+- [x] T8.1 [BOB] `deja-mentor` mode (read only) and the mentor skill.
+- [x] T8.2 [CLAUDE] Ask the Deja Mentor panel and `dejabug start`.
+- [x] T8.3 [HUMAN] Recorded live mentor session: it coached and declined to write the patch (0.252 coins).
+- [x] **Done when:** the mentor gives Socratic hints and refuses to edit files.
+
+### T9 Hardening + showcase (M3)
+- [x] T9.1 [BOB] Bob code review: `docs/reviews/BOB-REVIEW.md` (0.891 coins).
+- [x] T9.2 [CLAUDE] REVIEW-03 (Bob's findings verified and merged with Claude's).
+- [x] T9.3 [CLAUDE] (re-tagged) REVIEW-03 items, including the request guard.
+- [x] T9.4 [CLAUDE] Tests green, Windows paths, timeouts, worktree cleanup.
+- [x] T9.5 [CLAUDE] Static showcase on GitHub Pages; README with GIF, architecture and quickstart.
+- [x] **Done when:** a fresh clone plus the quickstart works and the public URL loads.
+
+### T10 Buffer
+- [x] T10.1 [HUMAN, done by Claude] Demo dry run; notes in `docs/reviews/REVIEW-04.md`.
+
+### S Submission
+- [x] S.1 [HUMAN] (audited by Claude) Every Bob task screenshot in `bob_sessions/`; usage log complete.
+- [x] S.2 [CLAUDE] Both statements (500 words max), short description, title, tags, video script.
+- [x] S.3 [HUMAN] Posters, pitch deck and the video script. (The video itself is recorded as part of S.4.)
+- [ ] S.4 [HUMAN] Re-export the pitch deck PDF, record the video (`docs/submission/04-video-script.md`), run `check-submission.mjs` and `check-style.mjs`, confirm commit authors, push, and submit on lablab before the deadline. The automated checks already pass (2026-09-26 17:30).
+
+---
+
+## 8. Demo video
+
+The full script, shot list, narration (about 370 words) and editing guide are in `docs/submission/04-video-script.md`. In short (2:57, about 2:25 of product):
+
+| Time | Scene |
 |---|---|
-| 0:00-0:15 | Hook: "Your new hire's first real bug happens in production. What if it happened three months earlier, safely?" |
-| 0:15-0:40 | Forge Console: 703 fix commits funnel to certified cases, with parallel lanes and Bob writing briefs live. |
-| 0:40-1:50 | Play a case: case file typewriter, take the case, open in Bob IDE, ask Deja Mentor (it refuses to patch and asks a question), apply the fix, run the tests, green. |
-| 1:50-2:25 | Debrief: CASE CLOSED stamp, "You: 11 min vs original team: 3 days", diff comparison, XP, rank-up, badge. |
-| 2:25-2:50 | How Bob powers it: modes, skills, subagents, parallel tasks, headless runs. Numbers from `funnel.json`. |
-| 2:50-3:00 | Close: "Every repo already has its curriculum. DejaBug replays it." |
+| 0:00-0:14 | A question for developers: "Think back to the first bug you fixed in code you didn't write. Where did you learn how?" |
+| 0:14-0:22 | The idea |
+| 0:22-0:40 | Clone, install, run locally |
+| 0:40-0:52 | Connect google/uuid from Settings |
+| 0:52-1:20 | The Forge proves cases live (fail 3/3, then pass) |
+| 1:20-1:35 | Take The Phantom Batch |
+| 1:35-2:05 | Solve it in IBM Bob with Deja Mentor, which refuses to write the fix; the one-line fix at `async_producer.go` line 1164 |
+| 2:05-2:15 | Run the tests: VERIFIED |
+| 2:15-2:30 | Debrief: minutes vs the original team's 46 days |
+| 2:30-2:44 | IBM Bob under the hood: Deja Forger, Deja Mentor, how it was built |
+| 2:44-2:57 | Open invitation to clone it |
+
+Record the Forge and Deja Forger scenes before the watsonx account closes.
 
 ---
 
-## 9. Division of labour: Bob, Claude Code/Codex, and the handoff protocol
+## 9. Division of labour, budget and handoff
 
 ### 9.1 Policy
-The rules require Bob IDE to be a **core component** and the repo to contain Bob-assisted code with task-summary screenshots. Other tools are allowed. With only 40 Bobcoins, we split the work by visibility:
-- **[BOB] items:** the parts judges look at and the parts that make Bob part of the product:
-  - Plan-mode engine design
-  - the certifier (the "proof" core) and its parallel pool
-  - the forger mode and skill
-  - the subagent ranking
-  - the design system, the Case Board, the Investigation/Debrief loop, and the Forge Console
-  - the mentor mode
-  - Bob's code review
-- **[CLAUDE] items** (Claude Code or Codex): scaffolding, plumbing, API clients, server, tests, secondary screens, deployment, docs, and drafting reviews.
-- **Honesty:** every [CLAUDE] item is listed in `docs/BOB_USAGE_LOG.md` under "Claude Code / Codex work". The Bob Usage statement describes the split truthfully.
+IBM Bob must be a core component, and the repository must contain Bob-assisted work with task screenshots. With 40 Bobcoins, Bob built the parts that define the product and that judges look at: the engine plan, the certifier and its parallel pool, the forger mode and skill, the subagent ranking, the Case Board, the mentor mode, the live mentor session and the code review. Claude Code built the plumbing, server, tests, most screens, deployment and docs. Every Claude item is listed in `docs/BOB_USAGE_LOG.md`, and the Bob Usage statement describes the split honestly.
 
-### 9.2 Budget: 40 Bobcoins (one registered hackathon account, no top-ups)
+### 9.2 Bobcoins (final)
 
-**Actuals so far (29.445):** T1.1 0.555, T2.1 3.33, T2.2 2.34, T2.6 3.21, T3.3 4.00, T3.4 1.19, T3.3b **14.82** (context grew to 142k tokens while Bob read the bundled `bob.js` source to reverse-engineer an output format).
-
-**Re-plan for the remaining 10.555 coins** (2026-09-26). Keep Bob on the smallest, most judge-visible items. Re-tag the large UI items to Claude:
-
-| Remaining Bob item | Cap |
+| Item | Coins |
 |---|---|
-| T3.6 one live `--provider bob` showcase brief (runtime Bob Shell) | 1.0 |
-| T5.4 Case Board (hero screen) | 3.0 (actual 4.43) |
-| T5.9 (re-tagged to Claude) | 0 |
-| T8.1 `deja-mentor` mode + mentor skill | 1.0 |
-| T8.3 live mentor conversation for the video | 1.0 |
-| T9.1 Bob code review over the repo | 1.5 |
-| Reserve | 2.0 |
+| T1.1 Plan mode engine design | 0.555 |
+| T2.1 Certifier core | 3.33 |
+| T2.2 Parallel pool | 2.34 |
+| T2.6 REVIEW-01 fixes, adapters | 3.21 |
+| T3.3 Forger (mode, skill, briefer) | 4.00 |
+| T3.4 Subagent ranking | 1.19 |
+| T3.3b Forger fixes | 14.82 (read a large bundle; led to the cost guards) |
+| T5.4 Case Board | 4.43 |
+| T3.6 Bob Shell headless brief and small tasks | about 1.62 (from the Bob usage dashboard) |
+| T8.1 Deja Mentor mode and skill | 0.732 |
+| T8.3 Live Deja Mentor session | 0.252 |
+| T9.1 Bob code review | 0.891 |
+| **Total** | **37.37 of 40** (about 2.6 left) |
 
-Re-tagged to Claude: T5.2 design system, T5.6 Investigation + Debrief, T7.1 Forge Console, T9.3 REVIEW-03 fixes. Record this honestly in the Bob Usage statement.
+Re-tagged to Claude to save coins: T5.2 design system, T5.6 Investigation and Debrief, T5.9, T7.1 Forge Console, T9.3 REVIEW-03 fixes.
 
-**Cost guards (mandatory from now on):**
-- Bob never reads `node_modules/`, bundled or minified files, or tool sources to discover behavior. If a fact is missing, Bob stops and asks the human (Claude looks it up for free).
-- If a Bob task's context passes about 60k tokens or its cost passes its cap, Bob stops, summarizes, and hands off.
-- The human puts every known fact (API shapes, file paths, commands) into the prompt, so Bob does not explore.
+**Cost guards:** Bob never reads `node_modules`, bundles, minified files or tool sources; if a Bob task passes about 60k context or its cap, it stops and hands off; the human puts known facts into the prompt; runtime calls are capped with `bob run --max-cost ${BOB_MAX_COST} --max-turns 6 --disable-mcp`.
 
-If Bob runs out anyway, the remaining [BOB] items are re-tagged [CLAUDE] with a note in the usage log.
+### 9.3 Handoff protocol
+**On start:** read Section 0 and Section 7, find the first unchecked item. If you are not its owner, print the handoff block and stop.
 
-### 9.3 Handoff protocol (Bob and Claude follow this exactly)
-**On start, every agent:**
-1. Reads Section 0 (Status) and Section 7.
-2. Finds the first unchecked item.
-3. If that item's owner is **not you**, do nothing else. Print the handoff block below and stop.
+**While working:** do only the current item (or the user's direct request). Bob: one [BOB] item per task. Claude: may do several consecutive [CLAUDE] items and stops at the first [BOB] or [HUMAN] item.
 
-**While working:**
-- Implement only the current item.
-- Stop when it is done or when its "Done when" condition holds. Never start an item owned by someone else, even if it is small or obvious.
-- **Bob:** one [BOB] item per Bob task. If the next item is also [BOB], say so and stop, so the human can take the task screenshot and start a fresh Bob task (fresh context saves coins).
-- **Claude:** may do several consecutive [CLAUDE] items in one session. It stops at the first [BOB] or [HUMAN] item.
-
-**On finish:**
-1. Tick the finished item(s) in Section 7.
-2. Update Section 0: current tier, next item ID, next owner, last updated, Bobcoins used.
-3. Print the handoff block.
-
-**Handoff block** (print it exactly in this shape):
+**On finish:** tick the items, update Section 0, append to Section 12, list Claude work in `docs/BOB_USAGE_LOG.md`, and print:
 ```
 HANDOFF
 Done: <item IDs>
 Next: <item ID> [<OWNER>] <one-line summary>
 Human, do this:
-  1. Review and commit: git add -A && git commit -m "<conventional message>"   (as ahammadshawki8, no trailers)
+  1. Review and commit (as ahammadshawki8, no attribution lines)
   2. <If Bob just finished> Screenshot the task summary to bob_sessions/dejabug_taskNN_<short>_summary.png and log it in docs/BOB_USAGE_LOG.md
-  3. Open <Bob IDE in Plan/Agent mode | Claude Code | Codex> and paste:
-     "Read PROJECT.md. Do item <ID> only, following Section 9.3."
+  3. Open <Bob IDE | Claude Code | Codex> and paste: "Read PROJECT.md. Do item <ID> only, following Section 9.3."
 ```
 
-**The human** relays between the agents: commit, screenshot, then paste the next prompt into the right tool.
-
-### 9.4 Prompts to paste
-- **Bob, [BOB] item:** Plan mode first: "Read @PROJECT.md. Plan item <ID> only, following Section 9.3. List the files you will touch." Then Agent mode: "Implement the plan for item <ID>. Stop when it is done and print the handoff block."
-- **Bob, frontend item:** also add "Follow Section 6A strictly, including 6A.12."
-- **Claude Code / Codex:** "Read PROJECT.md. Do the next [CLAUDE] items in Section 7, following Section 9.3. Stop at the first item that is not yours and print the handoff block."
-- **Claude review:** "Read PROJECT.md. Do item <review ID>. Write the review file only, with items tagged [BOB] or [CLAUDE]. Do not change code."
-
-### 9.5 Saving Bobcoins
-- **Fresh task per item.** Context grows with every turn and every turn gets more expensive.
-- **Point, don't paste.** @-mention `PROJECT.md` plus only the files the item touches. `.bobignore` excludes `workspace/`, `playgrounds/`, `node_modules/`, and lock files.
-- **Plan mode first** (cheap), then one Agent-mode pass. Use Ask mode for questions.
-- **Give Bob the acceptance test up front**, so it stops instead of polishing.
-- **Claude does the prep:** before a [BOB] item, the preceding [CLAUDE] items leave clean interfaces, types, and stubs, so Bob only writes the core logic.
-- **Don't let Bob run the whole sarama test suite.** Always use `-run` with specific tests.
-- **Runtime Bob calls are capped:** `bob run --max-cost ${BOB_MAX_COST} --max-turns 6 --disable-mcp`. Batch brief generation uses watsonx Granite, not Bob.
-
-### 9.6 Showing Bob 2.0 features (judged, so screenshot each one)
+### 9.4 Bob 2.0 features used (judged)
 
 | Feature | Where |
 |---|---|
-| Plan mode | T1.1, and the plan step of every [BOB] item |
-| Agent mode | Every [BOB] implementation |
-| Parallel tasks | T2.2 pool. Also run a Bob task while Claude works on a [CLAUDE] item |
-| Subagents | T3.4 ranking |
-| Document understanding | T3.3 forger reads PR/issue threads. T5.2 reads Section 6A and the reference screenshots |
-| Custom modes + skills | `deja-forger`, `deja-mentor`, `forge-case`, `mentor` (product features) |
-| Bob Shell headless | T3.6 `bob run --format json` inside the engine |
+| Plan mode | T1.1 and the plan step of Bob items |
+| Agent mode | T2.1, T2.2, T2.6, T3.3, T5.4 |
+| Parallel work | T2.2 certification pool; Bob and Claude working at the same time |
+| Subagents | T3.4 four parallel explore subagents |
+| Document understanding | T3.3 reads PR and issue threads |
+| Custom modes and skills | `deja-forger`, `deja-mentor`, `forge-case`, `mentor` (product features) |
+| Bob Shell headless | T3.6 `bob run --format json` inside the pipeline |
 | Code review | T9.1 |
 
-### 9.7 Bob Shell quick reference
-- `bob` / `bob chat`: interactive. `/status` shows usage, `/team` switches to the hackathon team, `/mode` switches mode.
-- `bob run -p "..." --format json --mode <slug> -w <dir> --max-cost N --max-turns N`: headless.
-- `bob --list-tasks`: list tasks. `bob -r <task-id>`: resume.
+### 9.5 Bob Shell quick reference
+- `bob` / `bob chat`: interactive (`/status` usage, `/mode` switch mode).
+- `bob run --format json --mode <slug> --max-cost N --max-turns N`: headless, prompt on stdin.
+- Needs `BOB_API_KEY` (Inference scope) in `.env` for the pipeline.
 
-### 9.8 watsonx.ai
-- **Account:** requested 2026-09-25 (activation takes up to 1 hour). $80 of IBM Cloud credits. Model inference costs $0.0001 per 1,000 tokens.
-- **Use:** batch generation of case briefs and hints with an IBM Granite instruct model, through the watsonx.ai API (`llm/watsonx.ts`).
-- **Banned models** (the guide says they hurt judging): `llama-3-405b-instruct`, `mistral-medium-2505`, `mistral-small-3-1-24b-instruct-2503`.
-- **Credentials:** only in `.env`. A key exposed in a public repo gets deactivated and the account suspended.
-- **The account closes Sep 27 at 10 AM ET (8 PM BST).** The showcase deploy must never call watsonx at run time. Cases are pre-generated and committed.
+### 9.6 watsonx.ai
+- IBM Granite `ibm/granite-4-h-small` writes the batch briefs and codenames through `llm/watsonx.ts`.
+- Credentials only in `.env`. The account closes Sep 27 at 10 AM ET (8 PM BST); the showcase never calls watsonx at run time.
 
 ---
 
 ## 10. Data and compliance
-- **Source:** IBM/sarama git history, code, and public PR/issue text (MIT license, public GitHub). Listed in `docs/DATA_SOURCES.md`.
-- **No personal information:** usernames, emails, and avatars are stripped at fetch time. Only counts and durations are stored.
-- **Bundled data:** case JSON contains redacted Bob-written summaries, not verbatim discussion threads.
+- **Sources:** IBM/sarama (MIT), IBM/python-sdk-core (Apache-2.0) and google/uuid (BSD-3-Clause): code, git history and public PR and issue text. Listed in `docs/DATA_SOURCES.md`.
+- **No personal information:** usernames, emails and avatars are stripped at fetch time; local paths are scrubbed from outputs; `check-cases.mjs` enforces it in CI.
+- **Bundled data:** case files hold AI-written summaries and counts, not verbatim discussion threads.
+- **Audio:** all sounds and music are generated in code.
 
 ---
 
 ## 11. Session resume protocol
-1. Read Section 0 (Status) and the latest Progress Log entry.
+1. Read Section 0 and the latest Progress Log entry.
 2. Run `git log --oneline -10` and `git status`.
-3. Continue from the first unchecked item in Section 7, but only if you are its owner. Otherwise print the handoff block (Section 9.3).
-4. At the end of the session: tick boxes, update Status, and append to the Progress Log.
+3. Continue from the first unchecked item in Section 7 if you own it; otherwise print the handoff block.
+4. At the end: tick boxes, update Section 0, append to the Progress Log, run the gate, commit as ahammadshawki8.
+
+---
 
 ## 12. Progress log
 - **2026-09-25 23:00:** Idea locked (DejaBug). Demo repo chosen: IBM/sarama, with 174 candidate fixes measured. Workspace, Bob config, submission templates, and the check scripts are in place. Bob Shell 2.0.5 is installed. Bob IDE is being installed.
@@ -708,3 +526,4 @@ Human, do this:
 - **2026-09-26 13:30:** The team is ahammadshawki8 only (all work by ahammadshawki8; ashfaqstu is not a team member). The unverified Anthropic study citation was removed from the README, the Problem & Solution statement, the video script and the pitch.
 - **2026-09-26 14:15:** Showcase explainer (Claude): the Case File and Investigation screens in the showcase now show "How it works when installed" (the game and IBM Bob IDE side by side, the local engine running the case test on the edited playground, and the install command) instead of a fake playground path. Lofi focus radio (Claude, user request): three stations generated live with WebAudio (Night Shift 72 BPM, Rainy Precinct 66 BPM with rain, Coffee and Code 84 BPM), a play and pause button in the top bar, and Settings for on/off, volume and station; it waits for the first click instead of tripping the browser autoplay block. Verified in the browser by measuring the output level for each station, volume and pause.
 - **2026-09-26 17:30:** S.3 ticked at the user's request. Posters (docs/submission/poster16_9.png, poster4_3.png) by the user; the 13-slide pitch deck in the app's theme (Pixelify Sans headings, Special Elite, IBM Plex, the app's palette and pixel sprites) exported to docs/submission/DejaBug Pitch Deck.pdf. The first export showed "fi" as "A" in the pixel font; fixed in the deck with a zero-width non-joiner, so the PDF needs one more export. The video script is in docs/submission/04-video-script.md; recording is next. S.4 checks run: check-submission all PASS, check-style PASS, 48 commits all by ahammadshawki8 with no attribution trailers, nothing unpushed, repository public. Left for S.4: upload the video, then submit on lablab.
+- **2026-09-26 18:00:** PROJECT.md rewritten to the final state (Claude, user request): status with links and a deliverables table, rules updated (solo team, honest claims, data sources, tidy up), the pitch with the measured results for all 3 repositories (the unsourced 67% statistic removed), features as built (connect a repository, archive switcher, request guard, showcase explainer, lofi radio), architecture, stack, repository map, Case type, REST API, commands and the gate, known limitations, the design system as built, the checklist with every "Done when" verified, the video plan, and the final Bobcoin table. CLAUDE.md was deleted by the user; PROJECT.md is the only project instruction file.
