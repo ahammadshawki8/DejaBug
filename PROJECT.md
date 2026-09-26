@@ -9,9 +9,9 @@
 | Field | Value |
 |---|---|
 | Current tier | S Submission |
-| Next item | S.3 |
+| Next item | S.4 |
 | Next owner | HUMAN |
-| Last updated | 2026-09-26 10:30 BST |
+| Last updated | 2026-09-26 17:30 BST |
 | Bobcoins used | 37.37 / 40 (about 2.6 left, reserve) |
 | Blockers | none |
 
@@ -528,7 +528,7 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 ### S Submission (5 h), Sun 10:00 AM to 3:00 PM (the hard deadline is 8:00 PM BST)
 - [x] S.1 [HUMAN] (audited by Claude) Collect every Bob task screenshot into `bob_sessions/`. Complete `docs/BOB_USAGE_LOG.md`.
 - [x] S.2 [CLAUDE] Draft the Problem & Solution statement and the Bob Usage statement (500 words or less each) from the repo and the usage log.
-- [ ] S.3 [HUMAN] Slides, cover image, and the demo video (3:00 or less, at least 90 s of the product working).
+- [x] S.3 [HUMAN] (slides and posters done; the video is being recorded from docs/submission/04-video-script.md) Slides, cover image, and the demo video (3:00 or less, at least 90 s of the product working).
 - [ ] S.4 [HUMAN] Run `check-submission.mjs` and `check-style.mjs`, verify commit authors, push, and submit on lablab **before 3:00 PM**.
 
 ---
@@ -707,3 +707,4 @@ Human, do this:
 - **2026-09-26 13:00:** Final checkup (Claude). Static gate green (lint, typecheck, 106 tests with Go and Python, build, prettier, style, cases, submission). Real end-to-end play through the API on a Go case (sarama 67d977b: hang reproduced, fix applied, pass, reveal) and a Python case (python-sdk-core 091ecde). Live web app against the engine: the request guard lets the Vite proxy through. New-repo proof: Settings > Connect a repository with google/uuid (never seen) cloned, mined 29 fix-like commits, certified 1 of 8 in parallel (5 correct build rejections, 2 no-fail) and Granite briefed "Monotonic UUID" in about 90 s; the case was then played in the UI from a real failure to a real pass and the debrief (2.1 days and 17 comments for the original team). Kept as the third repository (BSD-3-Clause, listed in DATA_SOURCES). Fixed: the Forge funnel showed the selected repository's numbers during a run for another repository, and now switches to the forged repository when the run ends (with a reducer test). Test sessions, test playgrounds and the test profile were removed afterwards.
 - **2026-09-26 13:30:** The team is ahammadshawki8 only (all work by ahammadshawki8; ashfaqstu is not a team member). The unverified Anthropic study citation was removed from the README, the Problem & Solution statement, the video script and the pitch.
 - **2026-09-26 14:15:** Showcase explainer (Claude): the Case File and Investigation screens in the showcase now show "How it works when installed" (the game and IBM Bob IDE side by side, the local engine running the case test on the edited playground, and the install command) instead of a fake playground path. Lofi focus radio (Claude, user request): three stations generated live with WebAudio (Night Shift 72 BPM, Rainy Precinct 66 BPM with rain, Coffee and Code 84 BPM), a play and pause button in the top bar, and Settings for on/off, volume and station; it waits for the first click instead of tripping the browser autoplay block. Verified in the browser by measuring the output level for each station, volume and pause.
+- **2026-09-26 17:30:** S.3 ticked at the user's request. Posters (docs/submission/poster16_9.png, poster4_3.png) by the user; the 13-slide pitch deck in the app's theme (Pixelify Sans headings, Special Elite, IBM Plex, the app's palette and pixel sprites) exported to docs/submission/DejaBug Pitch Deck.pdf. The first export showed "fi" as "A" in the pixel font; fixed in the deck with a zero-width non-joiner, so the PDF needs one more export. The video script is in docs/submission/04-video-script.md; recording is next. S.4 checks run: check-submission all PASS, check-style PASS, 48 commits all by ahammadshawki8 with no attribution trailers, nothing unpushed, repository public. Left for S.4: upload the video, then submit on lablab.
