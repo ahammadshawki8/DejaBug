@@ -25,6 +25,6 @@ On IBM/sarama, DejaBug scanned 2,889 commits, found 703 fix-like commits and 101
 
 ## Why it matters
 
-DejaBug needs no content authoring: point it at a repository and the history becomes the course. Because each case is proven by the project's own tests, a team can trust the curriculum it generates, and because the mentor cannot write code, the skill stays with the engineer.
+The market is large: SlashData counts 36.5 million professional developers (2025), and the US alone expects about 106,100 developer and tester openings every year (BLS, 2025-35), each a new person to onboard. DejaBug needs no content authoring: point it at a repository and the history becomes the course. Because each case is proven by the project's own tests, a team can trust the curriculum it generates, and because the mentor cannot write code, the skill stays with the engineer.
 
 Try it: https://ahammadshawki8.github.io/DejaBug/
