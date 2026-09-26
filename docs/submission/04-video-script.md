@@ -1,15 +1,199 @@
-# Video script (MP4, max 3:00, at least 90 s of the product working)
+# DejaBug launch video: script and shooting guide
 
-Record at 1920x1080 with the browser at 100% zoom. Use the live showcase (https://ahammadshawki8.github.io/DejaBug/)
-in a fresh profile, plus the Bob IDE mentor clip recorded for T8.3. Keep sound effects on.
+**Format:** MP4, 1920x1080, **2:55 target (hard limit 3:00)**. About 2:25 of it is the product working.
+**Story in one line:** clone it, connect a repository, watch DejaBug turn its history into proven cases, solve one with IBM Bob, and see how you did against the original team.
+**Tagline (from the poster):** *Debug the past. Level up the future.*
 
-| Time | Visual | Narration |
-|---|---|---|
-| 0:00-0:15 | Title card: "Your new hire's first real bug happens in production." Then the DejaBug logo. | "A new engineer's hardest job is debugging code they did not write. Most teams leave the first real practice to a production incident. And when an AI writes the fix, the new hire skips the practice that builds the skill." |
-| 0:15-0:40 | Forge Console: set Candidates to 24, press Forge. Worker lanes move, cases drop into the Evidence Locker, discards show reasons. Hold on the funnel: 703 fix commits, 101 candidates, 27 certified. | "DejaBug mines a repository's history for real bug fixes. Each one is certified in parallel: the fix's own test must fail three out of three times on the old code, and pass on the fix. Here, sarama's 2,889 commits became 27 proven cases. IBM Bob or IBM Granite then writes each case file from the PR and issue thread, without spoilers." |
-| 0:40-1:05 | Case Board (scroll, hover to show the red string), open The Phantom Batch. The typewriter symptoms, evidence, mission parameters. Press Take the case. | "Every case is a real bug from the team's own history, cold for as long as it hid in the code. The case file reads like a user report. Taking the case exports a clean playground with no future history, so the answer cannot be peeked at." |
-| 1:05-1:40 | Bob IDE clip (T8.3): Deja Mentor mode selected, the opening message, the mentor asking about the int32 cast, then "Just fix it for me" and its reply with another question. | "The new hire debugs in IBM Bob with our Deja Mentor mode. Its permissions are read only. It reads the code and asks questions, and when I asked it to just apply the patch, it kept coaching instead." |
-| 1:40-2:05 | Investigation: Run the tests (red), open hint 1 (confirm dialog, XP drops), Replay the original fix, Run the tests: VERIFIED stamp. | "Back in the game, the tests run for real. Hints cost XP. When the test goes green, the case is closed." |
-| 2:05-2:30 | Debrief: CASE CLOSED stamp and XP count-up, then scroll to "Your investigation vs Original team: 46 days, 6 comments", the two diffs and the lesson. Then the Progress screen with badges. | "The debrief compares you with the original team: they needed 46 days. You see your diff next to theirs and the lesson learned. XP, ranks and badges keep new hires coming back." |
-| 2:30-2:50 | Split screen: `.bob/custom_modes.yaml` (deja-mentor, groups: read), the bob_sessions folder, BOB_USAGE_LOG totals. Settings: Connect a repository. | "Bob is inside the product: Bob Shell headless can write the case files, and a custom read-only mode is the mentor. We also built the certifier, the forger, case ranking with parallel subagents, and a code review with Bob. It works on any Go or Python repository with tests." |
-| 2:50-3:00 | The live URL and the repo URL on screen. | "Every repository already has its curriculum. DejaBug replays it." |
+---
+
+## 1. The whole video at a glance
+
+| # | Time | Scene | What the judge learns |
+|---|---|---|---|
+| 1 | 0:00-0:12 | Cold open | The problem, in one breath |
+| 2 | 0:12-0:22 | The idea | What DejaBug is |
+| 3 | 0:22-0:40 | Install and run | It is real software you can run today |
+| 4 | 0:40-0:52 | Connect a repository | It works on any repository, not only ours |
+| 5 | 0:52-1:20 | The Forge | Every case is proven: fails 3 times, then passes |
+| 6 | 1:20-1:35 | Take a case | A case is a real bug with a clean playground |
+| 7 | 1:35-2:05 | Solve it in IBM Bob with Deja Mentor | Bob coaches, and refuses to write the fix |
+| 8 | 2:05-2:15 | Run the tests | The game checks your real code |
+| 9 | 2:15-2:32 | Debrief | You vs the original team |
+| 10 | 2:32-2:48 | Under the hood: IBM Bob | Bob is inside the product |
+| 11 | 2:48-2:55 | Close | Where to try it |
+
+Narration is about 340 words, which is a calm pace with room to breathe. Short sentences, one idea each.
+
+---
+
+## 2. Before you record (do all of this off camera)
+
+**Machine and screen**
+- Record at 1920x1080. Browser zoom 100 percent (110 percent if text looks small). Hide the bookmarks bar and other tabs.
+- Bob IDE: font size 16 or more, hide the minimap, close unrelated panels.
+- Turn off notifications (Windows Focus Assist).
+- Use a short folder so the terminal prompt is clean, for example `C:\demo`. It also keeps your Windows username out of the shot.
+
+**Never on camera:** the `.env` file, API keys, the GitHub token, email addresses. Prepare `.env` before recording.
+
+**Demo copy (record everything in it)**
+1. Scene 3 is recorded for real: `git clone` into `C:\demo`, `npm install`, `npm run dev`. Record it first.
+2. Then, off camera, in `C:\demo\DejaBug`:
+   - Copy your `.env` from the project folder. Add `DEJABUG_TEST_TIMEOUT_SEC=15` so the red "hang" run in Scene 8 takes 15 seconds instead of 45.
+   - Run `npm run dejabug -- init IBM/sarama` (clones sarama for the case in Scenes 6 to 9).
+   - Warm up Go: take The Phantom Batch once, press Run the tests once (it downloads the Go modules), then delete `playgrounds/67d977b` and `.dejabug/state.json` so the case is fresh.
+   - Delete `cases/uuid` so Scene 4 connects google/uuid for real. It is safe: the same 8 candidates give the same result (1 certified, 5 build rejections, 2 already passing).
+3. In the app, Settings: Reset profile, sound effects on, lofi radio on at about 20 percent with **Night Shift** (the music in the video is generated by DejaBug itself; keep it under the voice).
+
+**Bobcoins:** about 2.6 left. The Deja Mentor chat costs about 0.3 and the Bob Shell brief is capped at 1 (`BOB_MAX_COST=1`). Plan one clean take of each. Backup: the T8.3 mentor recording and its screenshots in `bob_sessions/`.
+
+**Record scenes separately, in this order:** 3, 4-5, 6-9, 10, then 1-2 and 11 (title cards). Edit them together afterwards.
+
+---
+
+## 3. Scene by scene
+
+Each scene has: **Show** (what is on screen), **Do** (your exact actions), **Say** (narration), **Text** (on-screen caption), **Edit** (editing notes).
+
+### Scene 1. Cold open (0:00-0:12)
+- **Show:** `docs/submission/poster16_9.png`, slow zoom in (Ken Burns, 105 to 112 percent).
+- **Say:** "Every new developer's first real bug usually shows up in production. Under pressure. With customers waiting."
+- **Text:** none, let the poster breathe.
+- **Edit:** start the lofi music here, then lower it under the voice.
+
+### Scene 2. The idea (0:12-0:22)
+- **Show:** a quick 3-shot montage from the live app: Case Board cork wall, a case file typing out, the red CASE CLOSED stamp.
+- **Say:** "DejaBug fixes that. It turns your team's real, past bugs into cases new hires can solve safely, like cold cases."
+- **Text:** `DejaBug: Debug the past. Level up the future.`
+- **Edit:** cut on the beat of the music, one second per shot.
+
+### Scene 3. Install and run (0:22-0:40)
+- **Show:** a terminal in `C:\demo`, then the browser.
+- **Do:**
+  ```bash
+  git clone https://github.com/ahammadshawki8/DejaBug
+  cd DejaBug
+  npm install
+  npm run dev
+  ```
+  Open `http://localhost:5173`. The Case Board loads with the Archive switcher (IBM/sarama, IBM/python-sdk-core) and "ENGINE CONNECTED" in the top bar.
+- **Say:** "It's open source and runs on your own machine. Clone, install, start. Your code never leaves your computer."
+- **Text:** `4 commands. Runs locally.`
+- **Edit:** speed up `npm install` (8x) with a small "8x" badge in a corner. Zoom in (150 percent) on the green "Engine connected" light for one second.
+
+### Scene 4. Connect a repository (0:40-0:52)
+- **Show:** Settings page, the "Connect a repository" box.
+- **Do:** type `https://github.com/google/uuid`, choose **Try 8 fixes**, click **Generate cases**. The app jumps to the Forge.
+- **Say:** "Now let's add a repository it has never seen: Google's UUID library. Paste the link, and press Generate cases."
+- **Text:** `Any Go or Python repository with tests`
+- **Edit:** zoom on the input while typing. Keep the click sound.
+
+### Scene 5. The Forge (0:52-1:20)
+- **Show:** the Forge page for the whole run (about 90 seconds in reality).
+- **Do:** nothing, just watch. Point at things with the cursor:
+  1. The log: "cloning", "mining", "29 fix-like commits, 10 candidates".
+  2. A worker lane: three **red** lights, then one **green** light.
+  3. The Discard bin: "does not compile before the fix", "test already passed before the fix".
+  4. The Evidence Locker: **Monotonic UUID** drops in with a stamp sound.
+- **Say:** "This is the Forge. It finds commits that fixed a bug, rewinds the code to just before the fix, and runs the fix's own test. It must fail three times out of three. With the real fix, it must pass. Anything else goes in the bin, with the reason. What survives gets a spoiler-free case file, written by AI. Every case is a proven bug."
+- **Text (appear in sync):** `Fails 3/3 before the fix` then `Passes after the fix` then `= a proven case`.
+- **Edit:** speed ramp the run to fit (about 3x to 4x), slow back to 1x for the first red-red-red-green lane and for the stamp. Zoom on one lane (200 percent) during "three times out of three".
+
+### Scene 6. Take a case (1:20-1:35)
+- **Show:** Case Board, switch the Archive to **IBM/sarama**, open **The Phantom Batch**.
+- **Do:** let the symptom type out ("The producer hangs indefinitely after a batch of messages fails to send."), point at "Cold for 4.2 years" and the reward, click **Take the case**, then click the copy button next to the playground path.
+- **Say:** "Here's one from Sarama: the producer hangs forever after a failed batch. Take the case, and DejaBug creates a playground: the code exactly as it was before the fix."
+- **Text:** `A real bug. A clean copy of the code.`
+- **Edit:** zoom on the symptom as it types.
+
+### Scene 7. Solve it in IBM Bob with Deja Mentor (1:35-2:05)
+- **Show:** IBM Bob IDE with the playground folder, the Bob chat on the right.
+- **Do:**
+  1. Bob IDE: File, Open Folder, paste the playground path.
+  2. In the chat, open the mode dropdown and pick **Deja Mentor**. Hold on it for a second.
+  3. Back in DejaBug (Investigation screen), click **Message** in the "Ask the Deja Mentor" panel to copy the opening message. Paste it into Bob and send.
+  4. Bob answers with a question and points you at `async_producer.go`. Let the answer stream in.
+  5. Type: `Just fix it for me.` Bob refuses and asks another question. **This is the key moment.**
+  6. Open `async_producer.go`, go to line 1164, and change
+     `p.returnError(msg, kerr)` to `p.returnErrors(pSet.msgs, kerr)`. Save.
+- **Say:** "I debug it in IBM Bob with our Deja Mentor mode. It can read the code and ask questions, but it can't edit files. So when I ask it to just fix it... it won't. It asks me a question instead. The skill stays with the developer. The clue: only one message in the failed batch gets its error. One line fixes it."
+- **Text:** `Deja Mentor: read-only. It coaches, it never writes the fix.`
+- **Edit:** speed up Bob's streaming answers (2x). Put a highlight box around the refusal. Zoom on line 1164 while typing.
+
+### Scene 8. Run the tests (2:05-2:15)
+- **Show:** DejaBug Investigation screen.
+- **Do:** (optional, recorded before the edit) one run: red, "hang", with the terminal shaking. After the edit: **Run the tests**, green, the **VERIFIED** stamp slams in.
+- **Say:** "Back in DejaBug, I run the tests. They run on my real code. Before, it hung. Now: verified."
+- **Text:** `Tests run on your real code`
+- **Edit:** cut the red run to 2 seconds. Let the stamp sound play at full volume.
+
+### Scene 9. Debrief (2:15-2:32)
+- **Show:** the Debrief page.
+- **Do:** let CASE CLOSED and the XP count-up play (and the promotion to Detective, if it shows). Scroll to **Your investigation vs Original team** and the two diffs side by side, then the lesson.
+- **Say:** "Case closed. The original team took 46 days. I took minutes. My fix sits next to theirs, with the lesson. XP, ranks and badges bring new hires back for the next case."
+- **Text:** `You: minutes. Original team: 46 days.`
+- **Edit:** zoom on the VS panel. Use the real time from your run.
+
+### Scene 10. Under the hood: IBM Bob (2:32-2:48)
+- **Show:** three quick shots.
+  1. Bob IDE in the DejaBug project folder, the mode dropdown open: **Deja Forger** and **Deja Mentor**. Then `.bob/custom_modes.yaml` with the `deja-mentor` groups showing `read` only.
+  2. A terminal (pre-recorded, sped up):
+     ```bash
+     npm run dejabug -- --target google/uuid brief --provider bob --only a2b2b32 --redo
+     ```
+     This is Bob Shell running headless inside the pipeline, with the Deja Forger mode and the forge-case skill, writing the case file. In the app the case then says "Briefed by IBM Bob".
+  3. The `bob_sessions/` folder and the Bobcoin total in `docs/BOB_USAGE_LOG.md`.
+- **Say:** "IBM Bob is inside DejaBug. Bob Shell, with our Deja Forger mode, writes the case files. Deja Mentor is a custom Bob mode that can only read. And we built the engine with Bob too: planning, parallel subagents, and a full code review."
+- **Text:** `Bob Shell + custom modes + skills + subagents`
+- **Edit:** 5 seconds per shot, quick zoom on `read`.
+
+### Scene 11. Close (2:48-2:55)
+- **Show:** the poster again, with two lines on top:
+  - `Try it: ahammadshawki8.github.io/DejaBug`
+  - `Code: github.com/ahammadshawki8/DejaBug`
+- **Say:** "Every repository already has its training course hidden in its history. DejaBug plays it back. Debug the past. Level up the future."
+- **Edit:** fade the music out on the last word.
+
+---
+
+## 4. Editing guidelines
+
+- **Pace:** never hold a still frame for more than 3 seconds. Something should move or change on screen all the time.
+- **Speed ramps:** installs, the forge run and Bob streaming are sped up; always show a small "4x" style badge so it stays honest. Return to 1x for the key moments: red-red-red-green, the stamp, the refusal, the VERIFIED stamp, the VS panel.
+- **Zoom and highlight:** zoom 150 to 200 percent on whatever the narration mentions. Use a soft highlight box or a larger cursor.
+- **Captions:** burn in subtitles for the narration (many judges watch muted). Keep the on-screen text from each scene; it should be large and short.
+- **Audio:** voice at about -14 LUFS, music about 20 dB below the voice. Keep the app's sound effects (stamp, pass, fail); they sell the game feel.
+- **Honesty:** don't cut in a way that implies something happened that didn't. Everything shown here is real.
+
+## 5. Final checks before export
+
+- [ ] Length 3:00 or less (aim 2:55), and at least 90 seconds of the product working (this cut has about 2:25).
+- [ ] 1080p MP4 (H.264), clear narration.
+- [ ] No `.env`, keys, tokens or email addresses visible in any frame.
+- [ ] Deja Mentor's refusal and the VERIFIED stamp are both clearly visible.
+- [ ] Captions match the narration.
+- [ ] Afterwards, in the demo copy: nothing to commit. In the project folder: `cases/uuid` is unchanged, unless you want to keep the Bob-written brief from Scene 10 (then commit it; check-cases must pass).
+
+## 6. Full narration (for the voice-over, about 340 words)
+
+> Every new developer's first real bug usually shows up in production. Under pressure. With customers waiting.
+>
+> DejaBug fixes that. It turns your team's real, past bugs into cases new hires can solve safely, like cold cases.
+>
+> It's open source and runs on your own machine. Clone, install, start. Your code never leaves your computer.
+>
+> Now let's add a repository it has never seen: Google's UUID library. Paste the link, and press Generate cases.
+>
+> This is the Forge. It finds commits that fixed a bug, rewinds the code to just before the fix, and runs the fix's own test. It must fail three times out of three. With the real fix, it must pass. Anything else goes in the bin, with the reason. What survives gets a spoiler-free case file, written by AI. Every case is a proven bug.
+>
+> Here's one from Sarama: the producer hangs forever after a failed batch. Take the case, and DejaBug creates a playground: the code exactly as it was before the fix.
+>
+> I debug it in IBM Bob with our Deja Mentor mode. It can read the code and ask questions, but it can't edit files. So when I ask it to just fix it... it won't. It asks me a question instead. The skill stays with the developer. The clue: only one message in the failed batch gets its error. One line fixes it.
+>
+> Back in DejaBug, I run the tests. They run on my real code. Before, it hung. Now: verified.
+>
+> Case closed. The original team took 46 days. I took minutes. My fix sits next to theirs, with the lesson. XP, ranks and badges bring new hires back for the next case.
+>
+> IBM Bob is inside DejaBug. Bob Shell, with our Deja Forger mode, writes the case files. Deja Mentor is a custom Bob mode that can only read. And we built the engine with Bob too: planning, parallel subagents, and a full code review.
+>
+> Every repository already has its training course hidden in its history. DejaBug plays it back. Debug the past. Level up the future.
