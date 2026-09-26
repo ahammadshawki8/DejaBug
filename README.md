@@ -13,7 +13,7 @@ Built with IBM Bob for the IBM Bob 2.0 Hackathon (lablab.ai, Sep 25-27 2026). MI
 ## The problem
 
 - New engineers learn a codebase slowly, and the skill that matters most on a real team, debugging unfamiliar code, is the one they practice least.
-- AI assistants can make this worse. In Anthropic's 2026 randomized study of developers learning a new library, the group that learned with AI scored lower on mastery, and the largest gap was in debugging. Developers who used AI to understand rather than to produce kept their learning.
+- AI assistants can make this worse: when the AI writes the fix, the new hire skips the practice that builds the skill.
 - Every mature repository already holds an unused curriculum: hundreds of real bugs, each with a known fix and a test that proves it.
 
 ## What it does

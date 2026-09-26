@@ -3,7 +3,7 @@
 
 ## The problem
 
-A new engineer's hardest early job is debugging code they did not write. Teams teach it slowly, and the first real practice is often an incident in production. AI assistants add a new risk. In Anthropic's 2026 randomized study of developers learning a new library, the group that learned with AI scored lower on mastery, and the largest gap was in debugging. Developers who used AI to understand the code rather than to produce it kept their learning.
+A new engineer's hardest early job is debugging code they did not write. Teams teach it slowly, and the first real practice is often an incident in production. AI assistants add a new risk: when the AI writes the fix, the new hire skips the practice that builds the skill.
 
 Every mature repository already holds the missing curriculum: hundreds of real bugs, each with a known fix and a test that proves it. Turning a commit into a safe, playable exercise by hand takes hours, so it goes unused.
 
