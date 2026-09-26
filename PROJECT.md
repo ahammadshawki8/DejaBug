@@ -17,7 +17,7 @@
 | Next owner | HUMAN |
 | Last updated | 2026-09-26 18:00 BST |
 | Bobcoins used | 37.37 / 40 (about 2.6 left, reserved for the video: a live Deja Mentor chat and a Bob Shell brief) |
-| Blockers | The pitch deck PDF must be exported once more (the ligature fix, see the Progress Log). |
+| Blockers | none |
 
 **Links**
 - Repository: https://github.com/ahammadshawki8/DejaBug (public, MIT)
@@ -36,7 +36,7 @@
 | Short description, title, tags | `docs/submission/03-short-description.md` | Done |
 | Video script and shooting guide | `docs/submission/04-video-script.md` | Done |
 | Posters (cover images) | `docs/submission/poster16_9.png`, `poster4_3.png` | Done |
-| Pitch deck | `docs/submission/DejaBug Pitch Deck.pdf` | Re-export pending |
+| Pitch deck (15 slides) | `docs/submission/DejaBug Pitch Deck.pdf` | Done |
 | Bob task screenshots | `bob_sessions/` | Done (all 12 tasks) |
 | Demo video (MP4, 3:00 max) | uploaded with the submission | To record |
 
@@ -381,27 +381,28 @@ Every item has one owner: **[BOB]** (IBM Bob, one item per task), **[CLAUDE]** (
 - [x] S.1 [HUMAN] (audited by Claude) Every Bob task screenshot in `bob_sessions/`; usage log complete.
 - [x] S.2 [CLAUDE] Both statements (500 words max), short description, title, tags, video script.
 - [x] S.3 [HUMAN] Posters, pitch deck and the video script. (The video itself is recorded as part of S.4.)
-- [ ] S.4 [HUMAN] Re-export the pitch deck PDF, record the video (`docs/submission/04-video-script.md`), run `check-submission.mjs` and `check-style.mjs`, confirm commit authors, push, and submit on lablab before the deadline. The automated checks already pass (2026-09-26 17:30).
+- [ ] S.4 [HUMAN] Record the video (`docs/submission/04-video-script.md`), run `check-submission.mjs` and `check-style.mjs`, confirm commit authors, push, and submit on lablab before the deadline. The automated checks already pass (2026-09-26 17:30).
 
 ---
 
 ## 8. Demo video
 
-The full script, shot list, narration (about 370 words) and editing guide are in `docs/submission/04-video-script.md`. In short (2:57, about 2:25 of product):
+The full script, shot list, narration (about 420 words) and editing guide are in `docs/submission/04-video-script.md`. In short (2:58, about 2:05 of product):
 
 | Time | Scene |
 |---|---|
 | 0:00-0:14 | A question for developers: "Think back to the first bug you fixed in code you didn't write. Where did you learn how?" |
-| 0:14-0:22 | The idea |
-| 0:22-0:40 | Clone, install, run locally |
-| 0:40-0:52 | Connect google/uuid from Settings |
-| 0:52-1:20 | The Forge proves cases live (fail 3/3, then pass) |
-| 1:20-1:35 | Take The Phantom Batch |
-| 1:35-2:05 | Solve it in IBM Bob with Deja Mentor, which refuses to write the fix; the one-line fix at `async_producer.go` line 1164 |
-| 2:05-2:15 | Run the tests: VERIFIED |
-| 2:15-2:30 | Debrief: minutes vs the original team's 46 days |
-| 2:30-2:44 | IBM Bob under the hood: Deja Forger, Deja Mentor, how it was built |
-| 2:44-2:57 | Open invitation to clone it |
+| 0:14-0:21 | The idea |
+| 0:21-0:37 | Clone, install, run locally |
+| 0:37-0:48 | Connect google/uuid from Settings |
+| 0:48-1:13 | The Forge proves cases live (fail 3/3, then pass) |
+| 1:13-1:27 | Take The Phantom Batch |
+| 1:27-1:55 | Solve it in IBM Bob with Deja Mentor, which refuses to write the fix; the one-line fix at `async_producer.go` line 1164 |
+| 1:55-2:04 | Run the tests: VERIFIED |
+| 2:04-2:14 | Debrief: minutes vs the original team's 46 days |
+| 2:14-2:27 | IBM Bob under the hood: Deja Forger, Deja Mentor, how it was built |
+| 2:27-2:46 | Why it pays off: 106K US openings a year (BLS), free and open source with a paid team plan, about $100K a year saved for a company hiring 20 engineers if ramp-up is 2 weeks shorter |
+| 2:46-2:58 | Open invitation to clone it |
 
 Record the Forge and Deja Forger scenes before the watsonx account closes.
 
@@ -528,3 +529,4 @@ Human, do this:
 - **2026-09-26 17:30:** S.3 ticked at the user's request. Posters (docs/submission/poster16_9.png, poster4_3.png) by the user; the 13-slide pitch deck in the app's theme (Pixelify Sans headings, Special Elite, IBM Plex, the app's palette and pixel sprites) exported to docs/submission/DejaBug Pitch Deck.pdf. The first export showed "fi" as "A" in the pixel font; fixed in the deck with a zero-width non-joiner, so the PDF needs one more export. The video script is in docs/submission/04-video-script.md; recording is next. S.4 checks run: check-submission all PASS, check-style PASS, 48 commits all by ahammadshawki8 with no attribution trailers, nothing unpushed, repository public. Left for S.4: upload the video, then submit on lablab.
 - **2026-09-26 18:00:** PROJECT.md rewritten to the final state (Claude, user request): status with links and a deliverables table, rules updated (solo team, honest claims, data sources, tidy up), the pitch with the measured results for all 3 repositories (the unsourced 67% statistic removed), features as built (connect a repository, archive switcher, request guard, showcase explainer, lofi radio), architecture, stack, repository map, Case type, REST API, commands and the gate, known limitations, the design system as built, the checklist with every "Done when" verified, the video plan, and the final Bobcoin table. CLAUDE.md was deleted by the user; PROJECT.md is the only project instruction file.
 - **2026-09-27:** Business value (Claude, user request): two new deck slides, 15 in total. "Who pays, and why now": buyer, user and channel, plus four cited facts (SlashData 36.5M professional developers; BLS 106K US openings a year; Cortex 72% need over a month for the first 3 meaningful PRs; Cambridge Judge 50% of programming time on bugs). "Open source first, then a team plan": free and open source, Team $499 a month, Enterprise from $25K a year; a worked impact example from BLS pay ($2,578 a week, $5,156 per hire if ramp-up is 2 weeks shorter, $103K a year for 20 hires, 17x the Team plan); targets labelled as a plan ($120K ARR in year 1, $1.0M in year 2). Sources are listed in docs/DATA_SOURCES.md, and one cited market sentence was added to the Problem & Solution statement. The PDF needs a fresh export.
+- **2026-09-27:** The re-exported pitch deck PDF (15 slides, ligature fix, business slides, numbers in IBM Plex Mono) checked page by page and committed. Video script: new Scene 11 "Why it pays off" (BLS hiring volume, the open-source-to-team-plan model, the worked saving labelled as an assumption) shown over deck slides 13 and 14; scenes retimed to 2:58 with about 2:05 of product.
