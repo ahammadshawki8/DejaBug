@@ -48,12 +48,15 @@ export function AppLayout() {
 
   return (
     <PageTitleContext.Provider value={setTitle}>
-      <div className="flex h-full min-h-screen">
+      <div className="flex min-h-screen">
         <NavRail />
         <div className="flex min-w-0 flex-1 flex-col">
-          <DispatchTicker lines={dispatch} />
-          <TopBar title={title.node ?? title.text} engine={engine} />
-          <main id="main" className="min-w-0 flex-1 px-6 pb-12 sm:px-8">
+          {/* Ticker and top bar stay pinned while the page scrolls. */}
+          <div className="sticky top-0 z-30 border-b-[3px] border-line bg-ink">
+            <DispatchTicker lines={dispatch} />
+            <TopBar title={title.node ?? title.text} engine={engine} />
+          </div>
+          <main id="main" className="min-w-0 flex-1 overflow-x-clip px-6 pt-4 pb-12 sm:px-8">
             <Outlet />
           </main>
         </div>

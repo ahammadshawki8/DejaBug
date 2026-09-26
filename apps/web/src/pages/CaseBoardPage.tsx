@@ -191,7 +191,7 @@ export function CaseBoardPage() {
 
   // --- Ready ---
   return (
-    <div className="max-w-7xl py-4">
+    <div className="w-full py-2">
       {/* Stat tiles */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Open cases" value={openCount} tone="navy" icon={<Folder className="size-7" />} />
@@ -247,7 +247,7 @@ export function CaseBoardPage() {
               </svg>
             ) : null}
 
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-6">
               {filteredCases.map((c) => {
                 const state = folderState(c);
                 return (

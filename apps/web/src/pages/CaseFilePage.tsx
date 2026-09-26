@@ -121,7 +121,7 @@ export function CaseFilePage() {
   };
 
   return (
-    <div className="max-w-6xl py-4">
+    <div className="mx-auto w-full max-w-[1400px] py-2">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <Link to="/" className="font-display text-xs uppercase text-muted hover:text-amber">
           &lt; Case board

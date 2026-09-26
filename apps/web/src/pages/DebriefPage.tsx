@@ -119,7 +119,7 @@ export function DebriefPage() {
 
   const xpEarned = record?.xp ?? 0;
   return (
-    <div className="flex max-w-6xl flex-col gap-8 py-4">
+    <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-8 py-2">
       {/* The reward moment */}
       <DarkPanel className="grid items-center gap-8 p-8 md:grid-cols-[1fr_auto]">
         <div className="flex flex-col gap-6">

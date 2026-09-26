@@ -72,7 +72,7 @@ export function SettingsPage() {
   const currentRepo = settings.repo ?? repos.find((r) => r.default)?.name;
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6 py-4">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2">
       <DarkPanel title="Precinct archive" className="px-6">
         <Row label="Repository" hint="Which repository's cases fill the board. Add more from the Forge.">
           <select

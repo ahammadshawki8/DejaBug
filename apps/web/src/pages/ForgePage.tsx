@@ -102,7 +102,7 @@ export function ForgePage() {
   );
 
   return (
-    <div className="flex max-w-7xl flex-col gap-6 py-4">
+    <div className="flex w-full flex-col gap-6 py-2">
       <DarkPanel className="flex flex-wrap items-end gap-5 p-5">
         <label className="flex flex-col gap-1">
           <span className="font-display text-[11px] uppercase text-muted">Repository</span>

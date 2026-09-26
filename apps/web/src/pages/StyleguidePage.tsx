@@ -106,7 +106,7 @@ export function StyleguidePage() {
   const push = useToasts((s) => s.push);
 
   return (
-    <div className="flex max-w-6xl flex-col gap-10 py-4">
+    <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-10 py-2">
       <Section title="Color tokens">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
           {TOKENS.map(([name, hex]) => (

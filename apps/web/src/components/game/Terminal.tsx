@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { useReducedMotion } from "../../state/settings";
 
 // Terminal readout (6A.7 W3): dark frame, mono text, lines colored by meaning.
@@ -29,6 +30,11 @@ export function Terminal({
   wrap?: boolean;
 }) {
   const reduced = useReducedMotion();
+  const pre = useRef<HTMLPreElement>(null);
+  // Follow the output so the verdict at the bottom is always in view.
+  useEffect(() => {
+    if (pre.current) pre.current.scrollTop = pre.current.scrollHeight;
+  }, [lines]);
   const border = { idle: "border-line", running: "border-amber", fail: "border-stamp", pass: "border-pass" }[
     tone
   ];
@@ -45,6 +51,7 @@ export function Terminal({
         <span className="ml-2 font-mono text-xs text-muted">{title}</span>
       </div>
       <pre
+        ref={pre}
         className={`overflow-auto px-4 py-3 font-mono text-[13px] leading-relaxed ${wrap ? "whitespace-pre-wrap break-words" : ""}`}
         style={{ maxHeight }}
         aria-live="polite"

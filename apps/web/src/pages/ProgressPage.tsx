@@ -64,7 +64,7 @@ export function ProgressPage() {
   );
 
   return (
-    <div className="flex max-w-6xl flex-col gap-6 py-4">
+    <div className="flex w-full flex-col gap-6 py-2">
       <DarkPanel className="grid items-center gap-8 p-6 md:grid-cols-[auto_1fr]">
         <div className="flex flex-col items-center gap-2">
           <RankInsignia rank={rank.id} size={120} />

@@ -18,6 +18,7 @@ export function tiltFor(id: string): number {
 }
 
 export function coldLabel(days: number): string {
+  if (days < 1) return "Fixed the same day";
   if (days >= 365) return `Cold for ${(days / 365).toFixed(1)} years`;
   return `Cold for ${days.toLocaleString()} ${days === 1 ? "day" : "days"}`;
 }

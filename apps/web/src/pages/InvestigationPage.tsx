@@ -88,6 +88,7 @@ function Investigation({ id }: { id: string }) {
   const [result, setResult] = useState<VerifyResult>();
   const [shakeKey, setShakeKey] = useState(0);
   const [confirmGiveUp, setConfirmGiveUp] = useState(false);
+  const [justSolved, setJustSolved] = useState(false);
 
   useEffect(() => {
     let live = true;
@@ -118,6 +119,7 @@ function Investigation({ id }: { id: string }) {
       setResult(res.result);
       setSession(res.session);
       if (res.result.pass && res.session.solvedAt) {
+        setJustSolved(true);
         playSound("pass");
         const outcome = applySolve(profile, c, res.session);
         const withBadges = awardBadges(
@@ -135,7 +137,7 @@ function Investigation({ id }: { id: string }) {
                 unlocked: withBadges.unlocked,
               },
             }),
-          1400,
+          1600,
         );
       } else {
         playSound("fail");
@@ -214,7 +216,7 @@ function Investigation({ id }: { id: string }) {
     );
   }
   if (!session.startedAt) return <Navigate to={`/case/${id}`} replace />;
-  if (session.solvedAt || session.gaveUpAt) {
+  if ((session.solvedAt || session.gaveUpAt) && !justSolved) {
     return (
       <PaperPanel tone="manila" className="mt-6 max-w-xl p-8">
         <Stamp size="lg">Case closed</Stamp>
@@ -228,7 +230,7 @@ function Investigation({ id }: { id: string }) {
 
   const pass = result?.pass;
   return (
-    <div className="grid max-w-7xl gap-6 py-4 xl:grid-cols-[1fr_24rem]">
+    <div className="grid w-full gap-6 py-2 xl:grid-cols-[1fr_26rem]">
       <div className="flex min-w-0 flex-col gap-6">
         <DarkPanel className="grid gap-6 p-6 md:grid-cols-[auto_1fr]">
           <Timer seconds={elapsed} parSeconds={c.parSeconds} />

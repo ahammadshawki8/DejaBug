@@ -49,7 +49,7 @@ export function NavRail() {
   return (
     <nav
       aria-label="Main"
-      className="sticky top-0 flex h-screen w-20 shrink-0 flex-col border-r-[3px] border-line bg-navy"
+      className="sticky top-0 z-40 flex h-screen w-20 shrink-0 flex-col self-start border-r-[3px] border-line bg-navy"
     >
       <NavLink
         to="/"
@@ -86,7 +86,7 @@ export function TopBar({ title, engine }: { title: ReactNode; engine: EngineStat
   ];
 
   return (
-    <header className="flex flex-wrap items-center gap-4 px-6 pt-5 pb-4 sm:px-8">
+    <header className="flex flex-wrap items-center gap-4 px-6 py-3 sm:px-8">
       <div className="min-w-0 flex-1">{title}</div>
       <div className="flex items-center gap-3 rounded-[2px] border-[3px] border-line bg-navy px-3 py-2 shadow-hard">
         <RankInsignia rank={rank.id} size={36} />
@@ -136,9 +136,9 @@ export function DispatchTicker({ lines }: { lines: string[] }) {
   }, [lines.length]);
   if (!lines.length) return null;
   return (
-    <div className="flex items-center gap-3 border-b-[3px] border-line bg-line px-6 py-1.5 font-mono text-xs text-muted sm:px-8">
+    <div className="flex min-w-0 items-center gap-3 border-b-[3px] border-line bg-line px-6 py-1.5 font-mono text-xs text-muted sm:px-8">
       <span className="font-display text-[10px] uppercase text-amber">Dispatch</span>
-      <span className="truncate" aria-live="polite">
+      <span className="min-w-0 truncate" aria-live="polite">
         {lines[i % lines.length]}
       </span>
     </div>
