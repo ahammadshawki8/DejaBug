@@ -8,11 +8,11 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T8 Mentor |
-| Next item | T9.1 |
-| Next owner | BOB |
-| Last updated | 2026-09-26 07:40 BST |
-| Bobcoins used | 36.48 / 40 (about 3.5 left: T9.1) |
+| Current tier | T9 Hardening |
+| Next item | T9.5 |
+| Next owner | CLAUDE |
+| Last updated | 2026-09-26 09:00 BST |
+| Bobcoins used | 37.37 / 40 (about 2.6 left, reserve) |
 | Blockers | none |
 
 ---
@@ -515,10 +515,10 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] **Done when:** in Bob IDE, the mentor gives Socratic hints on a case and refuses to edit files.
 
 ### T9 Hardening + showcase deploy (4 h), target Sun 7:00 AM, **M3**
-- [ ] T9.1 [BOB] **Bob Review workflow** over the whole repo (the built-in code review feature). Save its findings to `docs/reviews/BOB-REVIEW.md`.
-- [ ] T9.2 [CLAUDE] **Review #3:** merge the Bob review findings with Claude's own into `docs/reviews/REVIEW-03.md` with tagged items.
-- [ ] T9.3 [CLAUDE] (re-tagged: coins) Apply the review items of REVIEW-03.
-- [ ] T9.4 [CLAUDE] Apply the [CLAUDE] items. Get engine and web tests green, fix Windows paths, add timeouts and worktree cleanup.
+- [x] T9.1 [BOB] **Bob Review workflow** over the whole repo (the built-in code review feature). Save its findings to `docs/reviews/BOB-REVIEW.md`.
+- [x] T9.2 [CLAUDE] **Review #3:** merge the Bob review findings with Claude's own into `docs/reviews/REVIEW-03.md` with tagged items.
+- [x] T9.3 [CLAUDE] (re-tagged: coins) Apply the review items of REVIEW-03.
+- [x] T9.4 [CLAUDE] Apply the [CLAUDE] items. Get engine and web tests green, fix Windows paths, add timeouts and worktree cleanup.
 - [ ] T9.5 [CLAUDE] Showcase build (static, bundled cases, labeled replayed verification, no watsonx calls at run time) deployed to Vercel. README with a GIF, architecture, and quickstart.
 - [ ] **Done when:** a fresh clone plus quickstart works, and the public URL loads.
 
@@ -701,3 +701,5 @@ Human, do this:
 - **2026-09-26 06:45:** T9.5 showcase (Claude, in parallel with T8.3): `dejabug export-showcase` (public cases, reveals, real recorded fail/pass runs, forge records; 55 cases, 564 KB, no local paths) and a VITE_SHOWCASE build where the API is served from bundled data with localStorage sessions. Runs are labeled replays of real recorded results; a "Replay the original fix" button shows the recorded passing run; the Forge Console replays the real certification outcomes. Hosted on **GitHub Pages** instead of Vercel (no extra account): https://ahammadshawki8.github.io/DejaBug/, built by .github/workflows/pages.yml on every push.
 - **2026-09-26 07:10:** UX fixes (Claude, from the user's review): sticky nav rail and top bar, full-width board (auto-fill grid) and pages without dead space, no sideways overflow, the verified view stays until the debrief, terminal follows output, "Fixed the same day", pixel favicon. Stale chunks after a deploy now reload once instead of crashing (route error screen plus vite:preloadError). Settings gains "Connect a repository" (owner/name or GitHub URL, runs mine, certify and brief through the Forge; disabled with an explanation in the showcase) and the board gains an archive switcher so each repository's cases stay separate. Precinct spellings merge into one tab. Fixed normalizeSlug for URLs ending in ".git/". 101 tests.
 - **2026-09-26 07:40:** T8.3 done (human, 0.252 coins, task 6d3de2f7): live Deja Mentor session on playgrounds/fc42022 (The Overflowing Slice), screen-recorded for the video. The mentor read the failing tests, walked the int32 cast on real_decoder.go line 120 and the guard on line 125 with one question at a time, and when asked "Just fix it for me and apply the patch" it kept coaching with a question instead of editing. The developer reached the root cause (int(int32(0x80000000)) is -2147483648 on 32-bit, so both guards pass). Evidence: bob_sessions/dejabug_task11_mentor_live_*.png. Next: T9.1 Bob Review.
+- **2026-09-26 08:30:** T9.1 done by Bob (0.891 coins, task 44b4601e): Bob Review over certifier.ts, forge.ts, server.ts, verify.ts, play.ts, briefer.ts, store.ts. 10 findings written to docs/reviews/BOB-REVIEW.md (3 HIGH, 4 MEDIUM, 3 LOW). Top issues: shell exec in briefer, unbounded forge history, parallel next-counter race, worktree name collision, state.json parsed without validation.
+- **2026-09-26 09:00:** T9.2-T9.4 done (Claude): REVIEW-03 merges Bob's 10 findings with Claude's pass. Each was checked against the code: 6 accepted (F1, F4, F5, F6, F7, F10), 4 rejected with reasons (F2, F3, F9 are not reachable in single-threaded JS; F8 not worth it). Claude added C1 (HIGH): the engine accepted cross-site and DNS-rebinding requests, so any web page could start a forge run or overwrite the profile; now only localhost hosts and origins are accepted and the API takes JSON only. Also: forge failures before runForge can no longer lock the forge, a corrupt state.json no longer stops the engine, worktrees carry the pid (path scrubber updated), repo names cannot start with a dot, BOB_MAX_COST is validated. 105 tests pass with Go and Python.

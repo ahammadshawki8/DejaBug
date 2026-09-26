@@ -35,6 +35,12 @@ export function findRepoRoot(start: string = process.cwd()): string {
 }
 
 /** Accepts "owner/name", "github.com/owner/name", or a full https/ssh GitHub URL. Returns "owner/name". */
+/** A finite positive number from the environment, or the fallback. */
+function positiveNumber(value: string | undefined, fallback: number): number {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? n : fallback;
+}
+
 export function normalizeSlug(input: string): string {
   const cleaned = input
     .trim()
@@ -81,6 +87,6 @@ export function loadConfig(
       url: env.WATSONX_URL ?? "https://us-south.ml.cloud.ibm.com",
       modelId: env.WATSONX_MODEL_ID || undefined,
     },
-    bobMaxCost: Number(env.BOB_MAX_COST ?? 1),
+    bobMaxCost: positiveNumber(env.BOB_MAX_COST, 1),
   };
 }

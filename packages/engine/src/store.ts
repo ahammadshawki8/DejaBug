@@ -45,7 +45,7 @@ export function readCertifications(casesDir: string): CertificationsFile | undef
 }
 
 /** Local temp worktree prefixes (they contain the OS username). Stripped before anything is persisted. */
-const LOCAL_WORKTREE_PATH = /(?:[A-Za-z]:)?[\\/](?:[^\\/\s"]+[\\/])*?dejabug-wt-[0-9a-f]+[\\/]/g;
+const LOCAL_WORKTREE_PATH = /(?:[A-Za-z]:)?[\\/](?:[^\\/\s"]+[\\/])*?dejabug-wt-[0-9a-f]+(?:-\d+)?[\\/]/g;
 
 /** Home directories in any separator form (C:\Users\x, C:\\Users\\x, C:/Users/x, /home/x, /Users/x). */
 const HOME_DIR = /(?:[A-Za-z]:(?:\\+|\/)|\/)(?:Users|home)(?:\\+|\/)[^\\/\s"'<>]+/gi;
@@ -54,7 +54,10 @@ export function stripLocalPaths(text: string): string {
   return (
     text
       .replace(LOCAL_WORKTREE_PATH, "")
-      .replace(/(?:[A-Za-z]:)?(?:\\+|\/)(?:[^\\/\s"']+(?:\\+|\/))*?dejabug-wt-[0-9a-f]+(?:\\+|\/)/g, "")
+      .replace(
+        /(?:[A-Za-z]:)?(?:\\+|\/)(?:[^\\/\s"']+(?:\\+|\/))*?dejabug-wt-[0-9a-f]+(?:-\d+)?(?:\\+|\/)/g,
+        "",
+      )
       .replace(HOME_DIR, "~")
       // Leftover worktree fragments, e.g. truncated reprs like "~\\AppData\\Local\\Temp\\dejabug-wt-70cf...ca6e\\".
       .replace(

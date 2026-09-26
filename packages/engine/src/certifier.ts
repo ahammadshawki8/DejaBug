@@ -82,7 +82,8 @@ async function certifyOne(
   workerIndex: number,
 ): Promise<Certification> {
   const { fixSha, parentSha, testFiles, packages, tests } = candidate;
-  const wtDir = path.join(os.tmpdir(), `dejabug-wt-${fixSha}`);
+  // The pid keeps a CLI run and a server run on the same commit from sharing a worktree.
+  const wtDir = path.join(os.tmpdir(), `dejabug-wt-${fixSha}-${process.pid}`);
   const start = Date.now();
 
   // Resolve the language adapter for this candidate (REVIEW-01 item 0).

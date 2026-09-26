@@ -14,6 +14,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 9 | ahammadshawki8 | T5.4 Case Board | Plan, Agent | Plan mode, Agent mode, frontend composition from the design system | 4.43 | dejabug_task09_case_board_summary.png, dejabug_task09_case_board_prompt.png |
 | 10 | ahammadshawki8 | T8.1 deja-mentor mode + mentor skill | Agent | Custom mode with read-only permissions (product feature), Skill authoring | 0.732 | dejabug_task10_mentor_mode_summary.png, dejabug_task10_mentor_mode_prompt.png |
 | 11 | ahammadshawki8 | T8.3 live Deja Mentor session (fc42022, recorded for the video) | Deja Mentor (custom, read-only) | Custom mode as a product feature, mentor skill, codebase search, refusal to patch | 0.252 | dejabug_task11_mentor_live_summary.png, dejabug_task11_mentor_live_{1_opening,2_socratic,3_refuses_patch}.png |
+| 12 | ahammadshawki8 | T9.1 Bob code review of the core engine (7 files) | Agent | Code review over the engine, findings document (docs/reviews/BOB-REVIEW.md) | 0.891 | dejabug_task12_bob_review_summary.png |
 | 8 | ahammadshawki8 | T3.6 live Bob Shell headless brief (fc42022) | bob run --mode deja-forger | Bob Shell headless inside the product pipeline, custom mode, skill | (see Bob usage dashboard) | terminal output in PROJECT.md progress log |
 
 ## Claude Code / Codex work
@@ -44,3 +45,5 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T7.0, T7.1 | Claude Code | apps/web/src/pages/ForgePage.tsx, lib/forgeView.ts (+ tests), packages/engine/src/forge.ts (subject relay) | Forge Console and repo picker |
 | 2026-09-26 | T8.2 | Claude Code | apps/web/src/components/game/MentorPanel.tsx, InvestigationPage.tsx, packages/engine/src/cli.ts (start) | Mentor panel and CLI start |
 | 2026-09-26 | T9.5 (showcase part) | Claude Code | packages/engine/src/showcase.ts, cli.ts (export-showcase), apps/web/src/api/showcase.ts, client.ts, InvestigationPage.tsx, AppLayout.tsx, router.tsx, vite.config.ts, .github/workflows/pages.yml | Static showcase on GitHub Pages |
+| 2026-09-26 | UX fixes, connect a repository, board archive | Claude Code | apps/web/src (AppLayout, Shell, pages, Terminal, RouteErrorPage, lib/repoInput), packages/engine/src/config.ts | From the user's review |
+| 2026-09-26 | T9.2-T9.4 | Claude Code | docs/reviews/REVIEW-03.md, packages/engine/src/server.ts, certifier.ts, config.ts, store.ts (+ tests) | Bob review verified and applied, plus C1 request guard |

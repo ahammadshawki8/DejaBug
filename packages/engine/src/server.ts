@@ -22,7 +22,37 @@ interface State {
   profile?: unknown;
 }
 
-const REPO_NAME = /^[A-Za-z0-9_.-]+$/;
+// A folder name under cases/. It may contain dots (socket.io) but may not start with one ("..").
+const REPO_NAME = /^[A-Za-z0-9_-][A-Za-z0-9_.-]*$/;
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+/** Hostname of a Host header or Origin URL, without the port. */
+function hostOf(value: string): string {
+  const host = value.includes("://") ? new URL(value).host : value;
+  return host.replace(/:\d+$/, "").toLowerCase();
+}
+
+/** Only this machine may drive the engine (REVIEW-03 C1): blocks DNS rebinding and cross-site requests. */
+export function isLocalRequest(method: string, host?: string, origin?: string): boolean {
+  if (!host || !LOCAL_HOSTS.has(hostOf(host))) return false;
+  if (method === "GET" || method === "HEAD" || !origin) return true;
+  try {
+    return LOCAL_HOSTS.has(hostOf(origin));
+  } catch {
+    return false;
+  }
+}
+
+function loadState(file: string): State {
+  try {
+    const raw = JSON.parse(readFileSync(file, "utf8")) as Partial<State> | null;
+    const sessions = raw?.sessions && typeof raw.sessions === "object" ? raw.sessions : {};
+    return { sessions, profile: raw?.profile };
+  } catch {
+    // A corrupt or hand-edited state file must not stop the engine; sessions start fresh.
+    return { sessions: {} };
+  }
+}
 const MAX_PROFILE_BYTES = 64 * 1024;
 
 export function toPublicCase(c: Case): PublicCase {
@@ -45,9 +75,14 @@ export function buildServer(baseCfg: Config, deps: Partial<ServerDeps> = {}): Fa
   const app = Fastify({ logger: false });
   const stateDir = path.join(baseCfg.repoRoot, ".dejabug");
   const stateFile = path.join(stateDir, "state.json");
-  const state: State = existsSync(stateFile)
-    ? (JSON.parse(readFileSync(stateFile, "utf8")) as State)
-    : { sessions: {} };
+  const state: State = existsSync(stateFile) ? loadState(stateFile) : { sessions: {} };
+
+  // The API only accepts JSON bodies, so a cross-site form or text/plain POST cannot reach it.
+  app.removeContentTypeParser("text/plain");
+  app.addHook("onRequest", async (req) => {
+    if (!isLocalRequest(req.method, req.headers.host, req.headers.origin))
+      throw new HttpError(403, "the DejaBug engine only accepts requests from this machine");
+  });
   const save = () => {
     mkdirSync(stateDir, { recursive: true });
     writeJsonAtomic(stateFile, state);
@@ -244,7 +279,14 @@ export function buildServer(baseCfg: Config, deps: Partial<ServerDeps> = {}): Fa
           }
         }
         await d.runForge(cfg, opts, forge.emitter);
-      })();
+      })().catch((err: unknown) => {
+        // runForge emits done itself; this covers failures before it starts, so the forge never stays locked.
+        forge.emitter.emit("forge", {
+          type: "log",
+          message: `forge failed: ${String(err)}`,
+        } satisfies ForgeEvent);
+        if (forge.running) forge.emitter.emit("forge", { type: "done" } satisfies ForgeEvent);
+      });
       return reply.status(202).send({ started: true, repo: cfg.repoSlug, ...opts });
     },
   );

@@ -22,6 +22,10 @@ describe("stripLocalPaths", () => {
     expect(stripLocalPaths(back)).toBe("at client.go:10");
     expect(stripLocalPaths(posix)).toBe("broker_test.go:5: boom");
     expect(stripLocalPaths("--- FAIL: TestX (0.00s)")).toBe("--- FAIL: TestX (0.00s)");
+    // Worktrees carry the process id since REVIEW-03 (F4).
+    expect(stripLocalPaths("C:/Users/someone/AppData/Local/Temp/dejabug-wt-4d07ef2-9120/a_test.go:3")).toBe(
+      "a_test.go:3",
+    );
   });
 });
 

@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { FixtureRepo, goFile, goTest } from "../test/fixture-repo.js";
 import { loadConfig, type Config } from "./config.js";
 import { extractMode } from "./play.js";
-import { buildServer, toPublicCase } from "./server.js";
+import { buildServer, isLocalRequest, toPublicCase } from "./server.js";
 import { writeCase } from "./store.js";
 import type { Case } from "./types.js";
 
@@ -74,6 +74,63 @@ describe("toPublicCase and extractMode", () => {
       "customModes:\n  - slug: deja-mentor\n    name: Mentor\n    groups:\n      - read\n",
     );
     expect(extractMode(yaml, "missing")).toBeUndefined();
+  });
+});
+
+describe("engine request guard (REVIEW-03)", () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), "dejabug-guard-"));
+  writeFileSync(path.join(root, "PROJECT.md"), "# fixture\n");
+  const cfg = loadConfig({ DEJABUG_REPO_SLUG: "demo/calc" }, root);
+  const app = buildServer(cfg, {
+    runForge: async (_c, _o, emitter) => void emitter.emit("forge", { type: "done" }),
+  });
+  afterAll(async () => {
+    await app.close();
+    rmSync(root, { recursive: true, force: true });
+  });
+
+  it("accepts this machine and rejects other hosts and origins", () => {
+    expect(isLocalRequest("GET", "localhost:4317")).toBe(true);
+    expect(isLocalRequest("POST", "127.0.0.1:4317", "http://localhost:5173")).toBe(true);
+    expect(isLocalRequest("GET", "evil.example:4317")).toBe(false);
+    expect(isLocalRequest("POST", "localhost:4317", "https://evil.example")).toBe(false);
+    expect(isLocalRequest("POST", "localhost:4317", "null")).toBe(false);
+  });
+
+  it("refuses cross-site and text/plain requests", async () => {
+    const crossSite = await app.inject({
+      method: "POST",
+      url: "/api/forge",
+      headers: { origin: "https://evil.example" },
+      payload: {},
+    });
+    expect(crossSite.statusCode).toBe(403);
+    const rebinding = await app.inject({
+      method: "GET",
+      url: "/api/health",
+      headers: { host: "evil.example" },
+    });
+    expect(rebinding.statusCode).toBe(403);
+    const textPlain = await app.inject({
+      method: "PUT",
+      url: "/api/profile",
+      headers: { "content-type": "text/plain" },
+      payload: "{}",
+    });
+    expect(textPlain.statusCode).toBe(415);
+    expect((await app.inject({ method: "GET", url: "/api/health" })).statusCode).toBe(200);
+  });
+
+  it("rejects repository names that climb out of cases/", async () => {
+    expect((await app.inject({ method: "GET", url: "/api/cases?repo=.." })).statusCode).toBe(400);
+  });
+
+  it("starts with empty sessions when state.json is corrupt", async () => {
+    mkdirSync(path.join(root, ".dejabug"), { recursive: true });
+    writeFileSync(path.join(root, ".dejabug", "state.json"), "{not json");
+    const fresh = buildServer(cfg);
+    expect((await fresh.inject({ method: "GET", url: "/api/profile" })).json()).toBeNull();
+    await fresh.close();
   });
 });
 
