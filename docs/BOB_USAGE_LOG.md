@@ -49,3 +49,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T9.2-T9.4 | Claude Code | docs/reviews/REVIEW-03.md, packages/engine/src/server.ts, certifier.ts, config.ts, store.ts (+ tests) | Bob review verified and applied, plus C1 request guard |
 | 2026-09-26 | T9.5, T10.1, S.1, S.2 | Claude Code | README.md, docs/media/*, docs/reviews/REVIEW-04.md, docs/submission/01-04, package.json (dejabug alias) | README, dry run, statements |
 | 2026-09-26 | Final checkup | Claude Code | apps/web/src/pages/ForgePage.tsx, lib/forgeView.ts (+ test), cases/uuid/*, README.md, docs/DATA_SOURCES.md, docs/submission/01 | End-to-end verification, third repository, forge funnel fix |
+| 2026-09-26 | Showcase explainer, lofi radio | Claude Code | apps/web/src/components/game/HowItWorks.tsx, lib/lofi.ts, lib/useLofi.ts, state/settings.ts, Shell.tsx, SettingsPage.tsx, CaseFilePage.tsx, InvestigationPage.tsx | User requests |

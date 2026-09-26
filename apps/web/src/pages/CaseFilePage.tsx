@@ -3,10 +3,11 @@ import { Copy } from "pixelarticons/react/Copy.js";
 import { FileText } from "pixelarticons/react/FileText.js";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { api, type CaseSession, type PublicCase } from "../api/client";
+import { api, SHOWCASE, type CaseSession, type PublicCase } from "../api/client";
 import { DifficultyPip } from "../art/sprites";
 import {
   ArcadeButton,
+  HowItWorks,
   PaperPanel,
   Stamp,
   Terminal,
@@ -103,7 +104,9 @@ export function CaseFilePage() {
       setActiveCase(id);
       push(
         res.created
-          ? "Case taken. The playground is ready."
+          ? SHOWCASE
+            ? "Case taken. In the showcase, runs replay real recorded results."
+            : "Case taken. The playground is ready."
           : "Case reopened. Your work is where you left it.",
         "success",
       );
@@ -202,34 +205,38 @@ export function CaseFilePage() {
                 </ArcadeButton>
               ) : playground ? (
                 <div className="flex flex-col gap-4">
-                  <div className="rounded-[2px] border-[3px] border-line bg-paper p-4">
-                    <div className="font-display text-[11px] uppercase text-text-dark/70">
-                      Your playground
+                  {SHOWCASE ? (
+                    <HowItWorks caseId={id} />
+                  ) : (
+                    <div className="rounded-[2px] border-[3px] border-line bg-paper p-4">
+                      <div className="font-display text-[11px] uppercase text-text-dark/70">
+                        Your playground
+                      </div>
+                      <div className="mt-1 flex items-center gap-2">
+                        <code className="min-w-0 flex-1 truncate font-mono text-xs" title={playground}>
+                          {playground}
+                        </code>
+                        <button
+                          type="button"
+                          onClick={copyPath}
+                          aria-label="Copy playground path"
+                          className="border-2 border-line bg-amber p-1 text-line shadow-hard-sm"
+                        >
+                          <Copy className="size-4" />
+                        </button>
+                      </div>
+                      <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm">
+                        <li>Open this folder in IBM Bob.</li>
+                        <li>
+                          Switch the chat to the <strong>Deja Mentor</strong> mode. It coaches but never
+                          writes the fix.
+                        </li>
+                        <li>
+                          Find the bug, change the code, then run the tests from the investigation screen.
+                        </li>
+                      </ol>
                     </div>
-                    <div className="mt-1 flex items-center gap-2">
-                      <code className="min-w-0 flex-1 truncate font-mono text-xs" title={playground}>
-                        {playground}
-                      </code>
-                      <button
-                        type="button"
-                        onClick={copyPath}
-                        aria-label="Copy playground path"
-                        className="border-2 border-line bg-amber p-1 text-line shadow-hard-sm"
-                      >
-                        <Copy className="size-4" />
-                      </button>
-                    </div>
-                    <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm">
-                      <li>Open this folder in IBM Bob.</li>
-                      <li>
-                        Switch the chat to the <strong>Deja Mentor</strong> mode. It coaches but never writes
-                        the fix.
-                      </li>
-                      <li>
-                        Find the bug, change the code, then run the tests from the investigation screen.
-                      </li>
-                    </ol>
-                  </div>
+                  )}
                   <ArcadeButton tone="amber" size="xl" onClick={() => navigate(`/case/${id}/investigate`)}>
                     Start investigating
                   </ArcadeButton>

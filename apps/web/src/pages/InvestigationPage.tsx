@@ -7,6 +7,7 @@ import {
   ArcadeButton,
   DarkPanel,
   HintLadder,
+  HowItWorks,
   MentorPanel,
   Modal,
   PaperPanel,
@@ -302,10 +303,7 @@ function Investigation({ id }: { id: string }) {
         />
 
         {SHOWCASE ? (
-          <p className="rounded-[2px] border-[3px] border-amber bg-navy p-4 text-sm">
-            Showcase mode: runs replay real recorded results from the engine. Install DejaBug locally to fix
-            the bug yourself in IBM Bob with the Deja Mentor.
-          </p>
+          <HowItWorks caseId={c.id} />
         ) : (
           <MentorPanel c={c} playgroundPath={session.playgroundPath} />
         )}

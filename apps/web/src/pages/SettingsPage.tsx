@@ -6,6 +6,7 @@ import { ArcadeButton, DarkPanel, Modal, PaperPanel, useToasts } from "../compon
 import { useGame } from "../state/game";
 import { useProfile } from "../state/profile";
 import { useSettings } from "../state/settings";
+import { LOFI_THEMES } from "../lib/lofi";
 import { parseRepoInput } from "../lib/repoInput";
 import { usePageTitle } from "./pageTitle";
 
@@ -198,6 +199,56 @@ export function SettingsPage() {
             ]}
           />
         </Row>
+      </DarkPanel>
+
+      <DarkPanel title="Lofi radio" className="px-6">
+        <Row label="Focus music" hint="Generated live in your browser. Also in the top bar.">
+          <ArcadeButton tone={settings.musicOn ? "amber" : "navy"} size="sm" onClick={settings.toggleMusic}>
+            {settings.musicOn ? "Playing" : "Off"}
+          </ArcadeButton>
+        </Row>
+        <Row label="Music volume">
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={settings.musicVolume}
+            onChange={(e) => settings.setMusicVolume(Number(e.target.value))}
+            aria-label="Music volume"
+            className="w-40 accent-amber"
+          />
+          <span className="tabular w-10 font-mono text-sm">{Math.round(settings.musicVolume * 100)}%</span>
+        </Row>
+        <div className="py-4">
+          <div className="font-display text-xs uppercase">Station</div>
+          <div role="radiogroup" aria-label="Lofi station" className="mt-3 grid gap-3 sm:grid-cols-3">
+            {LOFI_THEMES.map((t) => {
+              const active = t.id === settings.musicTheme;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => {
+                    settings.setMusicTheme(t.id);
+                    if (!settings.musicOn) settings.toggleMusic();
+                  }}
+                  className={`border-[3px] border-line p-3 text-left shadow-hard-sm ${
+                    active ? "bg-amber text-line" : "bg-navy-2 text-paper hover:text-amber"
+                  }`}
+                >
+                  <div className="font-display text-[11px] uppercase">{t.name}</div>
+                  <div className={`mt-1 text-xs ${active ? "text-line/80" : "text-muted"}`}>{t.mood}</div>
+                  <div className={`mt-2 font-mono text-[11px] ${active ? "text-line/70" : "text-muted"}`}>
+                    {t.bpm} BPM
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </DarkPanel>
 
       <DarkPanel title="Detective record" className="px-6">

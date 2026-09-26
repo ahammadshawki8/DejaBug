@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { api, SHOWCASE } from "../api/client";
 import { DispatchTicker, NavRail, ToastStack, TopBar, type EngineStatus } from "../components/game";
+import { useLofi } from "../lib/useLofi";
 import { useGame } from "../state/game";
 import { useProfile } from "../state/profile";
 import { useSettings } from "../state/settings";
@@ -10,6 +11,7 @@ import { PageTitleContext, type PageTitleState } from "./pageTitle";
 // The game shell around every screen (6A.6).
 
 export function AppLayout() {
+  useLofi();
   const [engine, setEngine] = useState<EngineStatus>("offline");
   const [title, setTitle] = useState<PageTitleState>({ text: "DejaBug" });
   const repo = useSettings((s) => s.repo);

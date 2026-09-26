@@ -63,7 +63,7 @@ flowchart LR
 ```
 
 - `packages/engine`: CLI (`doctor`, `init`, `mine`, `certify`, `brief`, `start`, `serve`, `export-showcase`) and the local game server. It only accepts requests from this machine.
-- `apps/web`: the game. Pixel art, typewriter case files, stamps and synthesized sounds, with reduced-motion support.
+- `apps/web`: the game. Pixel art, typewriter case files, stamps and synthesized sounds, a lofi focus radio with three generated stations (top bar and Settings), and reduced-motion support.
 - `cases/<repo>/`: certified cases, one JSON file each. Usernames, emails and local paths are stripped before anything is saved (checked in CI by `scripts/check-cases.mjs`).
 
 ## Run it locally

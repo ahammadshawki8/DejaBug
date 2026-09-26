@@ -12,3 +12,4 @@ export { Stamp } from "./Stamp";
 export { Terminal, type TerminalTone } from "./Terminal";
 export { TypewriterText } from "./TypewriterText";
 export { MentorPanel, mentorPrompt } from "./MentorPanel";
+export { HowItWorks } from "./HowItWorks";

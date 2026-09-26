@@ -1,5 +1,6 @@
 import { Fire } from "pixelarticons/react/Fire.js";
 import { Folder } from "pixelarticons/react/Folder.js";
+import { Music } from "pixelarticons/react/Music.js";
 import { Search } from "pixelarticons/react/Search.js";
 import { Sliders } from "pixelarticons/react/Sliders.js";
 import { Trophy } from "pixelarticons/react/Trophy.js";
@@ -9,6 +10,7 @@ import { Zap } from "pixelarticons/react/Zap.js";
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { RankInsignia } from "../../art/sprites";
+import { LOFI_THEMES } from "../../lib/lofi";
 import { rankFor } from "../../lib/rules";
 import { streakDays, useProfile } from "../../state/profile";
 import { useSettings } from "../../state/settings";
@@ -78,6 +80,10 @@ export function TopBar({ title, engine }: { title: ReactNode; engine: EngineStat
   const profile = useProfile((s) => s.profile);
   const soundOn = useSettings((s) => s.soundOn);
   const toggleSound = useSettings((s) => s.toggleSound);
+  const musicOn = useSettings((s) => s.musicOn);
+  const toggleMusic = useSettings((s) => s.toggleMusic);
+  const themeId = useSettings((s) => s.musicTheme);
+  const musicTheme = LOFI_THEMES.find((t) => t.id === themeId)?.name ?? "Lofi";
   const { rank, next } = rankFor(profile.xp);
   const streak = streakDays(profile.solves);
   const light = { connected: "bg-pass", offline: "bg-stamp", showcase: "bg-amber" }[engine];
@@ -112,7 +118,15 @@ export function TopBar({ title, engine }: { title: ReactNode; engine: EngineStat
           <span className="tabular">{streak}</span>
         </div>
       </div>
-      <IconButton label={soundOn ? "Mute sounds" : "Unmute sounds"} onClick={toggleSound}>
+      <IconButton
+        label={musicOn ? `Pause lofi radio (${musicTheme})` : `Play lofi radio (${musicTheme})`}
+        onClick={toggleMusic}
+        aria-pressed={musicOn}
+        className="aria-pressed:bg-amber aria-pressed:text-line"
+      >
+        <Music />
+      </IconButton>
+      <IconButton label={soundOn ? "Mute sound effects" : "Unmute sound effects"} onClick={toggleSound}>
         {soundOn ? <Volume3 /> : <VolumeX />}
       </IconButton>
       <span
