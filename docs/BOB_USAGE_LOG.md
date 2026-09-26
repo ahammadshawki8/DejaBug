@@ -47,3 +47,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T9.5 (showcase part) | Claude Code | packages/engine/src/showcase.ts, cli.ts (export-showcase), apps/web/src/api/showcase.ts, client.ts, InvestigationPage.tsx, AppLayout.tsx, router.tsx, vite.config.ts, .github/workflows/pages.yml | Static showcase on GitHub Pages |
 | 2026-09-26 | UX fixes, connect a repository, board archive | Claude Code | apps/web/src (AppLayout, Shell, pages, Terminal, RouteErrorPage, lib/repoInput), packages/engine/src/config.ts | From the user's review |
 | 2026-09-26 | T9.2-T9.4 | Claude Code | docs/reviews/REVIEW-03.md, packages/engine/src/server.ts, certifier.ts, config.ts, store.ts (+ tests) | Bob review verified and applied, plus C1 request guard |
+| 2026-09-26 | T9.5, T10.1, S.1, S.2 | Claude Code | README.md, docs/media/*, docs/reviews/REVIEW-04.md, docs/submission/01-04, package.json (dejabug alias) | README, dry run, statements |

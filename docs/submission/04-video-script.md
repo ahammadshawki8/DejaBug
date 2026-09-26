@@ -1,11 +1,15 @@
-# Video script (MP4, max 3:00)
+# Video script (MP4, max 3:00, at least 90 s of the product working)
+
+Record at 1920x1080 with the browser at 100% zoom. Use the live showcase (https://ahammadshawki8.github.io/DejaBug/)
+in a fresh profile, plus the Bob IDE mentor clip recorded for T8.3. Keep sound effects on.
 
 | Time | Visual | Narration |
 |---|---|---|
-| 0:00–0:20 | Hook: the painful "before" (stopwatch, messy manual process) | The problem, with a number |
-| 0:20–0:35 | Title plus a one-line pitch | What we built |
-| 0:35–2:20 | **Live demo (at least 90 s required)**, with Bob visibly doing the work | Walk through the workflow end to end |
-| 2:20–2:45 | Before/after metrics and Bob features used | Impact |
-| 2:45–3:00 | Repo, team, call to action | Close |
-
-Tips: record at 1080p, zoom into the relevant UI, cut dead time, add captions. Judges stop at 3:00.
+| 0:00-0:15 | Title card: "Your new hire's first real bug happens in production." Then the DejaBug logo. | "A new engineer's hardest job is debugging code they did not write. Most teams leave the first real practice to a production incident. And learning with AI can make it worse: in Anthropic's 2026 study, the biggest gap was debugging." |
+| 0:15-0:40 | Forge Console: set Candidates to 24, press Forge. Worker lanes move, cases drop into the Evidence Locker, discards show reasons. Hold on the funnel: 703 fix commits, 101 candidates, 27 certified. | "DejaBug mines a repository's history for real bug fixes. Each one is certified in parallel: the fix's own test must fail three out of three times on the old code, and pass on the fix. Here, sarama's 2,889 commits became 27 proven cases. Bob writes each case file from the PR and issue thread, without spoilers." |
+| 0:40-1:05 | Case Board (scroll, hover to show the red string), open The Phantom Batch. The typewriter symptoms, evidence, mission parameters. Press Take the case. | "Every case is a real bug from the team's own history, cold for as long as it hid in the code. The case file reads like a user report. Taking the case exports a clean playground with no future history, so the answer cannot be peeked at." |
+| 1:05-1:40 | Bob IDE clip (T8.3): Deja Mentor mode selected, the opening message, the mentor asking about the int32 cast, then "Just fix it for me" and its reply with another question. | "The new hire debugs in IBM Bob with our Deja Mentor mode. Its permissions are read only. It reads the code and asks questions, and when I asked it to just apply the patch, it kept coaching instead." |
+| 1:40-2:05 | Investigation: Run the tests (red), open hint 1 (confirm dialog, XP drops), Replay the original fix, Run the tests: VERIFIED stamp. | "Back in the game, the tests run for real. Hints cost XP. When the test goes green, the case is closed." |
+| 2:05-2:30 | Debrief: CASE CLOSED stamp and XP count-up, then scroll to "Your investigation vs Original team: 46 days, 6 comments", the two diffs and the lesson. Then the Progress screen with badges. | "The debrief compares you with the original team: they needed 46 days. You see your diff next to theirs and the lesson learned. XP, ranks and badges keep new hires coming back." |
+| 2:30-2:50 | Split screen: `.bob/custom_modes.yaml` (deja-mentor, groups: read), the bob_sessions folder, BOB_USAGE_LOG totals. Settings: Connect a repository. | "Bob is inside the product: Bob Shell headless writes the case files, and a custom read-only mode is the mentor. We also built the certifier, the forger, case ranking with parallel subagents, and a code review with Bob. It works on any Go or Python repository with tests." |
+| 2:50-3:00 | The live URL and the repo URL on screen. | "Every repository already has its curriculum. DejaBug replays it." |

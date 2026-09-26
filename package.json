@@ -21,6 +21,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "dejabug": "npm run dejabug -w @dejabug/engine --",
     "check:style": "node scripts/check-style.mjs",
     "check:submission": "node scripts/check-submission.mjs",
     "showcase": "npm run dejabug -w @dejabug/engine -- export-showcase && npm run build:showcase -w @dejabug/web"

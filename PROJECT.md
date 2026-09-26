@@ -8,10 +8,10 @@
 
 | Field | Value |
 |---|---|
-| Current tier | T9 Hardening |
-| Next item | T9.5 |
-| Next owner | CLAUDE |
-| Last updated | 2026-09-26 09:00 BST |
+| Current tier | S Submission |
+| Next item | S.3 |
+| Next owner | HUMAN |
+| Last updated | 2026-09-26 10:30 BST |
 | Bobcoins used | 37.37 / 40 (about 2.6 left, reserve) |
 | Blockers | none |
 
@@ -519,15 +519,15 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [x] T9.2 [CLAUDE] **Review #3:** merge the Bob review findings with Claude's own into `docs/reviews/REVIEW-03.md` with tagged items.
 - [x] T9.3 [CLAUDE] (re-tagged: coins) Apply the review items of REVIEW-03.
 - [x] T9.4 [CLAUDE] Apply the [CLAUDE] items. Get engine and web tests green, fix Windows paths, add timeouts and worktree cleanup.
-- [ ] T9.5 [CLAUDE] Showcase build (static, bundled cases, labeled replayed verification, no watsonx calls at run time) deployed to Vercel. README with a GIF, architecture, and quickstart.
-- [ ] **Done when:** a fresh clone plus quickstart works, and the public URL loads.
+- [x] T9.5 [CLAUDE] Showcase build (static, bundled cases, labeled replayed verification, no watsonx calls at run time) deployed to Vercel (done on GitHub Pages instead). README with a GIF, architecture, and quickstart.
+- [x] **Done when:** a fresh clone plus quickstart works, and the public URL loads.
 
 ### T10 Buffer (3 h), until Sun 10:00 AM
-- [ ] T10.1 [HUMAN] Full dry-run of the demo script (Section 8). Log the problems as tagged items in `docs/reviews/REVIEW-04.md`, then route them by owner.
+- [x] T10.1 [HUMAN] (done by Claude on request) Full dry-run of the demo script (Section 8). Log the problems as tagged items in `docs/reviews/REVIEW-04.md`, then route them by owner.
 
 ### S Submission (5 h), Sun 10:00 AM to 3:00 PM (the hard deadline is 8:00 PM BST)
-- [ ] S.1 [HUMAN] Collect every Bob task screenshot into `bob_sessions/`. Complete `docs/BOB_USAGE_LOG.md`.
-- [ ] S.2 [CLAUDE] Draft the Problem & Solution statement and the Bob Usage statement (500 words or less each) from the repo and the usage log.
+- [x] S.1 [HUMAN] (audited by Claude) Collect every Bob task screenshot into `bob_sessions/`. Complete `docs/BOB_USAGE_LOG.md`.
+- [x] S.2 [CLAUDE] Draft the Problem & Solution statement and the Bob Usage statement (500 words or less each) from the repo and the usage log.
 - [ ] S.3 [HUMAN] Slides, cover image, and the demo video (3:00 or less, at least 90 s of the product working).
 - [ ] S.4 [HUMAN] Run `check-submission.mjs` and `check-style.mjs`, verify commit authors, push, and submit on lablab **before 3:00 PM**.
 
@@ -703,3 +703,4 @@ Human, do this:
 - **2026-09-26 07:40:** T8.3 done (human, 0.252 coins, task 6d3de2f7): live Deja Mentor session on playgrounds/fc42022 (The Overflowing Slice), screen-recorded for the video. The mentor read the failing tests, walked the int32 cast on real_decoder.go line 120 and the guard on line 125 with one question at a time, and when asked "Just fix it for me and apply the patch" it kept coaching with a question instead of editing. The developer reached the root cause (int(int32(0x80000000)) is -2147483648 on 32-bit, so both guards pass). Evidence: bob_sessions/dejabug_task11_mentor_live_*.png. Next: T9.1 Bob Review.
 - **2026-09-26 08:30:** T9.1 done by Bob (0.891 coins, task 44b4601e): Bob Review over certifier.ts, forge.ts, server.ts, verify.ts, play.ts, briefer.ts, store.ts. 10 findings written to docs/reviews/BOB-REVIEW.md (3 HIGH, 4 MEDIUM, 3 LOW). Top issues: shell exec in briefer, unbounded forge history, parallel next-counter race, worktree name collision, state.json parsed without validation.
 - **2026-09-26 09:00:** T9.2-T9.4 done (Claude): REVIEW-03 merges Bob's 10 findings with Claude's pass. Each was checked against the code: 6 accepted (F1, F4, F5, F6, F7, F10), 4 rejected with reasons (F2, F3, F9 are not reachable in single-threaded JS; F8 not worth it). Claude added C1 (HIGH): the engine accepted cross-site and DNS-rebinding requests, so any web page could start a forge run or overwrite the profile; now only localhost hosts and origins are accepted and the API takes JSON only. Also: forge failures before runForge can no longer lock the forge, a corrupt state.json no longer stops the engine, worktrees carry the pid (path scrubber updated), repo names cannot start with a dot, BOB_MAX_COST is validated. 105 tests pass with Go and Python.
+- **2026-09-26 10:30:** T9.5, T10.1, S.1, S.2 done (Claude; the user asked Claude to take the human items except S.3). README rewritten (demo GIF from the live showcase, measured funnel for both repos, how Bob powers it, mermaid architecture, quickstart with a new root `npm run dejabug` alias); a fresh clone passes install, 105 tests, build and doctor. Dry run of the full demo on the live showcase: no blockers, 3 demo notes in docs/reviews/REVIEW-04.md (the mentor case is locked for a new Rookie, the forge replay is short, Pages deep links log a 404). S.1: every Bob IDE task has its summary screenshot (tasks 1-7, 9-12; task 8 was Bob Shell headless, logged with terminal output). S.2: both statements written and checked (Problem & Solution 467 words, Bob Usage 448), plus the short description, title, tags and a timed video script. Screens for slides are in docs/media/. Next: S.3 (human: slides, cover image, video), then S.4 submit.
