@@ -7,6 +7,7 @@ import {
   ArcadeButton,
   DarkPanel,
   HintLadder,
+  MentorPanel,
   Modal,
   PaperPanel,
   Stamp,
@@ -286,10 +287,10 @@ function Investigation({ id }: { id: string }) {
           wrap
         />
 
+        <MentorPanel c={c} playgroundPath={session.playgroundPath} />
+
         <p className="text-sm text-muted">
-          Stuck? Open your playground in IBM Bob and ask the{" "}
-          <strong className="text-paper">Deja Mentor</strong> mode. It asks questions and points at code, but
-          it will not write the fix.{" "}
+          Out of ideas?{" "}
           <button
             type="button"
             onClick={() => setConfirmGiveUp(true)}

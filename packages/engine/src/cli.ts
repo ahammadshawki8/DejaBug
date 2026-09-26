@@ -7,6 +7,8 @@ import { findRepoRoot, loadConfig, normalizeSlug, type Config, type LlmProvider 
 import { runDoctor } from "./doctor.js";
 import { initRepo, renameDuplicateCodenames, runBrief, runCertify, runMine } from "./forge.js";
 import { WatsonxClient } from "./llm/watsonx.js";
+import { exportPlayground } from "./play.js";
+import { readCase } from "./store.js";
 import { startServer } from "./server.js";
 import type { ForgeEvent } from "./types.js";
 
@@ -156,6 +158,21 @@ program
       );
     },
   );
+
+program
+  .command("start")
+  .description("export a clean playground for a case (the same as Take the case in the web app)")
+  .argument("<id>", "case id (short sha)")
+  .option("--reset", "discard any existing playground work and start over")
+  .action(async (id: string, opts: { reset?: boolean }) => {
+    const cfg = config();
+    const c = readCase(cfg.casesDir, id);
+    if (!c) throw new Error(`no case ${id} in ${cfg.casesDir}`);
+    const res = await exportPlayground(c, cfg, Boolean(opts.reset));
+    console.log(`${res.created ? "exported" : "kept existing"} playground for "${c.brief.codename}":`);
+    console.log(`  ${res.path}`);
+    console.log("  Open it in IBM Bob and switch to the Deja Mentor mode.");
+  });
 
 program
   .command("codenames")

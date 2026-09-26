@@ -12,6 +12,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 6 | ahammadshawki8 | T3.4 case ranking | Agent | 4 explore subagents in parallel, todo list, document understanding of review packs | 1.19 | dejabug_task06_ranking_*.png (todo, subagents running, subagents done, summary, prompt) |
 | 7 | ahammadshawki8 | T3.3b forger fixes (REVIEW-T3.3) | Plan, Agent | Plan mode, Agent mode, todo list, skill rewrite, Bob Shell output-format analysis | 14.82 | dejabug_task07_forger_fixes_summary.png |
 | 9 | ahammadshawki8 | T5.4 Case Board | Plan, Agent | Plan mode, Agent mode, frontend composition from the design system | 4.43 | dejabug_task09_case_board_summary.png, dejabug_task09_case_board_prompt.png |
+| 10 | ahammadshawki8 | T8.1 deja-mentor mode + mentor skill | Agent | Custom mode with read-only permissions (product feature), Skill authoring | 0.732 | dejabug_task10_mentor_mode_summary.png, dejabug_task10_mentor_mode_prompt.png |
 | 8 | ahammadshawki8 | T3.6 live Bob Shell headless brief (fc42022) | bob run --mode deja-forger | Bob Shell headless inside the product pipeline, custom mode, skill | (see Bob usage dashboard) | terminal output in PROJECT.md progress log |
 
 ## Claude Code / Codex work
@@ -40,3 +41,4 @@ Items done by Claude Code or Codex (see PROJECT.md Section 9.1), plus any [BOB] 
 | 2026-09-26 | T5.8-T5.10 | Claude Code | docs/reviews/REVIEW-02.md; certifier.ts (hang head), briefer.ts (exec), CaseBoardPage, InvestigationPage, DebriefPage | Review and fixes (re-tagged from Bob for coins) |
 | 2026-09-26 | T6.1-T6.3 | Claude Code | apps/web/src/lib/badges.ts (+ tests), sound.ts, shareCard.ts, pages/ProgressPage.tsx, DebriefPage.tsx, InvestigationPage.tsx, ArcadeButton.tsx | Gamification |
 | 2026-09-26 | T7.0, T7.1 | Claude Code | apps/web/src/pages/ForgePage.tsx, lib/forgeView.ts (+ tests), packages/engine/src/forge.ts (subject relay) | Forge Console and repo picker |
+| 2026-09-26 | T8.2 | Claude Code | apps/web/src/components/game/MentorPanel.tsx, InvestigationPage.tsx, packages/engine/src/cli.ts (start) | Mentor panel and CLI start |

@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T8 Mentor |
-| Next item | T8.1 |
-| Next owner | BOB |
-| Last updated | 2026-09-26 05:30 BST |
-| Bobcoins used | 35.5 / 40 (4.5 left: only T8.1, T8.3, T9.1) |
+| Next item | T8.3 |
+| Next owner | HUMAN |
+| Last updated | 2026-09-26 06:15 BST |
+| Bobcoins used | 36.23 / 40 (about 3.8 left: T8.3, T9.1) |
 | Blockers | none |
 
 ---
@@ -509,8 +509,8 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 - [ ] **Done when:** clicking "Forge 8 cases" shows the lanes moving in real time against sarama.
 
 ### T8 Mentor (2 h), target Sun 3:00 AM
-- [ ] T8.1 [BOB] `deja-mentor` mode (groups: read only) and `.bob/skills/mentor/SKILL.md` (ask, point, never patch).
-- [ ] T8.2 [CLAUDE] In-app "Ask the Mentor" panel with step-by-step Bob IDE instructions.
+- [x] T8.1 [BOB] `deja-mentor` mode (groups: read only) and `.bob/skills/mentor/SKILL.md` (ask, point, never patch).
+- [x] T8.2 [CLAUDE] In-app "Ask the Mentor" panel with step-by-step Bob IDE instructions.
 - [ ] T8.3 [HUMAN] Record the mentor refusing to patch and giving a Socratic hint in Bob IDE (for the video).
 - [ ] **Done when:** in Bob IDE, the mentor gives Socratic hints on a case and refuses to edit files.
 
@@ -697,3 +697,4 @@ Human, do this:
 - **2026-09-26 04:40:** T5.6-T5.10 done (Claude): Investigation (live timer, objective, draining XP meter, 3-envelope hint ladder with confirmation, big RUN TESTS with R shortcut, verdict terminal for pass/fail/hang/build/notest, give-up with confirmation), Debrief (CASE CLOSED slam, XP count-up with breakdown, rank bar, promotion modal and confetti only on first solve or rank-up, VS panel, your diff vs the original fix via diff2html, lesson card, next case), Settings (repository switcher across IBM repos, sound, volume, reduced motion, profile reset), lazy routes, and REVIEW-02 (7 items, all applied). Solve logic in lib/solve.ts with tests. The M2 visual check of the full loop is still pending until dev servers can run again (memory).
 - **2026-09-26 05:05:** T6 done (Claude): badge rules (lib/badges.ts, 7 badges, tests) awarded on solve and shown flipping in on the debrief; WebAudio sounds (click, hint, stamp, fail, pass, rank-up; mute and volume respected); the Progress screen (rank ladder, XP bar, badge collection with locked silhouettes, precinct mastery rings, 35-day streak calendar, closed files table, Hall of fame modal with the speed factor vs the original team); and a Case Closed share card (canvas PNG, no personal data). 96 tests. Browser verification is still pending (memory).
 - **2026-09-26 05:30:** T7.0-T7.1 done (Claude): Forge Console with a repository picker plus "open a new precinct" for any GitHub owner/name (the engine clones, mines, certifies and briefs), candidate and worker controls, funnel counters, live SSE worker lanes (chip moves Mine, Certify, Brief with fail/pass lights and a writing indicator), Evidence Locker (new cases drop in with a stamp sound), discard bin with plain-English reasons, and a log terminal. Stage events carry the commit subject via a relay in forge.ts. The reducer is in lib/forgeView.ts with tests. The live forge run in the browser is pending (memory).
+- **2026-09-26 06:15:** T8.1 done by Bob (0.732 coins): the deja-mentor custom mode (groups: read only, so it cannot edit files) and the mentor skill (5-step Socratic method). T8.2 done (Claude): Ask the Deja Mentor panel on the Investigation screen (copy playground path, switch mode, copy a ready opening message), plus `dejabug start <id> [--reset]` to export a playground from the CLI. Playgrounds get the mentor mode and skill in .bob/. Clean demo playgrounds are ready at playgrounds/fc42022 and playgrounds/66e60c7.
