@@ -6,7 +6,7 @@ DejaBug mines a repository's git history for real bug fixes, proves each one wit
 
 Built with IBM Bob for the IBM Bob 2.0 Hackathon (lablab.ai, Sep 25-27 2026). MIT licensed.
 
-**Play it now:** https://ahammadshawki8.github.io/DejaBug/ (static showcase: 55 real cases, runs replay real recorded results)
+**Play it now:** https://ahammadshawki8.github.io/DejaBug/ (static showcase: 56 real cases from 3 repositories, runs replay real recorded results)
 
 ![DejaBug demo: case board, case file, a failing run, a hint, the verified run and the debrief](docs/media/demo.gif)
 
@@ -30,6 +30,7 @@ Built with IBM Bob for the IBM Bob 2.0 Hackathon (lablab.ai, Sep 25-27 2026). MI
 |---|---|---|---|---|---|---|
 | [IBM/sarama](https://github.com/IBM/sarama) | Go | 2,889 | 703 | 101 | 27 of 44 attempted | 27 |
 | [IBM/python-sdk-core](https://github.com/IBM/python-sdk-core) | Python | 489 | 98 | 45 | 31 of 45 attempted | 28 |
+| [google/uuid](https://github.com/google/uuid) (connected from Settings, first run) | Go | | 29 | 10 | 1 of 8 attempted | 1 |
 
 It is repository-agnostic: a language adapter layer (Go and Python today) detects the language, finds and runs the tests, and classifies the results as pass, fail, hang (a reproduced deadlock), build error or no test. Connect any Go or Python repository with tests from Settings or the Forge Console, or with `dejabug init <owner/repo>`.
 
@@ -97,7 +98,7 @@ Tests: `npm test` (105 tests across the engine and the web app), `npm run lint`,
 
 ## Data
 
-Demo cases come from MIT and Apache-2.0 licensed public repositories. See [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md).
+Demo cases come from MIT, Apache-2.0 and BSD-3-Clause licensed public repositories. See [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md).
 
 ## License
 

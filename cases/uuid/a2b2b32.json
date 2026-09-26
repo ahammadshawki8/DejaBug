@@ -1,0 +1,55 @@
+{
+  "id": "a2b2b32",
+  "repo": "google/uuid",
+  "language": "go",
+  "fixSha": "a2b2b32373ff0b1a312b7fdf6d38a977099698a6",
+  "parentSha": "c58770eb495f55fe2ced6284f93c5158a62e53e3",
+  "prNumber": 150,
+  "status": "certified",
+  "tests": [
+    "TestVersion7",
+    "TestVersion7FromReader",
+    "TestVersion7Monotonicity"
+  ],
+  "packages": [
+    "."
+  ],
+  "testFiles": [
+    "uuid_test.go"
+  ],
+  "certification": {
+    "failRuns": 3,
+    "passRuns": 1,
+    "failOutput": "--- FAIL: TestVersion7Monotonicity (0.00s)\n    uuid_test.go:893: monotonicity failed at #0: 01a0ddb7-fc39-77ae-ae28-5b19438c88d6(next) < 01a0ddb7-fc39-79f6-88a8-fad7a53bcf30(before)\nFAIL\nFAIL\tgithub.com/google/uuid\t0.251s\nFAIL\n",
+    "passOutput": "ok  \tgithub.com/google/uuid\t0.231s\n",
+    "durationMs": 4373
+  },
+  "brief": {
+    "codename": "Monotonic UUID",
+    "symptoms": "Test for UUIDv7 monotonicity fails, reporting that a generated UUID is earlier than the previous one.",
+    "evidence": "uuid_test.go:893: monotonicity failed at #0: 01a0ddb7-fc39-77ae-ae28-5b19438c88d6(next) < 01a0ddb7-fc39-79f6-88a8-fad7a53bcf30(before)",
+    "hints": [
+      "The failure occurs when the clock does not advance between two UUID generations.",
+      "Look at the package that implements UUIDv7 generation - the time component is derived from the current moment.",
+      "When the system clock does not move forward, the generated UUIDs can appear out of order."
+    ],
+    "difficulty": 2,
+    "precinct": "uuid",
+    "lesson": "UUIDv7 must include a sequence component that increments when the timestamp does not change, ensuring monotonicity.",
+    "tags": [
+      "uuid",
+      "time",
+      "monotonicity"
+    ]
+  },
+  "original": {
+    "daysOpen": 2.1,
+    "comments": 17,
+    "reviewRounds": 9,
+    "mergedAt": "2024-01-11T18:16:32Z"
+  },
+  "bugAgeDays": 49,
+  "briefedBy": "watsonx:ibm/granite-4-h-small",
+  "parSeconds": 1200,
+  "fixDiff": "diff --git a/version7.go b/version7.go\nindex ba9dd5e..fbc902a 100644\n--- a/version7.go\n+++ b/version7.go\n@@ -44,7 +44,7 @@ func NewV7FromReader(r io.Reader) (UUID, error) {\n \n // makeV7 fill 48 bits time (uuid[0] - uuid[5]), set version b0111 (uuid[6])\n // uuid[8] already has the right version number (Variant is 10)\n-// see function  NewV7 and NewV7FromReader\n+// see function NewV7 and NewV7FromReader\n func makeV7(uuid []byte) {\n \t/*\n \t\t 0                   1                   2                   3\n@@ -52,7 +52,7 @@ func makeV7(uuid []byte) {\n \t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n \t\t|                           unix_ts_ms                          |\n \t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n-\t\t|          unix_ts_ms           |  ver  |       rand_a          |\n+\t\t|          unix_ts_ms           |  ver  |  rand_a (12 bit seq)  |\n \t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n \t\t|var|                        rand_b                             |\n \t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n@@ -61,7 +61,7 @@ func makeV7(uuid []byte) {\n \t*/\n \t_ = uuid[15] // bounds check\n \n-\tt := timeNow().UnixMilli()\n+\tt, s := getV7Time()\n \n \tuuid[0] = byte(t >> 40)\n \tuuid[1] = byte(t >> 32)\n@@ -70,6 +70,35 @@ func makeV7(uuid []byte) {\n \tuuid[4] = byte(t >> 8)\n \tuuid[5] = byte(t)\n \n-\tuuid[6] = 0x70 | (uuid[6] & 0x0F)\n-\t// uuid[8] has already has right version\n+\tuuid[6] = 0x70 | (0x0F & byte(s>>8))\n+\tuuid[7] = byte(s)\n+}\n+\n+// lastV7time is the last last time we returned stored as:\n+//\n+//\t52 bits of time in milliseconds since epoch\n+//\t12 bits of (fractional nanoseconds) >> 8\n+var lastV7time int64\n+\n+const nanoPerMilli = 1000000\n+\n+// getV7Time returns the time in milliseconds and nanoseconds / 256.\n+// The returned (milli << 12 + seq) is guarenteed to be greater than\n+// (milli << 12 + seq) returned by any previous call to getV7Time.\n+func getV7Time() (milli, seq int64) {\n+\ttimeMu.Lock()\n+\tdefer timeMu.Unlock()\n+\n+\tnano := timeNow().UnixNano()\n+\tmilli = nano / nanoPerMilli\n+\t// Sequence number is between 0 and 3906 (nanoPerMilli>>8)\n+\tseq = (nano - milli*nanoPerMilli) >> 8\n+\tnow := milli<<12 + seq\n+\tif now <= lastV7time {\n+\t\tnow = lastV7time + 1\n+\t\tmilli = now >> 12\n+\t\tseq = now & 0xfff\n+\t}\n+\tlastV7time = now\n+\treturn milli, seq\n }\n"
+}

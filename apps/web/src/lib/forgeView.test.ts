@@ -10,6 +10,14 @@ function run(events: ForgeEvent[], workers = 2): ForgeView {
 }
 
 describe("forge view reducer", () => {
+  it("drops the previous repository's funnel when a different repository is forged", () => {
+    const funnel = { repo: "IBM/sarama", fixLikeCommits: 703, candidates: 101 } as never;
+    const withFunnel = reduce(initial(2), { type: "event", e: { type: "funnel", funnel } });
+    expect(reduce(withFunnel, { type: "reset", workers: 2 }).funnel).toBe(funnel);
+    expect(reduce(withFunnel, { type: "reset", workers: 2, keepFunnel: false }).funnel).toBeUndefined();
+    expect(reduce(withFunnel, { type: "clearFunnel" }).funnel).toBeUndefined();
+  });
+
   it("moves a certified case through certify and brief into the locker", () => {
     const v = run([
       { type: "stage", worker: 0, fixSha: "aaa1111", stage: "certify", detail: "fix: guard overflow" },

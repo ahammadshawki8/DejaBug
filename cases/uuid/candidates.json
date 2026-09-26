@@ -1,0 +1,238 @@
+{
+  "repo": "google/uuid",
+  "generatedAt": "2026-09-26T12:36:55.756Z",
+  "language": "go",
+  "scannedCommits": 130,
+  "fixLikeCommits": 29,
+  "candidates": [
+    {
+      "fixSha": "6e10cd1027e225e3ad7bfcc13c896abd165b02ef",
+      "parentSha": "b5b9aeb1d146751d5a09f1b2ca83fd9731d3a8fa",
+      "subject": "fix: use MustParse(\"xxx\") instead of Must(Parse(\"xxxx\")) (#106)",
+      "date": "2024-02-22T10:41:49-06:00",
+      "prNumber": 106,
+      "language": "go",
+      "sourceFiles": [
+        "hash.go"
+      ],
+      "testFiles": [
+        "json_test.go",
+        "sql_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestScan",
+        "TestValue"
+      ]
+    },
+    {
+      "fixSha": "a2b2b32373ff0b1a312b7fdf6d38a977099698a6",
+      "parentSha": "c58770eb495f55fe2ced6284f93c5158a62e53e3",
+      "subject": "fix: Monotonicity in UUIDv7 (#150)",
+      "date": "2024-01-11T12:16:31-06:00",
+      "prNumber": 150,
+      "language": "go",
+      "sourceFiles": [
+        "version7.go"
+      ],
+      "testFiles": [
+        "uuid_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestVersion7",
+        "TestVersion7FromReader",
+        "TestVersion7Monotonicity"
+      ]
+    },
+    {
+      "fixSha": "b35aa6a595277504b1ec94c520d4091ec050b9d5",
+      "parentSha": "8de8764e294f072b7a2f1a209e88fdcdb1ebc875",
+      "subject": "add uuid version 6 and 7 (#139)",
+      "date": "2023-11-23T17:50:18-06:00",
+      "prNumber": 139,
+      "language": "go",
+      "sourceFiles": [
+        "time.go",
+        "version6.go",
+        "version7.go"
+      ],
+      "testFiles": [
+        "uuid_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestVersion6",
+        "TestVersion7",
+        "TestVersion7FromReader",
+        "TestVersion7_pooled"
+      ]
+    },
+    {
+      "fixSha": "bd451584982ecf4ca5b1e5938cf168e17e30d837",
+      "parentSha": "7c63a14153262497940ad1c2237accc855f47684",
+      "subject": "Resolved code issues of gofmt and golint (#55)",
+      "date": "2020-03-30T20:53:17-05:00",
+      "prNumber": 55,
+      "language": "go",
+      "sourceFiles": [
+        "version4.go"
+      ],
+      "testFiles": [
+        "uuid_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestSetRand"
+      ]
+    },
+    {
+      "fixSha": "9c6b41367eeed0b5fb3a509fbe471f5c97b22630",
+      "parentSha": "bb91e0b0e28d478ae15f8caad3ab9fa6fd48ab4e",
+      "subject": "fix some typos",
+      "date": "2017-11-22T06:47:31+01:00",
+      "language": "go",
+      "sourceFiles": [
+        "hash.go"
+      ],
+      "testFiles": [
+        "seq_test.go",
+        "uuid_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestBadRand",
+        "TestNode",
+        "TestNodeID",
+        "TestVersion1"
+      ]
+    },
+    {
+      "fixSha": "7dd4798941114ca30eb7efd3f958275c05917231",
+      "parentSha": "a8b7006b7b0bc10a42b142cbfdebfd29a3fa53ba",
+      "subject": "replace `Must*` funcs with a single generic Must func",
+      "date": "2016-02-25T20:56:08-08:00",
+      "language": "go",
+      "sourceFiles": [
+        "hash.go",
+        "uuid.go",
+        "version1.go"
+      ],
+      "testFiles": [
+        "json_test.go",
+        "seq_test.go",
+        "sql_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestClockSeqRace",
+        "TestScan",
+        "TestValue"
+      ]
+    },
+    {
+      "fixSha": "6cc520cd8b4eca0efacc65b60bce7828e2fbdaf6",
+      "parentSha": "ae80070655697e171ccb9b7a5b8671393599a471",
+      "subject": "Fix govet issues and make node.go thread safe.",
+      "date": "2016-02-09T09:58:31-08:00",
+      "language": "go",
+      "sourceFiles": [
+        "node.go",
+        "time.go",
+        "uuid.go"
+      ],
+      "testFiles": [
+        "uuid_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestBadRand",
+        "TestClockSeq",
+        "TestCoding",
+        "TestConstants",
+        "TestMD5",
+        "TestNew",
+        "TestNode",
+        "TestNodeAndTime",
+        "TestNodeID",
+        "TestRandomUUID",
+        "TestSHA1",
+        "TestVersion1"
+      ]
+    },
+    {
+      "fixSha": "d4a682d48de470c6a9e43e9dfe5b6985b9234d8c",
+      "parentSha": "cccd189d45f7ac3368a0d127efb7f4d08ae0b655",
+      "subject": "Attempt to scan []byte uuids larger than 16 bytes. Fixes #12",
+      "date": "2015-11-18T19:54:10-05:00",
+      "language": "go",
+      "sourceFiles": [
+        "sql.go"
+      ],
+      "testFiles": [
+        "sql_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestScan"
+      ]
+    },
+    {
+      "fixSha": "7464a2351d307dba69271f2ba792779cb715f087",
+      "parentSha": "ca53cad383cad2479bbba7f7a1a05797ec1386e4",
+      "subject": "Implement database/sql's Scanner interface. Fixes #5",
+      "date": "2015-08-24T16:47:56-04:00",
+      "language": "go",
+      "sourceFiles": [
+        "sql.go"
+      ],
+      "testFiles": [
+        "sql_test.go"
+      ],
+      "packages": [
+        "."
+      ],
+      "tests": [
+        "TestScan"
+      ]
+    },
+    {
+      "fixSha": "ed3ca8a15a931b141440a7e98e4f716eec255f7d",
+      "parentSha": "e1a3bdbdba77343b026c9bb4a7c7b1a148321290",
+      "subject": "go-uuid: Fix JSON encoding for empty UUIDs",
+      "date": "2014-12-02T10:54:02-06:00",
+      "language": "go",
+      "sourceFiles": [
+        "uuid/json.go",
+        "uuid/time.go"
+      ],
+      "testFiles": [
+        "uuid/json_test.go",
+        "uuid/seq_test.go"
+      ],
+      "packages": [
+        "./uuid"
+      ],
+      "tests": [
+        "TestClockSeqRace",
+        "TestJSON"
+      ]
+    }
+  ]
+}

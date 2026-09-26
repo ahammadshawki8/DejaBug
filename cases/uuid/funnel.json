@@ -1,0 +1,15 @@
+{
+  "repo": "google/uuid",
+  "fixLikeCommits": 29,
+  "candidates": 10,
+  "attempted": 8,
+  "byStatus": {
+    "certified": 1,
+    "rejected:build": 5,
+    "rejected:no-fail": 2,
+    "rejected:flaky": 0,
+    "rejected:no-pass": 0,
+    "rejected:timeout": 0
+  },
+  "generatedAt": "2026-09-26T12:37:00.233Z"
+}

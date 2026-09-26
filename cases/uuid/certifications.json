@@ -1,0 +1,78 @@
+{
+  "repo": "google/uuid",
+  "updatedAt": "2026-09-26T12:37:00.232Z",
+  "results": [
+    {
+      "fixSha": "6e10cd1027e225e3ad7bfcc13c896abd165b02ef",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 3459
+    },
+    {
+      "fixSha": "a2b2b32373ff0b1a312b7fdf6d38a977099698a6",
+      "status": "certified",
+      "failRuns": 3,
+      "passRuns": 1,
+      "failOutput": "--- FAIL: TestVersion7Monotonicity (0.00s)\n    uuid_test.go:893: monotonicity failed at #0: 01a0ddb7-fc39-77ae-ae28-5b19438c88d6(next) < 01a0ddb7-fc39-79f6-88a8-fad7a53bcf30(before)\nFAIL\nFAIL\tgithub.com/google/uuid\t0.251s\nFAIL\n",
+      "passOutput": "ok  \tgithub.com/google/uuid\t0.231s\n",
+      "durationMs": 4373
+    },
+    {
+      "fixSha": "b35aa6a595277504b1ec94c520d4091ec050b9d5",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "FAIL\tgithub.com/google/uuid [build failed]\nFAIL\n# github.com/google/uuid [github.com/google/uuid.test]\n.\\uuid_test.go:756:16: undefined: NewV6\n.\\uuid_test.go:760:16: undefined: NewV6\n.\\uuid_test.go:800:16: undefined: NewV7\n.\\uuid_test.go:827:16: undefined: NewV7\n.\\uuid_test.go:849:16: undefined: NewV7FromReader\n.\\uuid_test.go:853:11: undefined: NewV7FromReader\n.\\uuid_test.go:857:16: undefined: NewV7FromReader\n",
+      "passOutput": "",
+      "durationMs": 815
+    },
+    {
+      "fixSha": "bd451584982ecf4ca5b1e5938cf168e17e30d837",
+      "status": "rejected:no-fail",
+      "failRuns": 0,
+      "passRuns": 3,
+      "failOutput": "",
+      "passOutput": "",
+      "durationMs": 3400
+    },
+    {
+      "fixSha": "9c6b41367eeed0b5fb3a509fbe471f5c97b22630",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "go: go.mod file not found in current directory or any parent directory; see 'go help modules'\n",
+      "passOutput": "",
+      "durationMs": 360
+    },
+    {
+      "fixSha": "7dd4798941114ca30eb7efd3f958275c05917231",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "go: go.mod file not found in current directory or any parent directory; see 'go help modules'\n",
+      "passOutput": "",
+      "durationMs": 290
+    },
+    {
+      "fixSha": "6cc520cd8b4eca0efacc65b60bce7828e2fbdaf6",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "go: go.mod file not found in current directory or any parent directory; see 'go help modules'\n",
+      "passOutput": "",
+      "durationMs": 421
+    },
+    {
+      "fixSha": "d4a682d48de470c6a9e43e9dfe5b6985b9234d8c",
+      "status": "rejected:build",
+      "failRuns": 0,
+      "passRuns": 0,
+      "failOutput": "go: go.mod file not found in current directory or any parent directory; see 'go help modules'\n",
+      "passOutput": "",
+      "durationMs": 299
+    }
+  ]
+}

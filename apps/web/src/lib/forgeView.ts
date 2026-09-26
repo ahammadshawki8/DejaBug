@@ -24,10 +24,15 @@ export function initial(workers: number): ForgeView {
   };
 }
 
-export type Action = { type: "reset"; workers: number } | { type: "event"; e: ForgeEvent };
+export type Action =
+  | { type: "reset"; workers: number; keepFunnel?: boolean }
+  | { type: "clearFunnel" }
+  | { type: "event"; e: ForgeEvent };
 
 export function reduce(v: ForgeView, a: Action): ForgeView {
-  if (a.type === "reset") return { ...initial(a.workers), running: true, funnel: v.funnel };
+  if (a.type === "reset")
+    return { ...initial(a.workers), running: true, funnel: a.keepFunnel === false ? undefined : v.funnel };
+  if (a.type === "clearFunnel") return { ...v, funnel: undefined };
   const e = a.e;
   const lanes = [...v.lanes];
   const lane = (w: number) => {

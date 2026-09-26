@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Zap } from "pixelarticons/react/Zap.js";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { api, subscribeForge } from "../api/client";
 import {
   ArcadeButton,
@@ -40,6 +40,13 @@ export function ForgePage() {
   const [limit, setLimit] = useState(8);
   const [workers, setWorkers] = useState(4);
   const [view, dispatch] = useReducer(reduce, 4, initial);
+  // The repository of the run in progress, which can differ from the selection (a new precinct, or a run
+  // started from Settings). Its funnel wins over the selected repository's.
+  const [forging, setForging] = useState<string>();
+  const forgingRef = useRef<string>(undefined);
+  useEffect(() => {
+    forgingRef.current = forging;
+  }, [forging]);
 
   const defaultRepo = repos.find((r) => r.default);
   const selected = target || settingsRepo || defaultRepo?.name || "";
@@ -52,11 +59,15 @@ export function ForgePage() {
   // Current funnel for the selected repository.
   useEffect(() => {
     if (!selected) return;
+    if (forging && forging !== selectedRepo?.slug) {
+      dispatch({ type: "clearFunnel" });
+      return;
+    }
     api
       .funnel(selected === defaultRepo?.name ? undefined : selected)
       .then((f) => f && dispatch({ type: "event", e: { type: "funnel", funnel: f } }))
       .catch(() => undefined);
-  }, [selected, defaultRepo?.name]);
+  }, [selected, defaultRepo?.name, forging, selectedRepo?.slug]);
 
   // Live events: replays the current run's history on connect, so reloading the page is safe.
   useEffect(() => {
@@ -64,26 +75,31 @@ export function ForgePage() {
       dispatch({ type: "event", e });
       if (e.type === "briefed" && e.ok) playSound("stamp");
       if (e.type === "done") {
-        void loadRepos();
+        // Show the repository that was just forged, with its new cases and final funnel.
+        void loadRepos().then(() => {
+          const done = useGame.getState().repos.find((r) => r.slug === forgingRef.current);
+          if (done) setTarget(done.name);
+        });
         void loadCases(settingsRepo, true);
       }
     });
     api
       .forgeStatus()
-      .then(
-        (s) =>
-          s.running &&
-          dispatch({ type: "event", e: { type: "log", message: `Forge in progress for ${s.repo}.` } }),
-      )
+      .then((s) => {
+        if (!s.running) return;
+        setForging(s.repo);
+        dispatch({ type: "event", e: { type: "log", message: `Forge in progress for ${s.repo}.` } });
+      })
       .catch(() => undefined);
     return stop;
   }, [loadRepos, loadCases, settingsRepo]);
 
   const start = async () => {
     const repo = custom.trim() || (selected === defaultRepo?.name ? undefined : selected);
-    dispatch({ type: "reset", workers });
+    dispatch({ type: "reset", workers, keepFunnel: !custom.trim() });
     try {
       const res = await api.startForge({ repo, limit, concurrency: workers });
+      setForging(res.repo);
       push(`Forging ${limit} candidates from ${res.repo}.`, "info");
     } catch (e) {
       push((e as Error).message, "error");

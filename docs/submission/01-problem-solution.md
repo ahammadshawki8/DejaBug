@@ -3,7 +3,7 @@
 
 ## The problem
 
-A new engineer's hardest early job is debugging code they did not write. Teams teach it slowly, and the first real practice is often an incident in production. AI assistants add a new risk. In Anthropic's 2026 randomized study of developers learning a new library, the group that learned with AI scored lower on mastery, and the largest gap was in debugging. Developers who used AI to understand the code, instead of producing it, kept their learning.
+A new engineer's hardest early job is debugging code they did not write. Teams teach it slowly, and the first real practice is often an incident in production. AI assistants add a new risk. In Anthropic's 2026 randomized study of developers learning a new library, the group that learned with AI scored lower on mastery, and the largest gap was in debugging. Developers who used AI to understand the code rather than to produce it kept their learning.
 
 Every mature repository already holds the missing curriculum: hundreds of real bugs, each with a known fix and a test that proves it. Turning a commit into a safe, playable exercise by hand takes hours, so it goes unused.
 
@@ -21,10 +21,10 @@ It is repository-agnostic: Go and Python adapters detect the language and run th
 
 ## Impact
 
-On IBM/sarama, DejaBug scanned 2,889 commits, found 703 fix-like commits and 101 runnable candidates, and certified 27 of the 44 it attempted. On IBM/python-sdk-core it certified 31 of 45. That is 55 playable cases, none written by hand. In a recorded session the Deja Mentor led a developer to the root cause of a 32-bit integer overflow with a few guiding questions, and declined when asked to just apply the patch.
+On IBM/sarama, DejaBug scanned 2,889 commits, found 703 fix-like commits and 101 runnable candidates, and certified 27 of the 44 it attempted. On IBM/python-sdk-core it certified 31 of 45. Connected from the app, google/uuid, never seen before, gave a certified case in 90 seconds. That is 56 playable cases, none written by hand. In a recorded session the Deja Mentor led a developer to the root cause of a 32-bit integer overflow with a few guiding questions, and declined when asked to just apply the patch.
 
 ## Why it matters
 
-Every team pays for onboarding each time someone joins. DejaBug needs no content authoring: point it at a repository and the history becomes the course. Because each case is proven by the project's own tests, a team can trust the curriculum it generates, and because the mentor cannot write code, the skill stays with the engineer.
+DejaBug needs no content authoring: point it at a repository and the history becomes the course. Because each case is proven by the project's own tests, a team can trust the curriculum it generates, and because the mentor cannot write code, the skill stays with the engineer.
 
 Try it: https://ahammadshawki8.github.io/DejaBug/
