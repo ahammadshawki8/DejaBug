@@ -9,10 +9,10 @@
 | Field | Value |
 |---|---|
 | Current tier | T8 Mentor |
-| Next item | T8.3 |
-| Next owner | HUMAN |
-| Last updated | 2026-09-26 06:15 BST |
-| Bobcoins used | 36.23 / 40 (about 3.8 left: T8.3, T9.1) |
+| Next item | T9.1 |
+| Next owner | BOB |
+| Last updated | 2026-09-26 07:40 BST |
+| Bobcoins used | 36.48 / 40 (about 3.5 left: T9.1) |
 | Blockers | none |
 
 ---
@@ -511,8 +511,8 @@ Work always proceeds top to bottom. Follow the handoff protocol in Section 9.3.
 ### T8 Mentor (2 h), target Sun 3:00 AM
 - [x] T8.1 [BOB] `deja-mentor` mode (groups: read only) and `.bob/skills/mentor/SKILL.md` (ask, point, never patch).
 - [x] T8.2 [CLAUDE] In-app "Ask the Mentor" panel with step-by-step Bob IDE instructions.
-- [ ] T8.3 [HUMAN] Record the mentor refusing to patch and giving a Socratic hint in Bob IDE (for the video).
-- [ ] **Done when:** in Bob IDE, the mentor gives Socratic hints on a case and refuses to edit files.
+- [x] T8.3 [HUMAN] Record the mentor refusing to patch and giving a Socratic hint in Bob IDE (for the video).
+- [x] **Done when:** in Bob IDE, the mentor gives Socratic hints on a case and refuses to edit files.
 
 ### T9 Hardening + showcase deploy (4 h), target Sun 7:00 AM, **M3**
 - [ ] T9.1 [BOB] **Bob Review workflow** over the whole repo (the built-in code review feature). Save its findings to `docs/reviews/BOB-REVIEW.md`.
@@ -700,3 +700,4 @@ Human, do this:
 - **2026-09-26 06:15:** T8.1 done by Bob (0.732 coins): the deja-mentor custom mode (groups: read only, so it cannot edit files) and the mentor skill (5-step Socratic method). T8.2 done (Claude): Ask the Deja Mentor panel on the Investigation screen (copy playground path, switch mode, copy a ready opening message), plus `dejabug start <id> [--reset]` to export a playground from the CLI. Playgrounds get the mentor mode and skill in .bob/. Clean demo playgrounds are ready at playgrounds/fc42022 and playgrounds/66e60c7.
 - **2026-09-26 06:45:** T9.5 showcase (Claude, in parallel with T8.3): `dejabug export-showcase` (public cases, reveals, real recorded fail/pass runs, forge records; 55 cases, 564 KB, no local paths) and a VITE_SHOWCASE build where the API is served from bundled data with localStorage sessions. Runs are labeled replays of real recorded results; a "Replay the original fix" button shows the recorded passing run; the Forge Console replays the real certification outcomes. Hosted on **GitHub Pages** instead of Vercel (no extra account): https://ahammadshawki8.github.io/DejaBug/, built by .github/workflows/pages.yml on every push.
 - **2026-09-26 07:10:** UX fixes (Claude, from the user's review): sticky nav rail and top bar, full-width board (auto-fill grid) and pages without dead space, no sideways overflow, the verified view stays until the debrief, terminal follows output, "Fixed the same day", pixel favicon. Stale chunks after a deploy now reload once instead of crashing (route error screen plus vite:preloadError). Settings gains "Connect a repository" (owner/name or GitHub URL, runs mine, certify and brief through the Forge; disabled with an explanation in the showcase) and the board gains an archive switcher so each repository's cases stay separate. Precinct spellings merge into one tab. Fixed normalizeSlug for URLs ending in ".git/". 101 tests.
+- **2026-09-26 07:40:** T8.3 done (human, 0.252 coins, task 6d3de2f7): live Deja Mentor session on playgrounds/fc42022 (The Overflowing Slice), screen-recorded for the video. The mentor read the failing tests, walked the int32 cast on real_decoder.go line 120 and the guard on line 125 with one question at a time, and when asked "Just fix it for me and apply the patch" it kept coaching with a question instead of editing. The developer reached the root cause (int(int32(0x80000000)) is -2147483648 on 32-bit, so both guards pass). Evidence: bob_sessions/dejabug_task11_mentor_live_*.png. Next: T9.1 Bob Review.

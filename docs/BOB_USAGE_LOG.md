@@ -13,6 +13,7 @@ One row per Bob task. The screenshot file lives in `bob_sessions/`.
 | 7 | ahammadshawki8 | T3.3b forger fixes (REVIEW-T3.3) | Plan, Agent | Plan mode, Agent mode, todo list, skill rewrite, Bob Shell output-format analysis | 14.82 | dejabug_task07_forger_fixes_summary.png |
 | 9 | ahammadshawki8 | T5.4 Case Board | Plan, Agent | Plan mode, Agent mode, frontend composition from the design system | 4.43 | dejabug_task09_case_board_summary.png, dejabug_task09_case_board_prompt.png |
 | 10 | ahammadshawki8 | T8.1 deja-mentor mode + mentor skill | Agent | Custom mode with read-only permissions (product feature), Skill authoring | 0.732 | dejabug_task10_mentor_mode_summary.png, dejabug_task10_mentor_mode_prompt.png |
+| 11 | ahammadshawki8 | T8.3 live Deja Mentor session (fc42022, recorded for the video) | Deja Mentor (custom, read-only) | Custom mode as a product feature, mentor skill, codebase search, refusal to patch | 0.252 | dejabug_task11_mentor_live_summary.png, dejabug_task11_mentor_live_{1_opening,2_socratic,3_refuses_patch}.png |
 | 8 | ahammadshawki8 | T3.6 live Bob Shell headless brief (fc42022) | bob run --mode deja-forger | Bob Shell headless inside the product pipeline, custom mode, skill | (see Bob usage dashboard) | terminal output in PROJECT.md progress log |
 
 ## Claude Code / Codex work
