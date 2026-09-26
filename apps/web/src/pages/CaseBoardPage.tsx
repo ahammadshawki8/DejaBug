@@ -3,7 +3,7 @@ import { Check } from "pixelarticons/react/Check.js";
 import { Clock } from "pixelarticons/react/Clock.js";
 import { Folder } from "pixelarticons/react/Folder.js";
 import { Reload } from "pixelarticons/react/Reload.js";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { PublicCase } from "../api/client";
 import {
@@ -26,6 +26,14 @@ import { usePageTitle } from "./pageTitle";
 // precinct tabs, red-string hover links, and themed loading/empty/error states.
 
 const DETECTIVE_XP = 300;
+
+/** One key per area, so "base_service" and "base-service" share a tab. */
+function precinctKey(precinct: string): string {
+  return precinct
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_-]+/g, "-");
+}
 
 /** Tab labels from precinct slugs: "consumer-group" becomes "Consumer group". */
 function precinctLabel(slug: string): string {
@@ -55,10 +63,26 @@ export function CaseBoardPage() {
   const error = useGame((s) => s.error);
   const loadCases = useGame((s) => s.loadCases);
   const repo = useSettings((s) => s.repo);
+  const setRepo = useSettings((s) => s.setRepo);
+  const repos = useGame((s) => s.repos);
+  const loadRepos = useGame((s) => s.loadRepos);
   const activeCaseId = useSettings((s) => s.activeCaseId);
   const profile = useProfile((s) => s.profile);
 
   const [precinct, setPrecinct] = useState<string>("all");
+
+  useEffect(() => {
+    void loadRepos();
+  }, [loadRepos]);
+
+  const defaultRepoName = repos.find((r) => r.default)?.name;
+  const activeRepoName = repo ?? defaultRepoName;
+  const switchRepo = (name: string) => {
+    const next = name === defaultRepoName ? undefined : name;
+    setRepo(next);
+    setPrecinct("all");
+    void loadCases(next, true);
+  };
 
   const boardRef = useRef<HTMLDivElement>(null);
   const folderRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -98,7 +122,7 @@ export function CaseBoardPage() {
   const tabsWithCounts = useMemo(() => {
     const counts = new Map<string, number>();
     for (const c of cases) {
-      const key = c.brief.precinct.toLowerCase();
+      const key = precinctKey(c.brief.precinct);
       counts.set(key, (counts.get(key) ?? 0) + 1);
     }
     const precincts = [...counts.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
@@ -109,7 +133,7 @@ export function CaseBoardPage() {
   }, [cases]);
 
   const filteredCases = useMemo(
-    () => (precinct === "all" ? cases : cases.filter((c) => c.brief.precinct.toLowerCase() === precinct)),
+    () => (precinct === "all" ? cases : cases.filter((c) => precinctKey(c.brief.precinct) === precinct)),
     [cases, precinct],
   );
 
@@ -124,12 +148,12 @@ export function CaseBoardPage() {
     if (!board || !hoveredEl) return [];
     const hoveredCase = filteredCases.find((c) => c.id === caseId);
     if (!hoveredCase) return [];
-    const hoveredPrecinct = hoveredCase.brief.precinct.toLowerCase();
+    const hoveredPrecinct = precinctKey(hoveredCase.brief.precinct);
     const from = centerOf(hoveredEl, board);
     const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
     for (const c of filteredCases) {
       if (c.id === caseId) continue;
-      if (c.brief.precinct.toLowerCase() !== hoveredPrecinct) continue;
+      if (precinctKey(c.brief.precinct) !== hoveredPrecinct) continue;
       const el = folderRefs.current.get(c.id);
       if (!el) continue;
       const to = centerOf(el, board);
@@ -192,6 +216,29 @@ export function CaseBoardPage() {
   // --- Ready ---
   return (
     <div className="w-full py-2">
+      {/* Archive drawers: each connected repository keeps its own cases. */}
+      {repos.length > 1 ? (
+        <nav aria-label="Repository" className="mb-5 flex flex-wrap items-center gap-2">
+          <span className="mr-1 font-display text-[11px] uppercase text-muted">Archive</span>
+          {repos.map((r) => {
+            const active = r.name === activeRepoName;
+            return (
+              <button
+                key={r.name}
+                type="button"
+                aria-pressed={active}
+                onClick={() => !active && switchRepo(r.name)}
+                className={`border-[3px] border-line px-3 py-1.5 font-display text-[11px] uppercase shadow-hard-sm ${
+                  active ? "bg-amber text-line" : "bg-navy-2 text-paper hover:text-amber"
+                }`}
+              >
+                {r.slug} <span className="opacity-70">({r.caseCount})</span>
+              </button>
+            );
+          })}
+        </nav>
+      ) : null}
+
       {/* Stat tiles */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Open cases" value={openCount} tone="navy" icon={<Folder className="size-7" />} />

@@ -61,7 +61,7 @@ export function CaseFolder({
           locked ? "bg-navy-2 text-muted" : "bg-manila-deep text-text-dark",
         ].join(" ")}
       >
-        {c.brief.precinct}
+        {c.brief.precinct.replace(/_/g, "-")}
       </span>
       <span
         className={[

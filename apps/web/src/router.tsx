@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { AppLayout } from "./pages/AppLayout";
 import { CaseBoardPage } from "./pages/CaseBoardPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { RouteErrorPage } from "./pages/RouteErrorPage";
 
 // Routes (PROJECT.md 6A.6-6A.7). The board loads eagerly; heavier screens are split into chunks.
 
@@ -39,6 +40,7 @@ export const router = createBrowserRouter(
     {
       path: "/",
       element: <AppLayout />,
+      errorElement: <RouteErrorPage />,
       children: [
         { index: true, element: <CaseBoardPage /> },
         {

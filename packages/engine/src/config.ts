@@ -38,8 +38,8 @@ export function findRepoRoot(start: string = process.cwd()): string {
 export function normalizeSlug(input: string): string {
   const cleaned = input
     .trim()
-    .replace(/\.git$/, "")
-    .replace(/\/+$/, "");
+    .replace(/\/+$/, "")
+    .replace(/\.git$/, "");
   const m = /(?:github\.com[/:])?([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+)$/.exec(cleaned);
   if (!m) throw new Error(`not a GitHub repository: "${input}" (expected owner/name or a GitHub URL)`);
   return `${m[1]}/${m[2]}`;

@@ -1,10 +1,12 @@
 import { Sliders } from "pixelarticons/react/Sliders.js";
 import { useEffect, useState } from "react";
-import { api } from "../api/client";
+import { useNavigate } from "react-router-dom";
+import { api, SHOWCASE } from "../api/client";
 import { ArcadeButton, DarkPanel, Modal, PaperPanel, useToasts } from "../components/game";
 import { useGame } from "../state/game";
 import { useProfile } from "../state/profile";
 import { useSettings } from "../state/settings";
+import { parseRepoInput } from "../lib/repoInput";
 import { usePageTitle } from "./pageTitle";
 
 // Settings (PROJECT.md 6A.7): repository, sound, motion, profile reset, engine details.
@@ -60,6 +62,25 @@ export function SettingsPage() {
   const push = useToasts((s) => s.push);
   const [engineRepo, setEngineRepo] = useState<string>();
   const [confirmReset, setConfirmReset] = useState(false);
+  const [newRepo, setNewRepo] = useState("");
+  const [newLimit, setNewLimit] = useState(8);
+  const [connecting, setConnecting] = useState(false);
+  const navigate = useNavigate();
+  const parsed = parseRepoInput(newRepo);
+
+  const connect = async () => {
+    if (!parsed) return;
+    setConnecting(true);
+    try {
+      await api.startForge({ repo: parsed, limit: newLimit, concurrency: 4 });
+      push(`Opening case files for ${parsed}. Follow the run in the Forge.`, "info");
+      navigate("/forge");
+    } catch (e) {
+      push((e as Error).message, "error");
+    } finally {
+      setConnecting(false);
+    }
+  };
 
   useEffect(() => {
     void loadRepos();
@@ -74,7 +95,10 @@ export function SettingsPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2">
       <DarkPanel title="Precinct archive" className="px-6">
-        <Row label="Repository" hint="Which repository's cases fill the board. Add more from the Forge.">
+        <Row
+          label="Active repository"
+          hint="Each repository keeps its own cases. The board shows one at a time."
+        >
           <select
             aria-label="Repository"
             value={currentRepo ?? ""}
@@ -94,6 +118,52 @@ export function SettingsPage() {
             ))}
           </select>
         </Row>
+        <div className="border-t-2 border-navy-2 py-4">
+          <div className="font-display text-xs uppercase">Connect a repository</div>
+          <p className="mt-1 text-sm text-muted">
+            Any well maintained open source Go or Python repository with tests. DejaBug clones it, finds real
+            bug fixes in its history, certifies each one and writes the case briefs.
+          </p>
+          {SHOWCASE ? (
+            <p className="mt-3 border-2 border-amber px-3 py-2 text-sm text-amber">
+              This public showcase cannot run tests. Install DejaBug locally to connect a new repository.
+            </p>
+          ) : (
+            <form
+              className="mt-3 flex flex-wrap items-center gap-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void connect();
+              }}
+            >
+              <input
+                aria-label="Repository to connect"
+                value={newRepo}
+                onChange={(e) => setNewRepo(e.target.value)}
+                placeholder="owner/name or https://github.com/owner/name"
+                className="min-w-0 flex-1 border-[3px] border-line bg-paper px-3 py-1.5 font-mono text-sm text-text-dark shadow-hard-sm"
+              />
+              <select
+                aria-label="Candidates to try"
+                value={newLimit}
+                onChange={(e) => setNewLimit(Number(e.target.value))}
+                className="border-[3px] border-line bg-paper px-2 py-1.5 font-display text-xs uppercase text-text-dark shadow-hard-sm"
+              >
+                {[4, 8, 16, 24].map((n) => (
+                  <option key={n} value={n}>
+                    Try {n} fixes
+                  </option>
+                ))}
+              </select>
+              <ArcadeButton tone="amber" size="sm" type="submit" disabled={!parsed || connecting}>
+                {connecting ? "Starting" : "Generate cases"}
+              </ArcadeButton>
+            </form>
+          )}
+          {newRepo && !parsed ? (
+            <p className="mt-2 text-sm text-stamp">Use owner/name or a GitHub repository URL.</p>
+          ) : null}
+        </div>
       </DarkPanel>
 
       <DarkPanel title="Sound and motion" className="px-6">
@@ -144,9 +214,11 @@ export function SettingsPage() {
       <PaperPanel tone="paper" className="p-6 text-sm">
         <div className="font-display text-xs uppercase">Engine</div>
         <p className="mt-2">
-          {engineRepo
-            ? `Connected to the local DejaBug engine on port 4317 (default repository ${engineRepo}).`
-            : "The local engine is not reachable. Start it with npm run dev from the project folder."}
+          {SHOWCASE
+            ? "Showcase mode: no engine. Cases are bundled and test runs replay real recorded results. Your progress stays in this browser."
+            : engineRepo
+              ? `Connected to the local DejaBug engine on port 4317 (default repository ${engineRepo}).`
+              : "The local engine is not reachable. Start it with npm run dev from the project folder."}
         </p>
       </PaperPanel>
 
