@@ -1,0 +1,30 @@
+DejaBug: your team's past bugs, replayed as training cases.
+
+THE PROBLEM
+A new developer's hardest job is debugging code they did not write, and the first real practice often happens in production, under pressure. AI assistants add a new risk: when the AI writes the fix, the new hire skips the practice that builds the skill. Yet every repository already holds the missing course: hundreds of real bugs, each with a fix and a test that proves it, unused because turning one into an exercise by hand takes hours. In Cortex's 2024 survey, 72% of engineering leaders said new hires need over a month for their first 3 meaningful pull requests.
+
+OUR SOLUTION
+DejaBug turns a repository's bug-fix history into proven cases in a detective game.
+1. Mine: find commits that fixed a bug and came with a test.
+2. Prove: in parallel git worktrees, restore the code just before the fix and run the fix's own test. It must fail 3 out of 3 times, then pass on the real fix. Anything else is rejected with a reason.
+3. Brief: IBM Granite on watsonx.ai, or IBM Bob Shell with our Deja Forger mode, writes a spoiler-free case file: symptoms, evidence, three hints, the lesson.
+4. Play: the player debugs in IBM Bob with Deja Mentor, a read-only Bob mode that coaches with questions but cannot write the fix.
+5. Debrief: XP, ranks, badges, and your time and diff next to the original team's.
+
+TARGET USERS
+Players are new hires and junior developers. Buyers are engineering managers at companies with 50 to 5,000 engineers. Open-source maintainers can publish free case libraries.
+
+HOW THEY USE IT
+Install DejaBug and paste any GitHub repository (Go or Python, with tests) into Settings. The Forge shows the proof live: red lights for failing runs, green for the pass. On the Case Board the player takes a case and gets a clean copy of the code with no later history. They fix it in IBM Bob with Deja Mentor and press Run the tests: the engine runs the certified test on their real files. Green means CASE CLOSED.
+
+WHAT MAKES IT UNIQUE
+Replaying real fixes is how AI models are benchmarked; DejaBug uses it to train people. Every case is proven by the project's own tests, and the mentor cannot write code, so the learning stays with the developer.
+
+RESULTS
+IBM/sarama: 2,889 commits scanned, 703 fixes found, 27 proven cases. IBM/python-sdk-core: 31 proven. google/uuid, never seen before, went from a pasted link to a proven case in about 90 seconds. 56 cases, none written by hand.
+
+BUSINESS VALUE
+The US expects about 106,100 developer and tester openings a year (BLS). DejaBug is free and open source; teams would pay for a shared case library, leaderboards and a manager's view. If it cuts ramp-up by two weeks (our assumption), a company hiring 20 engineers saves about $103K a year.
+
+Try it: https://ahammadshawki8.github.io/DejaBug/
+Code: https://github.com/ahammadshawki8/DejaBug

@@ -1,0 +1,36 @@
+IBM Bob runs inside DejaBug, and it built the core of DejaBug.
+
+1. IBM BOB INSIDE THE PRODUCT
+
+Deja Forger (Bob Shell, headless, in the pipeline). After a fix is certified, the briefer can call "bob run --format json --mode deja-forger" with the prompt on stdin. The custom deja-forger mode and the forge-case skill turn the fix's pull request and issue thread into a spoiler-free case file: symptoms, evidence, three tiered hints, difficulty, code area and the lesson. The engine validates Bob's JSON, runs a spoiler guard and retries once. The case "The Overflowing Slice" (IBM/sarama) was written this way in 18.7 seconds, and the app shows "Briefed by IBM Bob" on it.
+- Briefer: https://github.com/ahammadshawki8/DejaBug/blob/main/packages/engine/src/briefer.ts
+- Modes: https://github.com/ahammadshawki8/DejaBug/blob/main/.bob/custom_modes.yaml
+- Skill: https://github.com/ahammadshawki8/DejaBug/blob/main/.bob/skills/forge-case/SKILL.md
+
+Deja Mentor (a custom Bob mode as a product feature). Every playground ships a .bob folder with the deja-mentor mode and a Socratic mentor skill. The mode's only permission groups are read and skill, so Bob can read the code and ask questions but cannot edit a file. In our recorded session (0.252 Bobcoins) the mentor walked a developer through a 32-bit integer overflow in sarama's decoder one question at a time, and when asked to "just fix it and apply the patch" it answered with another question instead.
+- Mentor skill: https://github.com/ahammadshawki8/DejaBug/blob/main/.bob/skills/mentor/SKILL.md
+- Playground export: https://github.com/ahammadshawki8/DejaBug/blob/main/packages/engine/src/play.ts
+
+2. HOW WE BUILT DEJABUG WITH IBM BOB
+
+- Plan mode: the engine design. https://github.com/ahammadshawki8/DejaBug/blob/main/docs/ENGINE_PLAN.md
+- Agent mode: the certifier (every case fails 3 of 3 times before the fix, passes after it), its parallel worktree pool and language adapters. https://github.com/ahammadshawki8/DejaBug/blob/main/packages/engine/src/certifier.ts
+- Subagents in parallel: four explore subagents ranked all certified cases by teaching value and difficulty. https://github.com/ahammadshawki8/DejaBug/blob/main/cases/sarama/ranking.json
+- Document understanding: reading PR and issue threads to write the briefs.
+- Frontend: the Case Board, the game's main screen. https://github.com/ahammadshawki8/DejaBug/blob/main/apps/web/src/pages/CaseBoardPage.tsx
+- Code review: Bob reviewed seven engine files and found 10 issues; we checked each against the code, applied 6 and rejected 4 with reasons. https://github.com/ahammadshawki8/DejaBug/blob/main/docs/reviews/BOB-REVIEW.md
+
+Budget: 12 Bob tasks, 37.37 of 40 Bobcoins. One early task cost 14.82 coins because Bob read a large bundled file, so we added cost-guard rules (never read bundles or node_modules, stop at about 60k context). https://github.com/ahammadshawki8/DejaBug/blob/main/.bob/rules/01-hackathon.md
+
+We also used Claude Code for plumbing, the API server, tests, most screens and deployment. Every item is listed in the usage log, so the split is transparent.
+
+3. IBM WATSONX.AI
+
+IBM Granite (ibm/granite-4-h-small) on watsonx.ai writes the batch case files: 55 of our 56 cases, for example 27 sarama cases in 47 seconds. Our client handles IAM tokens, validates JSON and blocks the banned models. Granite also gives every case a unique codename. The public showcase never calls watsonx at run time; the cases are generated ahead and committed.
+- Client: https://github.com/ahammadshawki8/DejaBug/blob/main/packages/engine/src/llm/watsonx.ts
+- Codenames: https://github.com/ahammadshawki8/DejaBug/blob/main/packages/engine/src/codenames.ts
+
+4. EVIDENCE
+
+- Task summary screenshots for every Bob task: https://github.com/ahammadshawki8/DejaBug/tree/main/bob_sessions
+- Usage log with coins per task: https://github.com/ahammadshawki8/DejaBug/blob/main/docs/BOB_USAGE_LOG.md
