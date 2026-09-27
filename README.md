@@ -76,12 +76,11 @@ cd DejaBug
 npm install
 cp .env.example .env              # optional: GITHUB_TOKEN, watsonx keys for new briefs
 
-npm run dejabug -- init IBM/sarama   # clones the repo the 27 bundled cases come from
 npm run dejabug -- doctor            # checks git, Go/Python, Bob Shell and watsonx
 npm run dev                          # engine on :4317, web on http://localhost:5173
 ```
 
-Open http://localhost:5173, pick a case, press **Take the case**, open the playground folder in IBM Bob IDE, switch to the **Deja Mentor** mode, and run the tests from the Investigation screen.
+Open http://localhost:5173, pick a case, press **Take the case** (it clones the repository, and sets up Python, the first time), open the playground folder in IBM Bob IDE, switch to the **Deja Mentor** mode, and run the tests from the Investigation screen.
 
 Forge cases for another repository:
 
@@ -92,7 +91,7 @@ npm run dejabug -- --target <owner>/<name> certify --limit 20 --concurrency 4
 npm run dejabug -- --target <owner>/<name> brief
 ```
 
-Or use **Settings > Connect a repository** in the app, which runs the same pipeline with live progress in the Forge Console.
+Or use **Settings > Connect a repository** in the app, which runs the same pipeline with live progress in the Forge Console. No AI key is required: add your own watsonx.ai or IBM Bob key under **Settings > AI for new cases** for AI-written case files, or forge without one and each case file is written from the tests.
 
 Tests: `npm test` (105 tests across the engine and the web app), `npm run lint`, `npm run typecheck`.
 
