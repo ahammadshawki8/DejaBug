@@ -4,7 +4,9 @@ Open a case, take it, press Run the tests, then Replay the original fix and run 
 
 RUN IT LOCALLY
 git clone https://github.com/ahammadshawki8/DejaBug
-cd DejaBug && npm install && npm run dev
+cd DejaBug && npm install
+npm run dejabug -- init IBM/sarama   (clones the repository the sarama cases come from)
+npm run dev
 Then open http://localhost:5173. Needs Node 24+ and git; playing a case needs Go or Python with pytest. To forge cases from a new repository, add a watsonx.ai key (or a Bob API key) to .env; the 56 bundled cases work without any key.
 
 WHERE TO LOOK
