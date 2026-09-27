@@ -1,4 +1,5 @@
 import type {
+  AiStatus,
   CaseSession,
   ForgeEvent,
   Funnel,
@@ -235,6 +236,16 @@ export const showcaseApi = {
   funnel: async (repo?: string): Promise<Funnel | null> => {
     const name = await repoName(repo);
     return (await get<RepoSummary[]>("repos.json")).find((r) => r.name === name)?.funnel ?? null;
+  },
+  // The showcase has no engine, so there is nothing to configure; Settings explains how to install.
+  aiStatus: async (): Promise<AiStatus> => ({
+    provider: "watsonx",
+    configured: false,
+    watsonx: { apiKey: false, projectId: false, url: "" },
+    bob: { apiKey: false },
+  }),
+  saveAi: async (): Promise<AiStatus> => {
+    throw new Error("Install DejaBug locally to add an AI key.");
   },
   profile: async () => read<unknown>(PROFILE_KEY, null),
   saveProfile: async (profile: unknown) => {

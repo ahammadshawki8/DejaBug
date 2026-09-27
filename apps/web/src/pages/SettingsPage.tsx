@@ -8,6 +8,7 @@ import { useProfile } from "../state/profile";
 import { useSettings } from "../state/settings";
 import { LOFI_THEMES } from "../lib/lofi";
 import { parseRepoInput } from "../lib/repoInput";
+import { AiKeyPanel } from "./AiKeyPanel";
 import { usePageTitle } from "./pageTitle";
 
 // Settings (PROJECT.md 6A.7): repository, sound, motion, profile reset, engine details.
@@ -166,6 +167,8 @@ export function SettingsPage() {
           ) : null}
         </div>
       </DarkPanel>
+
+      <AiKeyPanel />
 
       <DarkPanel title="Sound and motion" className="px-6">
         <Row label="Sound effects" hint="Short synthesized blips, stamps and fanfares.">

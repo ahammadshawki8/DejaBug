@@ -56,6 +56,24 @@ export interface Brief {
   tags: string[];
 }
 
+/** Settings > AI for new cases: what is configured (never the keys themselves). */
+export interface AiStatus {
+  provider: "watsonx" | "bob";
+  configured: boolean;
+  watsonx: { apiKey: boolean; projectId: boolean; modelId?: string; url: string };
+  bob: { apiKey: boolean };
+}
+
+/** Settings > AI for new cases: blank fields keep what is already saved. */
+export interface AiUpdate {
+  provider: "watsonx" | "bob";
+  watsonxApiKey?: string;
+  watsonxProjectId?: string;
+  watsonxModelId?: string;
+  watsonxUrl?: string;
+  bobApiKey?: string;
+}
+
 export interface OriginalEffort {
   daysOpen?: number;
   comments?: number;

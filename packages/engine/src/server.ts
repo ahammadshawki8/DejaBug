@@ -4,10 +4,11 @@ import path from "node:path";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { detectAdapter } from "./adapters/index.js";
 import { loadConfig, normalizeSlug, type Config } from "./config.js";
+import { aiStatus, saveAiSettings } from "./aiSettings.js";
 import { activateToolchain, initRepo, runForge, type ForgeRunOptions } from "./forge.js";
 import { exportPlayground, playerDiff } from "./play.js";
 import { readCandidates, readCase, readCases, readFunnel, writeJsonAtomic } from "./store.js";
-import type { Case, CaseSession, ForgeEvent, PublicCase, Reveal } from "./types.js";
+import type { AiUpdate, Case, CaseSession, ForgeEvent, PublicCase, Reveal } from "./types.js";
 import { verify } from "./verify.js";
 
 // Local game server (PROJECT.md 4.1 F9, Section 5 REST API). The web app talks only to this.
@@ -164,6 +165,16 @@ export function buildServer(baseCfg: Config, deps: Partial<ServerDeps> = {}): Fa
   app.post<CaseParams & { Body: { reset?: boolean } | null }>("/api/cases/:id/start", async (req) => {
     const cfg = repoConfig(req.query.repo);
     const c = loadCase(cfg, req.params.id);
+    // A fresh install only has the case files: clone the repository (and set up Python) on first use.
+    try {
+      initRepo(cfg);
+    } catch (err) {
+      throw new HttpError(
+        502,
+        `Could not prepare ${cfg.repoSlug} (${err instanceof Error ? err.message : String(err)}). ` +
+          `Run: npm run dejabug -- init ${cfg.repoSlug}`,
+      );
+    }
     const reset = Boolean(req.body?.reset);
     const result = await exportPlayground(c, cfg, reset);
     const s = sessionFor(c);
@@ -231,6 +242,21 @@ export function buildServer(baseCfg: Config, deps: Partial<ServerDeps> = {}): Fa
   app.get<RepoQuery>("/api/funnel", async (req) => readFunnel(repoConfig(req.query.repo).casesDir) ?? null);
 
   app.get("/api/profile", async () => state.profile ?? null);
+
+  // Bring your own AI key: status never includes a key; saving writes the local .env and applies at once.
+  const liveConfig = () => loadConfig(process.env, baseCfg.repoRoot);
+  app.get("/api/ai", async () => aiStatus(liveConfig()));
+  app.put<{ Body: AiUpdate | null }>("/api/ai", async (req) => {
+    try {
+      saveAiSettings(baseCfg.repoRoot, req.body ?? ({} as AiUpdate));
+    } catch (err) {
+      throw new HttpError(400, err instanceof Error ? err.message : String(err));
+    }
+    const fresh = liveConfig();
+    baseCfg.llmProvider = fresh.llmProvider;
+    baseCfg.watsonx = fresh.watsonx;
+    return aiStatus(fresh);
+  });
 
   app.put<{ Body: unknown }>("/api/profile", async (req) => {
     if (JSON.stringify(req.body ?? null).length > MAX_PROFILE_BYTES)

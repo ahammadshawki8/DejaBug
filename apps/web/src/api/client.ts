@@ -1,9 +1,18 @@
-import type { CaseSession, ForgeEvent, Funnel, PublicCase, Reveal, VerifyResult } from "@engine/types";
+import type {
+  AiStatus,
+  AiUpdate,
+  CaseSession,
+  ForgeEvent,
+  Funnel,
+  PublicCase,
+  Reveal,
+  VerifyResult,
+} from "@engine/types";
 import { showcaseApi, subscribeShowcaseForge } from "./showcase";
 
 // Typed client for the local game server (packages/engine/src/server.ts), or the static showcase.
 
-export type { CaseSession, ForgeEvent, Funnel, PublicCase, Reveal, VerifyResult };
+export type { AiStatus, AiUpdate, CaseSession, ForgeEvent, Funnel, PublicCase, Reveal, VerifyResult };
 
 export interface RepoSummary {
   name: string;
@@ -71,6 +80,8 @@ const liveApi = {
   reveal: (id: string, repo?: string) =>
     request<{ reveal: Reveal; session: CaseSession }>("GET", `/api/cases/${id}/reveal${q(repo)}`),
   funnel: (repo?: string) => request<Funnel | null>("GET", `/api/funnel${q(repo)}`),
+  aiStatus: () => request<AiStatus>("GET", "/api/ai"),
+  saveAi: (update: AiUpdate) => request<AiStatus>("PUT", "/api/ai", update),
   profile: () => request<unknown>("GET", "/api/profile"),
   saveProfile: (profile: unknown) => request<{ ok: boolean }>("PUT", "/api/profile", profile),
   startForge: (body: { repo?: string; limit?: number; concurrency?: number }) =>

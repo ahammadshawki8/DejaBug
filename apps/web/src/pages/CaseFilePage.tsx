@@ -25,6 +25,7 @@ import { usePageTitle } from "./pageTitle";
 function briefedByLabel(by?: string): string | undefined {
   if (!by) return undefined;
   if (by === "bob-shell") return "Briefed by IBM Bob";
+  if (by === "template") return "Written from the tests (no AI key)";
   if (by.startsWith("watsonx:")) return `Briefed by IBM ${by.includes("granite") ? "Granite" : "watsonx.ai"}`;
   return undefined;
 }

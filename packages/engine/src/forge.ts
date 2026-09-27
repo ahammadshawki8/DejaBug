@@ -1,8 +1,9 @@
 import { execFileSync } from "node:child_process";
 import { EventEmitter } from "node:events";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ADAPTERS, detectAdapter } from "./adapters/index.js";
+import { commandVersion } from "./adapters/tool.js";
 import type { LanguageAdapter } from "./adapters/types.js";
 import { assembleCase, bugAgeDays } from "./assemble.js";
 import { brief } from "./briefer.js";
@@ -12,6 +13,7 @@ import type { Config } from "./config.js";
 import { git } from "./git.js";
 import { createGitHubClient, fetchContext, fetchOriginalEffort } from "./github.js";
 import { mine } from "./miner.js";
+import { TEMPLATE_BRIEFED_BY, aiKeyMissing, templateBrief } from "./templateBrief.js";
 import {
   computeFunnel,
   mergeCertifications,
@@ -31,7 +33,10 @@ export function emitForge(emitter: EventEmitter | undefined, event: ForgeEvent):
   emitter?.emit("forge", event);
 }
 
-/** Clones owner/name into the workspace if needed and returns the detected adapter (if any). */
+/**
+ * Clones owner/name into the workspace if needed and returns the detected adapter (if any). Python
+ * repositories also get their own virtualenv (see ensurePythonEnv), so a fresh machine can play them.
+ */
 export function initRepo(cfg: Config): LanguageAdapter | undefined {
   if (!existsSync(path.join(cfg.repoDir, ".git"))) {
     mkdirSync(path.dirname(cfg.repoDir), { recursive: true });
@@ -39,7 +44,44 @@ export function initRepo(cfg: Config): LanguageAdapter | undefined {
       stdio: "ignore",
     });
   }
-  return detectAdapter(cfg.repoDir);
+  const adapter = detectAdapter(cfg.repoDir);
+  if (adapter?.name === "Python") ensurePythonEnv(cfg);
+  return adapter;
+}
+
+function venvDir(cfg: Config): string {
+  return path.join(path.dirname(cfg.repoDir), ".venvs", path.basename(cfg.repoDir));
+}
+
+function venvPython(venv: string): string {
+  return process.platform === "win32"
+    ? path.join(venv, "Scripts", "python.exe")
+    : path.join(venv, "bin", "python");
+}
+
+/**
+ * Creates workspace/.venvs/<repo> once, with the project installed in editable mode (plus its "dev" or
+ * "test" extras when it declares them) and pytest. Skipped when the user pins their own interpreter.
+ */
+export function ensurePythonEnv(cfg: Config): void {
+  const venv = venvDir(cfg);
+  if (process.env.DEJABUG_PYTHON_PINNED || existsSync(venvPython(venv))) return;
+  const base = (process.platform === "win32" ? ["python", "py"] : ["python3", "python"]).find((cmd) =>
+    commandVersion(cmd, ["--version"]),
+  );
+  if (!base) throw new Error("Python 3 is not installed (needed for this repository's tests)");
+  execFileSync(base, ["-m", "venv", venv], { stdio: "ignore" });
+  const pyproject = path.join(cfg.repoDir, "pyproject.toml");
+  const text = existsSync(pyproject) ? readFileSync(pyproject, "utf8") : "";
+  // An optional-dependencies group such as `dev = [` in pyproject.toml.
+  const extra = ["dev", "test", "tests"].find((e) =>
+    text.split(/\r?\n/).some((line) => /^\s*=\s*\[/.test(line.startsWith(e) ? line.slice(e.length) : "")),
+  );
+  const spec = extra ? `${cfg.repoDir}[${extra}]` : cfg.repoDir;
+  execFileSync(venvPython(venv), ["-m", "pip", "install", "--quiet", "-e", spec, "pytest"], {
+    stdio: "ignore",
+    timeout: 10 * 60_000,
+  });
 }
 
 /**
@@ -152,7 +194,13 @@ export async function runBrief(cfg: Config, opts: QueueOptions, emitter?: EventE
     opts,
   );
   const gh = createGitHubClient(cfg);
-  const briefedBy = cfg.llmProvider === "bob" ? "bob-shell" : `watsonx:${cfg.watsonx.modelId ?? "unknown"}`;
+  // No AI key (for example after a hackathon account closes): write the case files from the proof data.
+  const noAi = aiKeyMissing(cfg);
+  const briefedBy = noAi
+    ? TEMPLATE_BRIEFED_BY
+    : cfg.llmProvider === "bob"
+      ? "bob-shell"
+      : `watsonx:${cfg.watsonx.modelId ?? "unknown"}`;
 
   let written = 0;
   let next = 0;
@@ -180,10 +228,21 @@ export async function runBrief(cfg: Config, opts: QueueOptions, emitter?: EventE
           "--",
           ...candidate.sourceFiles,
         ]);
-        const result = await brief({ candidate, certification: cert, context, fixDiff }, cfg);
+        // The AI brief, or the tests-only case file when there is no key or the AI call fails (for example
+        // a wrong or expired key), so a proven bug is never lost.
+        let result = noAi
+          ? null
+          : await brief({ candidate, certification: cert, context, fixDiff }, cfg).catch((err: unknown) => {
+              emitForge(emitter, {
+                type: "log",
+                message: `${cert.fixSha.slice(0, 7)}: AI brief failed (${String(err)}); writing it from the tests`,
+              });
+              return null;
+            });
+        let caseBriefedBy = briefedBy;
         if (!result) {
-          emitForge(emitter, { type: "briefed", worker: slot, fixSha: cert.fixSha, ok: false });
-          continue;
+          result = templateBrief(candidate, cert, fixDiff);
+          caseBriefedBy = TEMPLATE_BRIEFED_BY;
         }
         const c = assembleCase({
           repo: candidates.repo,
@@ -195,7 +254,7 @@ export async function runBrief(cfg: Config, opts: QueueOptions, emitter?: EventE
           original,
           bugAgeDays: await bugAgeDays(cfg.repoDir, candidate, fixDiff),
           fixDiff,
-          briefedBy,
+          briefedBy: caseBriefedBy,
         });
         writeCase(cfg.casesDir, c);
         written++;
@@ -243,6 +302,12 @@ export interface ForgeRunOptions extends QueueOptions {
 /** The whole pipeline for the UI's "Forge N cases" button. Emits `done` at the end, even on error. */
 export async function runForge(cfg: Config, opts: ForgeRunOptions, emitter: EventEmitter): Promise<void> {
   try {
+    if (aiKeyMissing(cfg))
+      emitForge(emitter, {
+        type: "log",
+        message:
+          "No AI key in .env (watsonx.ai or BOB_API_KEY): case files will be written from the tests, without AI. Add a key for richer briefs.",
+      });
     if (!readCandidates(cfg.casesDir)) {
       emitForge(emitter, { type: "log", message: `mining ${cfg.repoSlug}...` });
       const mined = await runMine(cfg);
