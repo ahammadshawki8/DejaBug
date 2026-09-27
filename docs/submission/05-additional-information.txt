@@ -1,0 +1,20 @@
+TRY IT IN 2 MINUTES
+Showcase (no install): https://ahammadshawki8.github.io/DejaBug/
+Open a case, take it, press Run the tests, then Replay the original fix and run again. In the showcase, runs replay real recorded results and are labelled as replays; only a local install runs tests live. Difficulty 3 cases unlock at the Detective rank (300 XP), one or two solves in.
+
+RUN IT LOCALLY
+git clone https://github.com/ahammadshawki8/DejaBug
+cd DejaBug && npm install && npm run dev
+Then open http://localhost:5173. Needs Node 24+ and git; playing a case needs Go or Python with pytest. To forge cases from a new repository, add a watsonx.ai key (or a Bob API key) to .env; the 56 bundled cases work without any key.
+
+WHERE TO LOOK
+- Bob task screenshots: https://github.com/ahammadshawki8/DejaBug/tree/main/bob_sessions
+- Bob usage log with coins per task: https://github.com/ahammadshawki8/DejaBug/blob/main/docs/BOB_USAGE_LOG.md
+- Bob custom modes (Deja Mentor is read-only): https://github.com/ahammadshawki8/DejaBug/blob/main/.bob/custom_modes.yaml
+- Bob code review and how we applied it: https://github.com/ahammadshawki8/DejaBug/tree/main/docs/reviews
+
+HONESTY NOTES
+- Built solo during the hackathon, from scratch.
+- IBM Bob built the core parts; Claude Code built the plumbing, tests, most screens and deployment. Every item is listed in the usage log.
+- Every number in our materials is measured or cited. The business slide's pricing, 2-week saving and revenue targets are our plan and are labelled as assumptions.
+- Engine and tests run on your own machine by design: it executes a repository's test code, so it is not hosted as a public server.
