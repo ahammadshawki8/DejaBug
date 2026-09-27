@@ -10,7 +10,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "node --watch --import tsx src/cli.ts serve",
+    "dev": "tsc -p tsconfig.build.json && node dist/cli.js serve",
+    "dev:watch": "node --watch --import tsx src/cli.ts serve",
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "dejabug": "tsx src/cli.ts"
